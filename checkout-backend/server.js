@@ -13,7 +13,9 @@ app.use(cors({
         'https://tiwshirts.com.br',
         'https://www.tiwshirts.com.br',
         'https://tiw-shirts.vercel.app',
-        'https://tiw-shirts-edubovolines-projects.vercel.app'
+        'https://tiwshirts.vercel.app',
+        'https://tiw-shirts-edubovolines-projects.vercel.app',
+        'https://tiwshirts-edubovolines-projects.vercel.app'
     ]
 }));
 
