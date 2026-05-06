@@ -800,3 +800,78 @@
         padding: 20px;
     }
 }
+
+/* ---- SHIPPING SELECTOR ---- */
+.shipping-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.shipping-method-card {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    color: inherit;
+    font-family: inherit;
+}
+
+.shipping-method-card:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+}
+
+.shipping-method-card.active {
+    background: rgba(58, 107, 53, 0.1);
+    border-color: var(--green);
+}
+
+.method-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.method-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.method-time {
+    font-size: 10px;
+    color: var(--gray);
+}
+
+.method-price {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--green);
+}
+
+.shipping-result-free {
+    padding: 20px;
+    background: rgba(58, 107, 53, 0.1);
+    border: 1px dashed var(--green);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--green);
+    font-weight: 700;
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+

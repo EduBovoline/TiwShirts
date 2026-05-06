@@ -835,10 +835,22 @@ function updateCartUI() {
 
 function updateShippingBadge(count) {
     const el = document.getElementById('shippingBadge');
+    const resultEl = document.getElementById('shippingResult');
     if (!el) return;
+
     if (count >= 2) {
         el.innerHTML = '🚚 <strong>FRETE GRÁTIS</strong> aplicado!';
         el.className = 'shipping-badge active';
+        
+        // Se o simulador estiver visível, atualiza para grátis imediatamente
+        if (resultEl && resultEl.style.display === 'block') {
+            resultEl.innerHTML = `
+                <div class="shipping-result-free">
+                    🎯 FRETE GRÁTIS LIBERADO!<br>
+                    <span style="font-size: 10px; font-weight: 400; opacity: 0.8;">Válido para todo o Brasil neste pedido.</span>
+                </div>
+            `;
+        }
     } else {
         el.innerHTML = '🚚 Adicione <strong>mais 1 peça</strong> para <strong>FRETE GRÁTIS</strong>';
         el.className = 'shipping-badge hint';
@@ -875,11 +887,13 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
     resultEl.style.color = '#aaa';
     resultEl.innerHTML = 'Calculando...';
 
-    const itemCount = cart.reduce((acc, i) => acc + (i.type === 'bag-bundle' ? 5 : 1), 0);
-    
     if (itemCount >= 2) {
-        resultEl.style.color = 'var(--green)';
-        resultEl.innerHTML = '🎯 <strong>FRETE GRÁTIS</strong> (Promoção aplicada para 2+ peças)';
+        resultEl.innerHTML = `
+            <div class="shipping-result-free">
+                🎯 FRETE GRÁTIS LIBERADO!<br>
+                <span style="font-size: 10px; font-weight: 400; opacity: 0.8;">Válido para todo o Brasil neste pedido.</span>
+            </div>
+        `;
         return;
     }
 
@@ -889,48 +903,43 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
         
         if (data.erro) throw new Error();
 
-        // Origem: Sorocaba/SP (18070-009)
-        // Regras simuladas baseadas em contratos do Melhor Envio
-        let pacPrice = 35.00, jadPrice = 24.00, loggiPrice = 18.50;
-        let pacDays = 8, jadDays = 7, loggiDays = 6;
-        
+        // Regras simuladas
+        const options = [
+            { id: 'loggi', name: '⚡ Loggi (Express)', price: 18.50, days: 6 },
+            { id: 'jadlog', name: '📦 Jadlog (.Package)', price: 24.00, days: 7 },
+            { id: 'pac', name: '📮 Correios (PAC)', price: 35.00, days: 8 }
+        ];
+
         if (data.uf === 'SP') {
-            pacPrice = 22.00; jadPrice = 13.50; loggiPrice = 12.00;
-            pacDays = 5; jadDays = 4; loggiDays = 3;
+            options[0].price = 12.00; options[0].days = 3;
+            options[1].price = 13.50; options[1].days = 4;
+            options[2].price = 22.00; options[2].days = 5;
         } else if (['RJ', 'MG', 'PR', 'SC', 'RS'].includes(data.uf)) {
-            pacPrice = 25.00; jadPrice = 15.50; loggiPrice = 14.00;
-            pacDays = 6; jadDays = 5; loggiDays = 4;
-        } else if (['DF', 'GO', 'MS', 'MT'].includes(data.uf)) {
-            pacPrice = 28.00; jadPrice = 18.00; loggiPrice = 16.50;
-            pacDays = 7; jadDays = 6; loggiDays = 5;
-        } else {
-            // Norte e Nordeste (ex: PE)
-            pacPrice = 34.50; jadPrice = 19.50; loggiPrice = 18.40;
-            pacDays = 8; jadDays = 7; loggiDays = 6;
+            options[0].price = 14.00; options[0].days = 4;
+            options[1].price = 15.50; options[1].days = 5;
+            options[2].price = 25.00; options[2].days = 6;
         }
 
         const fmt = val => val.toFixed(2).replace('.', ',');
 
-        resultEl.style.color = '#fff';
         resultEl.innerHTML = `
-            <div style="margin-bottom: 6px; font-weight: 600; font-size: 11px; text-transform: uppercase;">
-                Envio para ${data.localidade} - ${data.uf}
+            <div style="margin-bottom: 12px; font-weight: 600; font-size: 11px; text-transform: uppercase; color: #888;">
+                Selecione o frete para ${data.localidade}:
             </div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 8px;">
-                <tr style="border-bottom: 1px solid #333;">
-                    <td style="padding: 4px 0;">⚡ <strong>Loggi (Express)</strong><br><span style="color:#888; font-size:10px;">Até ${loggiDays} dias úteis</span></td>
-                    <td style="text-align: right; color: var(--green); font-weight: bold;">R$ ${fmt(loggiPrice)}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #333;">
-                    <td style="padding: 4px 0;">📦 <strong>Jadlog (.Package)</strong><br><span style="color:#888; font-size:10px;">Até ${jadDays} dias úteis</span></td>
-                    <td style="text-align: right; color: var(--green); font-weight: bold;">R$ ${fmt(jadPrice)}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 4px 0;">📮 <strong>Correios (PAC)</strong><br><span style="color:#888; font-size:10px;">Até ${pacDays} dias úteis</span></td>
-                    <td style="text-align: right; color: var(--green); font-weight: bold;">R$ ${fmt(pacPrice)}</td>
-                </tr>
-            </table>
-            <span style="font-size: 10px; color: #888;">*Adicione 2 ou mais peças para garantir Frete Grátis em qualquer modalidade.</span>
+            <div class="shipping-methods">
+                ${options.map(opt => `
+                    <button class="shipping-method-card" onclick="selectShipping(this, '${opt.id}')">
+                        <div class="method-info">
+                            <span class="method-name">${opt.name}</span>
+                            <span class="method-time">Até ${opt.days} dias úteis</span>
+                        </div>
+                        <span class="method-price">R$ ${fmt(opt.price)}</span>
+                    </button>
+                `).join('')}
+            </div>
+            <p style="font-size: 10px; color: #666; margin-top: 12px; line-height: 1.4;">
+                *Prazo de produção de até 10 dias úteis não incluso no prazo de entrega.
+            </p>
         `;
     } catch(err) {
         resultEl.style.color = '#ff4444';
@@ -938,10 +947,16 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
     }
 });
 
+// Função para selecionar frete (estética)
+window.selectShipping = (el, id) => {
+    document.querySelectorAll('.shipping-method-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+};
+
 /* ---- MERCADO PAGO CHECKOUT PRO ---- */
 
 // ⚙️ Configure esta URL com o endereço do seu backend (servidor Node.js)
-const BACKEND_URL = 'https://tiwshirts-checkout.onrender.com'; // TROQUE pelo URL do seu servidor
+const BACKEND_URL = 'https://tiwshirts.onrender.com'; // TROQUE pelo URL do seu servidor
 
 document.getElementById('checkoutBtn').addEventListener('click', async () => {
     if (cart.length === 0) return;
