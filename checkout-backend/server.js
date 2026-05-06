@@ -10,8 +10,10 @@ app.use(cors({
     origin: [
         'http://localhost',
         'http://127.0.0.1',
-        'https://tiwshirts.com.br',   // ← COLOQUE seu domínio aqui
-        'https://www.tiwshirts.com.br'
+        'https://tiwshirts.com.br',
+        'https://www.tiwshirts.com.br',
+        'https://tiw-shirts.vercel.app',
+        'https://tiw-shirts-edubovolines-projects.vercel.app'
     ]
 }));
 
