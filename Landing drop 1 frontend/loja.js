@@ -887,6 +887,8 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
     resultEl.style.color = '#aaa';
     resultEl.innerHTML = 'Calculando...';
 
+    const itemCount = cart.reduce((acc, i) => acc + (i.type === 'bag-bundle' ? 5 : 1), 0);
+
     if (itemCount >= 2) {
         resultEl.innerHTML = `
             <div class="shipping-result-free">
