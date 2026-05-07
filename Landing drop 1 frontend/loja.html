@@ -241,34 +241,97 @@
     <!-- CHECKOUT DRAWER -->
     <div id="checkoutDrawer" class="drawer-backdrop" onclick="closeDrawer(event)">
         <div class="drawer">
-            <div class="drawer-header">
-                <h3>SUA BAG</h3>
-                <button onclick="closeCheckout()" type="button">✕</button>
-            </div>
-            <div id="cartItems" class="cart-items"></div>
-            
-            <div class="shipping-calculator" style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                <label style="display: block; font-size: 11px; color: #aaa; margin-bottom: 8px; font-weight: 600;">CALCULAR FRETE</label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="cepInput" placeholder="Seu CEP" maxlength="9" style="flex: 1; background: #111; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 4px; font-family: inherit; font-size: 13px;">
-                    <button type="button" id="calcShippingBtn" style="background: #333; color: #fff; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background 0.2s;">OK</button>
+            <!-- STEP 1: CART -->
+            <div id="step-cart" class="checkout-step active">
+                <div class="drawer-header">
+                    <h3>SUA BAG</h3>
+                    <button onclick="closeCheckout()" type="button" class="close-btn">✕</button>
                 </div>
-                <div id="shippingResult" style="margin-top: 10px; font-size: 13px; color: #ccc; display: none;"></div>
+                
+                <div id="cartItems" class="cart-items">
+                    <!-- Injetado via JS -->
+                </div>
+
+                <div class="shipping-calculator">
+                    <label class="section-label">SIMULAR FRETE</label>
+                    <div class="cep-row">
+                        <input type="text" id="cepInput" placeholder="Seu CEP (00000-000)" maxlength="9">
+                        <button type="button" id="calcShippingBtn">CALCULAR</button>
+                    </div>
+                    <div id="shippingResult" class="shipping-result-area"></div>
+                    <div id="shippingBadge" class="shipping-badge hint">
+                        🚚 Leve <strong>2+ peças</strong> e o frete é GRÁTIS
+                    </div>
+                </div>
+
+                <div class="checkout-footer">
+                    <div class="cart-total-details">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span id="subtotalVal">R$ 0</span>
+                        </div>
+                        <div class="total-row highlight">
+                            <span>Frete</span>
+                            <span id="shippingVal">Selecione o CEP</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>TOTAL</span>
+                            <span id="cartTotal">R$ 0</span>
+                        </div>
+                    </div>
+                    <button class="btn-next-step" id="goToFormBtn" type="button">FINALIZAR PEDIDO</button>
+                </div>
             </div>
 
-            <div id="shippingBadge" class="shipping-badge hint">
-                🚚 Leve <strong>2+ peças</strong> e o frete é por nossa conta
+            <!-- STEP 2: CUSTOMER DATA -->
+            <div id="step-form" class="checkout-step">
+                <div class="drawer-header">
+                    <button onclick="changeStep('cart')" type="button" class="back-btn">←</button>
+                    <h3>DADOS DE ENVIO</h3>
+                    <button onclick="closeCheckout()" type="button" class="close-btn">✕</button>
+                </div>
+
+                <form id="checkoutForm" class="customer-form">
+                    <div class="form-section">
+                        <label class="section-label">DADOS PESSOAIS</label>
+                        <input type="text" name="nome" placeholder="Nome Completo" required>
+                        <div class="form-row">
+                            <input type="text" name="cpf" id="cpfInput" placeholder="CPF (Apenas números)" required maxlength="14">
+                            <input type="tel" name="whatsapp" placeholder="WhatsApp (DDD)" required>
+                        </div>
+                        <input type="email" name="email" placeholder="E-mail principal" required>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="section-label">ENDEREÇO COMPLETO</label>
+                        <div class="form-row">
+                            <input type="text" name="rua" placeholder="Rua / Avenida" required style="flex: 2;">
+                            <input type="text" name="numero" placeholder="Nº" required style="flex: 1;">
+                        </div>
+                        <div class="form-row">
+                            <input type="text" name="complemento" placeholder="Complemento (Apto, bloco...)">
+                            <input type="text" name="bairro" placeholder="Bairro" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="text" name="cidade" placeholder="Cidade" required style="flex: 2;">
+                            <input type="text" name="uf" placeholder="UF" required maxlength="2" style="flex: 1;">
+                        </div>
+                    </div>
+
+                    <div class="lgpd-consent">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="lgpd" required>
+                            <span class="checkmark"></span>
+                            <span class="lgpd-text">Aceito a <a href="politica.html" target="_blank">Política de Privacidade</a> e autorizo o uso dos dados para processar meu pedido e comunicações futuras.</span>
+                        </label>
+                    </div>
+
+                    <div class="checkout-footer">
+                        <button class="btn-buy" id="checkoutBtn" type="button">💳 PAGAR COM MERCADO PAGO</button>
+                        <p class="safe-note">🛡️ Pagamento seguro via Mercado Pago</p>
+                    </div>
+                </form>
             </div>
-            
-            <div class="cart-total-row">
-                <span>Total dos Produtos</span>
-                <span id="cartTotal">R$ 0</span>
-            </div>
-            <button class="btn-buy" id="checkoutBtn" type="button">💳 COMPRAR AGORA</button>
-            <p class="cart-note">Pagamento 100% online e seguro via Mercado Pago. Cartão, Pix ou boleto.</p>
-            <p style="text-align: center; margin-top: 8px;">
-                <a href="politica.html" target="_blank" style="font-size: 11px; color: #555; text-decoration: underline;">Política de Envio & Reembolso</a>
-            </p>
         </div>
     </div>
 

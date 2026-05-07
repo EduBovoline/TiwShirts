@@ -875,3 +875,200 @@
     100% { opacity: 0.8; }
 }
 
+/* ========================
+   CHECKOUT STEPS & FORM
+======================== */
+.checkout-step {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+}
+.checkout-step.active {
+    display: flex;
+}
+
+.section-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gray);
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Shipping Calculator Refined */
+.cep-row {
+    display: flex;
+    gap: 8px;
+}
+.cep-row input {
+    flex: 1;
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+}
+.cep-row button {
+    background: var(--white);
+    color: #000;
+    border: none;
+    padding: 0 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* Footer & Totals */
+.checkout-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--glass-border);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #888;
+}
+.total-row.highlight { color: var(--green); font-weight: 600; }
+.total-row.final {
+    margin-top: 15px;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--white);
+}
+
+.btn-next-step {
+    width: 100%;
+    padding: 20px;
+    background: var(--white);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.2s;
+}
+.btn-next-step:hover { transform: translateY(-2px); }
+
+/* Customer Form */
+.customer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 10px 0;
+    overflow-y: auto;
+}
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+.customer-form input {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    color: #fff;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+.customer-form input:focus {
+    border-color: var(--green);
+    outline: none;
+}
+
+/* LGPD & Checkbox */
+.lgpd-consent {
+    margin: 10px 0;
+}
+.checkbox-container {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    cursor: pointer;
+    font-size: 11px;
+    color: #888;
+    line-height: 1.4;
+}
+.checkbox-container input { display: none; }
+.checkmark {
+    min-width: 18px;
+    height: 18px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    position: relative;
+    background: #000;
+}
+.checkbox-container input:checked ~ .checkmark {
+    background: var(--green);
+    border-color: var(--green);
+}
+.checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #000;
+    font-weight: bold;
+    display: none;
+}
+.checkbox-container input:checked ~ .checkmark::after { display: block; }
+.lgpd-text a { color: var(--white); text-decoration: underline; }
+
+/* Back Button */
+.back-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: -10px;
+}
+.back-btn:hover { color: #fff; }
+
+.safe-note {
+    text-align: center;
+    font-size: 10px;
+    color: #555;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Cart Item Removal */
+.cart-item {
+    position: relative;
+}
+.btn-remove {
+    position: absolute;
+    top: 15px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #444;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s;
+    font-size: 16px;
+}
+.btn-remove:hover { color: #ff4444; }
+

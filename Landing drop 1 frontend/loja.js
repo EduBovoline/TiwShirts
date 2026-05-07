@@ -1,9 +1,14 @@
-/* ========================
-   LOJA INTERATIVA JS
-   TiwShirts Drop #01 - Nova Coleção
-======================== */
-
 const ASSETS_PATH = 'Assets/';
+
+/* ---- CHECKOUT STATE ---- */
+let selectedShippingPrice = 0;
+let selectedShippingId    = '';
+
+function changeStep(step) {
+    document.querySelectorAll('.checkout-step').forEach(el => el.classList.remove('active'));
+    document.getElementById('step-' + step).classList.add('active');
+}
+window.changeStep = changeStep;
 
 /* ---- CATÁLOGO DE PRODUTOS ---- */
 // colors: array das cores disponíveis para cada estampa com base nas novas imagens
@@ -790,6 +795,8 @@ function addBagToCart() {
 function updateCartUI() {
     const countEl = document.getElementById('cartCount');
     const itemsEl = document.getElementById('cartItems');
+    const subtotalEl = document.getElementById('subtotalVal');
+    const shippingEl = document.getElementById('shippingVal');
     const totalEl = document.getElementById('cartTotal');
 
     const itemCount = cart.reduce((acc, i) => acc + (i.type === 'bag-bundle' ? 5 : 1), 0);
@@ -798,14 +805,19 @@ function updateCartUI() {
 
     if (cart.length === 0) {
         itemsEl.innerHTML = '<p class="empty-cart">Seu carrinho está vazio.</p>';
+        subtotalEl.textContent = 'R$ 0';
+        shippingEl.textContent = '---';
         totalEl.textContent = 'R$ 0';
         updateShippingBadge(0);
+        selectedShippingPrice = 0;
         return;
     }
 
-    let total = 0;
+    let subtotal = 0;
     itemsEl.innerHTML = cart.map(item => {
-        total += item.price;
+        subtotal += item.price;
+        const removeBtn = `<button class="btn-remove" onclick="removeFromCart(${item.id})">🗑️</button>`;
+
         if (item.type === 'bag-bundle') {
             return `
                 <div class="cart-item cart-item--bag">
@@ -815,6 +827,7 @@ function updateCartUI() {
                         <div class="ci-size">${item.items.map(i => `${i.name.split(' ')[0]} ${i.colorLabel} ${i.size}`).join(' · ')}</div>
                     </div>
                     <div class="ci-price">${formatPrice(item.price)}</div>
+                    ${removeBtn}
                 </div>`;
         }
         return `
@@ -825,13 +838,40 @@ function updateCartUI() {
                     <div class="ci-size">${item.colorLabel} | ${item.size}</div>
                 </div>
                 <div class="ci-price">${formatPrice(item.price)}</div>
+                ${removeBtn}
             </div>`;
     }).join('');
 
-    totalEl.textContent = formatPrice(total);
+    subtotalEl.textContent = formatPrice(subtotal);
+    
+    // Frete grátis automático
+    if (itemCount >= 2) {
+        selectedShippingPrice = 0;
+        shippingEl.textContent = 'GRÁTIS';
+    } else {
+        shippingEl.textContent = selectedShippingPrice > 0 ? formatPrice(selectedShippingPrice) : 'A calcular';
+    }
+
+    totalEl.textContent = formatPrice(subtotal + selectedShippingPrice);
     updateShippingBadge(itemCount);
-    document.getElementById('checkoutBtn').dataset.total = total;
 }
+
+function removeFromCart(id) {
+    const idx = cart.findIndex(i => i.id === id);
+    if (idx > -1) {
+        const item = cart[idx];
+        // Devolve o estoque
+        if (item.type === 'bag-bundle') {
+            Object.keys(PRINTS).forEach(pid => PRINTS[pid].stock++);
+        } else {
+            PRINTS[item.printId].stock++;
+        }
+        cart.splice(idx, 1);
+        updateCartUI();
+        updateComposite();
+    }
+}
+window.removeFromCart = removeFromCart;
 
 function updateShippingBadge(count) {
     const el = document.getElementById('shippingBadge');
@@ -842,7 +882,6 @@ function updateShippingBadge(count) {
         el.innerHTML = '🚚 <strong>FRETE GRÁTIS</strong> aplicado!';
         el.className = 'shipping-badge active';
         
-        // Se o simulador estiver visível, atualiza para grátis imediatamente
         if (resultEl && resultEl.style.display === 'block') {
             resultEl.innerHTML = `
                 <div class="shipping-result-free">
@@ -924,50 +963,51 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
 
         const fmt = val => val.toFixed(2).replace('.', ',');
 
-        resultEl.innerHTML = `
-            <div style="margin-bottom: 12px; font-weight: 600; font-size: 11px; text-transform: uppercase; color: #888;">
-                Selecione o frete para ${data.localidade}:
-            </div>
-            <div class="shipping-methods">
-                ${options.map(opt => `
-                    <button class="shipping-method-card" onclick="selectShipping(this, '${opt.id}')">
-                        <div class="method-info">
-                            <span class="method-name">${opt.name}</span>
-                            <span class="method-time">Até ${opt.days} dias úteis</span>
-                        </div>
-                        <span class="method-price">R$ ${fmt(opt.price)}</span>
-                    </button>
-                `).join('')}
-            </div>
-            <p style="font-size: 10px; color: #666; margin-top: 12px; line-height: 1.4;">
-                *Prazo de produção de até 10 dias úteis não incluso no prazo de entrega.
-            </p>
-        `;
-    } catch(err) {
-        resultEl.style.color = '#ff4444';
-        resultEl.innerHTML = '⚠️ Não foi possível calcular o frete para este CEP.';
-    }
-});
-
-// Função para selecionar frete (estética)
-window.selectShipping = (el, id) => {
+// Função para selecionar frete
+window.selectShipping = (el, id, price) => {
     document.querySelectorAll('.shipping-method-card').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
+    selectedShippingPrice = price;
+    selectedShippingId    = id;
+    updateCartUI();
 };
 
-/* ---- MERCADO PAGO CHECKOUT PRO ---- */
+/* ---- FORM STEP & CHECKOUT ---- */
+document.getElementById('goToFormBtn').addEventListener('click', () => {
+    if (cart.length === 0) return;
+    
+    const itemCount = cart.reduce((acc, i) => acc + (i.type === 'bag-bundle' ? 5 : 1), 0);
+    if (itemCount < 2 && selectedShippingPrice === 0) {
+        alert('Por favor, calcule e selecione o frete antes de continuar.');
+        return;
+    }
+    changeStep('form');
+});
 
-// ⚙️ Configure esta URL com o endereço do seu backend (servidor Node.js)
-const BACKEND_URL = 'https://tiwshirts.onrender.com'; // TROQUE pelo URL do seu servidor
+// CPF Masking
+document.getElementById('cpfInput').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.substring(0, 11);
+    if (v.length > 9) v = v.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+    else if (v.length > 6) v = v.replace(/^(\d{3})(\d{3})(\d{0,3})$/, "$1.$2.$3");
+    else if (v.length > 3) v = v.replace(/^(\d{3})(\d{0,3})$/, "$1.$2");
+    e.target.value = v;
+});
 
 document.getElementById('checkoutBtn').addEventListener('click', async () => {
-    if (cart.length === 0) return;
+    const form = document.getElementById('checkoutForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
 
     const btn = document.getElementById('checkoutBtn');
     btn.disabled = true;
-    btn.textContent = 'Preparando pagamento...';
+    btn.textContent = 'Enviando dados...';
 
-    // Monta os itens no formato que o backend espera (Seguro: IDs e Variantes)
+    const formData = new FormData(form);
+    const customer = Object.fromEntries(formData.entries());
+
     const items = cart.flatMap(item => {
         if (item.type === 'bag-bundle') {
             const plusSizeCount = item.items.filter(i => ['G1', 'G2', 'G3'].includes(i.size)).length;
@@ -989,21 +1029,26 @@ document.getElementById('checkoutBtn').addEventListener('click', async () => {
         const res = await fetch(`${BACKEND_URL}/create-preference`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items })
+            body: JSON.stringify({ 
+                items,
+                customer,
+                shipping: {
+                    id: selectedShippingId,
+                    price: selectedShippingPrice
+                }
+            })
         });
 
         if (!res.ok) throw new Error('Erro ao criar preferência de pagamento');
 
         const data = await res.json();
-
-        // Redireciona para o checkout do Mercado Pago
-        window.location.href = data.init_point; // use sandbox_init_point para testes
+        window.location.href = data.init_point;
 
     } catch (err) {
         console.error(err);
-        alert('Não foi possível iniciar o pagamento. Tente novamente ou entre em contato.');
+        alert('Não foi possível iniciar o pagamento. Verifique seus dados e tente novamente.');
         btn.disabled = false;
-        btn.textContent = '💳 COMPRAR AGORA';
+        btn.textContent = '💳 PAGAR COM MERCADO PAGO';
     }
 });
 
