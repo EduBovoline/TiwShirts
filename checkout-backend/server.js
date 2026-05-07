@@ -107,8 +107,15 @@ app.post('/create-preference', async (req, res) => {
         });
 
     } catch (err) {
-        console.error('Erro Mercado Pago:', err);
-        res.status(500).json({ error: 'Falha ao criar preferência de pagamento.' });
+        console.error('❌ ERRO DETALHADO MERCADO PAGO:', {
+            message: err.message,
+            stack: err.stack,
+            items: req.body.items
+        });
+        res.status(500).json({ 
+            error: 'Falha ao criar preferência de pagamento.',
+            details: err.message 
+        });
     }
 });
 
