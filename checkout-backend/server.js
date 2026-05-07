@@ -11,6 +11,8 @@ app.use(cors({
         'http://127.0.0.1',
         'https://tiwshirts.com.br',
         'https://www.tiwshirts.com.br',
+        'https://tiwshirts.space',
+        'https://www.tiwshirts.space',
         'https://tiw-shirts.vercel.app',
         'https://tiwshirts.vercel.app',
         'https://tiw-shirts-edubovolines-projects.vercel.app',
@@ -40,6 +42,10 @@ const BAG_PRICE = 475;
 app.post('/create-preference', async (req, res) => {
     try {
         const { items, customer, shipping } = req.body;
+        
+        console.log('--- NOVA REQUISIÇÃO DE CHECKOUT ---');
+        console.log('Shipping recebido:', shipping);
+        console.log('Customer:', customer);
 
         if (!items || !Array.isArray(items) || items.length === 0) {
             return res.status(400).json({ error: 'Nenhum item enviado.' });
