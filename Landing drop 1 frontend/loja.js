@@ -1017,6 +1017,8 @@ document.getElementById('cpfInput').addEventListener('input', function(e) {
     e.target.value = v;
 });
 
+const BACKEND_URL = 'https://tiwshirts.onrender.com';
+
 document.getElementById('checkoutBtn').addEventListener('click', async () => {
     const form = document.getElementById('checkoutForm');
     if (!form.checkValidity()) {
