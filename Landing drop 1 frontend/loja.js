@@ -963,7 +963,30 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
 
         const fmt = val => val.toFixed(2).replace('.', ',');
 
-// Função para selecionar frete
+        resultEl.innerHTML = `
+            <div style="margin-bottom: 12px; font-weight: 600; font-size: 11px; text-transform: uppercase; color: #888;">
+                Selecione o frete para ${data.localidade}:
+            </div>
+            <div class="shipping-methods">
+                ${options.map(opt => `
+                    <button class="shipping-method-card" onclick="selectShipping(this, '${opt.id}', ${opt.price})">
+                        <div class="method-info">
+                            <span class="method-name">${opt.name}</span>
+                            <span class="method-time">Até ${opt.days} dias úteis</span>
+                        </div>
+                        <span class="method-price">R$ ${fmt(opt.price)}</span>
+                    </button>
+                `).join('')}
+            </div>
+            <p style="font-size: 10px; color: #666; margin-top: 12px; line-height: 1.4;">
+                *Prazo de produção de até 10 dias úteis não incluso no prazo de entrega.
+            </p>
+        `;
+    } catch(err) {
+        resultEl.style.color = '#ff4444';
+        resultEl.innerHTML = '⚠️ Não foi possível calcular o frete para este CEP.';
+    }
+});
 window.selectShipping = (el, id, price) => {
     document.querySelectorAll('.shipping-method-card').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
