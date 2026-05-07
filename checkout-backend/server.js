@@ -1,9 +1,8 @@
 const express = require('express');
-const cors    = require('cors');
+const cors = require('cors');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 
 const app = express();
-app.use(express.json());
 
 // Permite chamadas do domínio da loja (ajuste para seu domínio real)
 app.use(cors({
@@ -18,7 +17,10 @@ app.use(cors({
         'https://tiwshirts-edubovolines-projects.vercel.app'
     ]
 }));
+// IMPORTANTE:
+app.options('*', cors());
 
+app.use(express.json());
 // ─── Credenciais Mercado Pago ───────────────────────────────────────────────
 // Crie suas credenciais em: https://www.mercadopago.com.br/developers/panel
 const mp = new MercadoPagoConfig({
@@ -61,10 +63,10 @@ app.post('/create-preference', async (req, res) => {
                 const printId = item.printId || item.id;
                 const p = PRINTS[printId];
                 if (!p) throw new Error(`Produto inválido: ${printId}`);
-                
+
                 unitPrice = p.price;
                 title = `Camiseta ${p.name} - ${item.size}`;
-                
+
                 // Acréscimo Plus Size (G1, G2, G3)
                 if (['G1', 'G2', 'G3'].includes(item.size)) {
                     unitPrice += 27;
@@ -72,10 +74,10 @@ app.post('/create-preference', async (req, res) => {
             }
 
             return {
-                id:          item.id,
-                title:       title,
-                quantity:    item.quantity || 1,
-                unit_price:  unitPrice,
+                id: item.id,
+                title: title,
+                quantity: item.quantity || 1,
+                unit_price: unitPrice,
                 currency_id: 'BRL'
             };
         });
@@ -92,16 +94,16 @@ app.post('/create-preference', async (req, res) => {
                 auto_return: 'approved',
                 // ─── Informações da loja ─────────────────────────────────────
                 statement_descriptor: 'TIWSHIRTS DROP1',
-                external_reference:  `DROP1-${Date.now()}`,
+                external_reference: `DROP1-${Date.now()}`,
                 // ─── Envio (opcional) ────────────────────────────────────────
                 // shipments: { mode: 'not_specified' } // descomente se quiser calcular frete
             }
         });
 
         res.json({
-            id:                  result.id,
-            init_point:          result.init_point,         // produção
-            sandbox_init_point:  result.sandbox_init_point  // testes
+            id: result.id,
+            init_point: result.init_point,         // produção
+            sandbox_init_point: result.sandbox_init_point  // testes
         });
 
     } catch (err) {
