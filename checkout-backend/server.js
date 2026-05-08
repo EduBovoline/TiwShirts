@@ -1,8 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
+const nodemailer = require('nodemailer');
 
 const app = express();
+
+// Configuração do Email (Nodemailer)
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 // Permite chamadas do domínio da loja (ajuste para seu domínio real)
 app.use(cors({
@@ -133,11 +143,49 @@ app.post('/create-preference', async (req, res) => {
 
         const result = await preference.create(preferenceData);
 
+        // ─── Disparar E-mail de Aviso ──────────────────────────────────────────
+        if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            const pedidoId = preferenceData.body.external_reference;
+            const itensHtml = validatedItems.map(i => `<li>${i.quantity}x ${i.title} - R$ ${i.unit_price}</li>`).join('');
+            
+            const htmlEmail = `
+                <h2>🚨 Novo Checkout Iniciado</h2>
+                <p><strong>Pedido:</strong> ${pedidoId}</p>
+                <p><strong>Status:</strong> Aguardando Pagamento no Mercado Pago</p>
+                
+                <h3>Dados do Cliente:</h3>
+                <ul>
+                    <li><strong>Nome:</strong> ${customer?.nome || 'N/A'}</li>
+                    <li><strong>Email:</strong> ${customer?.email || 'N/A'}</li>
+                    <li><strong>WhatsApp:</strong> ${customer?.whatsapp || 'N/A'}</li>
+                    <li><strong>CPF:</strong> ${customer?.cpf || 'N/A'}</li>
+                </ul>
+                
+                <h3>Endereço de Entrega:</h3>
+                <p>${customer?.rua || ''}, ${customer?.numero || ''} - ${customer?.bairro || ''}<br>
+                ${customer?.cidade || ''} / ${customer?.uf || ''}<br>
+                <strong>CEP:</strong> ${customer?.cep || ''}<br>
+                <strong>Complemento:</strong> ${customer?.complemento || 'N/A'}</p>
+                
+                <h3>Itens do Pedido:</h3>
+                <ul>${itensHtml}</ul>
+            `;
+
+            transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: 'edubovoline@gmail.com', // E-mail que vai RECEBER o aviso
+                subject: `#venda n ${pedidoId.split('-')[1]} (Checkout Iniciado)`,
+                html: htmlEmail
+            }).then(() => console.log('📧 E-mail de aviso enviado!'))
+              .catch(err => console.error('Erro ao enviar e-mail:', err));
+        }
+
         res.json({
             id: result.id,
-            init_point: result.init_point,         // produção
-            sandbox_init_point: result.sandbox_init_point  // testes
+            init_point: result.init_point,
+            sandbox_init_point: result.sandbox_init_point
         });
+
 
     } catch (err) {
         console.error('❌ ERRO DETALHADO MERCADO PAGO:', {
