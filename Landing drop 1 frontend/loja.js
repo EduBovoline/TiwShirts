@@ -18,11 +18,12 @@ const PRINTS = {
         description: 'A arte que não esconde o que o mundo já sabe. Uma tipografia crua, direta, pra quem cansa de eufemismos. Expressão pura de quem entende que o bagulho é sério, mas a mente é livre.',
         file: 'Assets/Maco nheiro 1x1 Tiwshirts image.webp',
         price: 105,
-        colors: ['bege', 'Verde'],
+        colors: ['bege', 'Verde', 'preto'],
         stock: 20,
         mockups: {
             'bege': 'tshirt Mockup in model - Areia - MACO NHEIRO - TiwDoo TiwShirts drop#1.webp',
-            'Verde': 'tshirt Mockup in model Verde 2 - TiwDoo TiwShirts drop#1.webp'
+            'Verde': 'tshirt Mockup in model - verde - MACO NHEIRO - TiwDoo TiwShirts drop#1.webp',
+            'preto': 'tshirt Mockup in model - PRETO - MACO NHEIRO - TiwDoo TiwShirts drop#1.webp'
         }
     },
     '2': {
@@ -30,11 +31,12 @@ const PRINTS = {
         description: 'O choque visual entre a estética da "lei e ordem" e a realidade de quem só quer viver em paz. Uma sátira à hipocrisia social que julga pela aparência. Somos gente boa, só não somos otários.',
         file: 'Assets/Não somos má pessoa 1x1 Tiwshirts image.webp',
         price: 105,
-        colors: ['bege', 'preto'],
+        colors: ['bege', 'preto', 'Verde'],
         stock: 20,
         mockups: {
             'bege': 'tshirt Mockup in model bege - Somos gente boa - TiwDoo TiwShirts drop#1.webp',
-            'preto': 'tshirt Mockup in model preto 4 - TiwDoo TiwShirts drop#1.webp'
+            'preto': 'tshirt Mockup in model preto 4 - TiwDoo TiwShirts drop#1.webp',
+            'Verde': 'tshirt Mockup in model verde - Somos gente boa - TiwDoo  TiwShirts drop#1.webp'
         }
     },
     '3': {
@@ -71,9 +73,9 @@ const PRINTS = {
         colors: ['preto', 'bege', 'Verde'],
         stock: 20,
         mockups: {
-            'preto': 'tshirt Mockup in model preto - LEGALIZA PRA POBRE TBM - TiwDoo TiwShirts drop#1.webp',
+            'preto': 'tshirt Mockup in model preto - LEGALIZA PRA POBRE TBM -  TiwDoo TiwShirts drop#1.webp',
             'bege': 'tshirt Mockup in model bege - legaliza pra pobre tbm - TiwDoo TiwShirts drop#1.webp',
-            'Verde': 'tshirt Mockup in model Verde 5 - TiwDoo TiwShirts drop#1.webp'
+            'Verde': 'tshirt Mockup in model VERDE - LEGALIZA PRA POBRE TBM -  TiwDoo TiwShirts drop#1.webp'
         }
     }
 };
