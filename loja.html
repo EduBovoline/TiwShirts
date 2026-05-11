@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja TiwShirts | Streetwear Underground Drop #01 — Peças Limitadas e Numeradas</title>
+    <meta name="description" content="Garanta sua peça no Drop #01 da TiwShirts. Camisetas de streetwear ideológico, edicão limitada, numeradas por ordem de compra. 5 estampas. 20 unidades cada. Entrega para todo o Brasil.">
+    <link rel="canonical" href="https://tiwshirts.space/loja.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tiwshirts.space/loja.html">
+    <meta property="og:title" content="Loja TiwShirts | Streetwear Underground Drop #01">
+    <meta property="og:description" content="Camisetas exclusivas de streetwear ideológico, numeradas e de tiragem limitada. Garanta a sua peça única ou o pack Bag of Drop com 5 estampas.">
+    <meta property="og:image" content="https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tiwshirts.space/loja.html">
+    <meta property="twitter:title" content="Loja TiwShirts | Streetwear Underground Drop #01">
+    <meta property="twitter:description" content="Camisetas exclusivas de streetwear ideológico, numeradas e de tiragem limitada. Garanta a sua peça única ou o pack Bag of Drop com 5 estampas.">
+    <meta property="twitter:image" content="https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="loja.css">
+
+    <!-- Schema Markup: Store Page -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Loja TiwShirts | Drop #01 — Streetwear Ideológico Brasileiro",
+      "description": "Página da loja oficial do Drop #01 da TiwShirts. Camisetas de streetwear ideológico, edicão limitada, numeradas por ordem de compra.",
+      "url": "https://tiwshirts.space/loja.html",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://tiwshirts.space/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Loja Drop #01",
+            "item": "https://tiwshirts.space/loja.html"
+          }
+        ]
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Camisetas Drop #01 TiwShirts",
+        "numberOfItems": 5,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Camiseta Maconheiro | Streetwear Underground TiwShirts" },
+          { "@type": "ListItem", "position": 2, "name": "Camiseta Não Somos Má Pessoa | Identidade & Estética Marginal TiwShirts" },
+          { "@type": "ListItem", "position": 3, "name": "Camiseta Just Doob It | Moda Provocativa & Paródia Underground TiwShirts" },
+          { "@type": "ListItem", "position": 4, "name": "Camiseta Maconha Salva Vidas | Ativismo & Streetwear Brasil TiwShirts" },
+          { "@type": "ListItem", "position": 5, "name": "Camiseta Legaliza | Streetwear Ativista & Estética Urbana TiwShirts" }
+        ]
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- NAV -->
+    <header id="nav" class="scrolled">
+        <div class="nav-inner">
+            <a href="index.html" class="logo" style="min-width: 120px;">TIWSHIRTS</a>
+            <ul>
+                <li><a href="index.html">INÍCIO</a></li>
+                <li><a href="index.html#drop">DROP #01</a></li>
+            </ul>
+            <button class="btn-cart" id="cartBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 01-8 0" />
+                </svg>
+                <span class="cart-count" id="cartCount" style="display:none">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="store-main">
+        <div class="store-container">
+
+            <!-- ===== PREVIEW ===== -->
+            <style>
+                .carousel-wrapper {
+                    position: relative;
+                    width: 100%;
+                    aspect-ratio: 16/9; /* Mais abrangente */
+                    border-radius: var(--radius);
+                    overflow: hidden;
+                    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+                    border: 1px solid var(--glass-border);
+                    background: #000;
+                }
+                .carousel-model {
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+                    cursor: pointer;
+                }
+                .carousel-model.active {
+                    transform: scale(1) translateX(0);
+                    opacity: 1;
+                    z-index: 3;
+                    filter: brightness(1) drop-shadow(0 10px 30px rgba(0,0,0,0.6));
+                }
+                .carousel-model.prev {
+                    transform: scale(0.75) translateX(-85%);
+                    opacity: 0.25;
+                    z-index: 2;
+                    filter: brightness(0.3) blur(3px);
+                }
+                .carousel-model.next {
+                    transform: scale(0.75) translateX(85%);
+                    opacity: 0.25;
+                    z-index: 2;
+                    filter: brightness(0.3) blur(3px);
+                }
+                .carousel-model.hidden {
+                    opacity: 0;
+                    transform: scale(0.7);
+                    z-index: 1;
+                    pointer-events: none;
+                }
+                /* Gradiente suave nas bordas para mesclar melhor com o fundo escuro */
+                .carousel-vignette {
+                    position: absolute;
+                    inset: 0;
+                    background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.6) 120%);
+                    z-index: 4;
+                    pointer-events: none;
+                }
+                .product-description {
+                    font-size: 13px;
+                    line-height: 1.6;
+                    color: #aaa;
+                    margin-top: 12px;
+                    font-family: 'Inter', sans-serif;
+                    font-weight: 400;
+                    max-width: 95%;
+                }
+            </style>
+            <div class="store-preview">
+                <div class="carousel-wrapper" id="mockupWrapper">
+                    
+                    <!-- Fundo / Cenário -->
+                    <img id="layer-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; z-index: 1;" src="" alt="Cenário">
+                    
+                    <!-- Container dos Modelos (Carrossel) -->
+                    <div id="modelsCarousel" style="position: absolute; inset: 0; z-index: 2;">
+                        <!-- Injetado via JS -->
+                    </div>
+
+                    <div class="carousel-vignette"></div>
+                    
+                    <div class="loading-overlay" id="loadingOverlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;">
+                        <div class="spinner" style="width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--green); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    </div>
+
+                    <!-- Stock badge on the viewer -->
+                    <div class="stock-badge" id="stockBadge" style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.75); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.7); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; backdrop-filter: blur(6px); z-index: 10;"></div>
+                </div>
+
+                <!-- Seletor de Cenário -->
+                <div class="bg-selector" id="bgSelectorArea" style="display: flex; align-items: center; justify-content: center; gap: 16px; padding: 12px; background: var(--mid-gray); border-radius: 30px; align-self: center; border: 1px solid var(--glass-border); margin-top: 20px;">
+                    <span class="selector-label" style="font-size: 10px; letter-spacing: 2px; color: var(--gray); font-weight: 600;">MUDAR CENÁRIO:</span>
+                    <div class="bg-dots" id="bgDots" style="display: flex; gap: 10px;">
+                        <button class="bg-dot active" data-bg="1" style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--gray); cursor: pointer; transition: 0.3s;"></button>
+                        <button class="bg-dot" data-bg="2" style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--gray); cursor: pointer; transition: 0.3s;"></button>
+                        <button class="bg-dot" data-bg="3" style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--gray); cursor: pointer; transition: 0.3s;"></button>
+                        <button class="bg-dot" data-bg="4" style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--gray); cursor: pointer; transition: 0.3s;"></button>
+                        <button class="bg-dot" data-bg="5" style="width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--gray); cursor: pointer; transition: 0.3s;"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== CONTROLS ===== -->
+            <div class="store-controls">
+                <div class="product-header">
+                    <span class="drop-tag">DROP #01</span>
+                    <h1 class="product-title" id="productTitle">MACONHEIRO</h1>
+                    <p class="product-price" id="productPrice">R$ 105</p>
+                    <p class="product-description" id="productDescription">A arte que não esconde o que o mundo já sabe. Uma tipografia crua, direta, pra quem cansa de eufemismos.</p>
+                </div>
+
+                <!-- 1. ESTAMPA -->
+                <div class="control-group">
+                    <label class="control-label">1. ESCOLHA A ESTAMPA</label>
+                    <div class="print-selector" id="printSelector">
+                        <button class="print-btn active" data-print="1">
+                            <img src="Assets/Maco nheiro 1x1 Tiwshirts image.webp" alt="Camiseta TiwShirts estampa Maconheiro" width="80" height="80" loading="lazy">
+                        </button>
+                        <button class="print-btn" data-print="2">
+                            <img src="Assets/Não somos má pessoa 1x1 Tiwshirts image.webp" alt="Camiseta TiwShirts estampa Não Somos Má Pessoa" width="80" height="80" loading="lazy">
+                        </button>
+                        <button class="print-btn" data-print="3">
+                            <img src="Assets/Just Doob It 1x1 Tiwshirts image.webp" alt="Camiseta TiwShirts estampa Just Doob It" width="80" height="80" loading="lazy">
+                        </button>
+                        <button class="print-btn" data-print="4">
+                            <img src="Assets/Maconha salva Vidas 1x1 Tiwshirts image.webp" alt="Camiseta TiwShirts estampa Maconha Salva Vidas" width="80" height="80" loading="lazy">
+                        </button>
+                        <button class="print-btn" data-print="5">
+                            <img src="Assets/Legaliza pra pobre tbm 1x1 Tiwshirts image.webp" alt="Camiseta TiwShirts estampa Legaliza Pra Pobre" width="80" height="80" loading="lazy">
+                        </button>
+                        <button class="print-btn bag-btn" data-print="bag" title="BAG OF DROP — Todas as estampas" type="button">
+                            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 2px;">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            <span class="btn-label" style="font-size: 10px; font-weight: 600;">BAG</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. COR — Produto Individual -->
+                <div class="control-group" id="colorGroup">
+                    <label class="control-label">2. COR DA CAMISETA</label>
+                    <div class="color-selector" id="colorSelector">
+                        <button class="color-btn active" data-color="preto" style="background:#1a1a1a" title="Preto"></button>
+                        <button class="color-btn" data-color="bege"  style="background:#d1c5b4" title="Bege"></button>
+                        <button class="color-btn" data-color="Verde" style="background:#2b3d2c" title="Verde"></button>
+                    </div>
+                </div>
+
+                <!-- 3. TAMANHO — Produto Individual -->
+                <div class="control-group" id="sizeGroup">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label class="control-label" style="margin-bottom: 0;">3. TAMANHO</label>
+                        <button id="guideBtn" type="button" style="background: none; border: none; color: #ff9900; font-size: 11px; cursor: pointer; text-decoration: underline; font-family: 'Inter', sans-serif;">Guia de Medidas</button>
+                    </div>
+                    <div class="size-selector" id="sizeSelector" style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="size-btn" data-size="P" type="button">P</button>
+                            <button class="size-btn active" data-size="M" type="button">M</button>
+                            <button class="size-btn" data-size="G" type="button">G</button>
+                            <button class="size-btn" data-size="GG" type="button">GG</button>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="size-btn plus-size" data-size="G1" type="button" title="+ R$27">G1*</button>
+                            <button class="size-btn plus-size" data-size="G2" type="button" title="+ R$27">G2*</button>
+                            <button class="size-btn plus-size" data-size="G3" type="button" title="+ R$27">G3*</button>
+                        </div>
+                        <span style="font-size: 10px; color: #888; margin-top: -4px;">*Tamanhos Plus Size possuem acréscimo de R$ 27,00</span>
+                    </div>
+                </div>
+
+                <!-- BAG CONFIGURATOR — aparece só quando Bag está selecionada -->
+                <div id="bagConfigurator" class="bag-configurator" style="display:none">
+                    <label class="control-label">2. CONFIGURE CADA PEÇA DO PACK</label>
+                    <div class="bag-items" id="bagItems">
+                        <!-- Gerado via JS para cada estampa -->
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="buy-section">
+                    <button class="btn-buy" id="addToCartBtn" type="button">🔥 GARANTIR A MINHA PEÇA</button>
+                    <ul class="guarantees">
+                        <li>✦ Edição Limitada — 20 unidades por estampa</li>
+                        <li>✦ Numerada por ordem de compra</li>
+                        <li>✦ Entrega para todo o Brasil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CHECKOUT DRAWER -->
+    <div id="checkoutDrawer" class="drawer-backdrop" onclick="closeDrawer(event)">
+        <div class="drawer">
+            <!-- STEP 1: CART -->
+            <div id="step-cart" class="checkout-step active">
+                <div class="drawer-header">
+                    <h3>SUA BAG</h3>
+                    <button onclick="closeCheckout()" type="button" class="close-btn">✕</button>
+                </div>
+                
+                <div id="cartItems" class="cart-items">
+                    <!-- Injetado via JS -->
+                </div>
+
+                <div class="shipping-calculator">
+                    <label class="section-label">SIMULAR FRETE</label>
+                    <div class="cep-row">
+                        <input type="text" id="cepInput" placeholder="Seu CEP (00000-000)" maxlength="9">
+                        <button type="button" id="calcShippingBtn">CALCULAR</button>
+                    </div>
+                    <div id="shippingResult" class="shipping-result-area"></div>
+                    <div id="shippingBadge" class="shipping-badge hint">
+                        🚚 Leve <strong>2+ peças</strong> e o frete é GRÁTIS
+                    </div>
+                </div>
+
+                <div class="checkout-footer">
+                    <div class="cart-total-details">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span id="subtotalVal">R$ 0</span>
+                        </div>
+                        <div class="total-row highlight">
+                            <span>Frete</span>
+                            <span id="shippingVal">Selecione o CEP</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>TOTAL</span>
+                            <span id="cartTotal">R$ 0</span>
+                        </div>
+                    </div>
+                    <button class="btn-next-step" id="goToFormBtn" type="button">FINALIZAR PEDIDO</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: CUSTOMER DATA -->
+            <div id="step-form" class="checkout-step">
+                <div class="drawer-header">
+                    <button onclick="changeStep('cart')" type="button" class="back-btn">←</button>
+                    <h3>DADOS DE ENVIO</h3>
+                    <button onclick="closeCheckout()" type="button" class="close-btn">✕</button>
+                </div>
+
+                <form id="checkoutForm" class="customer-form">
+                    <div class="form-section">
+                        <label class="section-label">DADOS PESSOAIS</label>
+                        <input type="text" name="nome" placeholder="Nome Completo" required>
+                        <div class="form-row">
+                            <input type="text" name="cpf" id="cpfInput" placeholder="CPF (Apenas números)" required maxlength="14">
+                            <input type="tel" name="whatsapp" placeholder="WhatsApp (DDD)" required>
+                        </div>
+                        <input type="email" name="email" placeholder="E-mail principal" required>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="section-label">ENDEREÇO COMPLETO</label>
+                        <div class="form-row">
+                            <input type="text" name="rua" placeholder="Rua / Avenida" required style="flex: 2;">
+                            <input type="text" name="numero" placeholder="Nº" required style="flex: 1;">
+                        </div>
+                        <div class="form-row">
+                            <input type="text" name="complemento" placeholder="Complemento (Apto, bloco...)">
+                            <input type="text" name="bairro" placeholder="Bairro" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="text" name="cidade" placeholder="Cidade" required style="flex: 2;">
+                            <input type="text" name="uf" placeholder="UF" required maxlength="2" style="flex: 1;">
+                        </div>
+                    </div>
+
+                    <div class="lgpd-consent">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="lgpd" required>
+                            <span class="checkmark"></span>
+                            <span class="lgpd-text">Aceito a <a href="politica.html" target="_blank">Política de Privacidade</a> e autorizo o uso dos dados para processar meu pedido e comunicações futuras.</span>
+                        </label>
+                    </div>
+
+                    <div class="checkout-footer">
+                        <button class="btn-buy" id="checkoutBtn" type="button">💳 PAGAR COM MERCADO PAGO</button>
+                        <p class="safe-note">🛡️ Pagamento seguro via Mercado Pago</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Guia de Medidas -->
+    <div id="sizeGuideModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeGuideBtn" class="modal-close" type="button">&times;</button>
+            <h2 class="modal-title">Guia de Medidas</h2>
+            
+            <div class="modal-illustration">
+                <svg viewBox="0 0 200 200" width="160" height="160">
+                    <path d="M60 40 Q100 60 140 40 L180 80 L150 100 L140 80 L140 180 L60 180 L60 80 L50 100 L20 80 Z" fill="#222" stroke="#444" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M80 40 Q100 55 120 40" fill="none" stroke="#444" stroke-width="2"/>
+                    <line x1="100" y1="50" x2="100" y2="180" stroke="#ff9900" stroke-width="2" stroke-dasharray="4"/>
+                    <text x="105" y="120" fill="#ff9900" font-size="11" font-weight="bold" font-family="sans-serif">Comprimento</text>
+                    <line x1="60" y1="130" x2="140" y2="130" stroke="#00d2ff" stroke-width="2" stroke-dasharray="4"/>
+                    <text x="100" y="125" fill="#00d2ff" font-size="11" font-weight="bold" font-family="sans-serif" text-anchor="middle">Tórax</text>
+                    <line x1="140" y1="40" x2="180" y2="80" stroke="#ff4444" stroke-width="2" stroke-dasharray="4"/>
+                    <text x="165" y="55" fill="#ff4444" font-size="11" font-weight="bold" font-family="sans-serif">Manga</text>
+                </svg>
+            </div>
+
+            <h3 class="modal-subtitle">CAMISETA TIWSHIRTS</h3>
+            <table class="size-table">
+                <tr><th>TAMANHO</th><th>COMPRIMENTO</th><th>TÓRAX</th><th>MANGA</th></tr>
+                <tr><td class="size-label">P</td><td>65 cm</td><td>50 cm</td><td>16 cm</td></tr>
+                <tr><td class="size-label">M</td><td>68 cm</td><td>52 cm</td><td>18 cm</td></tr>
+                <tr><td class="size-label">G</td><td>70 cm</td><td>56 cm</td><td>18 cm</td></tr>
+                <tr><td class="size-label">GG</td><td>72 cm</td><td>58 cm</td><td>19 cm</td></tr>
+            </table>
+
+            <h3 class="modal-subtitle">PLUS SIZE TIWSHIRTS</h3>
+            <table class="size-table">
+                <tr><th>TAMANHO</th><th>COMPRIMENTO</th><th>TÓRAX</th><th>MANGA</th></tr>
+                <tr><td class="size-label">G1</td><td>75 cm</td><td>59 cm</td><td>22 cm</td></tr>
+                <tr><td class="size-label">G2</td><td>77 cm</td><td>62 cm</td><td>23 cm</td></tr>
+                <tr><td class="size-label">G3</td><td>79 cm</td><td>65 cm</td><td>24 cm</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <script src="loja.js"></script>
+</body>
+</html>

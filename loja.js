@@ -1,9 +1,14 @@
-/* ========================
-   LOJA INTERATIVA JS
-   TiwShirts Drop #01 - Nova Coleção
-======================== */
-
 const ASSETS_PATH = 'Assets/';
+
+/* ---- CHECKOUT STATE ---- */
+let selectedShippingPrice = 0;
+let selectedShippingId    = '';
+
+function changeStep(step) {
+    document.querySelectorAll('.checkout-step').forEach(el => el.classList.remove('active'));
+    document.getElementById('step-' + step).classList.add('active');
+}
+window.changeStep = changeStep;
 
 /* ---- CATÁLOGO DE PRODUTOS ---- */
 // colors: array das cores disponíveis para cada estampa com base nas novas imagens
@@ -13,11 +18,12 @@ const PRINTS = {
         description: 'A arte que não esconde o que o mundo já sabe. Uma tipografia crua, direta, pra quem cansa de eufemismos. Expressão pura de quem entende que o bagulho é sério, mas a mente é livre.',
         file: 'Assets/Maco nheiro 1x1 Tiwshirts image.webp',
         price: 105,
-        colors: ['bege', 'Verde'],
+        colors: ['bege', 'Verde', 'preto'],
         stock: 20,
         mockups: {
             'bege': 'tshirt Mockup in model - Areia - MACO NHEIRO - TiwDoo TiwShirts drop#1.webp',
-            'Verde': 'tshirt Mockup in model Verde 2 - TiwDoo TiwShirts drop#1.webp'
+            'Verde': 'tshirt Mockup in model - verde - MACO NHEIRO - TiwDoo TiwShirts drop#1.webp',
+            'preto': 'tshirt Mockup in model - PRETO - MACO NHEIRO - TiwDoo TiwShirts drop#1.webp'
         }
     },
     '2': {
@@ -25,11 +31,12 @@ const PRINTS = {
         description: 'O choque visual entre a estética da "lei e ordem" e a realidade de quem só quer viver em paz. Uma sátira à hipocrisia social que julga pela aparência. Somos gente boa, só não somos otários.',
         file: 'Assets/Não somos má pessoa 1x1 Tiwshirts image.webp',
         price: 105,
-        colors: ['bege', 'preto'],
+        colors: ['bege', 'preto', 'Verde'],
         stock: 20,
         mockups: {
             'bege': 'tshirt Mockup in model bege - Somos gente boa - TiwDoo TiwShirts drop#1.webp',
-            'preto': 'tshirt Mockup in model preto 4 - TiwDoo TiwShirts drop#1.webp'
+            'preto': 'tshirt Mockup in model preto 4 - TiwDoo TiwShirts drop#1.webp',
+            'Verde': 'tshirt Mockup in model verde - Somos gente boa - TiwDoo  TiwShirts drop#1.webp'
         }
     },
     '3': {
@@ -66,9 +73,9 @@ const PRINTS = {
         colors: ['preto', 'bege', 'Verde'],
         stock: 20,
         mockups: {
-            'preto': 'tshirt Mockup in model preto - LEGALIZA PRA POBRE TBM - TiwDoo TiwShirts drop#1.webp',
+            'preto': 'tshirt Mockup in model preto - LEGALIZA PRA POBRE TBM -  TiwDoo TiwShirts drop#1.webp',
             'bege': 'tshirt Mockup in model bege - legaliza pra pobre tbm - TiwDoo TiwShirts drop#1.webp',
-            'Verde': 'tshirt Mockup in model Verde 5 - TiwDoo TiwShirts drop#1.webp'
+            'Verde': 'tshirt Mockup in model VERDE - LEGALIZA PRA POBRE TBM -  TiwDoo TiwShirts drop#1.webp'
         }
     }
 };
@@ -790,6 +797,8 @@ function addBagToCart() {
 function updateCartUI() {
     const countEl = document.getElementById('cartCount');
     const itemsEl = document.getElementById('cartItems');
+    const subtotalEl = document.getElementById('subtotalVal');
+    const shippingEl = document.getElementById('shippingVal');
     const totalEl = document.getElementById('cartTotal');
 
     const itemCount = cart.reduce((acc, i) => acc + (i.type === 'bag-bundle' ? 5 : 1), 0);
@@ -798,14 +807,19 @@ function updateCartUI() {
 
     if (cart.length === 0) {
         itemsEl.innerHTML = '<p class="empty-cart">Seu carrinho está vazio.</p>';
+        subtotalEl.textContent = 'R$ 0';
+        shippingEl.textContent = '---';
         totalEl.textContent = 'R$ 0';
         updateShippingBadge(0);
+        selectedShippingPrice = 0;
         return;
     }
 
-    let total = 0;
+    let subtotal = 0;
     itemsEl.innerHTML = cart.map(item => {
-        total += item.price;
+        subtotal += item.price;
+        const removeBtn = `<button class="btn-remove" onclick="removeFromCart(${item.id})">🗑️</button>`;
+
         if (item.type === 'bag-bundle') {
             return `
                 <div class="cart-item cart-item--bag">
@@ -815,6 +829,7 @@ function updateCartUI() {
                         <div class="ci-size">${item.items.map(i => `${i.name.split(' ')[0]} ${i.colorLabel} ${i.size}`).join(' · ')}</div>
                     </div>
                     <div class="ci-price">${formatPrice(item.price)}</div>
+                    ${removeBtn}
                 </div>`;
         }
         return `
@@ -825,20 +840,58 @@ function updateCartUI() {
                     <div class="ci-size">${item.colorLabel} | ${item.size}</div>
                 </div>
                 <div class="ci-price">${formatPrice(item.price)}</div>
+                ${removeBtn}
             </div>`;
     }).join('');
 
-    totalEl.textContent = formatPrice(total);
+    subtotalEl.textContent = formatPrice(subtotal);
+    
+    // Frete grátis automático
+    if (itemCount >= 2) {
+        selectedShippingPrice = 0;
+        shippingEl.textContent = 'GRÁTIS';
+    } else {
+        shippingEl.textContent = selectedShippingPrice > 0 ? formatPrice(selectedShippingPrice) : 'A calcular';
+    }
+
+    totalEl.textContent = formatPrice(subtotal + selectedShippingPrice);
     updateShippingBadge(itemCount);
-    document.getElementById('checkoutBtn').dataset.total = total;
 }
+
+function removeFromCart(id) {
+    const idx = cart.findIndex(i => i.id === id);
+    if (idx > -1) {
+        const item = cart[idx];
+        // Devolve o estoque
+        if (item.type === 'bag-bundle') {
+            Object.keys(PRINTS).forEach(pid => PRINTS[pid].stock++);
+        } else {
+            PRINTS[item.printId].stock++;
+        }
+        cart.splice(idx, 1);
+        updateCartUI();
+        updateComposite();
+    }
+}
+window.removeFromCart = removeFromCart;
 
 function updateShippingBadge(count) {
     const el = document.getElementById('shippingBadge');
+    const resultEl = document.getElementById('shippingResult');
     if (!el) return;
+
     if (count >= 2) {
         el.innerHTML = '🚚 <strong>FRETE GRÁTIS</strong> aplicado!';
         el.className = 'shipping-badge active';
+        
+        if (resultEl && resultEl.style.display === 'block') {
+            resultEl.innerHTML = `
+                <div class="shipping-result-free">
+                    🎯 FRETE GRÁTIS LIBERADO!<br>
+                    <span style="font-size: 10px; font-weight: 400; opacity: 0.8;">Válido para todo o Brasil neste pedido.</span>
+                </div>
+            `;
+        }
     } else {
         el.innerHTML = '🚚 Adicione <strong>mais 1 peça</strong> para <strong>FRETE GRÁTIS</strong>';
         el.className = 'shipping-badge hint';
@@ -876,10 +929,14 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
     resultEl.innerHTML = 'Calculando...';
 
     const itemCount = cart.reduce((acc, i) => acc + (i.type === 'bag-bundle' ? 5 : 1), 0);
-    
+
     if (itemCount >= 2) {
-        resultEl.style.color = 'var(--green)';
-        resultEl.innerHTML = '🎯 <strong>FRETE GRÁTIS</strong> (Promoção aplicada para 2+ peças)';
+        resultEl.innerHTML = `
+            <div class="shipping-result-free">
+                🎯 FRETE GRÁTIS LIBERADO!<br>
+                <span style="font-size: 10px; font-weight: 400; opacity: 0.8;">Válido para todo o Brasil neste pedido.</span>
+            </div>
+        `;
         return;
     }
 
@@ -889,68 +946,95 @@ document.getElementById('calcShippingBtn').addEventListener('click', async () =>
         
         if (data.erro) throw new Error();
 
-        // Origem: Sorocaba/SP (18070-009)
-        // Regras simuladas baseadas em contratos do Melhor Envio
-        let pacPrice = 35.00, jadPrice = 24.00, loggiPrice = 18.50;
-        let pacDays = 8, jadDays = 7, loggiDays = 6;
-        
+        // Regras simuladas
+        const options = [
+            { id: 'loggi', name: '⚡ Loggi (Express)', price: 18.50, days: 6 },
+            { id: 'jadlog', name: '📦 Jadlog (.Package)', price: 24.00, days: 7 },
+            { id: 'pac', name: '📮 Correios (PAC)', price: 35.00, days: 8 }
+        ];
+
         if (data.uf === 'SP') {
-            pacPrice = 22.00; jadPrice = 13.50; loggiPrice = 12.00;
-            pacDays = 5; jadDays = 4; loggiDays = 3;
+            options[0].price = 12.00; options[0].days = 3;
+            options[1].price = 13.50; options[1].days = 4;
+            options[2].price = 22.00; options[2].days = 5;
         } else if (['RJ', 'MG', 'PR', 'SC', 'RS'].includes(data.uf)) {
-            pacPrice = 25.00; jadPrice = 15.50; loggiPrice = 14.00;
-            pacDays = 6; jadDays = 5; loggiDays = 4;
-        } else if (['DF', 'GO', 'MS', 'MT'].includes(data.uf)) {
-            pacPrice = 28.00; jadPrice = 18.00; loggiPrice = 16.50;
-            pacDays = 7; jadDays = 6; loggiDays = 5;
-        } else {
-            // Norte e Nordeste (ex: PE)
-            pacPrice = 34.50; jadPrice = 19.50; loggiPrice = 18.40;
-            pacDays = 8; jadDays = 7; loggiDays = 6;
+            options[0].price = 14.00; options[0].days = 4;
+            options[1].price = 15.50; options[1].days = 5;
+            options[2].price = 25.00; options[2].days = 6;
         }
 
         const fmt = val => val.toFixed(2).replace('.', ',');
 
-        resultEl.style.color = '#fff';
         resultEl.innerHTML = `
-            <div style="margin-bottom: 6px; font-weight: 600; font-size: 11px; text-transform: uppercase;">
-                Envio para ${data.localidade} - ${data.uf}
+            <div style="margin-bottom: 12px; font-weight: 600; font-size: 11px; text-transform: uppercase; color: #888;">
+                Selecione o frete para ${data.localidade}:
             </div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 8px;">
-                <tr style="border-bottom: 1px solid #333;">
-                    <td style="padding: 4px 0;">⚡ <strong>Loggi (Express)</strong><br><span style="color:#888; font-size:10px;">Até ${loggiDays} dias úteis</span></td>
-                    <td style="text-align: right; color: var(--green); font-weight: bold;">R$ ${fmt(loggiPrice)}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #333;">
-                    <td style="padding: 4px 0;">📦 <strong>Jadlog (.Package)</strong><br><span style="color:#888; font-size:10px;">Até ${jadDays} dias úteis</span></td>
-                    <td style="text-align: right; color: var(--green); font-weight: bold;">R$ ${fmt(jadPrice)}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 4px 0;">📮 <strong>Correios (PAC)</strong><br><span style="color:#888; font-size:10px;">Até ${pacDays} dias úteis</span></td>
-                    <td style="text-align: right; color: var(--green); font-weight: bold;">R$ ${fmt(pacPrice)}</td>
-                </tr>
-            </table>
-            <span style="font-size: 10px; color: #888;">*Adicione 2 ou mais peças para garantir Frete Grátis em qualquer modalidade.</span>
+            <div class="shipping-methods">
+                ${options.map(opt => `
+                    <button class="shipping-method-card" onclick="selectShipping(this, '${opt.id}', ${opt.price})">
+                        <div class="method-info">
+                            <span class="method-name">${opt.name}</span>
+                            <span class="method-time">Até ${opt.days} dias úteis</span>
+                        </div>
+                        <span class="method-price">R$ ${fmt(opt.price)}</span>
+                    </button>
+                `).join('')}
+            </div>
+            <p style="font-size: 10px; color: #666; margin-top: 12px; line-height: 1.4;">
+                *Prazo de produção de até 10 dias úteis não incluso no prazo de entrega.
+            </p>
         `;
     } catch(err) {
         resultEl.style.color = '#ff4444';
         resultEl.innerHTML = '⚠️ Não foi possível calcular o frete para este CEP.';
     }
 });
+window.selectShipping = (el, id, price) => {
+    document.querySelectorAll('.shipping-method-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    selectedShippingPrice = price;
+    selectedShippingId    = id;
+    updateCartUI();
+};
 
-/* ---- MERCADO PAGO CHECKOUT PRO ---- */
+/* ---- FORM STEP & CHECKOUT ---- */
+document.getElementById('goToFormBtn').addEventListener('click', () => {
+    if (cart.length === 0) return;
+    
+    const itemCount = cart.reduce((acc, i) => acc + (i.type === 'bag-bundle' ? 5 : 1), 0);
+    if (itemCount < 2 && selectedShippingPrice === 0) {
+        alert('Por favor, calcule e selecione o frete antes de continuar.');
+        return;
+    }
+    changeStep('form');
+});
 
-// ⚙️ Configure esta URL com o endereço do seu backend (servidor Node.js)
-const BACKEND_URL = 'https://tiwshirts.onrender.com'; // TROQUE pelo URL do seu servidor
+// CPF Masking
+document.getElementById('cpfInput').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.substring(0, 11);
+    if (v.length > 9) v = v.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+    else if (v.length > 6) v = v.replace(/^(\d{3})(\d{3})(\d{0,3})$/, "$1.$2.$3");
+    else if (v.length > 3) v = v.replace(/^(\d{3})(\d{0,3})$/, "$1.$2");
+    e.target.value = v;
+});
+
+const BACKEND_URL = 'https://tiwshirts.onrender.com';
 
 document.getElementById('checkoutBtn').addEventListener('click', async () => {
-    if (cart.length === 0) return;
+    const form = document.getElementById('checkoutForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
 
     const btn = document.getElementById('checkoutBtn');
     btn.disabled = true;
-    btn.textContent = 'Preparando pagamento...';
+    btn.textContent = 'Enviando dados...';
 
-    // Monta os itens no formato que o backend espera (Seguro: IDs e Variantes)
+    const formData = new FormData(form);
+    const customer = Object.fromEntries(formData.entries());
+
     const items = cart.flatMap(item => {
         if (item.type === 'bag-bundle') {
             const plusSizeCount = item.items.filter(i => ['G1', 'G2', 'G3'].includes(i.size)).length;
@@ -972,21 +1056,26 @@ document.getElementById('checkoutBtn').addEventListener('click', async () => {
         const res = await fetch(`${BACKEND_URL}/create-preference`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items })
+            body: JSON.stringify({ 
+                items,
+                customer,
+                shipping: {
+                    id: selectedShippingId,
+                    price: selectedShippingPrice
+                }
+            })
         });
 
         if (!res.ok) throw new Error('Erro ao criar preferência de pagamento');
 
         const data = await res.json();
-
-        // Redireciona para o checkout do Mercado Pago
-        window.location.href = data.init_point; // use sandbox_init_point para testes
+        window.location.href = data.init_point;
 
     } catch (err) {
         console.error(err);
-        alert('Não foi possível iniciar o pagamento. Tente novamente ou entre em contato.');
+        alert('Não foi possível iniciar o pagamento. Verifique seus dados e tente novamente.');
         btn.disabled = false;
-        btn.textContent = '💳 COMPRAR AGORA';
+        btn.textContent = '💳 PAGAR COM MERCADO PAGO';
     }
 });
 

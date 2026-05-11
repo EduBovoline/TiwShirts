@@ -1,0 +1,182 @@
+/* ============================
+   PRODUCT PAGE — Shared Styles
+   Used by all /camiseta-* pages
+   ============================ */
+
+.product-page { padding: 140px 0 100px; background: var(--black); }
+
+.product-page-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+}
+
+.product-page-img {
+    position: sticky;
+    top: 100px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+.product-page-img img { width: 100%; display: block; }
+
+.product-page-info { display: flex; flex-direction: column; gap: 32px; }
+
+.page-tag {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--green);
+    text-transform: uppercase;
+    border: 1px solid var(--green);
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 2px;
+}
+
+.page-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.1;
+}
+
+.page-manifesto {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.9;
+    padding-left: 20px;
+    border-left: 2px solid var(--green);
+    font-style: italic;
+}
+
+.page-price {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--gold);
+}
+.page-price span {
+    font-size: 1rem;
+    color: var(--gray);
+    font-weight: 400;
+    margin-left: 8px;
+}
+
+.stock-alert {
+    background: var(--mid-gray);
+    border: 1px solid var(--glass-border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+}
+.stock-alert strong { color: var(--white); }
+
+.btn-buy-product {
+    display: block;
+    padding: 18px 48px;
+    background: var(--green);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-radius: var(--radius);
+    transition: background .3s, transform .3s, box-shadow .3s;
+    text-align: center;
+}
+.btn-buy-product:hover {
+    background: #2d5230;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px rgba(61,107,64,0.4);
+}
+
+.guarantees-list { display: flex; flex-direction: column; gap: 10px; }
+.guarantees-list li { font-size: 13px; color: var(--gray); letter-spacing: 1px; }
+
+/* FAQ */
+.faq-section {
+    padding: 100px 0;
+    background: var(--dark-gray);
+    border-top: 1px solid var(--glass-border);
+}
+.faq-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 48px;
+}
+.faq-item { border-bottom: 1px solid var(--glass-border); padding: 28px 0; }
+.faq-q {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+.faq-a { font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.8; }
+
+/* Related */
+.related-section {
+    padding: 100px 0;
+    background: var(--black);
+    border-top: 1px solid var(--glass-border);
+}
+.related-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    color: var(--gray);
+}
+.related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+.related-card {
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--mid-gray);
+    transition: opacity .3s;
+    text-decoration: none;
+    color: inherit;
+}
+.related-card:hover { opacity: .8; }
+.related-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.related-card-info { padding: 14px 16px; }
+.related-card-name {
+    font-family: var(--font-display);
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.related-card-price {
+    font-size: .85rem;
+    color: var(--gold);
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+/* Breadcrumb */
+.breadcrumb { font-size: 12px; color: var(--gray); letter-spacing: 2px; margin-bottom: 40px; }
+.breadcrumb a { color: var(--gray); transition: color .3s; }
+.breadcrumb a:hover { color: var(--white); }
+.breadcrumb-sep { margin: 0 8px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .product-page-grid { grid-template-columns: 1fr; gap: 40px; }
+    .product-page-img { position: static; }
+    .related-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .product-page { padding: 100px 0 60px; }
+    .related-grid { grid-template-columns: 1fr 1fr; }
+}
