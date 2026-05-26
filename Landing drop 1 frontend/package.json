@@ -1,0 +1,20 @@
+{
+  "name": "tiwshirts-landing",
+  "version": "1.0.0",
+  "description": "TiwShirts - Streetwear Ideológico & Moda Underground Brasileira",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "start": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "streetwear",
+    "tiwshirts",
+    "landing-page"
+  ],
+  "author": "TiwShirts",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}
