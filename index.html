@@ -1,649 +1,1649 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TiwShirts | Streetwear Ideológico & Moda Underground Brasileira</title>
-    <meta name="description"
-        content="Camisetas limitadas com estética urbana, provocação cultural e identidade underground. Vista o que você pensa. Drop #01 disponível agora — apenas 20 unidades por estampa.">
-    <link rel="canonical" href="https://tiwshirts.space/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIWSHIRTS — Sugiro que saiba mais sobre maconha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Big+Shoulders+Stencil+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://tiwshirts.space/">
-    <meta property="og:title" content="TiwShirts | Streetwear Ideológico & Moda Underground Brasileira">
-    <meta property="og:description"
-        content="Camisetas limitadas com estética urbana, provocação cultural e identidade underground. Vista o que você pensa. Drop #01 disponível agora.">
-    <meta property="og:image" content="https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://tiwshirts.space/">
-    <meta property="twitter:title" content="TiwShirts | Streetwear Ideológico & Moda Underground Brasileira">
-    <meta property="twitter:description"
-        content="Camisetas limitadas com estética urbana, provocação cultural e identidade underground. Vista o que você pensa. Drop #01 disponível agora.">
-    <meta property="twitter:image"
-        content="https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp">
+<style>
+  :root {
+    --ink:        #0c0a07;
+    --ink-soft:   #1a1611;
+    --paper:      #d6c692;
+    --paper-2:    #c6b582;
+    --paper-3:    #b5a370;
+    --paper-deep: #8c7c4f;
+    --off:        #ede5cd;
+    --rust:       #b8472a;
+    --rust-deep:  #832d18;
+    --tape:       #d9c267;
+    --bone:       #f1e9d2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; background: var(--ink); }
+  body {
+    background: var(--ink);
+    color: var(--off);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--rust); color: var(--off); }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  /* Global grain + edge vignette */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='.5'/></svg>");
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: .45;
+    z-index: 80;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,.55) 100%);
+    pointer-events: none;
+    z-index: 79;
+  }
 
-    <!-- Schema Markup: Organization -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "TiwShirts",
-      "url": "https://tiwshirts.space/",
-      "logo": "https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp",
-      "sameAs": [
-        "https://www.instagram.com/tiwdoo",
-        "https://www.tiktok.com/@tiwdoo",
-        "https://www.youtube.com/@tiwdoo"
-      ],
-      "description": "Streetwear ideológico e underground brasileiro. Camisetas de drops limitados com estética urbana, provocação cultural e posicionamento. Expressão, não impressão.",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+55-15-981512083",
-        "contactType": "customer service",
-        "areaServed": "BR",
-        "availableLanguage": "Portuguese"
-      }
-    }
-    </script>
+  /* TYPE PRIMITIVES */
+  .poster {
+    font-family: 'Anton', 'Big Shoulders Stencil Display', Impact, sans-serif;
+    font-weight: 400;
+    line-height: .88;
+    letter-spacing: -.005em;
+    text-transform: uppercase;
+  }
+  .stencil {
+    font-family: 'Big Shoulders Stencil Display', 'Anton', Impact, sans-serif;
+    font-weight: 900;
+    line-height: .9;
+    letter-spacing: .005em;
+    text-transform: uppercase;
+  }
+  .chunk {
+    font-family: 'Archivo Black', 'Anton', sans-serif;
+    line-height: .92;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+  }
+  .mono {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: 11px;
+  }
 
-    <!-- Schema Markup: Product ItemList (Drop #01) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "TiwShirts Drop #01 — Cultura & Provocação",
-      "description": "Cinco peças de streetwear ideológico, numeradas e de tiragem limitada. Uma narrativa. Zero arrependimento.",
-      "url": "https://tiwshirts.space/",
-      "numberOfItems": 6,
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "item": {
-            "@type": "Product",
-            "name": "Camiseta Maconheiro | Streetwear Underground TiwShirts",
-            "description": "A arte que não esconde o que o mundo já sabe. Uma tipografia crua, direta, pra quem cansa de eufemismos. Expressão pura de quem entende que o bagulho é sério, mas a mente é livre.",
-            "image": "https://tiwshirts.space/Assets/Maco%20nheiro%201x1%20Tiwshirts%20image.webp",
-            "brand": { "@type": "Brand", "name": "TiwShirts" },
-            "offers": {
-              "@type": "Offer",
-              "url": "https://tiwshirts.space/loja.html?print=1",
-              "priceCurrency": "BRL",
-              "price": "105.00",
-              "availability": "https://schema.org/InStock",
-              "seller": { "@type": "Organization", "name": "TiwShirts" }
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "item": {
-            "@type": "Product",
-            "name": "Camiseta Não Somos Má Pessoa | Identidade & Estética Marginal TiwShirts",
-            "description": "Quebrando estigmas através da moda. Estampa com narrativa profunda sobre quem somos além dos preconceitos. Streetwear autêntico e limitado.",
-            "image": "https://tiwshirts.space/Assets/N%C3%A3o%20somos%20m%C3%A1%20pessoa%201x1%20Tiwshirts%20image.webp",
-            "brand": { "@type": "Brand", "name": "TiwShirts" },
-            "offers": {
-              "@type": "Offer",
-              "url": "https://tiwshirts.space/loja.html?print=2",
-              "priceCurrency": "BRL",
-              "price": "105.00",
-              "availability": "https://schema.org/InStock",
-              "seller": { "@type": "Organization", "name": "TiwShirts" }
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "item": {
-            "@type": "Product",
-            "name": "Camiseta Just Doob It | Moda Provocativa & Paródia Underground TiwShirts",
-            "description": "Uma subversão estética da cultura pop. A Just Doob It une humor marginal e streetwear de alto nível. Garanta sua posição no Drop #01.",
-            "image": "https://tiwshirts.space/Assets/Just%20Doob%20It%201x1%20Tiwshirts%20image.webp",
-            "brand": { "@type": "Brand", "name": "TiwShirts" },
-            "offers": {
-              "@type": "Offer",
-              "url": "https://tiwshirts.space/loja.html?print=3",
-              "priceCurrency": "BRL",
-              "price": "105.00",
-              "availability": "https://schema.org/InStock",
-              "seller": { "@type": "Organization", "name": "TiwShirts" }
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
-          "item": {
-            "@type": "Product",
-            "name": "Camiseta Maconha Salva Vidas | Ativismo & Streetwear Brasil TiwShirts",
-            "description": "Moda com propósito. A estampa Maconha Salva Vidas traz a urgência do debate medicinal com a estética crua das ruas. Vista a causa.",
-            "image": "https://tiwshirts.space/Assets/Maconha%20salva%20Vidas%201x1%20Tiwshirts%20image.webp",
-            "brand": { "@type": "Brand", "name": "TiwShirts" },
-            "offers": {
-              "@type": "Offer",
-              "url": "https://tiwshirts.space/loja.html?print=4",
-              "priceCurrency": "BRL",
-              "price": "105.00",
-              "availability": "https://schema.org/InStock",
-              "seller": { "@type": "Organization", "name": "TiwShirts" }
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 5,
-          "item": {
-            "@type": "Product",
-            "name": "Camiseta Legaliza | Streetwear Ativista & Estética Urbana TiwShirts",
-            "description": "Posicione-se com a Camiseta Legaliza. Moda provocativa com alta qualidade e estética marginal para quem não pede permissão para pensar.",
-            "image": "https://tiwshirts.space/Assets/Legaliza%20pra%20pobre%20tbm%201x1%20Tiwshirts%20image.webp",
-            "brand": { "@type": "Brand", "name": "TiwShirts" },
-            "offers": {
-              "@type": "Offer",
-              "url": "https://tiwshirts.space/loja.html?print=5",
-              "priceCurrency": "BRL",
-              "price": "105.00",
-              "availability": "https://schema.org/InStock",
-              "seller": { "@type": "Organization", "name": "TiwShirts" }
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 6,
-          "item": {
-            "@type": "Product",
-            "name": "Bag of Drop — Pack Completo TiwShirts Drop #01",
-            "description": "O pack completo do Drop #01. As 5 estampas do universo TiwShirts em uma só compra. Para quem não escolhe posição — toma todas.",
-            "image": "https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp",
-            "brand": { "@type": "Brand", "name": "TiwShirts" },
-            "offers": {
-              "@type": "Offer",
-              "url": "https://tiwshirts.space/loja.html?print=6",
-              "priceCurrency": "BRL",
-              "price": "475.00",
-              "availability": "https://schema.org/InStock",
-              "seller": { "@type": "Organization", "name": "TiwShirts" }
-            }
-          }
-        }
-      ]
-    }
-    </script>
+  /* LAYOUT */
+  .wrap { max-width: 1440px; margin: 0 auto; padding: 0 32px; position: relative; }
+  .rule { border: 0; height: 1px; background: currentColor; opacity: .15; }
+  .rule-strong { border: 0; height: 2px; background: currentColor; }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0; z-index: 60;
+    background: var(--ink);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    backdrop-filter: blur(6px);
+  }
+  .nav-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 32px;
+    padding: 14px 32px;
+  }
+  .logo {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 20px;
+    letter-spacing: -.005em;
+    text-decoration: none;
+    color: var(--off);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .logo small {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .18em;
+    color: var(--paper-deep);
+    font-weight: 500;
+  }
+  .nav-links { display: flex; gap: 26px; justify-content: center; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--off);
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s, color .15s;
+  }
+  .nav-links a:hover { border-bottom-color: var(--rust); color: var(--rust); }
+  .nav-cart {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    background: var(--rust);
+    color: var(--off);
+    padding: 9px 14px;
+    text-decoration: none;
+    display: inline-flex; gap: 6px; align-items: center;
+    transition: background .15s;
+  }
+  .nav-cart:hover { background: var(--rust-deep); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url("https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp");
+    background-size: cover;
+    background-position: center 20%;
+    opacity: .42;
+    filter: contrast(1.2) saturate(.55) sepia(.2);
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(12,10,7,.65) 0%, rgba(12,10,7,.35) 35%, rgba(12,10,7,.45) 60%, rgba(12,10,7,1) 100%);
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    padding: 36px 32px 48px;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 40px;
+  }
+  .hero-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 24px;
+    color: var(--paper);
+  }
+  .hero-top .stamp {
+    border: 1.5px solid var(--paper-deep);
+    color: var(--paper);
+    padding: 8px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+    transform: rotate(-1.2deg);
+  }
+  .hero-lettering {
+    margin: 12px auto 0;
+    width: 100%;
+    max-width: 1240px;
+    text-align: center;
+    align-self: center;
+  }
+  .hero-lettering img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,.55));
+  }
+  .hero-headline {
+    font-size: clamp(56px, 9.5vw, 168px);
+    color: var(--off);
+    text-align: center;
+    text-shadow: 0 2px 0 rgba(0,0,0,.45);
+  }
+  .hero-headline em {
+    color: var(--rust);
+    font-style: normal;
+    position: relative;
+  }
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  .hero-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--paper);
+    max-width: 40ch;
+  }
+  .hero-sub strong { color: var(--off); font-weight: 700; }
+  .hero-scroll {
+    text-align: center;
+    color: var(--paper-deep);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .25em;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .hero-scroll .arrow { font-size: 18px; animation: bounce 1.8s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+  .hero-actions {
+    display: flex; gap: 0; justify-self: end;
+    border: 1.5px solid var(--paper-deep);
+  }
+  .hero-actions a {
+    padding: 14px 20px;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--off);
+    display: inline-flex; gap: 10px; align-items: center;
+    transition: background .15s, color .15s;
+    background: transparent;
+  }
+  .hero-actions a + a { border-left: 1.5px solid var(--paper-deep); }
+  .hero-actions a:hover { background: var(--off); color: var(--ink); }
+  .hero-actions a.primary { background: var(--rust); }
+  .hero-actions a.primary:hover { background: var(--off); color: var(--ink); }
+
+  /* MARQUEE */
+  .marquee {
+    background: var(--rust);
+    color: var(--off);
+    overflow: hidden;
+    padding: 14px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .marquee-track {
+    display: flex; gap: 48px;
+    white-space: nowrap;
+    animation: scroll 38s linear infinite;
+    font-family: 'Anton', sans-serif;
+    text-transform: uppercase;
+    font-size: 22px; letter-spacing: .04em;
+  }
+  .marquee-track span { display: inline-flex; align-items: center; gap: 48px; }
+  .marquee-track i { font-style: normal; opacity: .55; font-family: 'DM Mono', monospace; font-size: 14px; }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* BIG STATEMENT (vista o que voce pensa) */
+  .statement {
+    background: var(--ink);
+    padding: 96px 0;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .statement-inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 64px;
+    align-items: end;
+  }
+  .statement h2 {
+    font-size: clamp(64px, 12vw, 180px);
+    color: var(--off);
+  }
+  .statement h2 em { color: var(--rust); font-style: italic; }
+  .statement-right p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--paper);
+    max-width: 36ch;
+  }
+  .statement-right p strong { color: var(--off); display: block; margin-top: 16px; }
+  .statement-right p + p { margin-top: 18px; }
+
+  /* MANUAL DOSSIER (the new heart) */
+  .dossier {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 80px 0 96px;
+    border-top: 4px solid var(--ink);
+    border-bottom: 4px solid var(--ink);
+    position: relative;
+    z-index: 2;
+    /* paper texture */
+    background-image:
+      repeating-linear-gradient(45deg, rgba(140,124,79,.05) 0 2px, transparent 2px 6px),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='nn'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='6'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .1  0 0 0 .25 0'/></filter><rect width='400' height='400' filter='url(%23nn)' opacity='.6'/></svg>");
+  }
+  .dossier-stamp {
+    position: absolute;
+    top: 28px; right: 36px;
+    border: 2px solid var(--rust);
+    color: var(--rust);
+    padding: 8px 12px 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+    transform: rotate(4deg);
+    background: rgba(214,198,146,.7);
+  }
+  .dossier-head {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 32px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 32px;
+    margin-bottom: 0;
+  }
+  .dossier-num {
+    font-family: 'Anton', sans-serif;
+    font-size: 80px;
+    line-height: .85;
+    color: var(--ink);
+  }
+  .dossier-num small {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .25em;
+    color: var(--ink);
+    opacity: .55;
+    margin-top: 6px;
+    line-height: 1.2;
+  }
+  .dossier-title {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(48px, 8vw, 132px);
+    line-height: .88;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .dossier-title em { color: var(--rust); font-style: italic; }
+  .dossier-lede {
+    grid-column: 2;
+    margin-top: 18px;
+    font-size: 17px;
+    max-width: 64ch;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .dossier-lede strong { color: var(--ink); }
+
+  .chapters {
+    margin-top: 0;
+    border-top: 1px solid var(--ink);
+  }
+  .chapter {
+    display: grid;
+    grid-template-columns: 120px 1fr auto 140px;
+    gap: 32px;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(12,10,7,.25);
+    text-decoration: none;
+    color: var(--ink);
+    transition: background .15s, padding .15s;
+    position: relative;
+  }
+  .chapter:hover {
+    background: var(--paper-2);
+    padding-left: 18px;
+  }
+  .chapter:hover .ch-go { color: var(--rust); }
+  .ch-num {
+    font-family: 'Anton', sans-serif;
+    font-size: 54px;
+    line-height: .85;
+  }
+  .ch-num span {
+    color: var(--rust);
+  }
+  .ch-body { display: flex; flex-direction: column; gap: 4px; }
+  .ch-body h3 {
+    font-family: 'Anton', sans-serif;
+    font-size: 30px;
+    line-height: 1.02;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .ch-body h3 em { color: var(--rust); font-style: italic; }
+  .ch-body p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    line-height: 1.5;
+  }
+  .ch-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+    opacity: .65;
+    white-space: nowrap;
+  }
+  .ch-go {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    text-align: right;
+    color: var(--ink);
+    transition: color .15s;
+  }
+  .dossier-foot {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 32px;
+    align-items: center;
+    border-top: 2px solid var(--ink);
+    padding-top: 28px;
+  }
+  .dossier-foot .mono { color: var(--ink); }
+  .dossier-foot p {
+    font-family: 'Anton', sans-serif;
+    font-size: 26px;
+    text-transform: uppercase;
+    line-height: 1.05;
+    color: var(--ink);
+    max-width: 38ch;
+  }
+  .dossier-foot p em { color: var(--rust); font-style: italic; }
+  .dossier-foot a {
+    background: var(--ink);
+    color: var(--off);
+    padding: 16px 22px;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .dossier-foot a:hover { background: var(--rust); }
+
+  /* PATHFINDER */
+  .pathfinder {
+    background: var(--ink);
+    padding: 88px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    position: relative;
+  }
+  .pf-head {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,.18);
+  }
+  .pf-head .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--paper-deep);
+    line-height: 1.5;
+  }
+  .pf-head h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(40px, 6vw, 88px);
+    line-height: .95;
+    color: var(--off);
+    text-transform: uppercase;
+  }
+  .pf-head h2 em { color: var(--rust); font-style: italic; }
+  .pf-head p {
+    margin-top: 14px;
+    color: var(--paper);
+    max-width: 56ch;
+    line-height: 1.55;
+  }
+
+  .pf-grid {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 0;
+    border: 1.5px solid rgba(255,255,255,.2);
+  }
+  .pf-left { border-right: 1.5px solid rgba(255,255,255,.2); }
+  .pf-option {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    text-align: left;
+    padding: 22px 24px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--off);
+    display: grid;
+    grid-template-columns: 36px 1fr 20px;
+    gap: 16px;
+    align-items: center;
+    transition: background .15s, padding-left .15s;
+  }
+  .pf-option:last-child { border-bottom: 0; }
+  .pf-option:hover { background: rgba(255,255,255,.04); padding-left: 30px; }
+  .pf-option.active { background: var(--rust); color: var(--off); }
+  .pf-option.active .n { color: var(--off); }
+  .pf-option .n {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    color: var(--paper-deep);
+    text-transform: uppercase;
+  }
+  .pf-option .lbl {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 0;
+  }
+  .pf-option .arr {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity .15s, transform .2s;
+  }
+  .pf-option:hover .arr, .pf-option.active .arr { opacity: 1; transform: translateX(3px); }
+
+  .pf-right {
+    padding: 32px;
+    display: flex; flex-direction: column; gap: 18px;
+    min-height: 420px;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,.02) 0 2px, transparent 2px 8px);
+  }
+  .pf-right .eyebrow {
+    color: var(--paper-deep);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  .pf-right h3 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: .98;
+    color: var(--off);
+    text-transform: uppercase;
+  }
+  .pf-right h3 em { color: var(--rust); font-style: italic; }
+  .pf-right p {
+    color: var(--paper);
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 50ch;
+  }
+  .pf-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .pf-chip {
+    border: 1px solid var(--paper-deep);
+    background: transparent;
+    padding: 9px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--off);
+    text-decoration: none;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .pf-chip:hover {
+    background: var(--rust);
+    color: var(--off);
+    border-color: var(--rust);
+  }
+  .pf-quote {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.15);
+    font-family: 'DM Sans', sans-serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--paper);
+    line-height: 1.35;
+  }
+  .pf-quote span {
+    display: block; margin-top: 6px;
+    font-style: normal; font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--paper-deep);
+  }
+
+  /* PRA QUEM É (original 4 profiles) */
+  .audience {
+    background: var(--bone);
+    color: var(--ink);
+    padding: 88px 0;
+    border-top: 4px solid var(--ink);
+    border-bottom: 4px solid var(--ink);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='aud'><feTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='9'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .22  0 0 0 0 .1  0 0 0 .14 0'/></filter><rect width='400' height='400' filter='url(%23aud)' opacity='.6'/></svg>");
+  }
+  .aud-head { display: grid; grid-template-columns: 120px 1fr; gap: 32px; }
+  .aud-head .label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--ink); opacity: .65; }
+  .aud-head h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(40px, 6vw, 88px);
+    line-height: .95;
+    text-transform: uppercase;
+  }
+  .aud-head h2 em { color: var(--rust); font-style: italic; }
+  .aud-head p {
+    margin-top: 14px;
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 50ch;
+  }
+  .aud-grid {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .aud-card {
+    padding: 28px 24px 32px;
+    border-right: 1px solid var(--ink);
+    display: flex; flex-direction: column; gap: 14px;
+    background: transparent;
+  }
+  .aud-card:last-child { border-right: 0; }
+  .aud-card .top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  }
+  .aud-card .top .glyph { font-size: 18px; }
+  .aud-card .h {
+    font-family: 'Anton', sans-serif;
+    font-size: 32px;
+    line-height: .98;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .aud-card .h em { color: var(--rust); font-style: italic; }
+  .aud-card .p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .aud-card .p strong { color: var(--ink); }
+
+  /* DROP */
+  .drop {
+    background: var(--ink);
+    color: var(--off);
+    padding: 88px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .drop-head {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 32px;
+    align-items: end;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,.18);
+  }
+  .drop-head .label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--paper-deep); }
+  .drop-head h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(48px, 8vw, 120px);
+    line-height: .9;
+    text-transform: uppercase;
+  }
+  .drop-head h2 em { color: var(--rust); font-style: italic; }
+  .drop-head .meta {
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--paper);
+  }
+  .drop-head .meta strong { display: block; color: var(--rust); font-size: 32px; font-family: 'Anton', sans-serif; letter-spacing: 0; }
+
+  .drop-shelf {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1.5px solid rgba(255,255,255,.18);
+  }
+  .product {
+    border-right: 1.5px solid rgba(255,255,255,.18);
+    border-bottom: 1.5px solid rgba(255,255,255,.18);
+    background: var(--ink);
+    text-decoration: none;
+    color: var(--off);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    transition: background .2s;
+  }
+  .product:nth-child(3n) { border-right: 0; }
+  .product:nth-last-child(-n+3) { border-bottom: 0; }
+  .product:hover { background: #14110d; }
+  .product:hover .p-img img { transform: scale(1.04); }
+  .p-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--paper-deep);
+  }
+  .p-head .ch {
+    background: var(--rust); color: var(--off);
+    padding: 3px 8px;
+    letter-spacing: .15em;
+  }
+  .p-img {
+    background: var(--paper-2);
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .p-img img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .45s;
+  }
+  .p-foot {
+    padding: 18px 18px 22px;
+    display: grid; grid-template-columns: 1fr auto; gap: 12px;
+    align-items: end;
+    border-top: 1px solid rgba(255,255,255,.12);
+  }
+  .p-foot .name {
+    font-family: 'Anton', sans-serif;
+    font-size: 28px; line-height: 1;
+    text-transform: uppercase;
+  }
+  .p-foot .name em { font-style: italic; color: var(--rust); }
+  .p-foot .sub {
+    margin-top: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--paper-deep);
+  }
+  .p-foot .price {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px; line-height: 1;
+  }
+  .p-foot .price small {
+    display: block; margin-top: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: .18em;
+    color: var(--paper-deep);
+  }
+
+  /* NUMBERED EDITION */
+  .number {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 88px 0;
+    border-top: 4px solid var(--ink);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='nu'><feTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='2' seed='2'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .1  0 0 0 .22 0'/></filter><rect width='400' height='400' filter='url(%23nu)' opacity='.6'/></svg>");
+  }
+  .number-head { display: grid; grid-template-columns: 120px 1fr; gap: 32px; }
+  .number-head h2 { font-family: 'Anton', sans-serif; font-size: clamp(40px,6vw,88px); line-height: .92; text-transform: uppercase; }
+  .number-head h2 em { color: var(--rust); font-style: italic; }
+  .number-head p { font-size: 16px; max-width: 50ch; color: var(--ink-soft); margin-top: 14px; }
+  .number-display {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 24px;
+    align-items: center;
+    background: var(--bone);
+    border: 2px solid var(--ink);
+    padding: 36px 32px;
+  }
+  .nd-cell { text-align: center; }
+  .nd-cell .big {
+    font-family: 'Anton', sans-serif;
+    font-size: 88px; line-height: .9;
+  }
+  .nd-cell .big em { color: var(--rust); font-style: italic; }
+  .nd-cell .lbl { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; margin-top: 8px; }
+  .nd-cell .desc { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+  .nd-sep { font-family: 'Anton', sans-serif; font-size: 56px; color: var(--paper-deep); }
+
+  .number-points {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 2px solid var(--ink);
+    background: var(--bone);
+  }
+  .np {
+    padding: 24px;
+    border-right: 1px solid var(--ink);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .np:last-child { border-right: 0; }
+  .np .n {
+    font-family: 'Anton', sans-serif; font-size: 38px; line-height: .9;
+    color: var(--rust);
+  }
+  .np h4 { font-family: 'Anton', sans-serif; font-size: 22px; text-transform: uppercase; line-height: 1.05; }
+  .np p { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+  /* STOCK URGENCY */
+  .urgency {
+    background: var(--rust);
+    color: var(--off);
+    padding: 56px 0;
+    text-align: center;
+    border-top: 4px solid var(--ink);
+    border-bottom: 4px solid var(--ink);
+  }
+  .urgency .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: .8;
+  }
+  .urgency h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: .95;
+    text-transform: uppercase;
+  }
+  .urgency p {
+    margin-top: 16px;
+    max-width: 56ch;
+    margin-inline: auto;
+    font-size: 15px;
+    opacity: .9;
+  }
+  .urgency .bar {
+    margin-top: 32px;
+    display: flex; gap: 24px; align-items: center; justify-content: center;
+    flex-wrap: wrap;
+  }
+  .urgency .stock {
+    font-family: 'Anton', sans-serif;
+    font-size: 56px; line-height: 1;
+    border: 2px solid var(--off);
+    padding: 12px 22px 8px;
+  }
+  .urgency .btn {
+    background: var(--off);
+    color: var(--ink);
+    padding: 16px 24px;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    border: 2px solid var(--off);
+    transition: background .15s, color .15s;
+  }
+  .urgency .btn:hover { background: var(--ink); color: var(--off); }
+
+  /* CLOSING */
+  .closing {
+    background: var(--ink);
+    padding: 120px 0 96px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .closing-quote {
+    font-family: 'DM Sans', sans-serif;
+    font-style: italic;
+    font-size: clamp(18px, 1.6vw, 22px);
+    color: var(--paper);
+    max-width: 56ch;
+    margin: 0 auto 40px;
+    line-height: 1.4;
+  }
+  .closing-quote em { color: var(--rust); font-style: italic; }
+  .closing h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(64px, 13vw, 220px);
+    line-height: .88;
+    color: var(--off);
+    text-transform: uppercase;
+  }
+  .closing h2 em { color: var(--rust); font-style: italic; }
+  .closing-cta {
+    margin-top: 48px;
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .btn {
+    text-decoration: none;
+    padding: 16px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    border: 2px solid var(--off);
+    transition: background .15s, color .15s;
+  }
+  .btn-primary { background: var(--rust); color: var(--off); border-color: var(--rust); }
+  .btn-primary:hover { background: var(--off); color: var(--ink); border-color: var(--off); }
+  .btn-ghost { background: transparent; color: var(--off); }
+  .btn-ghost:hover { background: var(--off); color: var(--ink); }
+
+  /* FOOTER */
+  footer {
+    background: #060503;
+    color: var(--off);
+    padding: 64px 0 24px;
+    position: relative; z-index: 2;
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+  }
+  .foot-brand {
+    font-family: 'Anton', sans-serif;
+    font-size: 56px;
+    line-height: .9;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .foot-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--paper);
+    max-width: 32ch;
+  }
+  .foot-grid h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--paper-deep);
+    margin-bottom: 14px;
+  }
+  .foot-grid ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .foot-grid a { color: var(--off); text-decoration: none; font-size: 14px; }
+  .foot-grid a:hover { color: var(--rust); }
+  .foot-bot {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    padding-top: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--paper-deep);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .hero-bottom { grid-template-columns: 1fr; gap: 24px; }
+    .hero-actions { justify-self: stretch; }
+    .statement-inner { grid-template-columns: 1fr; gap: 32px; }
+    .dossier-head, .pf-head, .aud-head, .drop-head, .number-head { grid-template-columns: 1fr; gap: 16px; }
+    .chapter { grid-template-columns: 60px 1fr; }
+    .chapter .ch-tag, .chapter .ch-go { display: none; }
+    .pf-grid { grid-template-columns: 1fr; }
+    .pf-left { border-right: 0; border-bottom: 1.5px solid rgba(255,255,255,.2); }
+    .aud-grid { grid-template-columns: repeat(2, 1fr); }
+    .aud-card:nth-child(2) { border-right: 0; }
+    .aud-card { border-bottom: 1px solid var(--ink); }
+    .drop-shelf { grid-template-columns: repeat(2, 1fr); }
+    .product:nth-child(3n) { border-right: 1.5px solid rgba(255,255,255,.18); }
+    .product:nth-child(2n) { border-right: 0; }
+    .product:nth-last-child(-n+3) { border-bottom: 1.5px solid rgba(255,255,255,.18); }
+    .number-display { grid-template-columns: 1fr; }
+    .nd-sep { display: none; }
+    .number-points { grid-template-columns: repeat(2, 1fr); }
+    .np:nth-child(2) { border-right: 0; }
+    .np { border-bottom: 1px solid var(--ink); }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 20px; }
+    .nav-inner { grid-template-columns: auto auto; padding: 12px 20px; }
+    .nav-links { display: none; }
+    .hero-inner { padding: 40px 20px 32px; min-height: 88vh; }
+    .hero-top { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .hero-actions { flex-direction: column; }
+    .hero-actions a + a { border-left: 0; border-top: 1.5px solid var(--paper-deep); }
+    .chapter { grid-template-columns: 50px 1fr; gap: 16px; padding: 16px 0; }
+    .ch-num { font-size: 36px; }
+    .ch-body h3 { font-size: 22px; }
+    .ch-body p { font-size: 13px; }
+    .dossier-foot { grid-template-columns: 1fr; gap: 16px; }
+    .aud-grid { grid-template-columns: 1fr; }
+    .aud-card { border-right: 0 !important; }
+    .drop-shelf { grid-template-columns: 1fr; }
+    .product { border-right: 0 !important; }
+    .number-points { grid-template-columns: 1fr; }
+    .np { border-right: 0; }
+    .foot-grid { grid-template-columns: 1fr; gap: 32px; }
+    .urgency .bar { flex-direction: column; }
+  }
+</style>
 </head>
-
 <body>
+  <div id="root"></div>
 
-    <!-- NAV -->
-    <header id="nav">
-        <div class="nav-inner">
-            <div class="logo" onclick="scrollToTop()">TIWSHIRTS</div>
-            <ul>
-                <li><a href="drop-01.html">DROP #01</a></li>
-                <li><a href="manifesto.html">MANIFESTO</a></li>
-                <li><a href="sobre.html">SOBRE</a></li>
-            </ul>
-            <button class="btn-cart" id="cartBtn" onclick="window.location.href='loja.html'" type="button">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <path d="M16 10a4 4 0 01-8 0" />
-                </svg>
-            </button>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel">
+  const { useState, useEffect, useMemo } = React;
+
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "tom": "equilibrio",
+    "ordem": "manual-primeiro",
+    "intensidade": "padrao",
+    "mostrarMarquee": true
+  }/*EDITMODE-END*/;
+
+  // ─── Assets (live from tiwshirts.space CDN)
+  const ASSET = (s) => "https://tiwshirts.space/Assets/" + encodeURIComponent(s);
+  const LETTERING = ASSET("TiwShirts capa Sugiro maconha bg lettering rusty.webp");
+
+  const PRODUCTS = [
+    { slug: "camiseta-legaliza",            name: "LEGALIZA",            sub: "pra pobre também",  chapter: "CAP. 02",  img: ASSET("Legaliza pra pobre tbm 1x1 Tiwshirts image.webp"), price: 105 },
+    { slug: "camiseta-just-doob-it",        name: "JUST DOOB IT",        sub: "faça você mesmo",   chapter: "CAP. 06",  img: ASSET("Just Doob It 1x1 Tiwshirts image.webp"),           price: 105 },
+    { slug: "camiseta-maconha-salva-vidas", name: "MACONHA SALVA VIDAS", sub: "uso medicinal",     chapter: "CAP. 07",  img: ASSET("Maconha salva Vidas 1x1 Tiwshirts image.webp"),    price: 105 },
+    { slug: "camiseta-nao-somos-ma-pessoa", name: "NÃO SOMOS MÁ PESSOA", sub: "estigma",           chapter: "CAP. 08",  img: ASSET("Não somos má pessoa 1x1 Tiwshirts image.webp"),    price: 105 },
+    { slug: "camiseta-maconheiro",          name: "MACONHEIRO",          sub: "ressignificação",   chapter: "CAP. 02",  img: ASSET("Maco nheiro 1x1 Tiwshirts image.webp"),            price: 105 },
+    { slug: "drop-01",                       name: "BAG OF DROP",         sub: "pacote · 5 peças",  chapter: "DROP",     img: ASSET("TiwDoo Just Doob It.webp"),                        price: 475, full: true },
+  ];
+
+  const CHAPTERS = [
+    { n: "01", h: "#o-que-e",          title: "O que é a cannabis",        desc: "Planta, canabinoides, THC, CBD, terpenos. O básico — sem mito.",                          tag: "FUNDAMENTO", read: "5 min" },
+    { n: "02", h: "#historia",         title: "História da proibição",     desc: "De remédio milenar à criminalização racista. E o caminho de volta.",                      tag: "HISTÓRIA",   read: "7 min" },
+    { n: "03", h: "#mundo",            title: "No mundo hoje",             desc: "Países que legalizaram, descriminalizaram, regularam. E o Brasil.",                       tag: "GEOPOLÍTICA",read: "6 min" },
+    { n: "04", h: "#corpo",            title: "O que acontece no corpo",   desc: "Sistema endocanabinoide, cérebro, coração, pulmões, sono.",                               tag: "CIÊNCIA",    read: "5 min" },
+    { n: "05", h: "#tipos",            title: "Tipos e formas de uso",     desc: "Sativa, indica, edibles, vape, óleo, tópico — diferenças e cuidados.",                    tag: "PRÁTICA",    read: "6 min" },
+    { n: "06", h: "#uso-responsavel",  title: "Usar com consciência",      desc: "Redução de danos. Set, setting, dose, mistura, direção, consentimento.",                  tag: "RD",         read: "7 min" },
+    { n: "07", h: "#saude",            title: "Cannabis e saúde",          desc: "Usos terapêuticos, evidência científica, dependência, ajuda profissional.",               tag: "SAÚDE",      read: "6 min" },
+    { n: "08", h: "#grupos",           title: "Para cada pessoa",          desc: "Adolescentes, jovens, adultos, idosos, gestantes, saúde mental, lei.",                    tag: "GRUPOS",     read: "8 min" },
+    { n: "09", h: "#perguntas",        title: "Perguntas sem rodeios",     desc: "Overdose, porta de entrada, remédios, dirigir, trabalho — fatos.",                        tag: "FAQ",        read: "5 min" },
+  ];
+
+  const PATHS = [
+    {
+      id: "curioso", n: "P1",
+      label: "Curioso · nunca usei mas tenho dúvidas.",
+      eyebrow: "VOCÊ ESTÁ CHEGANDO AGORA",
+      title: <>Comece pelo <em>fundamento.</em></>,
+      p: "Antes de qualquer opinião — o que é a planta, o que ela faz no corpo, e por que o debate dura séculos. Sem julgamento. Sem incentivo.",
+      chips: [
+        { t: "O QUE É", h: "#o-que-e" },
+        { t: "HISTÓRIA", h: "#historia" },
+        { t: "NO CORPO", h: "#corpo" },
+        { t: "FAQ", h: "#perguntas" },
+      ],
+      quote: <>“A primeira pergunta não é se é certo ou errado. É: <em>o que isso é de verdade?</em>” <span>↳ MANUAL · ABERTURA</span></>,
+    },
+    {
+      id: "cetico", n: "P2",
+      label: "Cético · me convença — ou não.",
+      eyebrow: "VOCÊ NÃO PRECISA CONCORDAR",
+      title: <>Comece pelos <em>dados.</em></>,
+      p: "Aqui não tem militância barata. Tem o que a ciência diz, o que a lei diz, e o que países que regularam aprenderam. Você lê. Depois decide.",
+      chips: [
+        { t: "NO MUNDO", h: "#mundo" },
+        { t: "EVIDÊNCIAS", h: "#saude" },
+        { t: "DEPENDÊNCIA", h: "#saude" },
+        { t: "MITOS COMUNS", h: "#perguntas" },
+      ],
+      quote: <>“Não pedimos sua aprovação. Pedimos que você <em>pense sobre isso.</em>” <span>↳ MANUAL · CAP. 03</span></>,
+    },
+    {
+      id: "usuario", n: "P3",
+      label: "Usuário · já uso, quero usar melhor.",
+      eyebrow: "VOCÊ JÁ ESTÁ DENTRO",
+      title: <>Vá direto na <em>redução de danos.</em></>,
+      p: "Set, setting, dose, mistura, frequência, consentimento. Não é manual de como começar — é manual de como continuar inteiro.",
+      chips: [
+        { t: "USO RESPONSÁVEL", h: "#uso-responsavel" },
+        { t: "TIPOS E FORMAS", h: "#tipos" },
+        { t: "SAÚDE", h: "#saude" },
+        { t: "SE FICAR DIFÍCIL", h: "#uso-responsavel" },
+      ],
+      quote: <>“Informação salva vidas. <em>Mais que qualquer slogan.</em>” <span>↳ MANUAL · CAP. 06</span></>,
+    },
+    {
+      id: "familia", n: "P4",
+      label: "Família · conheço alguém que usa.",
+      eyebrow: "VOCÊ SE IMPORTA COM ALGUÉM",
+      title: <>Comece pelo <em>diálogo.</em></>,
+      p: "Mãe, pai, parceiro, amigo. A diferença entre julgamento e diálogo geralmente é informação. Aqui tem o que você precisa pra começar uma conversa difícil.",
+      chips: [
+        { t: "PARA CADA IDADE", h: "#grupos" },
+        { t: "O QUE É", h: "#o-que-e" },
+        { t: "SAÚDE MENTAL", h: "#grupos" },
+        { t: "COMO CONVERSAR", h: "#perguntas" },
+      ],
+      quote: <>“Proibir sem dialogar raramente funciona. <em>Conversa sem julgamento funciona.</em>” <span>↳ MANUAL · CAP. 08</span></>,
+    },
+  ];
+
+  const AUDIENCE = [
+    { n: "01", g: "◈", t: "VOCÊ QUESTIONA",      h: "Quando todo mundo aceita, você pergunta \"por quê?\"",  p: <>Não é rebeldia. É <strong>recusa em ser passivo</strong>. Você não precisa de permissão pra pensar diferente.</> },
+    { n: "02", g: "◉", t: "VOCÊ FOI JULGADO",    h: "Já te chamaram de exagerado por ter uma opinião.",       p: <>Sabem que quando você abre a boca, <strong>o assunto muda</strong>. Isso incomoda. E tá ótimo assim.</> },
+    { n: "03", g: "◬", t: "VOCÊ NÃO EXPLICA",    h: "Cansou de justificar o que você acredita.",              p: <>Quem entende, entende. Quem não, não precisa. <strong>A estampa fala.</strong> Você não precisa mais.</> },
+    { n: "04", g: "◎", t: "VOCÊ VESTE POSIÇÃO",  h: "Roupa não é só roupa. É sinal. É triagem.",              p: <>A camiseta certa <strong>atrai quem você quer perto</strong> e afasta quem nunca entenderia.</> },
+  ];
+
+  const TOM = {
+    acolhedor: {
+      headlineFallback: <>Vamos <em>conversar</em><br/>sobre <em>maconha.</em></>,
+      sub: <>Isto é uma <strong>sugestão</strong>, não uma cobrança. Saber mais sobre cannabis é o jeito mais pacífico de tirar uma ideia do silêncio.</>,
+      statementH: <>NÃO É SOBRE A PLANTA. <em>É SOBRE A CONVERSA.</em></>,
+      statementP1: "Algumas ideias ainda incomodam — não porque são erradas, mas porque você nunca teve espaço pra pensar sobre elas.",
+      statementP2: <>Esse espaço é aqui. <strong>O manual é a porta. A camiseta é o gesto.</strong></>,
+      ctaPrimary: "MANUAL DO USUÁRIO",
+      ctaSecondary: "VER O DROP",
+      closingQuote: <>“A TiwShirts não te pede pra concordar. Pede que você <em>tenha lido antes de opinar.</em>”</>,
+    },
+    equilibrio: {
+      headlineFallback: <>SUGIRO QUE SAIBA MAIS<br/>SOBRE <em>MACONHA.</em></>,
+      sub: <>A estampa não pede aprovação. <strong>O manual também não.</strong> Lê quem quer. Veste quem assume.</>,
+      statementH: <>NÃO É MODA. <em>É POSIÇÃO.</em></>,
+      statementP1: "Algumas ideias ainda incomodam. Não porque são erradas — mas porque nunca deixaram você pensar sobre elas.",
+      statementP2: <>TiwShirts nasce pra isso: <strong>tirar o silêncio das ideias.</strong> Cada estampa não pede aprovação. Só pede que você pense.</>,
+      ctaPrimary: "MANUAL DO USUÁRIO",
+      ctaSecondary: "VER O DROP",
+      closingQuote: <>“A TiwShirts transforma <em>pensamentos não ditos</em> em algo visível. Não busca agradar. Busca gerar <em>identificação.</em>”</>,
+    },
+    provocativo: {
+      headlineFallback: <>SUGIRO QUE SAIBA MAIS<br/>SOBRE <em>MACONHA.</em></>,
+      sub: <>Lê quem tem coragem. <strong>Veste quem assume.</strong> Aqui nada é pedido, nada é vendido — é colocado na sua cara pra você decidir.</>,
+      statementH: <>NÃO É MODA. <em>É POSIÇÃO.</em></>,
+      statementP1: "Algumas ideias ainda incomodam. Não porque são erradas — mas porque nunca deixaram você pensar sobre elas.",
+      statementP2: <>TiwShirts existe pra tirar o silêncio das ideias. <strong>Não pede aprovação. Pede que você pense.</strong></>,
+      ctaPrimary: "MANUAL",
+      ctaSecondary: "DROP #01",
+      closingQuote: <>“Não é pra todo mundo. <em>É pra quem cansou de fingir que concorda.</em>”</>,
+    },
+  };
+
+  // ─── Components
+  function Nav() {
+    return (
+      <nav className="nav">
+        <div className="nav-inner">
+          <a className="logo" href="#">TIWSHIRTS <small>BR · 2026 · DROP #01</small></a>
+          <div className="nav-links">
+            <a href="#manual">MANUAL</a>
+            <a href="#caminho">POR ONDE COMEÇAR</a>
+            <a href="#drop">DROP #01</a>
+            <a href="manifesto.html">MANIFESTO</a>
+            <a href="sobre.html">SOBRE</a>
+          </div>
+          <a className="nav-cart" href="#drop">CARRINHO · 0</a>
         </div>
-    </header>
+      </nav>
+    );
+  }
 
-    <!-- 1. HERO -->
-    <section id="hero">
-        <div class="hero-bg">
-            <img src="Assets/TiwShirts capa Sugiro maconha bg.webp" alt="Sugiro Maconha" class="hero-bg-img" id="heroBg"
-                fetchpriority="high" decoding="async" width="1920" height="1080">
+  function Hero({ tom, useLetteringImg }) {
+    const c = TOM[tom] || TOM.equilibrio;
+    return (
+      <section className="hero">
+        <div className="hero-bg"></div>
+        <div className="hero-inner">
+          <div className="hero-top">
+            <div className="stamp">EDIÇÃO #01 · 100 PEÇAS · 9 CAPÍTULOS</div>
+            <div className="stamp" style={{ transform: "rotate(1.4deg)" }}>STREETWEAR IDEOLÓGICO · 2026</div>
+          </div>
+
+          <div className="hero-lettering">
+            {useLetteringImg ? (
+              <img src={LETTERING} alt="SUGIRO QUE SAIBA MAIS SOBRE MACONHA" />
+            ) : (
+              <h1 className="poster hero-headline">{c.headlineFallback}</h1>
+            )}
+          </div>
+
+          <div className="hero-bottom">
+            <p className="hero-sub">{c.sub}</p>
+            <div className="hero-scroll">
+              <span>ROLE PRA LER</span>
+              <span className="arrow">↓</span>
+            </div>
+            <div className="hero-actions">
+              <a className="primary" href="manualdousuario-cannabis.html">{c.ctaPrimary} ↗</a>
+              <a href="#drop">{c.ctaSecondary} ↘</a>
+            </div>
+          </div>
         </div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="hero-lettering">
-                <img src="Assets/TiwShirts capa Sugiro maconha bg lettering rusty.webp" alt="Lettering"
-                    id="heroLettering" fetchpriority="high" decoding="async" width="800" height="400">
-            </div>
-            <div class="hero-text-block">
-                <h1 class="hero-h1 sr-only">SUGIRO QUE SAIBA MAIS SOBRE MACONHA</h1>
-                <div class="hero-btns">
-                    <a href="#drop" class="btn-hero">VER O DROP</a>
-                    <a href="manualdousuario-cannabis.html" class="btn-hero btn-outline">MANUAL DO USUÁRIO</a>
-                </div>
-            </div>
+      </section>
+    );
+  }
+
+  function Marquee() {
+    const items = [
+      "MANUAL ABERTO",
+      <i key="d1">◇</i>,
+      "9 CAPÍTULOS",
+      <i key="d2">◇</i>,
+      "20 PEÇAS POR ESTAMPA",
+      <i key="d3">◇</i>,
+      "NUMERAÇÃO À MÃO",
+      <i key="d4">◇</i>,
+      "PRODUÇÃO BRASILEIRA",
+      <i key="d5">◇</i>,
+      "@TIWDOO + @EDU.BOVOLINE",
+      <i key="d6">◇</i>,
+      "VISTA O QUE VOCÊ PENSA",
+      <i key="d7">◇</i>,
+    ];
+    return (
+      <div className="marquee">
+        <div className="marquee-track">
+          <span>{items}{items}{items}</span>
         </div>
-        <div class="hero-scroll-hint">
-            <span>SCROLL</span>
-            <div class="scroll-line"></div>
+      </div>
+    );
+  }
+
+  function Statement({ tom }) {
+    const c = TOM[tom] || TOM.equilibrio;
+    return (
+      <section className="statement">
+        <div className="wrap statement-inner">
+          <h2 className="poster">{c.statementH}</h2>
+          <div className="statement-right">
+            <p className="mono" style={{ color: "var(--paper-deep)" }}>↳ POR QUE EXISTIMOS</p>
+            <p>{c.statementP1}</p>
+            <p>{c.statementP2}</p>
+          </div>
         </div>
-    </section>
+      </section>
+    );
+  }
 
-    <!-- 2. IDENTIFICAÇÃO (SOBRE + STATEMENT + AUDIENCE) -->
-    <div id="identificacao">
-        <!-- FUNDADOR / ETHOS -->
-        <section id="sobre" class="ethos-section">
-            <div class="ethos-inner container">
-                <div class="ethos-text reveal-up">
-                    <h2 class="ethos-headline">
-                        <strong>Estética urbana</strong> e <strong>vivência real</strong> pra transformar
-                        <strong>pensamento</strong> em algo que se veste.
-                    </h2>
-                    <div class="ethos-body">
-                        <p><strong>Peças limitadas</strong>, diretas e com <strong>identidade</strong>.</p>
-                        <p class="ethos-sub">Pra quem prefere se expressar do que se encaixar.</p>
-                    </div>
-                    <a href="#drop" class="btn-primary">ver o drop</a>
-                </div>
-
-                <div class="ethos-image-wrapper reveal-up" style="--delay: 0.15s">
-                    <div class="ethos-avatar">
-                        <img src="Assets/TiwDoo Just Doob It.webp" alt="TiwDoo Just Doob It" class="ethos-avatar-img"
-                            loading="lazy" decoding="async" width="600" height="800">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- BRAND STATEMENT -->
-        <section class="statement-section reveal-up">
-            <div class="container">
-                <div class="statement-badge">VISTA O QUE VOCÊ PENSA</div>
-                <h2 class="statement-h2">
-                    NÃO É MODA.<br><em>É POSIÇÃO.</em>
-                </h2>
-                <div class="statement-body">
-                    <p>Algumas ideias ainda incomodam.</p>
-                    <p>Não porque são erradas —<br>
-                        mas porque nunca deixaram você pensar sobre elas.</p>
-                    <p><strong>TiwShirts nasce pra isso:</strong><br>
-                        tirar o silêncio das ideias.</p>
-                    <p>Cada estampa não pede aprovação.<br>
-                        Só pede que você <strong>pense.</strong></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- PRA QUEM É -->
-        <section class="audience-section">
-            <div class="container">
-                <div class="audience-header reveal-up">
-                    <span class="drop-tag">PRA QUEM É</span>
-                    <h2 class="drop-title">Se você <em style="color: var(--green); font-style: normal;">tem algo pra
-                            dizer</em>,<br>é pra você.</h2>
-                    <p class="drop-sub">Não é pra todo mundo. É pra quem cansou de fingir que concorda.</p>
-                </div>
-
-                <div class="audience-grid reveal-up" style="--delay:0.1s">
-                    <div class="audience-card">
-                        <span class="card-num">01</span>
-                        <span class="audience-icon" style="color: var(--green);">◈</span>
-                        <p class="card-category">VOCÊ QUESTIONA</p>
-                        <h4>Quando todo mundo aceita, você pergunta "por quê?"</h4>
-                        <p>Não é rebeldia. É <strong>recusa em ser passivo</strong>. Você não precisa de permissão pra
-                            pensar diferente.</p>
-                    </div>
-                    <div class="audience-card">
-                        <span class="card-num">02</span>
-                        <span class="audience-icon" style="color: #3498db;">◉</span>
-                        <p class="card-category">VOCÊ FOI JULGADO</p>
-                        <h4>Já te chamaram de exagerado por ter uma opinião.</h4>
-                        <p>Sabem que quando você abre a boca, <strong>o assunto muda</strong>. Isso incomoda. E tá ótimo
-                            assim.</p>
-                    </div>
-                    <div class="audience-card">
-                        <span class="card-num">03</span>
-                        <span class="audience-icon" style="color: #e67e22;">◬</span>
-                        <p class="card-category">VOCÊ NÃO EXPLICA</p>
-                        <h4>Cansou de justificar o que você acredita.</h4>
-                        <p>Quem entende, entende. Quem não entende, não precisa. <strong>A estampa fala.</strong> Você
-                            não precisa mais.</p>
-                    </div>
-                    <div class="audience-card">
-                        <span class="card-num">04</span>
-                        <span class="audience-icon" style="color: var(--green);">◎</span>
-                        <p class="card-category">VOCÊ VESTE POSIÇÃO</p>
-                        <h4>Roupa não é só roupa. É sinal. É triagem.</h4>
-                        <p>A camiseta certa <strong>atrai quem você quer perto</strong> e afasta quem nunca entenderia
-                            de qualquer forma.</p>
-                    </div>
-                </div>
-
-                <div class="audience-footer reveal-up">
-                    <h3 class="footer-cta-text">Reconheceu alguém aí?</h3>
-                    <p class="footer-subtext">Esse alguém precisa de uma estampa.</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- 3. PRODUTOS -->
-    <section id="drop" class="drop-section">
-        <div class="container">
-            <div class="drop-header reveal-up">
-                <span class="drop-tag">PRIMEIRO LANÇAMENTO</span>
-                <h2 class="drop-title">DROP #01 — CULTURA &amp; PROVOCAÇÃO</h2>
-                <p class="drop-sub">Cinco peças. Uma narrativa. Zero arrependimento.</p>
-            </div>
-            <div class="product-grid reveal-up" style="--delay: 0.1s">
-
-                <!-- Card 1 -->
-                <div class="product-card" onclick="window.location.href='loja.html?print=5'">
-                    <div class="product-thumb">
-                        <img src="Assets/Legaliza pra pobre tbm 1x1 Tiwshirts image.webp" alt="Legaliza" loading="lazy"
-                            decoding="async">
-                        <div class="card-overlay">
-                            <span class="card-ver">VER</span>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-name">LEGALIZA</span>
-                        <div class="card-bottom">
-                            <span class="card-price">R$ 105</span>
-                            <button class="btn-ver"
-                                onclick="event.stopPropagation(); window.location.href='loja.html?print=5'">VER</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="product-card" onclick="window.location.href='loja.html?print=3'">
-                    <div class="product-thumb">
-                        <img src="Assets/Just Doob It 1x1 Tiwshirts image.webp" alt="Just Doob It" loading="lazy"
-                            decoding="async">
-                        <div class="card-overlay">
-                            <span class="card-ver">VER</span>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-name">JUST DOOB IT</span>
-                        <div class="card-bottom">
-                            <span class="card-price">R$ 105</span>
-                            <button class="btn-ver"
-                                onclick="event.stopPropagation(); window.location.href='loja.html?print=3'">VER</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="product-card" onclick="window.location.href='loja.html?print=4'">
-                    <div class="product-thumb">
-                        <img src="Assets/Maconha salva Vidas 1x1 Tiwshirts image.webp" alt="Maconha Salva Vidas"
-                            loading="lazy" decoding="async">
-                        <div class="card-overlay">
-                            <span class="card-ver">VER</span>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-name">MACONHA SALVA VIDAS</span>
-                        <div class="card-bottom">
-                            <span class="card-price">R$ 105</span>
-                            <button class="btn-ver"
-                                onclick="event.stopPropagation(); window.location.href='loja.html?print=4'">VER</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="product-card" onclick="window.location.href='loja.html?print=2'">
-                    <div class="product-thumb">
-                        <img src="Assets/Não somos má pessoa 1x1 Tiwshirts image.webp" alt="Não somos má pessoa"
-                            loading="lazy" decoding="async">
-                        <div class="card-overlay">
-                            <span class="card-ver">VER</span>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-name">NÃO SOMOS MÁ PESSOA</span>
-                        <div class="card-bottom">
-                            <span class="card-price">R$ 105</span>
-                            <button class="btn-ver"
-                                onclick="event.stopPropagation(); window.location.href='loja.html?print=2'">VER</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="product-card" onclick="window.location.href='loja.html?print=1'">
-                    <div class="product-thumb">
-                        <img src="Assets/Maco nheiro 1x1 Tiwshirts image.webp" alt="Maconheiro" loading="lazy"
-                            decoding="async">
-                        <div class="card-overlay">
-                            <span class="card-ver">VER</span>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-name">MACONHEIRO</span>
-                        <div class="card-bottom">
-                            <span class="card-price">R$ 105</span>
-                            <button class="btn-ver"
-                                onclick="event.stopPropagation(); window.location.href='loja.html?print=1'">VER</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 6: Bag of Drop -->
-                <div class="product-card product-card--bag" onclick="window.location.href='loja.html?print=6'">
-                    <div class="product-thumb">
-                        <img src="Assets/TiwShirts capa Sugiro maconha bg.webp" alt="Bag of Drop" loading="lazy"
-                            decoding="async">
-                        <div class="card-overlay">
-                            <span class="card-ver">VER</span>
-                        </div>
-                        <div class="bag-badge">PACOTE COMPLETO</div>
-                    </div>
-                    <div class="card-info">
-                        <span class="card-name">BAG OF DROP</span>
-                        <div class="card-bottom">
-                            <span class="card-price" style="color: var(--gold)">R$ 475</span>
-                            <button class="btn-ver"
-                                onclick="event.stopPropagation(); window.location.href='loja.html?print=6'">VER</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. PROVA (POSIÇÃO + NUMERADO) -->
-    <section class="howto-section" id="prova">
-        <div class="container">
-            <div class="howto-header reveal-up">
-                <span class="drop-tag">EXCLUSIVIDADE PROVADA</span>
-                <h2 class="drop-title">SUA CAMISETA TEM UM <em
-                        style="color: var(--gold); font-style: italic;">NÚMERO.</em></h2>
-                <p class="drop-sub">Não é só uma estampa. É a sua posição no drop. Quem compra primeiro, garante os
-                    números mais baixos.</p>
-            </div>
-
-            <div class="howto-grid">
-                <div class="howto-example reveal-up">
-                    <div class="howto-number-demo">
-                        <span class="num">01</span>
-                        <span class="sep">/</span>
-                        <span class="num">01</span>
-                        <span class="sep">/</span>
-                        <span class="num">20</span>
-                    </div>
-                    <div class="howto-labels">
-                        <div class="howto-label">
-                            <div class="arrow">↑</div>
-                            <p><strong>Posição #1</strong><br>O primeiro a comprar</p>
-                        </div>
-                        <div class="howto-label">
-                            <div class="arrow">↑</div>
-                            <p><strong>Estampa #1</strong><br>Maconha Salva Vidas</p>
-                        </div>
-                        <div class="howto-label">
-                            <div class="arrow">↑</div>
-                            <p><strong>De 20</strong><br>Limite do Drop</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="howto-steps reveal-up" style="--delay:0.15s">
-                    <div class="howto-step">
-                        <span class="step-num">01</span>
-                        <div>
-                            <h4>Ordem de Chegada</h4>
-                            <p>O número na etiqueta depende da sua velocidade. Comprou primeiro? Leva a #01.</p>
-                        </div>
-                    </div>
-                    <div class="howto-step">
-                        <span class="step-num">02</span>
-                        <div>
-                            <h4>Feito à Mão</h4>
-                            <p>Cada peça é numerada individualmente. Não existem duas iguais no mundo.</p>
-                        </div>
-                    </div>
-                    <div class="howto-step">
-                        <span class="step-num">03</span>
-                        <div>
-                            <h4>Limite Real</h4>
-                            <p>São apenas 20 unidades por estampa. Quando acabar, essa arte nunca mais volta.</p>
-                        </div>
-                    </div>
-                    <div class="howto-step">
-                        <span class="step-num">04</span>
-                        <div>
-                            <h4>Sua Prova</h4>
-                            <p>A numeração é a prova física de que você estava lá desde o início.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- 5. URGÊNCIA -->
-    <section id="urgencia" class="urgency-section reveal-up">
-        <div class="container">
-            <div class="urgency-card">
-                <div class="urgency-badge">ESTOQUE LIMITADO</div>
-                <h2 class="urgency-title">O DROP #01 NÃO VAI DURAR.</h2>
-                <p class="urgency-text">Apenas 100 unidades no total (20 por estampa). O estoque é atualizado em tempo
-                    real conforme as compras são confirmadas.</p>
-                <div class="urgency-stats">
-                    <div class="stat-item">
-                        <span class="stat-num" id="stockCount">98</span>
-                        <span class="stat-label">PEÇAS RESTANTES</span>
-                    </div>
-                </div>
-                <a href="#drop" class="btn-primary">GARANTIR MINHA POSIÇÃO</a>
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- 7. MANIFESTO -->
-    <section class="manifesto-section reveal-up">
-        <div class="container">
-            <blockquote class="manifesto-quote">
-                "A TiwShirts transforma <em>pensamentos não ditos</em> em algo visível. Não busca agradar. Busca gerar
-                <em>identificação.</em>"
-            </blockquote>
-        </div>
-    </section>
-
-    <!-- 8. CTA FINAL -->
-    <section id="cta-final" class="cta-final-section reveal-up">
-        <div class="container">
-            <div class="cta-final-content">
-                <h2 class="statement-h2">VISTA O QUE<br>VOCÊ <em>PENSA.</em></h2>
-                <p class="cta-sub">Não espere o próximo drop. As melhores posições são de quem age agora.</p>
-                <div class="cta-btns">
-                    <a href="#drop" class="btn-primary">ESCOLHER MINHA ESTAMPA</a>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- BRAND VALUES BAR -->
-    <div class="brand-values-bar">
-        <div class="container">
-            <div class="brand-values">
-                <div class="brand-value">
-                    <span class="bv-icon">🔒</span> Tiragem Limitada
-                </div>
-                <div class="brand-value">
-                    <span class="bv-icon">⭐</span> Ideia Vestida
-                </div>
-                <div class="brand-value">
-                    <span class="bv-icon">⚡</span> Verdade Acima de Tudo
-                </div>
-                <div class="brand-value">
-                    <strong>Expressão. Não Impressão.</strong>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="container footer-inner">
-            <div>
-                <h4 class="footer-logo">TIWSHIRTS</h4>
-                <p>Vista o que você pensa.</p>
+  function Dossier() {
+    return (
+      <section className="dossier" id="manual">
+        <div className="wrap" style={{ position: "relative" }}>
+          <div className="dossier-stamp">DOSSIÊ EDUCATIVO · GRÁTIS</div>
+          <div className="dossier-head">
+            <div className="dossier-num">
+              02
+              <small>SEÇÃO<br/>MANUAL</small>
             </div>
             <div>
-                <p class="footer-label">DROP #01</p>
-                <ul class="footer-links">
-                    <li><a href="drop-01.html">Ver todas as peças</a></li>
-                    <li><a href="camiseta-maconheiro.html">Maconheiro</a></li>
-                    <li><a href="camiseta-nao-somos-ma-pessoa.html">Não Somos Má Pessoa</a></li>
-                    <li><a href="camiseta-just-doob-it.html">Just Doob It</a></li>
-                    <li><a href="camiseta-maconha-salva-vidas.html">Maconha Salva Vidas</a></li>
-                    <li><a href="camiseta-legaliza.html">Legaliza</a></li>
-                </ul>
+              <h1 className="dossier-title">
+                Manual do<br/><em>Usuário.</em>
+              </h1>
+              <p className="dossier-lede">
+                Nove capítulos. Material educativo aberto, sem cadastro, sem paywall. Cobre o que <strong>a ciência sabe</strong>, o que <strong>a história ensina</strong>, o que a <strong>lei brasileira ainda discute</strong> — e o que a <strong>redução de danos</strong> provou que funciona. Lê quem quer. A camiseta é a consequência, não a porta.
+              </p>
             </div>
-            <div>
-                <p class="footer-label">LINKS</p>
-                <ul class="footer-links">
-                    <li><a href="manifesto.html">Manifesto</a></li>
-                    <li><a href="sobre.html">Sobre</a></li>
-                    <li><a href="manualdousuario-cannabis.html">Manual do Usuário</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                </ul>
-            </div>
-            <div>
-                <p class="footer-label">CONTATO</p>
-                <p>+55 15 981512083</p>
-                <div class="footer-social">
-                    <a href="https://www.instagram.com/tiwdoo" target="_blank" title="Instagram">IG</a>
-                    <a href="https://www.tiktok.com/@tiwdoo" target="_blank" title="TikTok">TK</a>
-                    <a href="https://www.youtube.com/@tiwdoo" target="_blank" title="YouTube">YT</a>
-                </div>
-                <div class="footer-credits" style="margin-top: 20px; font-size: 11px; opacity: 0.5;">
-                    Produzido por <a href="https://www.instagram.com/tiwdoo" target="_blank">@tiwDoo</a> & <a
-                        href="https://www.instagram.com/edu.bovoline" target="_blank">@edu.bovoline</a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2026 TiwShirts. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+          </div>
 
-    <script src="script.js"></script>
+          <div className="chapters">
+            {CHAPTERS.map((ch) => (
+              <a className="chapter" key={ch.n} href={"manualdousuario-cannabis.html" + ch.h}>
+                <div className="ch-num"><span>§</span>{ch.n}</div>
+                <div className="ch-body">
+                  <h3>{ch.title}</h3>
+                  <p>{ch.desc}</p>
+                </div>
+                <div className="ch-tag">{ch.tag}</div>
+                <div className="ch-go">{ch.read} · LER →</div>
+              </a>
+            ))}
+          </div>
+
+          <div className="dossier-foot">
+            <div className="mono">↳ NOTA DO EDITOR</div>
+            <p>O manual é grátis. <em>Sempre vai ser.</em> Se quiser apoiar — leia, compartilhe, ou vista uma camiseta.</p>
+            <a href="manualdousuario-cannabis.html">ABRIR O MANUAL COMPLETO ↗</a>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function PathFinder() {
+    const [active, setActive] = useState("curioso");
+    const path = PATHS.find((p) => p.id === active);
+    return (
+      <section className="pathfinder" id="caminho">
+        <div className="wrap">
+          <div className="pf-head">
+            <div className="label">03 ─<br/>POR ONDE<br/>COMEÇAR</div>
+            <div>
+              <h2 className="poster">Quem é <em>você</em><br/>nessa conversa?</h2>
+              <p>O manual é grande. Você não precisa ler tudo de uma vez. Diga quem você é — sugerimos por onde entrar. Quatro portas, todas válidas. Nenhuma melhor que a outra.</p>
+            </div>
+          </div>
+          <div className="pf-grid">
+            <div className="pf-left">
+              {PATHS.map((p) => (
+                <button
+                  key={p.id}
+                  className={"pf-option" + (active === p.id ? " active" : "")}
+                  onClick={() => setActive(p.id)}
+                >
+                  <span className="n">{p.n}</span>
+                  <span className="lbl">{p.label}</span>
+                  <span className="arr">→</span>
+                </button>
+              ))}
+            </div>
+            <div className="pf-right">
+              <div className="eyebrow">↳ {path.eyebrow}</div>
+              <h3>{path.title}</h3>
+              <p>{path.p}</p>
+              <div className="pf-chips">
+                {path.chips.map((c) => (
+                  <a key={c.t} className="pf-chip" href={"manualdousuario-cannabis.html" + c.h}>
+                    {c.t} →
+                  </a>
+                ))}
+              </div>
+              <div className="pf-quote">{path.quote}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function Audience() {
+    return (
+      <section className="audience">
+        <div className="wrap">
+          <div className="aud-head">
+            <div className="label">04 ─<br/>PRA QUEM É</div>
+            <div>
+              <h2>Se você <em>tem algo</em><br/>pra dizer, <em>é pra você.</em></h2>
+              <p>Não é pra todo mundo. É pra quem cansou de fingir que concorda.</p>
+            </div>
+          </div>
+          <div className="aud-grid">
+            {AUDIENCE.map((a) => (
+              <div className="aud-card" key={a.n}>
+                <div className="top">
+                  <span>{a.n}</span>
+                  <span className="glyph">{a.g}</span>
+                </div>
+                <div className="mono">{a.t}</div>
+                <h4 className="h">{a.h}</h4>
+                <p className="p">{a.p}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function Drop() {
+    return (
+      <section className="drop" id="drop">
+        <div className="wrap">
+          <div className="drop-head">
+            <div className="label">05 ─<br/>PRIMEIRO<br/>LANÇAMENTO</div>
+            <div>
+              <h2 className="poster">DROP #01 —<br/><em>CULTURA &amp; PROVOCAÇÃO</em></h2>
+            </div>
+            <div className="meta">
+              <strong>5</strong>
+              PEÇAS<br/>
+              UMA NARRATIVA
+            </div>
+          </div>
+          <div className="drop-shelf">
+            {PRODUCTS.map((p, i) => (
+              <a className="product" key={p.slug} href={p.slug + ".html"}>
+                <div className="p-head">
+                  <span>POS · {String(i + 1).padStart(2, "0")} / 06</span>
+                  <span className="ch">{p.chapter}</span>
+                </div>
+                <div className="p-img">
+                  <img src={p.img} alt={p.name} loading="lazy" />
+                </div>
+                <div className="p-foot">
+                  <div>
+                    <div className="name">{p.name}</div>
+                    <div className="sub">{p.sub}</div>
+                  </div>
+                  <div className="price">
+                    R$ {p.price}
+                    <small>{p.full ? "PACOTE" : "20/20"}</small>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function NumberedEdition() {
+    return (
+      <section className="number">
+        <div className="wrap">
+          <div className="number-head">
+            <div className="label" style={{ fontFamily: "DM Mono, monospace", fontSize: 11, letterSpacing: ".25em", textTransform: "uppercase", color: "var(--ink)", opacity: .65 }}>
+              06 ─<br/>EXCLUSIVIDADE PROVADA
+            </div>
+            <div>
+              <h2>SUA CAMISETA TEM UM <em>NÚMERO.</em></h2>
+              <p>Não é só uma estampa. É a sua posição no drop. Quem compra primeiro, garante os números mais baixos.</p>
+            </div>
+          </div>
+
+          <div className="number-display">
+            <div className="nd-cell">
+              <div className="big"><em>01</em></div>
+              <div className="lbl">Posição #1</div>
+              <div className="desc">O primeiro a comprar</div>
+            </div>
+            <div className="nd-sep">/</div>
+            <div className="nd-cell">
+              <div className="big"><em>01</em></div>
+              <div className="lbl">Estampa #1</div>
+              <div className="desc">Maconha Salva Vidas</div>
+            </div>
+            <div className="nd-sep">/</div>
+            <div className="nd-cell">
+              <div className="big"><em>20</em></div>
+              <div className="lbl">De 20</div>
+              <div className="desc">Limite do drop</div>
+            </div>
+          </div>
+
+          <div className="number-points">
+            <div className="np">
+              <div className="n">01</div>
+              <h4>Ordem de Chegada</h4>
+              <p>O número na etiqueta depende da sua velocidade. Comprou primeiro? Leva a #01.</p>
+            </div>
+            <div className="np">
+              <div className="n">02</div>
+              <h4>Feito à Mão</h4>
+              <p>Cada peça é numerada individualmente. Não existem duas iguais no mundo.</p>
+            </div>
+            <div className="np">
+              <div className="n">03</div>
+              <h4>Limite Real</h4>
+              <p>Apenas 20 unidades por estampa. Quando acabar, essa arte nunca mais volta.</p>
+            </div>
+            <div className="np">
+              <div className="n">04</div>
+              <h4>Sua Prova</h4>
+              <p>A numeração é a prova física de que você estava lá desde o início.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function Urgency() {
+    return (
+      <section className="urgency">
+        <div className="wrap">
+          <div className="label">ESTOQUE LIMITADO · ATUALIZADO EM TEMPO REAL</div>
+          <h2>O DROP #01 NÃO VAI DURAR.</h2>
+          <p>Apenas 100 unidades no total (20 por estampa). O estoque é atualizado em tempo real conforme as compras são confirmadas.</p>
+          <div className="bar">
+            <div className="stock">98 / 100</div>
+            <a className="btn" href="#drop">GARANTIR MINHA POSIÇÃO ↗</a>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function Closing({ tom }) {
+    const c = TOM[tom] || TOM.equilibrio;
+    return (
+      <section className="closing">
+        <div className="wrap">
+          <div className="closing-quote">{c.closingQuote}</div>
+          <h2>VISTA O QUE<br/>VOCÊ <em>PENSA.</em></h2>
+          <div className="closing-cta">
+            <a className="btn btn-primary" href="#drop">ESCOLHER MINHA ESTAMPA</a>
+            <a className="btn btn-ghost" href="manualdousuario-cannabis.html">LER O MANUAL</a>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function Footer() {
+    return (
+      <footer>
+        <div className="wrap">
+          <div className="foot-grid">
+            <div>
+              <div className="foot-brand">TIWSHIRTS</div>
+              <div className="foot-tag">Vista o que você pensa.<br/>Mas leia antes de vestir.</div>
+            </div>
+            <div>
+              <h4>DROP #01</h4>
+              <ul>
+                <li><a href="drop-01.html">Ver todas as peças</a></li>
+                <li><a href="camiseta-maconheiro.html">Maconheiro</a></li>
+                <li><a href="camiseta-nao-somos-ma-pessoa.html">Não Somos Má Pessoa</a></li>
+                <li><a href="camiseta-just-doob-it.html">Just Doob It</a></li>
+                <li><a href="camiseta-maconha-salva-vidas.html">Maconha Salva Vidas</a></li>
+                <li><a href="camiseta-legaliza.html">Legaliza</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>MANUAL</h4>
+              <ul>
+                <li><a href="manualdousuario-cannabis.html">Manual do Usuário</a></li>
+                <li><a href="manifesto.html">Manifesto</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="blog.html">Blog</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>CONTATO</h4>
+              <ul>
+                <li><a href="tel:+5515981512083">+55 15 98151-2083</a></li>
+                <li><a href="https://www.instagram.com/tiwdoo" target="_blank" rel="noreferrer">IG · @tiwdoo</a></li>
+                <li><a href="https://www.tiktok.com/@tiwdoo" target="_blank" rel="noreferrer">TK · @tiwdoo</a></li>
+                <li><a href="https://www.youtube.com/@tiwdoo" target="_blank" rel="noreferrer">YT · @tiwdoo</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="foot-bot">
+            <div>© 2026 TIWSHIRTS · TODOS OS DIREITOS RESERVADOS</div>
+            <div>PRODUZIDO POR @TIWDOO &amp; @EDU.BOVOLINE</div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
+  function App() {
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+    // Intensity tweak: adjust contrast / grain
+    useEffect(() => {
+      const r = document.documentElement;
+      if (t.intensidade === "calmo")    { r.style.setProperty("--rust", "#a3573e"); }
+      else if (t.intensidade === "raw") { r.style.setProperty("--rust", "#cc3c1a"); }
+      else                              { r.style.setProperty("--rust", "#b8472a"); }
+    }, [t.intensidade]);
+
+    const sectionsManual = [
+      <Dossier key="d" />,
+      <PathFinder key="p" />,
+      <Audience key="a" />,
+      <Drop key="dr" />,
+      <NumberedEdition key="n" />,
+      <Urgency key="u" />,
+    ];
+    const sectionsLoja = [
+      <Drop key="dr" />,
+      <Audience key="a" />,
+      <NumberedEdition key="n" />,
+      <Urgency key="u" />,
+      <Dossier key="d" />,
+      <PathFinder key="p" />,
+    ];
+    const sectionsAlt = [
+      <Dossier key="d" />,
+      <Audience key="a" />,
+      <PathFinder key="p" />,
+      <Drop key="dr" />,
+      <NumberedEdition key="n" />,
+      <Urgency key="u" />,
+    ];
+
+    const sections = t.ordem === "loja-primeiro" ? sectionsLoja
+                  :  t.ordem === "alternado"     ? sectionsAlt
+                  :  sectionsManual;
+
+    return (
+      <>
+        <Nav />
+        <Hero tom={t.tom} useLetteringImg={true} />
+        {t.mostrarMarquee && <Marquee />}
+        <Statement tom={t.tom} />
+        {sections}
+        <Closing tom={t.tom} />
+        <Footer />
+
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="Tom da copy" />
+          <TweakRadio
+            value={t.tom}
+            options={["acolhedor", "equilibrio", "provocativo"]}
+            onChange={(v) => setTweak("tom", v)}
+          />
+          <TweakSection label="Equilíbrio das seções" />
+          <TweakSelect
+            label="Ordem"
+            value={t.ordem}
+            options={[
+              { value: "manual-primeiro", label: "Manual → Caminho → Pra quem → Loja" },
+              { value: "alternado",       label: "Manual → Pra quem → Caminho → Loja" },
+              { value: "loja-primeiro",   label: "Loja → Pra quem → Manual → Caminho" },
+            ]}
+            onChange={(v) => setTweak("ordem", v)}
+          />
+          <TweakSection label="Intensidade visual" />
+          <TweakRadio
+            value={t.intensidade}
+            options={["calmo", "padrao", "raw"]}
+            onChange={(v) => setTweak("intensidade", v)}
+          />
+          <TweakSection label="Detalhes" />
+          <TweakToggle
+            label="Mostrar marquee"
+            value={t.mostrarMarquee}
+            onChange={(v) => setTweak("mostrarMarquee", v)}
+          />
+        </TweaksPanel>
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
-
 </html>

@@ -2,15 +2,15 @@
    RESET & BASE
 ======================== */
 :root {
-    --black: #000000;
-    --white: #ffffff;
-    --off-white: #f0ede8;
-    --gray: #777777;
-    --dark-gray: #111111;
-    --mid-gray: #1e1e1e;
-    --green: #3d6b40;
-    --green-glow: rgba(61, 107, 64, 0.4);
-    --gold: #c8a96e;
+    --black: #0c0a07;
+    --white: #ede5cd;
+    --off-white: #f1e9d2;
+    --gray: #8c7c4f;
+    --dark-gray: #13100c;
+    --mid-gray: #1a1611;
+    --green: #b8472a;
+    --green-glow: rgba(184, 71, 42, 0.4);
+    --gold: #d9c267;
     --glass: rgba(255,255,255,0.04);
     --glass-border: rgba(255,255,255,0.08);
     --font-display: 'Outfit', sans-serif;

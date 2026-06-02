@@ -3,6 +3,18 @@ const cors = require('cors');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 const nodemailer = require('nodemailer');
 
+// Função de Sanitização contra XSS e HTML Injection
+function escapeHtml(string) {
+    if (!string) return '';
+    return String(string)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
+}
+
 const app = express();
 
 // Configuração do Email (Nodemailer)
@@ -53,9 +65,24 @@ app.post('/create-preference', async (req, res) => {
     try {
         const { items, customer, shipping } = req.body;
         
+        // Sanitizar dados do cliente (Segurança do Usuário)
+        const sanitizedCustomer = {
+            nome: escapeHtml(customer?.nome),
+            email: escapeHtml(customer?.email),
+            cpf: escapeHtml(customer?.cpf),
+            whatsapp: escapeHtml(customer?.whatsapp),
+            rua: escapeHtml(customer?.rua),
+            numero: escapeHtml(customer?.numero),
+            cep: escapeHtml(customer?.cep),
+            bairro: escapeHtml(customer?.bairro),
+            cidade: escapeHtml(customer?.cidade),
+            uf: escapeHtml(customer?.uf),
+            complemento: escapeHtml(customer?.complemento)
+        };
+        
         console.log('--- NOVA REQUISIÇÃO DE CHECKOUT ---');
         console.log('Shipping recebido:', shipping);
-        console.log('Customer:', customer);
+        console.log('Customer:', sanitizedCustomer);
 
         if (!items || !Array.isArray(items) || items.length === 0) {
             return res.status(400).json({ error: 'Nenhum item enviado.' });
@@ -109,33 +136,33 @@ app.post('/create-preference', async (req, res) => {
             body: {
                 items: validatedItems,
                 payer: {
-                    name: customer?.nome || 'Cliente TiwShirts',
-                    email: customer?.email || '',
+                    name: sanitizedCustomer.nome || 'Cliente TiwShirts',
+                    email: sanitizedCustomer.email || '',
                     identification: {
                         type: 'CPF',
-                        number: customer?.cpf?.replace(/\D/g, '') || ''
+                        number: sanitizedCustomer.cpf ? sanitizedCustomer.cpf.replace(/\D/g, '') : ''
                     },
                     phone: {
-                        area_code: customer?.whatsapp?.substring(0,2) || '',
-                        number: customer?.whatsapp?.replace(/\D/g, '').substring(2) || ''
+                        area_code: sanitizedCustomer.whatsapp ? sanitizedCustomer.whatsapp.substring(0,2) : '',
+                        number: sanitizedCustomer.whatsapp ? sanitizedCustomer.whatsapp.replace(/\D/g, '').substring(2) : ''
                     },
                     address: {
-                        street_name: customer?.rua || '',
-                        street_number: Number(customer?.numero) || 0,
-                        zip_code: customer?.cep || ''
+                        street_name: sanitizedCustomer.rua || '',
+                        street_number: Number(sanitizedCustomer.numero) || 0,
+                        zip_code: sanitizedCustomer.cep || ''
                     }
                 },
                 back_urls: {
-                    success: 'https://tiwshirts.com.br/loja.html?status=success',
-                    failure: 'https://tiwshirts.com.br/loja.html?status=failure',
-                    pending: 'https://tiwshirts.com.br/loja.html?status=pending'
+                    success: 'https://tiwshirts.space/loja.html?status=success',
+                    failure: 'https://tiwshirts.space/loja.html?status=failure',
+                    pending: 'https://tiwshirts.space/loja.html?status=pending'
                 },
                 auto_return: 'approved',
                 statement_descriptor: 'TIWSHIRTS DROP1',
                 external_reference: `DROP1-${Date.now()}`,
                 // Metadados para o seu controle
                 metadata: {
-                    customer_data: customer,
+                    customer_data: sanitizedCustomer,
                     shipping_details: shipping
                 }
             }
@@ -155,17 +182,17 @@ app.post('/create-preference', async (req, res) => {
                 
                 <h3>Dados do Cliente:</h3>
                 <ul>
-                    <li><strong>Nome:</strong> ${customer?.nome || 'N/A'}</li>
-                    <li><strong>Email:</strong> ${customer?.email || 'N/A'}</li>
-                    <li><strong>WhatsApp:</strong> ${customer?.whatsapp || 'N/A'}</li>
-                    <li><strong>CPF:</strong> ${customer?.cpf || 'N/A'}</li>
+                    <li><strong>Nome:</strong> ${sanitizedCustomer.nome || 'N/A'}</li>
+                    <li><strong>Email:</strong> ${sanitizedCustomer.email || 'N/A'}</li>
+                    <li><strong>WhatsApp:</strong> ${sanitizedCustomer.whatsapp || 'N/A'}</li>
+                    <li><strong>CPF:</strong> ${sanitizedCustomer.cpf || 'N/A'}</li>
                 </ul>
                 
                 <h3>Endereço de Entrega:</h3>
-                <p>${customer?.rua || ''}, ${customer?.numero || ''} - ${customer?.bairro || ''}<br>
-                ${customer?.cidade || ''} / ${customer?.uf || ''}<br>
-                <strong>CEP:</strong> ${customer?.cep || ''}<br>
-                <strong>Complemento:</strong> ${customer?.complemento || 'N/A'}</p>
+                <p>${sanitizedCustomer.rua || ''}, ${sanitizedCustomer.numero || ''} - ${sanitizedCustomer.bairro || ''}<br>
+                ${sanitizedCustomer.cidade || ''} / ${sanitizedCustomer.uf || ''}<br>
+                <strong>CEP:</strong> ${sanitizedCustomer.cep || ''}<br>
+                <strong>Complemento:</strong> ${sanitizedCustomer.complemento || 'N/A'}</p>
                 
                 <h3>Itens do Pedido:</h3>
                 <ul>${itensHtml}</ul>
