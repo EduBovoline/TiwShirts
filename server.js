@@ -209,7 +209,9 @@ app.post('/create-preference', async (req, res) => {
 
         res.json({
             id: result.id,
-            init_point: result.init_point,
+            init_point: process.env.MP_ACCESS_TOKEN && process.env.MP_ACCESS_TOKEN.startsWith('TEST-') 
+                ? result.sandbox_init_point 
+                : result.init_point,
             sandbox_init_point: result.sandbox_init_point
         });
 
