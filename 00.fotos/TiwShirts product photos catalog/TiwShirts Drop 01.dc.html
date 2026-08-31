@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #080808; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  a { color: #E5E5E5; text-decoration: none; }
+  a:hover { color: #1DB954; }
+  ::selection { background: #1DB954; color: #080808; }
+  @keyframes tiwFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes tiwRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes tiwMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes tiwScroll { 0% { transform: translateY(0); opacity: 0; } 40% { opacity: 1; } 100% { transform: translateY(14px); opacity: 0; } }
+</style>
+</helmet>
+<div style="background: #080808; color: #E5E5E5; font-family: 'JetBrains Mono', ui-monospace, monospace; overflow-x: hidden; width: 100%;">
+
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: linear-gradient(180deg, rgba(8,8,8,0.92), rgba(8,8,8,0)); backdrop-filter: blur(2px);">
+    <div style="font-family: Syne, sans-serif; font-weight: 800; font-size: 15px; letter-spacing: -0.03em;">TIWSHIRTS</div>
+    <div style="display: flex; gap: 18px; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #8a8a8a;">
+      <a href="#tecido" style="color: #8a8a8a;">Tecido</a>
+      <a href="#modelagem" style="color: #8a8a8a;">Fit</a>
+      <a href="#lookbook" style="color: #8a8a8a;">Lookbook</a>
+    </div>
+  </header>
+
+  <section style="position: relative; height: 100svh; min-height: 620px; width: 100%; overflow: hidden;">
+    <div style="position: absolute; inset: 0;">
+      <img src="img/capa.webp" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.55; filter: grayscale(0.25) contrast(1.05);" />
+      <sc-for list="{{ heroFrames }}" as="frame" hint-placeholder-count="0">
+        <img src="{{ frame.src }}" alt="" style="{{ frame.style }}" />
+      </sc-for>
+      <div style="position: absolute; inset: 0; background: radial-gradient(120% 80% at 50% 25%, rgba(8,8,8,0.35), rgba(8,8,8,0.88) 70%, #080808 100%);"></div>
+      <div style="position: absolute; inset: 0; opacity: 0.16; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.35) 0 1px, transparent 1px 3px); mix-blend-mode: overlay; pointer-events: none;"></div>
+    </div>
+
+    <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 20px 56px; max-width: 1400px; margin: 0 auto;">
+      <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 26px; animation: tiwFade 1.2s ease both;">
+        <span style="width: 6px; height: 6px; border-radius: 50%; background: #1DB954; box-shadow: 0 0 12px #1DB954;"></span>
+        <span style="font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #9a9a9a;">Drop #01 • Edição limitada a 100 peças numeradas</span>
+      </div>
+      <h1 style="font-family: Syne, sans-serif; font-weight: 800; font-size: clamp(44px, 11vw, 148px); line-height: 0.86; letter-spacing: -0.045em; margin: 0 0 18px; text-transform: uppercase; text-wrap: balance; animation: tiwRise 1s ease both;">Expressão.<br /><span style="color: #4a4a4a;">Não impressão.</span></h1>
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; border-top: 1px solid #232323; padding-top: 18px;">
+        <p style="margin: 0; max-width: 380px; font-size: 12.5px; line-height: 1.75; color: #9a9a9a; text-wrap: pretty;">TiwShirts — Vista o que você pensa. Suedine premium, costura reforçada ombro a ombro e estampas que carregam discurso.</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <a href="#lookbook" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 26px; min-height: 48px; background: #E5E5E5; color: #080808; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 500;" style-hover="background: #1DB954; color: #080808;">Ver o drop</a>
+          <a href="https://wa.me/5515981512083?text=Ol%C3%A1%2C%20quero%20saber%20sobre%20o%20DROP%20%2301%20da%20TiwShirts%20(atacado)." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 26px; min-height: 48px; border: 1px solid #2a2a2a; color: #E5E5E5; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;" style-hover="border-color: #1DB954; color: #1DB954;">Atacado</a>
+        </div>
+      </div>
+      <div style="position: absolute; left: 20px; bottom: 20px; width: 1px; height: 24px; background: #1DB954; animation: tiwScroll 2s ease-in-out infinite;"></div>
+    </div>
+  </section>
+
+  <div style="overflow: hidden; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; background: #0c0c0c; padding: 13px 0;">
+    <div style="display: flex; width: 200%; animation: tiwMarquee 28s linear infinite; white-space: nowrap;">
+      <div style="display: flex; gap: 42px; width: 50%; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: #6a6a6a;">
+        <span>Suedine 100% algodão</span><span style="color: #1DB954;">◆</span><span>P ao GG</span><span style="color: #1DB954;">◆</span><span>11 estampas</span><span style="color: #1DB954;">◆</span><span>Costura ombro a ombro</span><span style="color: #1DB954;">◆</span><span>Peças numeradas</span><span style="color: #1DB954;">◆</span>
+      </div>
+      <div style="display: flex; gap: 42px; width: 50%; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: #6a6a6a;">
+        <span>Suedine 100% algodão</span><span style="color: #1DB954;">◆</span><span>P ao GG</span><span style="color: #1DB954;">◆</span><span>11 estampas</span><span style="color: #1DB954;">◆</span><span>Costura ombro a ombro</span><span style="color: #1DB954;">◆</span><span>Peças numeradas</span><span style="color: #1DB954;">◆</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="tecido" style="padding: 96px 20px; max-width: 1400px; margin: 0 auto;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 44px;">
+      <span style="font-size: 10px; letter-spacing: 0.28em; color: #1DB954;">01</span>
+      <h2 style="font-family: Syne, sans-serif; font-weight: 700; font-size: clamp(28px, 5.5vw, 64px); line-height: 0.95; letter-spacing: -0.04em; margin: 0; text-transform: uppercase;">A experiência suedine</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; align-items: start;">
+      <div>
+        <div onMouseMove="{{ onLens }}" onMouseLeave="{{ offLens }}" onTouchMove="{{ onLensTouch }}" onTouchEnd="{{ offLens }}" style="position: relative; aspect-ratio: 4/5; overflow: hidden; background: #121212; cursor: crosshair; touch-action: none;">
+          <img src="img/textura-suedine.jpeg" alt="Macro da textura suedine" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+          <div style="{{ lensStyle }}"></div>
+          <div style="position: absolute; left: 14px; bottom: 14px; font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: #E5E5E5; background: rgba(8,8,8,0.6); padding: 7px 11px; pointer-events: none;">Passe o dedo · zoom 2.6×</div>
+        </div>
+        <p style="margin: 16px 0 0; font-size: 12px; line-height: 1.8; color: #8a8a8a; max-width: 420px; text-wrap: pretty;">Toque aveludado e densidade alta. O suedine cai pesado, não amassa fácil e mantém a estampa firme depois de muita lavagem.</p>
+      </div>
+      <div style="display: grid; gap: 14px;">
+        <div style="position: relative; aspect-ratio: 16/10; overflow: hidden; background: #121212;">
+          <img src="img/detalhe-costura.jpg" alt="Costura reforçada ombro a ombro" style="width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.9s cubic-bezier(0.16,1,0.3,1);" style-hover="transform: scale(1.06);" />
+          <span style="position: absolute; left: 12px; top: 12px; font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: #080808; background: #E5E5E5; padding: 5px 9px;">Costura ombro a ombro</span>
+        </div>
+        <div style="position: relative; aspect-ratio: 16/10; overflow: hidden; background: #121212;">
+          <img src="img/detalhe-etiqueta.jpg" alt="Etiqueta personalizada TiwShirts" style="width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.9s cubic-bezier(0.16,1,0.3,1);" style-hover="transform: scale(1.06);" />
+          <span style="position: absolute; left: 12px; top: 12px; font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: #080808; background: #E5E5E5; padding: 5px 9px;">Etiqueta interna</span>
+        </div>
+      </div>
+      <div style="border: 1px solid #1a1a1a; padding: 26px; background: #0c0c0c;">
+        <div style="font-size: 9.5px; letter-spacing: 0.28em; text-transform: uppercase; color: #6a6a6a; margin-bottom: 22px;">Ficha técnica</div>
+        <div style="display: grid; gap: 0;">
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Tecido</span><span>Suedine 100% algodão</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Toque</span><span>Aveludado / peach</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Costura</span><span>Reforçada ombro a ombro</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Tamanhos</span><span>P · M · G · GG</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Modelagens</span><span>Classic · Oversized</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Drop</span><span style="color: #1DB954;">#01 · 100 peças</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modelagem" style="padding: 0 20px 96px; max-width: 1400px; margin: 0 auto;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 30px;">
+      <span style="font-size: 10px; letter-spacing: 0.28em; color: #1DB954;">02</span>
+      <h2 style="font-family: Syne, sans-serif; font-weight: 700; font-size: clamp(28px, 5.5vw, 64px); line-height: 0.95; letter-spacing: -0.04em; margin: 0; text-transform: uppercase;">Classic ou oversized</h2>
+    </div>
+    <div style="display: inline-flex; border: 1px solid #232323; margin-bottom: 26px;">
+      <button onClick="{{ pickClassic }}" style="{{ tabClassicStyle }}">Classic fit</button>
+      <button onClick="{{ pickOversized }}" style="{{ tabOverStyle }}">Oversized boxy</button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; align-items: stretch;">
+      <div style="position: relative; aspect-ratio: 3/4; overflow: hidden; background: #121212;">
+        <img src="{{ fit.imgA }}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block; animation: tiwFade 0.7s ease both;" />
+      </div>
+      <div style="position: relative; aspect-ratio: 3/4; overflow: hidden; background: #121212;">
+        <img src="{{ fit.imgB }}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block; animation: tiwFade 0.9s ease both;" />
+      </div>
+      <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 26px; border: 1px solid #1a1a1a; background: #0c0c0c; padding: 26px;">
+        <div>
+          <div style="font-family: Syne, sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.03em; text-transform: uppercase; margin-bottom: 12px;">{{ fit.title }}</div>
+          <p style="margin: 0 0 22px; font-size: 12px; line-height: 1.8; color: #8a8a8a; text-wrap: pretty;">{{ fit.desc }}</p>
+          <div style="display: grid; gap: 0;">
+            <div style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Caimento</span><span>{{ fit.caimento }}</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Manga</span><span>{{ fit.manga }}</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Preço</span><span style="color: #1DB954;">{{ fit.preco }}</span></div>
+          </div>
+        </div>
+        <a href="{{ fit.wa }}" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; padding: 16px; min-height: 48px; background: #E5E5E5; color: #080808; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 500;" style-hover="background: #1DB954;">Pedir no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="lookbook" style="padding: 0 20px 96px; max-width: 1400px; margin: 0 auto;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 14px;">
+      <span style="font-size: 10px; letter-spacing: 0.28em; color: #1DB954;">03</span>
+      <h2 style="font-family: Syne, sans-serif; font-weight: 700; font-size: clamp(28px, 5.5vw, 64px); line-height: 0.95; letter-spacing: -0.04em; margin: 0; text-transform: uppercase;">Lookbook · 11 estampas</h2>
+    </div>
+    <p style="margin: 0 0 40px; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #6a6a6a;">Toque em qualquer peça para ver frente, costas e close da estampa</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+      <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+        <button onClick="{{ p.open }}" style="display: block; text-align: left; padding: 0; border: 1px solid #1a1a1a; background: #0c0c0c; color: #E5E5E5; font-family: inherit; cursor: pointer; transition: border-color 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);" style-hover="border-color: #1DB954; transform: translateY(-4px);">
+          <div style="position: relative; aspect-ratio: 3/4; overflow: hidden; background: #121212;">
+            <img src="{{ p.cover }}" alt="{{ p.name }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1s cubic-bezier(0.16,1,0.3,1); filter: saturate(0.95);" style-hover="transform: scale(1.05);" />
+            <span style="position: absolute; left: 10px; top: 10px; font-size: 9px; letter-spacing: 0.2em; color: #E5E5E5; background: rgba(8,8,8,0.65); padding: 5px 8px;">{{ p.num }}</span>
+            <span style="position: absolute; right: 10px; top: 10px; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #080808; background: #E5E5E5; padding: 5px 8px;">{{ p.fitLabel }}</span>
+          </div>
+          <div style="padding: 16px 16px 18px;">
+            <div style="font-family: Syne, sans-serif; font-weight: 700; font-size: 15px; line-height: 1.15; letter-spacing: -0.02em; text-transform: uppercase; margin-bottom: 8px; min-height: 34px;">{{ p.name }}</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 10.5px; color: #6a6a6a;">
+              <span style="letter-spacing: 0.14em; text-transform: uppercase;">{{ p.color }}</span>
+              <span style="color: #E5E5E5;">{{ p.price }}</span>
+            </div>
+          </div>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="padding: 0 20px 96px; max-width: 1400px; margin: 0 auto;">
+    <div style="position: relative; overflow: hidden; border: 1px solid #1a1a1a; background: #0c0c0c;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: stretch;">
+        <div style="position: relative; min-height: 340px; overflow: hidden;">
+          <img src="img/costas-oversized.jpeg" alt="Bag do Drop TiwShirts" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
+          <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,8,8,0.2), rgba(12,12,12,0.95));"></div>
+        </div>
+        <div style="padding: 44px 34px; display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+          <span style="font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #1DB954;">Atacado · combo fechado</span>
+          <h3 style="font-family: Syne, sans-serif; font-weight: 800; font-size: clamp(30px, 5vw, 52px); line-height: 0.92; letter-spacing: -0.04em; margin: 0; text-transform: uppercase;">Bag of Drop</h3>
+          <p style="margin: 0; font-size: 12.5px; line-height: 1.8; color: #9a9a9a; max-width: 420px; text-wrap: pretty;">5 estampas do Drop #01 em uma bag fechada. Escolha modelagens e tamanhos na hora do pedido.</p>
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-family: Syne, sans-serif; font-weight: 800; font-size: 40px; letter-spacing: -0.04em;">R$ 475,00</span>
+            <span style="font-size: 11px; color: #6a6a6a;">R$ 95,00 / peça</span>
+          </div>
+          <a href="https://wa.me/5515981512083?text=Ol%C3%A1%2C%20quero%20a%20Bag%20of%20Drop%20(5%20estampas%20%C2%B7%20R%24%20475%2C00)%20do%20DROP%20%2301%20da%20TiwShirts." target="_blank" rel="noopener" style="display: inline-flex; align-self: flex-start; align-items: center; padding: 16px 30px; min-height: 48px; background: #1DB954; color: #080808; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 500;" style-hover="background: #E5E5E5;">Fechar a bag</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid #1a1a1a; padding: 60px 20px 40px;">
+    <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 34px; align-items: start;">
+      <div>
+        <div style="font-family: Syne, sans-serif; font-weight: 800; font-size: clamp(30px, 6vw, 56px); line-height: 0.9; letter-spacing: -0.045em; text-transform: uppercase;">Vista o que<br />você pensa</div>
+      </div>
+      <div style="display: grid; gap: 12px; font-size: 11.5px;">
+        <div style="font-size: 9.5px; letter-spacing: 0.28em; text-transform: uppercase; color: #6a6a6a; margin-bottom: 4px;">Contato</div>
+        <a href="https://wa.me/5515981512083" target="_blank" rel="noopener">WhatsApp · 15 98151-2083</a>
+        <a href="https://instagram.com/tiwshirts" target="_blank" rel="noopener">Instagram · @tiwshirts</a>
+        <a href="https://tiwshirts.space" target="_blank" rel="noopener">tiwshirts.space</a>
+      </div>
+      <div style="display: grid; gap: 12px; font-size: 11.5px; color: #6a6a6a;">
+        <div style="font-size: 9.5px; letter-spacing: 0.28em; text-transform: uppercase; color: #6a6a6a; margin-bottom: 4px;">Tabela</div>
+        <div>Classic · R$ 99,90</div>
+        <div>Oversized · R$ 119,90</div>
+        <div>Bag of Drop · R$ 475,00</div>
+      </div>
+    </div>
+    <div style="max-width: 1400px; margin: 46px auto 0; padding-top: 18px; border-top: 1px solid #1a1a1a; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #4a4a4a;">
+      <span>TiwShirts © 2026</span>
+      <span>Drop #01 · 100 peças numeradas</span>
+    </div>
+  </footer>
+
+  <sc-if value="{{ isOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ close }}" style="position: fixed; inset: 0; z-index: 90; background: rgba(4,4,4,0.94); backdrop-filter: blur(10px); animation: tiwFade 0.3s ease both; display: flex; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
+      <div onClick="{{ stop }}" style="width: 100%; max-width: 1180px; background: #0c0c0c; border: 1px solid #232323; animation: tiwRise 0.4s cubic-bezier(0.16,1,0.3,1) both; max-height: 96svh; overflow-y: auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; background: #0c0c0c; z-index: 2;">
+          <span style="font-size: 9.5px; letter-spacing: 0.26em; text-transform: uppercase; color: #6a6a6a;">{{ current.num }} · Drop #01</span>
+          <button onClick="{{ close }}" style="border: 1px solid #2a2a2a; background: none; color: #E5E5E5; font-family: inherit; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 14px; min-height: 40px; cursor: pointer;" style-hover="border-color: #1DB954; color: #1DB954;">Fechar ✕</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0;">
+          <div style="border-right: 1px solid #1a1a1a;">
+            <div onTouchStart="{{ swipeStart }}" onTouchEnd="{{ swipeEnd }}" style="position: relative; aspect-ratio: 3/4; overflow: hidden; background: #121212; touch-action: pan-y;">
+              <img src="{{ shot }}" alt="{{ current.name }}" style="width: 100%; height: 100%; object-fit: cover; display: block; animation: tiwFade 0.35s ease both;" />
+              <button onClick="{{ prev }}" style="position: absolute; left: 0; top: 0; bottom: 0; width: 22%; border: none; background: none; color: #E5E5E5; font-size: 20px; cursor: pointer; opacity: 0.35;" style-hover="opacity: 1; background: linear-gradient(90deg, rgba(8,8,8,0.55), transparent);">‹</button>
+              <button onClick="{{ next }}" style="position: absolute; right: 0; top: 0; bottom: 0; width: 22%; border: none; background: none; color: #E5E5E5; font-size: 20px; cursor: pointer; opacity: 0.35;" style-hover="opacity: 1; background: linear-gradient(270deg, rgba(8,8,8,0.55), transparent);">›</button>
+              <span style="position: absolute; right: 12px; bottom: 12px; font-size: 9px; letter-spacing: 0.2em; color: #E5E5E5; background: rgba(8,8,8,0.7); padding: 6px 10px; pointer-events: none;">{{ counter }}</span>
+            </div>
+            <div style="display: flex; gap: 8px; padding: 10px;">
+              <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="4">
+                <button onClick="{{ t.go }}" style="{{ t.style }}"><img src="{{ t.src }}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;" /></button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding: 30px 26px 34px; display: flex; flex-direction: column; gap: 22px;">
+            <div>
+              <h3 style="font-family: Syne, sans-serif; font-weight: 800; font-size: clamp(26px, 4vw, 40px); line-height: 0.95; letter-spacing: -0.04em; margin: 0 0 10px; text-transform: uppercase;">{{ current.name }}</h3>
+              <p style="margin: 0; font-size: 12px; line-height: 1.75; color: #8a8a8a; text-wrap: pretty;">{{ current.desc }}</p>
+            </div>
+            <div style="display: grid; gap: 0;">
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Modelagem</span><span>{{ current.fitFull }}</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Cor</span><span>{{ current.color }}</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Tamanhos</span><span>P · M · G · GG</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Tecido</span><span>Suedine 100% algodão</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; font-size: 11.5px;"><span style="color: #6a6a6a;">Preço</span><span style="color: #1DB954;">{{ current.price }}</span></div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #6a6a6a; border: 1px solid #232323; padding: 8px 12px;">P</span>
+              <span style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #6a6a6a; border: 1px solid #232323; padding: 8px 12px;">M</span>
+              <span style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #6a6a6a; border: 1px solid #232323; padding: 8px 12px;">G</span>
+              <span style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #6a6a6a; border: 1px solid #232323; padding: 8px 12px;">GG</span>
+            </div>
+            <a href="{{ current.wa }}" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 17px; min-height: 52px; background: #1DB954; color: #080808; font-size: 10.5px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 500; margin-top: auto;" style-hover="background: #E5E5E5;">Pedir esta peça</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroInterval&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:5200,&quot;min&quot;:2000,&quot;max&quot;:10000,&quot;step&quot;:200,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroGrayscale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.15,&quot;min&quot;:0,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;lensZoom&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:2.6,&quot;min&quot;:1.5,&quot;max&quot;:5,&quot;step&quot;:0.1,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Tecido&quot;}}">
+const WA = "https://wa.me/5515981512083?text=";
+
+const PRODUCTS = [
+  { slug: "msv-classic", name: "Maconha Salva Vidas", fit: "Classic", color: "Off-White", n: 4,
+    desc: "Estampa em faixas com lettering vermelho sobre bud. Peça de abertura do drop, no algodão cru." },
+  { slug: "msv-over", name: "Maconha Salva Vidas", fit: "Oversized", color: "Black", n: 4,
+    desc: "A mesma estampa em modelagem boxy, ombro caído e barra mais longa." },
+  { slug: "jdi-over", name: "Just Doob It", fit: "Oversized", color: "Black", n: 4,
+    desc: "Lettering condensado em diagonal com aplicação branca de alta cobertura. Noite, rua, contraste." },
+  { slug: "jdi-white", name: "Just Doob It", fit: "Classic", color: "White", n: 4,
+    desc: "Versão clara da estampa diagonal, com traço em preto sobre suedine branco." },
+  { slug: "tri-purple", name: "Eu Amo Tricomas · Purple Raze", fit: "Classic", color: "Purple", n: 4,
+    desc: "Série Tricomas: macro de flor com paleta roxa. Impressão de alta definição." },
+  { slug: "tri-navy", name: "Eu Amo Tricomas · Sour Diesel", fit: "Classic", color: "Navy", n: 4,
+    desc: "Série Tricomas em azul marinho, com macro de resina e contraste frio." },
+  { slug: "tri-offwhite", name: "Eu Amo Tricomas · OG Kush", fit: "Classic", color: "Off-White", n: 4,
+    desc: "Série Tricomas em off-white suedine, macro quente e granulado." },
+  { slug: "maconheiro", name: "Maconheiro", fit: "Classic", color: "Black", n: 4,
+    desc: "Palavra direta, tipografia cheia. A peça mais declarativa do drop." },
+  { slug: "medicina", name: "Medicina Ancestral", fit: "Classic", color: "Branca", n: 4,
+    desc: "Referência botânica e ancestral, estampa central com traço fino." },
+  { slug: "legaliza", name: "Legaliza Pra Pobre Também", fit: "Classic", color: "Black", n: 4,
+    desc: "Discurso político no peito. Lettering pesado, aplicação branca." },
+  { slug: "sugiro", name: "Sugiro Maconha (Se Informar Sobre)", fit: "Classic", color: "Black", n: 4,
+    desc: "Frase longa em bloco de texto, convite ao debate. Estampa tipográfica." }
+];
+
+const HERO = ["img/msv-over-1.jpeg", "img/jdi-over-1.jpeg", "img/costas-oversized.jpeg", "img/legaliza-1.jpeg"];
+
+const FITS = {
+  classic: {
+    title: "Classic Fit", caimento: "Reto, no corpo", manga: "Curta padrão", preco: "R$ 99,90",
+    desc: "Corte reto tradicional, ombro alinhado e comprimento na altura do quadril. Cai bem sozinha ou por baixo.",
+    imgA: "img/msv-classic-1.jpeg", imgB: "img/medicina-2.jpeg",
+    wa: WA + encodeURIComponent("Olá, quero uma TiwShirts Classic Fit (R$ 99,90) do DROP #01.")
+  },
+  oversized: {
+    title: "Oversized Boxy", caimento: "Amplo, ombro caído", manga: "Alargada", preco: "R$ 119,90",
+    desc: "Modelagem ampla com ombro caído e barra mais longa. Volume streetwear e caimento pesado do suedine.",
+    imgA: "img/costas-oversized.jpeg", imgB: "img/msv-over-1.jpeg",
+    wa: WA + encodeURIComponent("Olá, quero uma TiwShirts Oversized Boxy (R$ 119,90) do DROP #01.")
+  }
+};
+
+class Component extends DCLogic {
+  state = { hero: 0, fit: "classic", open: -1, shot: 0, lens: null };
+
+  componentDidMount() {
+    this._t = setInterval(() => this.setState(s => ({ hero: (s.hero + 1) % HERO.length })), this.props.heroInterval ?? 5200);
+    this._k = (e) => {
+      if (this.state.open < 0) return;
+      if (e.key === "Escape") this.setState({ open: -1 });
+      if (e.key === "ArrowRight") this.step(1);
+      if (e.key === "ArrowLeft") this.step(-1);
+    };
+    window.addEventListener("keydown", this._k);
+  }
+  componentWillUnmount() { clearInterval(this._t); window.removeEventListener("keydown", this._k); }
+
+  imgs(p) { return Array.from({ length: p.n }, (_, i) => "img/" + p.slug + "-" + (i + 1) + ".jpeg"); }
+  step(d) {
+    const p = PRODUCTS[this.state.open]; if (!p) return;
+    this.setState(s => ({ shot: (s.shot + d + p.n) % p.n }));
+  }
+  price(p) { return p.fit === "Oversized" ? "R$ 119,90" : "R$ 99,90"; }
+
+  lens(x, y, box) {
+    const px = ((x - box.left) / box.width) * 100;
+    const py = ((y - box.top) / box.height) * 100;
+    if (px < 0 || px > 100 || py < 0 || py > 100) return this.setState({ lens: null });
+    this.setState({ lens: { x: x - box.left, y: y - box.top, px, py } });
+  }
+
+  renderVals() {
+    const st = this.state;
+    const p = PRODUCTS[st.open] || null;
+    const shots = p ? this.imgs(p) : [];
+    const L = st.lens;
+    const gray = this.props.heroGrayscale ?? 0.15;
+    const zoom = (this.props.lensZoom ?? 2.6) * 100;
+
+    return {
+      heroFrames: HERO.map((src, i) => ({
+        src,
+        style: "position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 2.4s ease, transform 9s linear; opacity: " +
+          (i === st.hero ? "0.62" : "0") + "; transform: scale(" + (i === st.hero ? "1.07" : "1") + "); filter: grayscale(" + gray + ") contrast(1.06);"
+      })),
+
+      products: PRODUCTS.map((pr, i) => ({
+        name: pr.name, color: pr.color, fitLabel: pr.fit, price: this.price(pr),
+        num: String(i + 1).padStart(2, "0") + " / 11",
+        cover: "img/" + pr.slug + "-1.jpeg",
+        open: () => this.setState({ open: i, shot: 0 })
+      })),
+
+      fit: FITS[st.fit],
+      pickClassic: () => this.setState({ fit: "classic" }),
+      pickOversized: () => this.setState({ fit: "oversized" }),
+      tabClassicStyle: this.tab(st.fit === "classic"),
+      tabOverStyle: this.tab(st.fit === "oversized"),
+
+      lensStyle: L
+        ? "position: absolute; pointer-events: none; width: 190px; height: 190px; border-radius: 50%; border: 1px solid rgba(229,229,229,0.6); box-shadow: 0 20px 60px rgba(0,0,0,0.6); left: " +
+          (L.x - 95) + "px; top: " + (L.y - 95) + "px; background-image: url('img/textura-suedine.jpeg'); background-repeat: no-repeat; background-size: " + zoom + "% " + zoom + "%; background-position: " +
+          L.px + "% " + L.py + "%;"
+        : "display: none;",
+      onLens: (e) => this.lens(e.clientX, e.clientY, e.currentTarget.getBoundingClientRect()),
+      onLensTouch: (e) => { const t = e.touches[0]; if (t) this.lens(t.clientX, t.clientY, e.currentTarget.getBoundingClientRect()); },
+      offLens: () => this.setState({ lens: null }),
+
+      isOpen: st.open >= 0,
+      current: p ? {
+        name: p.name, color: p.color, desc: p.desc, fitFull: p.fit === "Oversized" ? "Oversized Boxy" : "Classic Fit",
+        price: this.price(p), num: String(st.open + 1).padStart(2, "0"),
+        wa: WA + encodeURIComponent("Olá, quero a TiwShirts \"" + p.name + "\" — " + p.fit + " " + p.color + " (" + this.price(p) + ") do DROP #01. Tamanho: ")
+      } : {},
+      shot: shots[st.shot] || "",
+      counter: p ? (st.shot + 1) + " / " + p.n : "",
+      thumbs: shots.map((src, i) => ({
+        src,
+        go: () => this.setState({ shot: i }),
+        style: "width: 25%; aspect-ratio: 3/4; padding: 0; border: 1px solid " + (i === st.shot ? "#1DB954" : "#232323") +
+          "; background: #121212; cursor: pointer; overflow: hidden; opacity: " + (i === st.shot ? "1" : "0.5") + "; transition: opacity 0.3s ease, border-color 0.3s ease;"
+      })),
+      prev: () => this.step(-1),
+      next: () => this.step(1),
+      close: () => this.setState({ open: -1 }),
+      stop: (e) => e.stopPropagation(),
+      swipeStart: (e) => { this._sx = e.touches[0] ? e.touches[0].clientX : 0; },
+      swipeEnd: (e) => {
+        const t = e.changedTouches && e.changedTouches[0]; if (!t) return;
+        const d = t.clientX - this._sx;
+        if (Math.abs(d) > 45) this.step(d < 0 ? 1 : -1);
+      }
+    };
+  }
+
+  tab(active) {
+    return "padding: 15px 24px; min-height: 48px; border: none; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; transition: background 0.3s ease, color 0.3s ease; background: " +
+      (active ? "#E5E5E5" : "transparent") + "; color: " + (active ? "#080808" : "#8a8a8a") + ";";
+  }
+}
+</script>
+</body>
+</html>
