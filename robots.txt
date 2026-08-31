@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /checkout-backend/
-
-Sitemap: https://tiwshirts.space/sitemap.xml
