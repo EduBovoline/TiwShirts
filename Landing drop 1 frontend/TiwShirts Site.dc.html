@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes crossfade { 0%,22%{opacity:1} 28%,100%{opacity:0} }
+body { margin:0; background:#080808; }
+.fade-up { opacity:0; animation: fadeUp .9s cubic-bezier(.16,1,.3,1) forwards; }
+::selection { background:#2D5A27; color:#F5F5F5; }
+a { color:#C5A880; }
+a:hover { color:#F5F5F5; }
+</style>
+</helmet>
+
+<div style="background:#080808;color:#F5F5F5;font-family:'Inter',sans-serif;overflow-x:hidden;min-height:100vh;">
+
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:22px 5vw;background:linear-gradient(to bottom, rgba(8,8,8,.85), transparent);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="assets/logo-tiw-mark.png" alt="TIW" style="height:30px;width:auto;">
+      <span style="font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:0.15em;">SHIRTS</span>
+    </div>
+    <div style="display:flex;gap:28px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.05em;color:#8E8E93;">
+      <a href="#lookbook" style="text-decoration:none;color:inherit;">COLEÇÃO</a>
+      <a href="#suedine" style="text-decoration:none;color:inherit;">TECIDO</a>
+      <a href="#manual" style="text-decoration:none;color:inherit;">MANUAL DO USUÁRIO</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section style="position:relative;height:100vh;min-height:640px;display:flex;align-items:center;justify-content:center;overflow:hidden;" data-screen-label="Hero">
+    <div style="position:absolute;inset:0;">
+      <video ref="{{ heroVideoRef }}" src="assets/hero-bg.mp4" autoPlay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(8,8,8,0.35) 0%, rgba(8,8,8,0.85) 100%);"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 30%, transparent 60%, rgba(8,8,8,0.95) 100%);"></div>
+    </div>
+    <div style="position:relative;z-index:2;text-align:center;padding:0 24px;max-width:900px;">
+      <div class="fade-up" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.25em;color:#8E8E93;margin-bottom:20px;">MANIFESTO VESTÍVEL</div>
+      <img class="fade-up" src="assets/logo-tiw-mark.png" alt="TIWSHIRTS" style="width:min(680px,80vw);height:auto;margin:0 auto;display:block;animation-delay:.1s;">
+      <p class="fade-up" style="font-size:clamp(16px,2vw,22px);color:#F5F5F5;margin:28px auto 0;max-width:620px;font-style:italic;line-height:1.5;animation-delay:.25s;">"Causando boa expressão."<br><span style="color:#8E8E93;font-size:0.75em;font-style:normal;">Permitido por LEI: Liberdade de Expressão Informativa</span></p>
+      <div class="fade-up" style="display:flex;gap:16px;justify-content:center;margin-top:44px;flex-wrap:wrap;animation-delay:.4s;">
+        <a href="#lookbook" style="text-decoration:none;padding:16px 32px;background:#F5F5F5;color:#080808;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">EXPLORAR COLEÇÃO</a>
+      </div>
+    </div>
+    <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.15em;z-index:2;">SCROLL</div>
+  </section>
+
+  <!-- LOOKBOOK -->
+  <section id="lookbook" style="padding:120px 5vw 100px;" data-screen-label="Lookbook">
+    <div class="fade-up" style="margin-bottom:56px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#2D5A27;margin-bottom:12px;">01 — A COLEÇÃO</div>
+      <h2 style="font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(34px,5vw,64px);margin:0;text-transform:uppercase;letter-spacing:0.01em;">Consciência</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-auto-flow:dense;gap:18px;">
+      <sc-for list="{{ looks }}" as="look" hint-placeholder-count="7">
+        <div class="fade-up" onClick="{{ look.open }}" style="{{ look.cardStyle }}" data-comment-anchor="{{ look.id }}">
+          <div style="position:absolute;inset:0;display:flex;">
+            <img src="{{ look.thumb }}" loading="lazy" decoding="async" style="width:{{ look.secondThumb }};height:100%;object-fit:cover;flex-shrink:0;transition:transform .6s cubic-bezier(.16,1,.3,1);" style-hover="transform:scale(1.06);" alt="{{ look.name }}">
+            <sc-if value="{{ look.hasSecond }}" hint-placeholder-val="{{ false }}">
+              <img src="{{ look.thumb2 }}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-left:1px solid rgba(255,255,255,0.08);transition:transform .6s cubic-bezier(.16,1,.3,1);" style-hover="transform:scale(1.06);" alt="{{ look.name }}">
+            </sc-if>
+          </div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.05) 40%, transparent 65%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:20px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C5A880;letter-spacing:0.1em;margin-bottom:6px;">{{ look.tagRight }}</div>
+            <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:21px;text-transform:uppercase;letter-spacing:0.01em;">{{ look.name }}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;margin-top:6px;">{{ look.priceLabel }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- SUEDINE SPEC -->
+  <section id="suedine" style="padding:80px 5vw;background:#121212;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);" data-screen-label="Suedine Spec">
+    <div class="fade-up" style="margin-bottom:40px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#2D5A27;margin-bottom:12px;">02 — MATÉRIA-PRIMA</div>
+      <h2 style="font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(28px,4vw,44px);margin:0;text-transform:uppercase;">Dois Tecidos, Dois Caimentos</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+      <div class="fade-up" style="display:flex;flex-direction:column;gap:18px;">
+        <div style="position:relative;aspect-ratio:4/3;overflow:hidden;">
+          <img src="assets/tricomas-ogkush-1.jpeg" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;" alt="Classic Fit em algodão 30.1">
+        </div>
+        <div>
+          <div style="font-family:'Oswald',sans-serif;font-size:20px;text-transform:uppercase;margin-bottom:6px;color:#F5F5F5;">Classic Fit — Algodão 30.1</div>
+          <p style="color:#8E8E93;line-height:1.7;font-size:14px;margin:0 0 18px;">Malha 100% algodão penteado 30.1, toque leve e caimento reto tradicional. Gola firme, alinhamento anatômico.</p>
+          <table style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:12px;">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;"></th>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;">COMPRIMENTO</th>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;">TÓRAX</th>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;">MANGA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">P</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">65 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">50 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">16 cm</td></tr>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">M</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">68 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">52 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">18 cm</td></tr>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">G</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">70 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">56 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">18 cm</td></tr>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">GG</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">72 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">58 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">19 cm</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="fade-up" style="display:flex;flex-direction:column;gap:18px;">
+        <div style="position:relative;aspect-ratio:4/3;overflow:hidden;">
+          <img src="assets/textura-suedine.jpeg" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;" alt="Oversized em malha Suedine">
+        </div>
+        <div>
+          <div style="font-family:'Oswald',sans-serif;font-size:20px;text-transform:uppercase;margin-bottom:6px;color:#F5F5F5;">Oversized Boxy — Suedine</div>
+          <p style="color:#8E8E93;line-height:1.7;font-size:14px;margin:0 0 18px;">Malha Suedine 100% algodão pesado, estrutura densa e caimento encorpado. Ombros caídos, mangas alongadas, silhueta ampla.</p>
+          <table style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:12px;">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;"></th>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;">LARGURA</th>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;">COMPRIMENTO</th>
+                <th style="text-align:left;padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#8E8E93;">MANGAS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">P</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">52 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">71 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">24 cm</td></tr>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">M</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">55 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">73 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">25 cm</td></tr>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">G</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">58 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">75 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">26 cm</td></tr>
+              <tr><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;font-weight:600;">GG</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">61 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">77 cm</td><td style="padding:8px 10px;border:1px solid rgba(255,255,255,0.12);color:#F5F5F5;">27 cm</td></tr>
+            </tbody>
+          </table>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;margin-top:10px;">As medidas podem variar 2cm para mais ou menos.</div>
+        </div>
+      </div>
+    </div>
+    <div class="fade-up" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;">
+      <img src="assets/detalhe-costura.jpeg" loading="lazy" decoding="async" style="width:90px;height:90px;object-fit:cover;" alt="Detalhe costura ombro a ombro">
+      <img src="assets/detalhe-etiqueta.jpeg" loading="lazy" decoding="async" style="width:90px;height:90px;object-fit:cover;" alt="Etiqueta interna">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;line-height:1.6;align-self:center;max-width:400px;">Costura reforçada ombro a ombro e acabamento de alta durabilidade em ambos os modelos.</div>
+    </div>
+  </section>
+
+  <!-- MANUAL -->
+  <section id="manual" style="padding:120px 5vw;position:relative;overflow:hidden;" data-screen-label="Manual do Usuario">
+    <div style="position:absolute;inset:0;">
+      <img src="assets/full-vento.jpeg" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;filter:grayscale(0.3);" alt="">
+      <div style="position:absolute;inset:0;background:linear-gradient(120deg, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.75) 55%, rgba(8,8,8,0.55) 100%);"></div>
+    </div>
+    <div class="fade-up" style="position:relative;z-index:2;max-width:640px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#2D5A27;margin-bottom:12px;">03 — EXTENSÃO CULTURAL</div>
+      <h2 style="font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(30px,4.5vw,52px);margin:0 0 20px;text-transform:uppercase;line-height:1.1;">Cultura, Ciência e Redução de Danos.</h2>
+      <p style="color:#8E8E93;line-height:1.8;font-size:16px;margin:0 0 32px;">O Manual do Usuário é a iniciativa informativa da TiwShirts: um material de referência sobre cannabis, feito para embasar quem veste a marca com conteúdo real — não apenas estampa.</p>
+      <a href="https://tiwshirts.space/manualdousuario-cannabis.html" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:#F5F5F5;color:#080808;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">ACESSAR MANUAL COMPLETO →</a>
+    </div>
+  </section>
+
+  <!-- ATACADO -->
+  <section style="padding:60px 5vw;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
+    <div class="fade-up" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#8E8E93;margin-bottom:10px;">REVENDA</div>
+    <h3 class="fade-up" style="font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(22px,3vw,32px);margin:0 0 16px;text-transform:uppercase;">Compra em atacado?</h3>
+    <a class="fade-up" href="{{ whatsappFooterLink }}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:#2D5A27;color:#F5F5F5;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">FALAR SOBRE ATACADO</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:70px 5vw 40px;border-top:1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;margin-bottom:50px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="assets/logo-tiw-mark.png" alt="TIW" style="height:40px;width:auto;">
+        <span style="font-family:'Oswald',sans-serif;font-weight:700;font-size:26px;letter-spacing:0.1em;">SHIRTS</span>
+      </div>
+      <div style="display:flex;gap:48px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;margin-bottom:10px;">SOCIAL</div>
+          <a href="https://instagram.com/tiwshirts" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:#F5F5F5;font-size:14px;margin-bottom:6px;">@tiwshirts</a>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;margin-bottom:10px;">ATENDIMENTO</div>
+          <a href="{{ whatsappFooterLink }}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:#F5F5F5;font-size:14px;">Fale no WhatsApp</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.03em;">
+      <div>TiwShirts — Feito para quem pensa. Todos os direitos reservados.</div>
+      <div>Desenvolvido e assinado por <a href="#" style="color:#C5A880;">@vocacaomkt</a></div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:100;background:rgba(8,8,8,0.92);display:flex;align-items:center;justify-content:center;padding:24px;" onClick="{{ closeModal }}">
+      <div onClick="{{ stopProp }}" style="background:#121212;border:1px solid rgba(255,255,255,0.08);max-width:920px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1.2fr 1fr;">
+        <div style="position:relative;background:#080808;">
+          <img src="{{ activeImage }}" style="width:100%;height:100%;object-fit:cover;min-height:320px;max-height:640px;" alt="{{ activeLook.name }}">
+          <div style="position:absolute;bottom:16px;left:16px;display:flex;gap:8px;">
+            <sc-for list="{{ activeLook.images }}" as="img" hint-placeholder-count="3">
+              <div onClick="{{ img.select }}" style="{{ img.dotStyle }}"></div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding:36px;display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <button onClick="{{ closeModal }}" style="background:none;border:none;color:#8E8E93;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;padding:0;letter-spacing:0.1em;">← FECHAR</button>
+          </div>
+          <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:30px;text-transform:uppercase;">{{ activeLook.name }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;line-height:1.8;">{{ activeLook.desc }}</div>
+          <sc-if value="{{ activeLook.hasVariants }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;margin-bottom:10px;">{{ activeLook.variantLabel }}</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <sc-for list="{{ activeLook.variants }}" as="v" hint-placeholder-count="2">
+                  <button onClick="{{ v.select }}" style="{{ v.btnStyle }}">{{ v.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <div style="margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);">
+            <div style="font-family:'Oswald',sans-serif;font-size:26px;color:#F5F5F5;margin-bottom:4px;">{{ activeLook.price }}</div>
+            
+            <a href="{{ activeLook.waLink }}" target="_blank" rel="noopener" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;background:#2D5A27;color:#F5F5F5;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">FALAR NO WHATSAPP</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const WHATSAPP = "5515981512083";
+const GREEN = "#2D5A27";
+
+function waLink(text) {
+  return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(text);
+}
+
+class Component extends DCLogic {
+  state = {
+    modalOpen: false,
+    activeLookId: null,
+    activeImageIdx: 0,
+    variantIdx: 0,
+  };
+
+  looksData = [
+    {
+      id: "maconheiro",
+      name: "Maconheiro",
+      tagRight: "CLASSIC",
+      thumb: "assets/maconheiro-1.jpeg",
+      desc: "Estampa Maconheiro, camiseta Classic Fit em malha 100% algodão 30.1.",
+      images: ["assets/maconheiro-1.jpeg", "assets/maconheiro-2.jpeg", "assets/maconheiro-8.jpeg", "assets/maconheiro-9.jpeg"],
+      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      gridSpan: "span 1",
+    },
+    {
+      id: "legaliza",
+      name: "Legaliza Pra Pobre Também",
+      tagRight: "CLASSIC BLACK",
+      thumb: "assets/legaliza-1.jpeg",
+      desc: "Estampa Legaliza Pra Pobre Também, Classic Fit preta, malha 100% algodão 30.1.",
+      images: ["assets/legaliza-1.jpeg", "assets/legaliza-2.jpeg", "assets/legaliza-7.jpeg", "assets/legaliza-8.jpeg", "assets/legaliza-9.jpeg", "assets/legaliza-10.jpeg"],
+      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      gridSpan: "span 1",
+    },
+    {
+      id: "justdoobit",
+      name: "Just Doob It",
+      tagRight: "CLASSIC BRANCA / OVERSIZED PRETA",
+      thumb: "assets/justdoobit-black-1.jpeg",
+      desc: "Estampa Just Doob It. Disponível em Classic Fit branca (algodão 30.1) ou Oversized Boxy preta (Suedine).",
+      images: ["assets/justdoobit-black-1.jpeg", "assets/justdoobit-black-2.jpeg", "assets/justdoobit-black-focus.jpeg", "assets/justdoobit-black-8.jpeg", "assets/justdoobit-black-9.jpeg", "assets/justdoobit-white-1.jpeg", "assets/justdoobit-white-2.jpeg", "assets/justdoobit-white-7.jpeg", "assets/justdoobit-white-8.jpeg"],
+      variants: [
+        { label: "Classic Branca — R$ 95", price: "R$ 95", fit: "Classic Branca", imgFrom: 5 },
+        { label: "Oversized Preta — R$ 115", price: "R$ 115", fit: "Oversized Preta", imgFrom: 0 },
+      ],
+      gridSpan: "span 2",
+      wide: true,
+      thumb2: "assets/justdoobit-white-1.jpeg",
+    },
+    {
+      id: "salvavidas",
+      name: "Maconha Salva Vidas",
+      tagRight: "CLASSIC BRANCA / OVERSIZED PRETA",
+      thumb: "assets/maconhasalvavidas-1.jpeg",
+      desc: "Estampa Maconha Salva Vidas. Disponível em Classic Fit branca (algodão 30.1) ou Oversized Boxy preta (Suedine).",
+      images: ["assets/maconhasalvavidas-1.jpeg", "assets/maconhasalvavidas-2.jpeg", "assets/maconhasalvavidas-3.jpeg", "assets/maconhasalvavidas-4.jpeg", "assets/maconhasalvavidas-5.jpeg", "assets/maconhasalvavidas-6.jpeg", "assets/maconhasalvavidas-7.jpeg", "assets/maconhasalvavidas-black-1.jpeg", "assets/maconhasalvavidas-black-6.jpeg", "assets/maconhasalvavidas-black-7.jpeg", "assets/maconhasalvavidas-black-8.jpeg", "assets/maconhasalvavidas-black-full.png"],
+      variants: [
+        { label: "Classic Branca — R$ 95", price: "R$ 95", fit: "Classic Branca", imgFrom: 0 },
+        { label: "Oversized Preta — R$ 115", price: "R$ 115", fit: "Oversized Preta", imgFrom: 7 },
+      ],
+      gridSpan: "span 1",
+    },
+    {
+      id: "tricomas",
+      name: "Eu Amo Tricomas",
+      tagRight: "SOUR DIESEL / OG KUSH / PURPLE HAZE",
+      thumb: "assets/tricomas-purple-1.jpeg",
+      desc: "Estampa Eu Amo Tricomas, Classic Fit, malha 100% algodão 30.1. Três colorways.",
+      images: ["assets/tricomas-purple-1.jpeg", "assets/tricomas-purple-2.jpeg", "assets/tricomas-purple-5.jpeg", "assets/tricomas-purple-6.jpeg", "assets/tricomas-sourdiesel-1.jpeg", "assets/tricomas-sourdiesel-2.jpeg", "assets/tricomas-sourdiesel-5.jpeg", "assets/tricomas-sourdiesel-6.jpeg", "assets/tricomas-ogkush-1.jpeg", "assets/tricomas-ogkush-2.jpeg", "assets/tricomas-ogkush-5.jpeg", "assets/tricomas-ogkush-6.jpeg"],
+      variants: [
+        { label: "Purple Haze — R$ 95", price: "R$ 95", fit: "Classic Purple Haze", imgFrom: 0 },
+        { label: "Sour Diesel — R$ 95", price: "R$ 95", fit: "Classic Sour Diesel (Azul Marinho)", imgFrom: 4 },
+        { label: "OG Kush — R$ 95", price: "R$ 95", fit: "Classic OG Kush (Off White)", imgFrom: 8 },
+      ],
+      gridSpan: "span 2",
+      wide: true,
+      thumb2: "assets/tricomas-sourdiesel-1.jpeg",
+    },
+    {
+      id: "sugiro",
+      name: "Sugiro Maconha (se informar sobre)",
+      tagRight: "CLASSIC",
+      thumb: "assets/sugiromaconha-1.jpeg",
+      desc: "Estampa Sugiro Maconha (se informar sobre), Classic Fit, malha 100% algodão 30.1.",
+      images: ["assets/sugiromaconha-1.jpeg", "assets/sugiromaconha-2.jpeg", "assets/sugiromaconha-6.jpeg", "assets/sugiromaconha-7.jpeg"],
+      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      gridSpan: "span 1",
+      thumb2: "assets/sugiromaconha-2.jpeg",
+    },
+    {
+      id: "medicina",
+      name: "Medicina Ancestral",
+      tagRight: "CLASSIC BRANCA",
+      thumb: "assets/medicinaancestral-1.jpeg",
+      desc: "Estampa Medicina Ancestral, Classic Fit branca, malha 100% algodão 30.1.",
+      images: ["assets/medicinaancestral-1.jpeg", "assets/medicinaancestral-2.jpeg", "assets/medicinaancestral-7.jpeg", "assets/medicinaancestral-8.jpeg", "assets/medicinaancestral-9.jpeg", "assets/medicinaancestral-10.jpeg"],
+      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      gridSpan: "span 1",
+      thumb2: "assets/medicinaancestral-2.jpeg",
+    },
+  ];
+
+  cardStyle(look, i) {
+    return {
+      position: "relative",
+      gridColumn: look.gridSpan || "span 1",
+      aspectRatio: look.wide ? "16/11" : "3/4",
+      overflow: "hidden",
+      cursor: "pointer",
+      background: "#181818",
+      animationDelay: (i * 0.08) + "s",
+    };
+  }
+
+  openLook(id) {
+    this.setState({ modalOpen: true, activeLookId: id, activeImageIdx: 0, variantIdx: 0 });
+  }
+
+  closeModal = () => this.setState({ modalOpen: false });
+  stopProp = (e) => e.stopPropagation();
+
+  heroVideoRef = React.createRef();
+  componentDidMount() {
+    if (this.heroVideoRef.current) {
+      this.heroVideoRef.current.playbackRate = 0.5;
+      this.heroVideoRef.current.muted = true;
+      this.heroVideoRef.current.volume = 0;
+    }
+  }
+
+  renderVals() {
+    const active = this.looksData.find(l => l.id === this.state.activeLookId) || this.looksData[0];
+    const variant = active.variants[this.state.variantIdx] || active.variants[0];
+    const imgFrom = variant.imgFrom || 0;
+    const activeImage = active.images[this.state.activeImageIdx] || active.images[imgFrom] || active.images[0];
+
+    const looks = this.looksData.map((look, i) => ({
+      id: look.id,
+      name: look.name,
+      thumb: look.thumb,
+      thumb2: look.thumb2 || look.thumb,
+      hasSecond: !!look.thumb2,
+      secondThumb: look.thumb2 ? "50%" : "100%",
+      tagRight: look.tagRight,
+      priceLabel: look.variants.length > 1 ? "A partir de R$ " + Math.min(...look.variants.map(v => parseInt(v.price.replace(/\D/g, "")))) : look.variants[0].price,
+      cardStyle: this.cardStyle(look, i),
+      open: () => this.openLook(look.id),
+    }));
+
+    const activeLook = {
+      name: active.name,
+      desc: active.desc,
+      hasVariants: active.variants.length > 1,
+      variantLabel: active.id === "tricomas" ? "COLORWAY" : "MODELAGEM",
+      variants: active.variants.map((v, vi) => ({
+        label: v.label,
+        btnStyle: {
+          padding: "10px 16px",
+          fontFamily: "'JetBrains Mono',monospace",
+          fontSize: "12px",
+          letterSpacing: "0.03em",
+          border: vi === this.state.variantIdx ? "1px solid #F5F5F5" : "1px solid rgba(255,255,255,0.15)",
+          background: vi === this.state.variantIdx ? "#F5F5F5" : "transparent",
+          color: vi === this.state.variantIdx ? "#080808" : "#8E8E93",
+          cursor: "pointer",
+        },
+        select: () => this.setState({ variantIdx: vi, activeImageIdx: v.imgFrom || 0 }),
+      })),
+      price: variant.price,
+      
+      images: active.images.map((img, ii) => ({
+        dotStyle: {
+          width: "8px",
+          height: "8px",
+          borderRadius: "50%",
+          cursor: "pointer",
+          background: ii === this.state.activeImageIdx ? "#F5F5F5" : "rgba(255,255,255,0.35)",
+        },
+        select: () => this.setState({ activeImageIdx: ii }),
+      })),
+      waLink: waLink("Oi! Quero saber mais sobre a camiseta \"" + active.name + "\" (" + variant.fit + ") da TiwShirts."),
+    };
+
+    return {
+      heroVideoRef: this.heroVideoRef,
+      looks,
+      modalOpen: this.state.modalOpen,
+      activeLook,
+      activeImage,
+      closeModal: this.closeModal,
+      stopProp: this.stopProp,
+      whatsappFooterLink: waLink("Oi! Quero saber mais sobre a TiwShirts."),
+    };
+  }
+}
+</script>
+</body>
+</html>
