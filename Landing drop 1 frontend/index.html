@@ -80,7 +80,7 @@ a:hover { color:#F5F5F5; }
   <!-- HERO -->
   <section style="position:relative;height:100vh;min-height:640px;display:flex;align-items:center;justify-content:center;overflow:hidden;" data-screen-label="Hero">
     <div style="position:absolute;inset:0;">
-      <video ref="{{ heroVideoRef }}" src="assets/hero-bg.mp4" autoPlay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+      <video ref="{{ heroVideoRef }}" src="assets/hero-bg.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" autoPlay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;"></video>
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(8,8,8,0.35) 0%, rgba(8,8,8,0.85) 100%);"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 30%, transparent 60%, rgba(8,8,8,0.95) 100%);"></div>
     </div>
@@ -399,10 +399,24 @@ class Component extends DCLogic {
 
   heroVideoRef = React.createRef();
   componentDidMount() {
-    if (this.heroVideoRef.current) {
-      this.heroVideoRef.current.playbackRate = 0.5;
-      this.heroVideoRef.current.muted = true;
-      this.heroVideoRef.current.volume = 0;
+    const v = this.heroVideoRef.current;
+    if (v) {
+      v.playbackRate = 0.5;
+      v.muted = true;
+      v.defaultMuted = true;
+      v.loop = true;
+      v.volume = 0;
+      const playVideo = () => {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      };
+      playVideo();
+      v.addEventListener('ended', () => {
+        v.currentTime = 0;
+        playVideo();
+      });
+      document.addEventListener('touchstart', playVideo, { once: true, passive: true });
+      document.addEventListener('click', playVideo, { once: true, passive: true });
     }
   }
 
