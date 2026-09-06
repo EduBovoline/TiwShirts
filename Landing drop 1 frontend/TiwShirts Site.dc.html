@@ -2,7 +2,19 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>TiwShirts — Vista o Que Pensa</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="TiwShirts — Causando boa expressão. Camisetas de edição limitada em suedine e algodão penteado 30.1.">
+<!-- Open Graph / WhatsApp preview -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tiwshirts.space/">
+<meta property="og:title" content="TiwShirts — Vista o Que Pensa">
+<meta property="og:description" content="Causando boa expressão. Camisetas de edição limitada em suedine e algodão penteado 30.1. Manifesto vestível.">
+<meta property="og:image" content="https://tiwshirts.space/assets/capa-hero.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="TiwShirts">
+<meta property="og:locale" content="pt_BR">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -20,6 +32,34 @@ body { margin:0; background:#080808; }
 ::selection { background:#2D5A27; color:#F5F5F5; }
 a { color:#C5A880; }
 a:hover { color:#F5F5F5; }
+
+
+/* ===== RESPONSIVE FIXES ===== */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+@media (max-width: 900px) {
+  nav { padding: 14px 4vw !important; }
+  nav > div:last-child { gap: 14px !important; font-size: 10.5px !important; }
+}
+@media (max-width: 768px) {
+  nav > div:last-child a:nth-child(3) { display: none; }
+  #lookbook > div:last-child { grid-template-columns: 1fr !important; }
+  #lookbook > div:last-child > * { grid-column: span 1 !important; aspect-ratio: 3/4 !important; }
+  #suedine > div:nth-child(2) { grid-template-columns: 1fr !important; }
+  #suedine > div:nth-child(2) table { font-size: 11px; }
+  #suedine > div:nth-child(2) th, #suedine > div:nth-child(2) td { padding: 6px 7px !important; }
+}
+@media (max-width: 480px) {
+  nav { padding: 12px 16px !important; }
+  nav > div:first-child img { height: 22px !important; }
+  nav > div:first-child span { font-size: 16px !important; }
+  nav > div:last-child { gap: 10px !important; font-size: 9px !important; }
+}
+/* Modal responsive */
+@media (max-width: 768px) {
+  div[style*="grid-template-columns:1.2fr 1fr"] { display: flex !important; flex-direction: column !important; max-height: 92vh !important; }
+  div[style*="grid-template-columns:1.2fr 1fr"] > div:first-child img { max-height: 320px !important; min-height: 240px !important; }
+  div[style*="grid-template-columns:1.2fr 1fr"] > div:last-child { padding: 24px 18px !important; }
+}
 </style>
 </helmet>
 
@@ -34,13 +74,14 @@ a:hover { color:#F5F5F5; }
       <a href="#lookbook" style="text-decoration:none;color:inherit;">COLEÇÃO</a>
       <a href="#suedine" style="text-decoration:none;color:inherit;">TECIDO</a>
       <a href="#manual" style="text-decoration:none;color:inherit;">MANUAL DO USUÁRIO</a>
+      <a href="#atacado" style="text-decoration:none;color:#C5A880;font-weight:600;">LOJAS / ATACADO</a>
     </div>
   </nav>
 
   <!-- HERO -->
   <section style="position:relative;height:100vh;min-height:640px;display:flex;align-items:center;justify-content:center;overflow:hidden;" data-screen-label="Hero">
     <div style="position:absolute;inset:0;">
-      <video ref="{{ heroVideoRef }}" src="assets/hero-bg.mp4" autoPlay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+      <video ref="{{ heroVideoRef }}" src="assets/hero-bg.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" autoPlay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;"></video>
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(8,8,8,0.35) 0%, rgba(8,8,8,0.85) 100%);"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 30%, transparent 60%, rgba(8,8,8,0.95) 100%);"></div>
     </div>
@@ -157,15 +198,16 @@ a:hover { color:#F5F5F5; }
       <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#2D5A27;margin-bottom:12px;">03 — EXTENSÃO CULTURAL</div>
       <h2 style="font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(30px,4.5vw,52px);margin:0 0 20px;text-transform:uppercase;line-height:1.1;">Cultura, Ciência e Redução de Danos.</h2>
       <p style="color:#8E8E93;line-height:1.8;font-size:16px;margin:0 0 32px;">O Manual do Usuário é a iniciativa informativa da TiwShirts: um material de referência sobre cannabis, feito para embasar quem veste a marca com conteúdo real — não apenas estampa.</p>
-      <a href="https://tiwshirts.space/manualdousuario-cannabis.html" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:#F5F5F5;color:#080808;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">ACESSAR MANUAL COMPLETO →</a>
+      <a href="manualdousuario-cannabis.html" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:#F5F5F5;color:#080808;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">ACESSAR MANUAL COMPLETO →</a>
     </div>
   </section>
 
   <!-- ATACADO -->
-  <section style="padding:60px 5vw;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
-    <div class="fade-up" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#8E8E93;margin-bottom:10px;">REVENDA</div>
-    <h3 class="fade-up" style="font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(22px,3vw,32px);margin:0 0 16px;text-transform:uppercase;">Compra em atacado?</h3>
-    <a class="fade-up" href="{{ whatsappFooterLink }}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:#2D5A27;color:#F5F5F5;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">FALAR SOBRE ATACADO</a>
+  <section id="atacado" style="padding:70px 5vw;border-top:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg, rgba(45,90,39,0.08) 0%, transparent 100%);text-align:center;">
+    <div class="fade-up" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#C5A880;margin-bottom:10px;">SEJA UM REVENDEDOR AUTORIZADO</div>
+    <h3 class="fade-up" style="font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(24px,3.5vw,36px);margin:0 0 14px;text-transform:uppercase;">Condições Especiais para Lojistas</h3>
+    <p class="fade-up" style="font-size:14px;color:#8E8E93;max-width:580px;margin:0 auto 24px;line-height:1.6;">Markup de 2.0x a 2.2x com garantia de margem. Linha Classic 30.1 e Oversized Suedine com pedido mínimo inicial a partir de 20 peças.</p>
+    <a class="fade-up" href="{{ whatsappAtacadoLink }}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:#2D5A27;color:#F5F5F5;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;">SOLICITAR CATÁLOGO DE ATACADO →</a>
   </section>
 
   <!-- FOOTER -->
@@ -257,7 +299,7 @@ class Component extends DCLogic {
       thumb: "assets/maconheiro-1.jpeg",
       desc: "Estampa Maconheiro, camiseta Classic Fit em malha 100% algodão 30.1.",
       images: ["assets/maconheiro-1.jpeg", "assets/maconheiro-2.jpeg", "assets/maconheiro-8.jpeg", "assets/maconheiro-9.jpeg"],
-      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      variants: [{ label: "Classic — R$ 129", price: "R$ 129", fit: "Classic" }],
       gridSpan: "span 1",
     },
     {
@@ -267,7 +309,7 @@ class Component extends DCLogic {
       thumb: "assets/legaliza-1.jpeg",
       desc: "Estampa Legaliza Pra Pobre Também, Classic Fit preta, malha 100% algodão 30.1.",
       images: ["assets/legaliza-1.jpeg", "assets/legaliza-2.jpeg", "assets/legaliza-7.jpeg", "assets/legaliza-8.jpeg", "assets/legaliza-9.jpeg", "assets/legaliza-10.jpeg"],
-      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      variants: [{ label: "Classic — R$ 129", price: "R$ 129", fit: "Classic" }],
       gridSpan: "span 1",
     },
     {
@@ -278,8 +320,8 @@ class Component extends DCLogic {
       desc: "Estampa Just Doob It. Disponível em Classic Fit branca (algodão 30.1) ou Oversized Boxy preta (Suedine).",
       images: ["assets/justdoobit-black-1.jpeg", "assets/justdoobit-black-2.jpeg", "assets/justdoobit-black-focus.jpeg", "assets/justdoobit-black-8.jpeg", "assets/justdoobit-black-9.jpeg", "assets/justdoobit-white-1.jpeg", "assets/justdoobit-white-2.jpeg", "assets/justdoobit-white-7.jpeg", "assets/justdoobit-white-8.jpeg"],
       variants: [
-        { label: "Classic Branca — R$ 95", price: "R$ 95", fit: "Classic Branca", imgFrom: 5 },
-        { label: "Oversized Preta — R$ 115", price: "R$ 115", fit: "Oversized Preta", imgFrom: 0 },
+        { label: "Classic Branca (30.1) — R$ 129", price: "R$ 129", fit: "Classic Branca", imgFrom: 5 },
+        { label: "Oversized Preta (Suedine) — R$ 159", price: "R$ 159", fit: "Oversized Preta", imgFrom: 0 },
       ],
       gridSpan: "span 2",
       wide: true,
@@ -293,8 +335,8 @@ class Component extends DCLogic {
       desc: "Estampa Maconha Salva Vidas. Disponível em Classic Fit branca (algodão 30.1) ou Oversized Boxy preta (Suedine).",
       images: ["assets/maconhasalvavidas-1.jpeg", "assets/maconhasalvavidas-2.jpeg", "assets/maconhasalvavidas-3.jpeg", "assets/maconhasalvavidas-4.jpeg", "assets/maconhasalvavidas-5.jpeg", "assets/maconhasalvavidas-6.jpeg", "assets/maconhasalvavidas-7.jpeg", "assets/maconhasalvavidas-black-1.jpeg", "assets/maconhasalvavidas-black-6.jpeg", "assets/maconhasalvavidas-black-7.jpeg", "assets/maconhasalvavidas-black-8.jpeg", "assets/maconhasalvavidas-black-full.png"],
       variants: [
-        { label: "Classic Branca — R$ 95", price: "R$ 95", fit: "Classic Branca", imgFrom: 0 },
-        { label: "Oversized Preta — R$ 115", price: "R$ 115", fit: "Oversized Preta", imgFrom: 7 },
+        { label: "Classic Branca (30.1) — R$ 129", price: "R$ 129", fit: "Classic Branca", imgFrom: 0 },
+        { label: "Oversized Preta (Suedine) — R$ 159", price: "R$ 159", fit: "Oversized Preta", imgFrom: 7 },
       ],
       gridSpan: "span 1",
     },
@@ -306,9 +348,9 @@ class Component extends DCLogic {
       desc: "Estampa Eu Amo Tricomas, Classic Fit, malha 100% algodão 30.1. Três colorways.",
       images: ["assets/tricomas-purple-1.jpeg", "assets/tricomas-purple-2.jpeg", "assets/tricomas-purple-5.jpeg", "assets/tricomas-purple-6.jpeg", "assets/tricomas-sourdiesel-1.jpeg", "assets/tricomas-sourdiesel-2.jpeg", "assets/tricomas-sourdiesel-5.jpeg", "assets/tricomas-sourdiesel-6.jpeg", "assets/tricomas-ogkush-1.jpeg", "assets/tricomas-ogkush-2.jpeg", "assets/tricomas-ogkush-5.jpeg", "assets/tricomas-ogkush-6.jpeg"],
       variants: [
-        { label: "Purple Haze — R$ 95", price: "R$ 95", fit: "Classic Purple Haze", imgFrom: 0 },
-        { label: "Sour Diesel — R$ 95", price: "R$ 95", fit: "Classic Sour Diesel (Azul Marinho)", imgFrom: 4 },
-        { label: "OG Kush — R$ 95", price: "R$ 95", fit: "Classic OG Kush (Off White)", imgFrom: 8 },
+        { label: "Purple Haze — R$ 129", price: "R$ 129", fit: "Classic Purple Haze", imgFrom: 0 },
+        { label: "Sour Diesel — R$ 129", price: "R$ 129", fit: "Classic Sour Diesel (Azul Marinho)", imgFrom: 4 },
+        { label: "OG Kush — R$ 129", price: "R$ 129", fit: "Classic OG Kush (Off White)", imgFrom: 8 },
       ],
       gridSpan: "span 2",
       wide: true,
@@ -321,7 +363,7 @@ class Component extends DCLogic {
       thumb: "assets/sugiromaconha-1.jpeg",
       desc: "Estampa Sugiro Maconha (se informar sobre), Classic Fit, malha 100% algodão 30.1.",
       images: ["assets/sugiromaconha-1.jpeg", "assets/sugiromaconha-2.jpeg", "assets/sugiromaconha-6.jpeg", "assets/sugiromaconha-7.jpeg"],
-      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      variants: [{ label: "Classic — R$ 129", price: "R$ 129", fit: "Classic" }],
       gridSpan: "span 1",
       thumb2: "assets/sugiromaconha-2.jpeg",
     },
@@ -332,7 +374,7 @@ class Component extends DCLogic {
       thumb: "assets/medicinaancestral-1.jpeg",
       desc: "Estampa Medicina Ancestral, Classic Fit branca, malha 100% algodão 30.1.",
       images: ["assets/medicinaancestral-1.jpeg", "assets/medicinaancestral-2.jpeg", "assets/medicinaancestral-7.jpeg", "assets/medicinaancestral-8.jpeg", "assets/medicinaancestral-9.jpeg", "assets/medicinaancestral-10.jpeg"],
-      variants: [{ label: "Classic — R$ 95", price: "R$ 95", fit: "Classic" }],
+      variants: [{ label: "Classic — R$ 129", price: "R$ 129", fit: "Classic" }],
       gridSpan: "span 1",
       thumb2: "assets/medicinaancestral-2.jpeg",
     },
@@ -359,10 +401,24 @@ class Component extends DCLogic {
 
   heroVideoRef = React.createRef();
   componentDidMount() {
-    if (this.heroVideoRef.current) {
-      this.heroVideoRef.current.playbackRate = 0.5;
-      this.heroVideoRef.current.muted = true;
-      this.heroVideoRef.current.volume = 0;
+    const v = this.heroVideoRef.current;
+    if (v) {
+      v.playbackRate = 0.5;
+      v.muted = true;
+      v.defaultMuted = true;
+      v.loop = true;
+      v.volume = 0;
+      const playVideo = () => {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      };
+      playVideo();
+      v.addEventListener('ended', () => {
+        v.currentTime = 0;
+        playVideo();
+      });
+      document.addEventListener('touchstart', playVideo, { once: true, passive: true });
+      document.addEventListener('click', playVideo, { once: true, passive: true });
     }
   }
 
@@ -428,6 +484,7 @@ class Component extends DCLogic {
       closeModal: this.closeModal,
       stopProp: this.stopProp,
       whatsappFooterLink: waLink("Oi! Quero saber mais sobre a TiwShirts."),
+      whatsappAtacadoLink: waLink("Olá! Sou lojista e tenho interesse em revender TiwShirts na minha loja física. Gostaria de receber o catálogo e condições de atacado."),
     };
   }
 }
