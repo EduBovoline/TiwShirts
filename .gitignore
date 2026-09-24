@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scroll-world internal generation scripts & keys
+**/assets/scroll-world/scripts/
+assets/scroll-world/scripts/
+*.zip
+

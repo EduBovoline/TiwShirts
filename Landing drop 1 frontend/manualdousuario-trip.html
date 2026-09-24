@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Manual do Usuário · Cannabis — TiwShirts Scroll World</title>
+  <meta name="description" content="Uma viagem cinematográfica de conhecimento pela botânica, ciência, história, geopolítica e redução de danos da cannabis. TiwShirts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Big+Shoulders+Stencil+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"
+    rel="stylesheet">
+  
+  <style>
+    :root {
+      --ink:        #0c0a07;
+      --ink-soft:   #1a1611;
+      --paper:      #d6c692;
+      --paper-2:    #c6b582;
+      --paper-3:    #b5a370;
+      --paper-deep: #8c7c4f;
+      --off:        #ede5cd;
+      --rust:       #b8472a;
+      --rust-deep:  #832d18;
+      --tape:       #d9c267;
+      --bone:       #f1e9d2;
+      --bone-2:     #e7dcbc;
+      --card-bg:    rgba(12, 10, 7, 0.76);
+      --card-light: rgba(237, 229, 205, 0.82);
+      
+      --font-poster: 'Anton', 'Big Shoulders Stencil Display', Impact, sans-serif;
+      --font-mono:   'DM Mono', ui-monospace, monospace;
+      --font-body:   'DM Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--ink); }
+    body {
+      font-family: var(--font-body);
+      background: var(--ink);
+      color: var(--bone);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--rust); color: var(--off); }
+
+    /* FILM GRAIN */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='.35'/></svg>");
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      opacity: .35;
+      z-index: 999;
+    }
+
+    /* TOP NAVIGATION */
+    nav.top-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      background: rgba(12,10,7,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(214, 198, 146, 0.18);
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: 'Archivo Black', sans-serif;
+      color: var(--off);
+      font-size: 15px;
+      letter-spacing: -.01em;
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-logo img {
+      width: 26px; height: 26px;
+      object-fit: cover;
+      border: 1px solid var(--paper-deep);
+      border-radius: 2px;
+    }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
+    .nav-link {
+      color: var(--paper);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 2px;
+      transition: all .2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--off);
+      background: rgba(184, 71, 42, 0.25);
+    }
+    .nav-loja {
+      background: var(--rust) !important;
+      color: var(--off) !important;
+      margin-left: 8px;
+      font-weight: 500;
+    }
+    .nav-loja:hover { background: var(--rust-deep) !important; }
+
+    /* TELEMETRY HUD */
+    .flight-hud {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(12, 10, 7, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(214, 198, 146, 0.25);
+      padding: 10px 18px;
+      border-radius: 4px;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+    }
+    .hud-act {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--tape);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+    }
+    .hud-title {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--bone);
+    }
+    .hud-progress-bar {
+      width: 64px;
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .hud-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--rust);
+      transition: width 0.1s linear;
+    }
+    .hud-dots { display: flex; gap: 6px; }
+    .hud-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      border: 0; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .hud-dot.active { background: var(--rust); transform: scale(1.4); }
+
+    /* ==========================================================================
+       SCROLL-WORLD SCENE ARCHITECTURE (STICKY THEATER)
+       ========================================================================== */
+    .sw-scene {
+      position: relative;
+      height: 360vh; /* fallback */
+    }
+    /* Alturas individuais por cena — 5 vídeos distintos */
+    #cena-1 { height: 860vh; }   /* 13 beats: botânica + história */
+    #cena-2 { height: 560vh; }   /* 7 beats: SEC + fisiologia */
+    #cena-3 { height: 420vh; }   /* 5 beats: geopolítica + brasil */
+    #cena-4 { height: 1680vh; }  /* 25 beats: botica + redução de danos (mesmo vídeo, uma cena longa) */
+    #cena-5 { height: 480vh; }   /* 6 beats: FAQ + manifesto */
+
+    /* O PALCO DE VÍDEO FIXADO NA TELA ENQUANTO A CENA ROLA */
+    .sw-theater {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0c0a07;
+    }
+    .sw-poster {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 1;
+      opacity: 1;
+    }
+    .sw-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    .sw-theater.video-active .sw-video {
+      opacity: 1;
+    }
+
+    /* VINHETA CINEMATOGRÁFICA */
+    .sw-theater::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(12,10,7,0.3) 0%, rgba(12,10,7,0.75) 100%),
+        linear-gradient(180deg, rgba(12,10,7,0.85) 0%, rgba(12,10,7,0.15) 30%, rgba(12,10,7,0.15) 70%, rgba(12,10,7,0.92) 100%);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* OS BEATS DESMEMBRADOS QUE FLUTUAM SOBRE O VÍDEO */
+    .sw-beats {
+      position: relative;
+      z-index: 10;
+      margin-top: -100vh; /* Alinha o primeiro beat com a tela visível */
+      padding-bottom: 40vh;
+    }
+
+    .sw-beat {
+      min-height: 95vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 4vw;
+      perspective: 1200px;
+      perspective-origin: center center;
+    }
+    .sw-beat.hero {
+      min-height: 100vh;
+    }
+    /* ALINHAMENTOS ESPACIAIS NO FRAME DO VÍDEO */
+    .sw-beat.align-left {
+      justify-content: flex-start;
+    }
+    .sw-beat.align-right {
+      justify-content: flex-end;
+    }
+    .sw-beat.align-center {
+      justify-content: center;
+    }
+    .sw-beat.align-left .sw-card {
+      margin-left: clamp(10px, 5vw, 90px);
+      max-width: 820px;
+    }
+    .sw-beat.align-right .sw-card {
+      margin-right: clamp(10px, 5vw, 90px);
+      max-width: 820px;
+    }
+
+    /* CARTÕES ESPACIAIS EM 3D GLASSO-MORPHISM */
+    .sw-card {
+      width: 100%;
+      max-width: 960px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      border: 1px solid rgba(214, 198, 146, 0.28);
+      border-radius: 4px;
+      padding: clamp(28px, 4vw, 52px);
+      box-shadow:
+        0 24px 60px -10px rgba(0, 0, 0, 0.85),
+        0 0 1px 1px rgba(214, 198, 146, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, box-shadow 0.35s ease;
+      will-change: transform, opacity;
+    }
+
+    /* Brackets técnicos 3D nos cantos do card */
+    .sw-card::before, .sw-card::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .sw-card::before {
+      top: -1px; left: -1px;
+      border-top: 2px solid var(--tape);
+      border-left: 2px solid var(--tape);
+    }
+    .sw-card::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 2px solid var(--rust);
+      border-right: 2px solid var(--rust);
+    }
+
+    .sw-card:hover {
+      box-shadow:
+        0 36px 80px -12px rgba(0, 0, 0, 0.95),
+        0 0 2px 1px rgba(214, 198, 146, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .sw-card.light {
+      background: var(--card-light);
+      color: var(--ink);
+      border-color: rgba(140, 124, 79, 0.4);
+      box-shadow:
+        0 24px 60px -10px rgba(0, 0, 0, 0.75),
+        0 0 1px 1px rgba(140, 124, 79, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    /* GRID SPLIT PARA OBSERVATÓRIO E GLOBO */
+    .sw-split-deck {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 36px;
+      align-items: center;
+      text-align: left;
+    }
+    @media (max-width: 900px) {
+      .sw-split-deck {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    /* TIPOGRAFIA EDITORIAL COM SOMBRA VOLUMÉTRICA */
+    .beat-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--tape);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+    .light .beat-tag { color: var(--rust); text-shadow: none; }
+    .beat-tag::after {
+      content: '';
+      height: 1px; width: 40px;
+      background: currentColor; opacity: .6;
+    }
+
+    h1, h2 {
+      font-family: var(--font-poster);
+      font-size: clamp(32px, 5.5vw, 64px);
+      line-height: .95;
+      text-transform: uppercase;
+      letter-spacing: -.01em;
+      margin-bottom: 20px;
+      text-wrap: balance;
+    }
+    h2 em, h1 em { color: var(--rust); font-style: italic; }
+
+    h3 {
+      font-family: var(--font-poster);
+      font-size: clamp(20px, 3vw, 28px);
+      text-transform: uppercase;
+      letter-spacing: -.005em;
+      margin-bottom: 14px;
+      margin-top: 32px;
+    }
+    h3 em { color: var(--rust); font-style: italic; }
+
+    p {
+      font-size: clamp(15px, 1.8vw, 17px);
+      margin-bottom: 16px;
+      max-width: 760px;
+      color: var(--paper);
+    }
+    .light p { color: var(--ink-soft); }
+    strong { color: var(--off); font-weight: 700; }
+    .light strong { color: var(--ink); }
+
+    /* GRIDS DE CARDS DESMEMBRADOS */
+    .beat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .beat-box {
+      background: rgba(18, 14, 10, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(214, 198, 146, 0.22);
+      border-radius: 3px;
+      padding: 24px 20px;
+      position: relative;
+      transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .light .beat-box {
+      background: rgba(247, 241, 226, 0.7);
+      border-color: rgba(140, 124, 79, 0.35);
+    }
+    .beat-box::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+      background: var(--rust);
+      border-radius: 3px 0 0 3px;
+    }
+    .beat-box:hover {
+      background: rgba(28, 22, 16, 0.85);
+      border-color: var(--tape);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+    }
+    .light .beat-box:hover {
+      background: rgba(255, 252, 245, 0.9);
+      border-color: var(--rust);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    }
+    .beat-box h4 {
+      font-family: var(--font-poster);
+      font-size: 21px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--off);
+      letter-spacing: .02em;
+    }
+    .light .beat-box h4 { color: var(--ink); }
+    .beat-box p {
+      font-size: 14px;
+      margin: 0;
+      color: var(--paper);
+      max-width: none;
+      line-height: 1.5;
+    }
+    .light .beat-box p { color: var(--ink-soft); }
+
+    /* TIMELINE DESMEMBRADA */
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .timeline-card {
+      background: rgba(18, 14, 10, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(214, 198, 146, 0.2);
+      border-radius: 3px;
+      padding: 22px 20px;
+      position: relative;
+      transition: transform .25s ease, border-color .25s ease;
+    }
+    .timeline-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--tape);
+    }
+    .timeline-ano {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--tape);
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: .1em;
+    }
+    .timeline-card h4 {
+      font-family: var(--font-poster);
+      font-size: 18px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: var(--off);
+    }
+    .timeline-card p { font-size: 13.5px; margin: 0; line-height: 1.5; }
+
+    /* ALERTA */
+    .sw-alert {
+      background: rgba(184, 71, 42, 0.12);
+      border: 1px solid var(--rust);
+      border-left: 5px solid var(--rust);
+      padding: 20px;
+      margin: 24px 0;
+    }
+    .sw-alert-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .sw-alert p { margin: 0; font-size: 14.5px; }
+
+    /* TABELA */
+    .sw-table-wrap {
+      overflow-x: auto;
+      margin: 24px 0;
+      border: 1px solid rgba(214, 198, 146, 0.25);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead { background: rgba(0,0,0,0.5); }
+    thead th {
+      padding: 12px 16px;
+      color: var(--tape);
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      text-align: left;
+    }
+    tbody tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: var(--paper);
+    }
+    tbody td:first-child { font-weight: 700; color: var(--off); }
+
+    /* GLOBO 3D */
+    .globe-wrapper {
+      width: 100%;
+      max-width: 380px;
+      height: 380px;
+      margin: 24px auto;
+      cursor: grab;
+    }
+    .globe-wrapper:active { cursor: grabbing; }
+    #globeCanvas { width: 100%; height: 100%; display: block; border-radius: 50%; }
+    .paises { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; justify-content: center; }
+    .pais-tag {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(214, 198, 146, 0.3);
+      padding: 6px 12px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--off);
+      border-radius: 2px;
+    }
+
+    /* LISTA NUMERADA (BAD TRIP) */
+    .passos-lista {
+      list-style: none;
+      margin: 20px 0;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .passos-lista li {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 14.5px;
+      color: var(--paper);
+    }
+    .passos-lista li:last-child { border-bottom: 0; }
+    .passo-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--tape);
+      font-size: 13px;
+    }
+
+    /* ACORDEON */
+    .acord-item {
+      border: 1px solid rgba(214, 198, 146, 0.2);
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.03);
+    }
+    .acord-btn {
+      width: 100%;
+      padding: 16px 20px;
+      background: transparent;
+      border: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-poster);
+      font-size: 19px;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      cursor: pointer;
+      color: var(--off);
+      text-align: left;
+    }
+    .acord-btn.ativo { background: var(--rust); }
+    .acord-conteudo {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease-out;
+    }
+    .acord-conteudo-inner {
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 15px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060503;
+      border-top: 2px solid var(--rust);
+      padding: 80px 24px;
+      text-align: center;
+      position: relative;
+      z-index: 20;
+    }
+    .foot-brand {
+      font-family: var(--font-poster);
+      font-size: 52px;
+      color: var(--off);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .social-links { display: flex; justify-content: center; gap: 14px; margin: 28px 0; }
+    .social-btn {
+      width: 42px; height: 42px;
+      border: 1px solid var(--paper-deep);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      color: var(--off);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { background: var(--rust); border-color: var(--rust); }
+    .social-btn svg { width: 17px; height: 17px; fill: currentColor; }
+    .producao {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--off);
+    }
+    .producao a { color: var(--rust); text-decoration: none; font-weight: 700; }
+
+    /* MOBILE TUNING */
+    @media (max-width: 860px) {
+      .flight-hud { bottom: 12px; right: 12px; left: 12px; justify-content: space-between; padding: 8px 12px; }
+      .hud-title { display: none; }
+      .sw-card { padding: 22px 18px; }
+      .nav-links { display: none; }
+      .globe-wrapper { max-width: 300px; height: 300px; }
+      .sw-scene { height: 300vh; }
+      .sw-scene.long { height: 420vh; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       TOPBAR
+       ======================================================================== -->
+  <nav class="top-nav">
+    <a href="#top" class="nav-logo">
+      <img src="https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp" alt="TiwShirts Logo">
+      TiwShirts
+    </a>
+    <div class="nav-links">
+      <a href="#cena-1" class="nav-link active" data-scene="1">01 Origens</a>
+      <a href="#cena-2" class="nav-link" data-scene="2">02 Ciência</a>
+      <a href="#cena-3" class="nav-link" data-scene="3">03 Mundo</a>
+      <a href="#cena-4" class="nav-link" data-scene="4">04 Formas</a>
+      <a href="#cena-5" class="nav-link" data-scene="5">05 Cuidado</a>
+      <a href="#cena-6" class="nav-link" data-scene="6">06 Manifesto</a>
+      <a href="https://tiwshirts.space" target="_blank" class="nav-link nav-loja">Loja Tiw</a>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       TELEMETRY HUD
+       ======================================================================== -->
+  <div class="flight-hud" id="flightHud">
+    <div>
+      <div class="hud-act" id="hudAct">CENA 01 // 06</div>
+      <div class="hud-title" id="hudTitle">O Santuário Botânico</div>
+    </div>
+    <div class="hud-progress-bar">
+      <div class="hud-progress-fill" id="hudProgressFill"></div>
+    </div>
+    <div class="hud-dots">
+      <button class="hud-dot active" onclick="jumpToScene(1)" title="Cena 1: Origens &amp; Botânica"></button>
+      <button class="hud-dot" onclick="jumpToScene(2)" title="Cena 2: Ciência &amp; SEC"></button>
+      <button class="hud-dot" onclick="jumpToScene(3)" title="Cena 3: Panorama Global"></button>
+      <button class="hud-dot" onclick="jumpToScene(4)" title="Cena 4: Formas de Uso &amp; Redução de Danos"></button>
+      <button class="hud-dot" onclick="jumpToScene(5)" title="Cena 5: Manifesto Tiw"></button>
+    </div>
+  </div>
+
+  <div id="top"></div>
+
+  <!-- ========================================================================
+       CENA 01: O SANTUÁRIO BOTÂNICO & ORIGENS (Vídeo 1)
+       Conteúdo: Capa, O que é a cannabis, Compostos químicos & Linha do Tempo
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-1" data-scene="1">
+    <div class="sw-theater" id="theater-1">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_1_poster.jpg" alt="Origens Botânicas">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_1.mp4" muted playsinline preload="auto" loop></video>
+    </div>
+
+    <div class="sw-beats">
+      <!-- Beat 1.1: Capa Heroica -->
+      <div class="sw-beat hero align-center">
+        <div class="sw-card" style="text-align: center; max-width: 860px;">
+          <div class="beat-tag" style="justify-content: center;">Edição Oficial · Baseada em Evidências</div>
+          <div style="margin-bottom: 20px;">
+            <img src="https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20folha.webp" alt="Folha" style="width: 90px; filter: drop-shadow(0 12px 24px rgba(0,0,0,.8));">
+          </div>
+          <h1 style="font-size: clamp(42px, 8vw, 92px); margin-bottom: 16px;">
+            Manual do<br>Usuário · <em>Cannabis</em>
+          </h1>
+          <p style="margin: 0 auto; font-size: clamp(16px, 2vw, 20px); max-width: 580px;">
+            Uma viagem cinematográfica pela história, a ciência do seu corpo, as formas de uso e a redução de danos. <strong>Role para voar pela botânica milenar.</strong>
+          </p>
+          <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--tape);">
+            ↓ ROLE PARA INICIAR A VIAGEM
+          </div>
+        </div>
+      </div>
+
+      <!-- Beat 1.2: O que é a cannabis — Introdução -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">01 — Fundamentos Botânicos</div>
+          <h2>O que é a <em>cannabis</em>?</h2>
+          <p>A cannabis é uma planta originária da Ásia Central, cultivada e usada pela humanidade há pelo menos <strong>10.000 anos</strong> — para fibras, alimento, medicina e rituais sagrados.</p>
+          <p style="margin-top: 12px;">Sua flor produz centenas de compostos bioativos chamados <strong>canabinoides</strong> e terpenos que interagem diretamente com a nossa biologia.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.3: THC -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Canabinoide 01</div>
+          <h2><em>THC</em></h2>
+          <p>Principal canabinoide psicoativo. Produz euforia, relaxamento e alteração temporal. Em doses altas pode desencadear ansiedade.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.4: CBD -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Canabinoide 02</div>
+          <h2><em>CBD</em></h2>
+          <p>Não causa efeito psicoativo embriagante. Possui comprovadas propriedades ansiolíticas, anti-inflamatórias e anticonvulsivantes.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.5: Terpenos -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Compostos Aromáticos</div>
+          <h2><em>Terpenos</em></h2>
+          <p>Moléculas aromáticas que conferem sabor e cheiro únicos, modulando diretamente a potência dos canabinoides.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.6: Efeito Entourage -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Sinergia Molecular</div>
+          <h2>Efeito <em>Entourage</em></h2>
+          <p>A sinergia entre canabinoides e terpenos integrados produz benefícios terapêuticos superiores a qualquer molécula isolada.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.7: Linha do Tempo — Introdução -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 680px;">
+          <div class="beat-tag" style="justify-content: center;">02 — Contexto Histórico</div>
+          <h2>De remédio milenar à <em>proibição</em> — e de volta</h2>
+          <p>A criminalização da cannabis é um parêntese recente e político em uma história de dez milênios de convivência humana.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.8: ~ 8.000 a.C. -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">~ 8.000 a.C.</div>
+          <h2>Origens na <em>Ásia</em></h2>
+          <p>Cultivada como fibra resistente e alimento nutritivo na China, com registros medicinais no Egito Antigo e Índia.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.9: Séc. XIX -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Séc. XIX</div>
+          <h2>Farmacopeia <em>Ocidental</em></h2>
+          <p>Ingrediente presente em centenas de xaropes e elixires farmacêuticos vendidos livremente em farmácias americanas e europeias.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.10: 1937 -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">1937 — EUA</div>
+          <h2>Marihuana <em>Tax Act</em></h2>
+          <p>Os EUA iniciam a criminalização federal com base em estigmas racistas contra comunidades mexicanas e afro-americanas.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.11: 1961 -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">1961 — ONU</div>
+          <h2>Convenção <em>Internacional</em></h2>
+          <p>A cannabis é colocada na restritiva Lista IV, institucionalizando a proibição mundial por décadas.</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.12: 2013–2018 -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">2013 – 2018</div>
+          <h2>Uruguai e <em>Canadá</em></h2>
+          <p>Uruguai (2013) torna-se o pioneiro mundial na legalização total, seguido pelo Canadá (2018, primeiro do G7).</p>
+        </div>
+      </div>
+
+      <!-- Beat 1.13: 2020–2025 -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">2020 – 2025</div>
+          <h2>ONU Reclassifica <em>&amp; Expansão</em></h2>
+          <p>A ONU retira a cannabis da Lista IV, reconhecendo seu valor medicinal. Alemanha, EUA e dezenas de nações avançam.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       CENA 02: O LABORATÓRIO MOLECULAR & CIÊNCIA (Vídeo 2)
+       Conteúdo: Sistema Endocanabinoide, Receptores CB1/CB2, Impactos no Corpo
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-2" data-scene="2">
+    <div class="sw-theater" id="theater-2">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_2_poster.jpg" alt="Laboratório Molecular">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_2.mp4" muted playsinline preload="auto" loop></video>
+    </div>
+
+    <div class="sw-beats">
+      <!-- Beat 2.1: Sistema Endocanabinoide -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">04 — A Ciência do Corpo</div>
+          <h2>O Sistema <em>Endocanabinoide</em></h2>
+          <p>Você não precisa consumir cannabis para ter canabinoides no organismo. O <strong>Sistema Endocanabinoide (SEC)</strong> é uma das maiores redes de receptores celulares do corpo humano, descoberta na década de 1990.</p>
+          <p style="margin-top: 12px;">Ele funciona como um maestro homeostático: equilibra humor, sono, imunidade, dor e memória celular produzindo moléculas naturais como a anandamida e o 2-AG.</p>
+        </div>
+      </div>
+
+      <!-- Beat 2.2: Como a planta age -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Mecanismo de Ação</div>
+          <h2>Como a <em>planta age</em></h2>
+          <div class="sw-alert" style="margin-top: 0;">
+            <div class="sw-alert-title">Chaves Mestras</div>
+            <p>Os fitocanabinoides da cannabis (THC, CBD, CBN) possuem estrutura geométrica semelhante aos nossos endocanabinoides, encaixando-se nos mesmos receptores como chaves mestras.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Beat 2.3: Cérebro -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">Fisiologia — Cérebro</div>
+          <h2>Receptores <em>CB1</em></h2>
+          <p>O THC se acopla aos receptores CB1 no hipocampo e córtex, alterando temporariamente a percepção temporal, foco e relaxamento motor.</p>
+        </div>
+      </div>
+
+      <!-- Beat 2.4: Coração -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Fisiologia — Coração</div>
+          <h2>Efeitos <em>Cardiovasculares</em></h2>
+          <p>Pode ocorrer vasodilatação e aumento transitório dos batimentos cardíacos. Pessoas com condições cardíacas prévias exigem supervisão médica.</p>
+        </div>
+      </div>
+
+      <!-- Beat 2.5: Pulmões -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">Fisiologia — Pulmões</div>
+          <h2>Combustão <em>vs. Vaporização</em></h2>
+          <p>A combustão de qualquer matéria vegetal gera toxinas irritantes. A vaporização e os óleos eliminam os riscos do alcatrão e fumaça quente.</p>
+        </div>
+      </div>
+
+      <!-- Beat 2.6: Sono -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Fisiologia — Sono</div>
+          <h2>Arquitetura do <em>Sono</em></h2>
+          <p>Pode acelerar o adormecimento inicial, mas o uso diário pesado altera a proporção de sono profundo e suprime a fase REM (sonhos).</p>
+        </div>
+      </div>
+
+      <!-- Beat 2.7: Alerta Adolescentes -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="max-width: 700px; text-align: center;">
+          <div class="beat-tag" style="justify-content: center;">⚠ Atenção Crítica</div>
+          <h2>Cérebros <em>até 25 anos</em></h2>
+          <div class="sw-alert" style="background: rgba(184, 71, 42, 0.08); border-color: var(--rust); margin-top: 20px; text-align: left;">
+            <div class="sw-alert-title">Desenvolvimento Incompleto</div>
+            <p>O córtex pré-frontal humano só completa sua maturação aos 25 anos. O consumo frequente na adolescência está comprovadamente associado a prejuízos no desenvolvimento cognitivo e maior taxa de dependência. Adie o início o máximo possível.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       CENA 03: A SALA DE CARTOGRAFIA & OBSERVATÓRIO GLOBAL (Vídeo 3)
+       Conteúdo: O mapa da legalização, Globo 3D interativo, Brasil, Anvisa e STF
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-3" data-scene="3">
+    <div class="sw-theater" id="theater-3">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_3_poster.jpg" alt="Sala de Mapas">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_3.mp4" muted playsinline preload="auto" loop></video>
+    </div>
+
+    <div class="sw-beats">
+      <!-- Beat 3.1: O Globo 3D e o Panorama Mundial -->
+      <div class="sw-beat align-center">
+        <div class="sw-card">
+          <div class="sw-split-deck">
+            <div>
+              <div class="beat-tag">03 — Geopolítica & Território</div>
+              <h2>Cannabis no <em>mundo</em> hoje</h2>
+              <p>
+                O mapa da regulamentação está redesenhando o comércio, a segurança jurídica e a saúde pública mundial. Explore os regimes legais no globo interativo:
+              </p>
+              <div class="paises" style="justify-content: flex-start; margin-top: 20px;">
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> Uruguai (Legal)</div>
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> Canadá (Legal)</div>
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> Alemanha (Legal)</div>
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> EUA 24+ Estados</div>
+                <div class="pais-tag" style="border-color: var(--tape);"><span style="color:var(--tape)">●</span> Brasil (Medicinal)</div>
+                <div class="pais-tag" style="border-color: var(--tape);"><span style="color:var(--tape)">●</span> Austrália & Israel</div>
+                <div class="pais-tag" style="border-color: var(--paper-deep);"><span style="color:var(--paper-deep)">●</span> Portugal & Holanda</div>
+              </div>
+              <p style="font-size: 12px; margin-top: 14px; color: var(--paper-2); font-family: var(--font-mono);">
+                ↻ Toque ou arraste com o mouse para girar o globo em 360°.
+              </p>
+            </div>
+
+            <div style="display: flex; justify-content: center;">
+              <div class="globe-wrapper" id="globeContainer" style="margin: 0;">
+                <canvas id="globeCanvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Beat 3.2: Intro Brasil -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">Cenário Nacional</div>
+          <h2>E no <em>Brasil</em>? Leis e Direitos</h2>
+          <p>O Brasil vive um momento de transição acelerada entre a judicialização e a criação de marcos regulatórios estáveis.</p>
+        </div>
+      </div>
+
+      <!-- Beat 3.3: Anvisa -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Regulação — Anvisa (RDC 327)</div>
+          <h2>Acesso <em>Medicinal</em></h2>
+          <p>Aprovada desde 2019 a venda em farmácias e importação individual de extratos e óleos com prescrição médica formal.</p>
+        </div>
+      </div>
+
+      <!-- Beat 3.4: Autocultivo -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">Direito Conquistado</div>
+          <h2>Autocultivo <em>Medicinal</em></h2>
+          <p>Centenas de pacientes e associações conquistaram na Justiça o direito ao cultivo doméstico para tratamento sem risco de prisão.</p>
+        </div>
+      </div>
+
+      <!-- Beat 3.5: STF -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Supremo Tribunal Federal</div>
+          <h2>O Debate <em>no STF</em></h2>
+          <p>O Supremo Tribunal Federal fixou critérios objetivos de porte pessoal para evitar a discriminação penal e prisões indevidas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       CENA 04: A BOTICA & FORMAS DE CONSUMO (Vídeo 4)
+       Conteúdo: Variedades Sativa/Indica, Métodos de Consumo e Regra dos Edibles
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-4" data-scene="4">
+    <div class="sw-theater" id="theater-4">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_4_poster.jpg" alt="A Botica">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_4.mp4" muted playsinline preload="auto" loop></video>
+    </div>
+
+    <div class="sw-beats">
+      <!-- Beat 4.1: Intro Variedades -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 680px;">
+          <div class="beat-tag" style="justify-content: center;">05 — Farmacologia &amp; Métodos</div>
+          <h2>Variedades, <em>Tipos e Perfis</em></h2>
+          <p>A composição química dita a experiência física e mental. Cada variedade tem um perfil de efeito distinto.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.2: Sativa -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Variedade 01</div>
+          <h2><em>Sativa</em></h2>
+          <p>Perfil energizante, cerebral, expansivo. Predomínio de THC. Indicada para uso diurno, social e criatividade.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.3: Indica -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Variedade 02</div>
+          <h2><em>Indica</em></h2>
+          <p>Relaxamento muscular profundo e sedação. Predomínio de THC. Ideal para uso noturno, dores e insônia.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.4: Híbrida -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Variedade 03</div>
+          <h2><em>Híbrida</em></h2>
+          <p>Equilíbrio personalizado de terpenos. Perfil balanceado. Uso customizado conforme necessidade.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.5: CBD Dominante -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Variedade 04</div>
+          <h2>CBD <em>Dominante</em></h2>
+          <p>Sem embriaguez, foco e serenidade. Baixo ou zero THC. Indicada para ansiedade, dor e inflamações.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.6: Vias de Consumo Intro -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 680px;">
+          <div class="beat-tag" style="justify-content: center;">Vias de Consumo</div>
+          <h2>Como cada via <em>age no tempo</em></h2>
+          <p>O método de administração define a velocidade, intensidade e duração do efeito. Escolha com consciência.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.7: Inalação -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Via 01 — Inalação (Fumo)</div>
+          <h2>Início <em>Imediato</em></h2>
+          <p>Início em minutos, pico em 30min, duração de 1-3h. Risco pulmonar presente pela combustão e alcatrão.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.8: Vaporização -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Via 02 — Vaporização</div>
+          <h2>Limpo e <em>Preciso</em></h2>
+          <p>Aquece sem queimar (170°C-210°C). Preserva terpenos delicados, poupa alvéolos e tem efeito veloz e limpo.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.9: Comestíveis -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Via 03 — Comestíveis (Edibles)</div>
+          <h2>Potência <em>Oculta</em></h2>
+          <p>Metabolizado no fígado como 11-OH-THC (muito mais potente). Demora 30min a 2h e dura até 8h.</p>
+        </div>
+      </div>
+
+      <!-- Beat 4.10: Regra de Ouro -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="max-width: 700px; text-align: center;">
+          <div class="beat-tag" style="justify-content: center;">Regra de Ouro dos Comestíveis</div>
+          <h2><em>"Começa baixo,<br>vai devagar."</em></h2>
+          <div class="sw-alert" style="margin-top: 20px; text-align: left;">
+            <div class="sw-alert-title">Protocolo Essencial</div>
+            <p>Espere no mínimo <strong>2 horas completas</strong> antes de considerar consumir qualquer dose adicional. A maioria das más experiências decorre da pressa ao esperar o início da digestão.</p>
+          </div>
+        </div>
+      </div>
+      <!-- ─────────────────────────────────────────────────────
+           Mesmo vídeo continua: Redução de Danos & Cuidado
+           ───────────────────────────────────────────────────── -->
+
+      <!-- Beat 5.1: Intro Redução de Danos -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 680px;">
+          <div class="beat-tag" style="justify-content: center;">06 — Redução de Danos</div>
+          <h2>Uso responsável <em>e consciente</em></h2>
+          <p>Redução de danos não é incentivo: é ética, respeito à integridade física e informação que protege vidas.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.2: Set & Setting -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">Princípio 01</div>
+          <h2>Set <em>&amp; Setting</em></h2>
+          <p>O estado psicológico interior (Set) e a segurança do ambiente externo (Setting) definem a experiência. Evite usar em cenários de tensão.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.3: Não Misture -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Princípio 02</div>
+          <h2>Não <em>Misture</em></h2>
+          <p>A combinação com álcool potencializa a absorção de THC gerando teto preto. Evite completamente com medicamentos depressores.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.4: Nunca Dirija -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">Princípio 03</div>
+          <h2>Nunca <em>Dirija</em></h2>
+          <p>O reflexo motor e a tomada de decisão espacial ficam comprometidos. Não assuma o volante sob nenhum pretexto.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.5: Consentimento -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Princípio 04</div>
+          <h2><em>Consentimento</em></h2>
+          <p>Nunca ofereça alimentos com cannabis sem aviso prévio claro sobre conteúdo e concentração. É questão de respeito e segurança.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.6: Protocolo de Emergência Intro -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 680px;">
+          <div class="beat-tag" style="justify-content: center;">Protocolo de Emergência</div>
+          <h2>Se a experiência <em>ficar difícil</em></h2>
+          <p>Crises de ansiedade acontecem quando a dose ultrapassa o limite individual. Lembre-se: <strong>elas são temporárias e vão passar</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.7: Passo 01 -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Passo 01</div>
+          <h2>Ambiente <em>Seguro</em></h2>
+          <p>Deite-se em um local arejado, acolhedor e com pouca luz estroboscópica.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.8: Passo 02 -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Passo 02</div>
+          <h2>Hidratação e <em>Alimento</em></h2>
+          <p>Beba água fresca em pequenos goles. Coma um alimento doce ou salgado leve.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.9: Passo 03 -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Passo 03</div>
+          <h2>Exercício <em>Respiratório</em></h2>
+          <p>4 segundos inspirando pelo nariz, segure 4, solte pela boca em 6 segundos. Repita até a calma retornar.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.10: Passo 04 -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Passo 04</div>
+          <h2>Pimenta-do-reino <em>Preta</em></h2>
+          <p>Mastigue ou sinta o aroma de grãos de pimenta-do-reino preta — o beta-cariofileno ajuda a suavizar a sobrecarga do THC.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.11: Passo 05 + Perfis Intro -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 680px;">
+          <div class="beat-tag" style="justify-content: center;">Passo 05 · Suporte</div>
+          <h2>Ligue para o <em>CVV (188)</em></h2>
+          <p>Se precisar de suporte emocional, ligue gratuitamente. Depois, conheça as orientações para cada perfil de usuário.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.12: Adolescentes -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">07 — Perfis · Adolescentes · Até 18 anos</div>
+          <h2>Cérebro em <em>Formação</em></h2>
+          <p>Especialmente vulnerável no hipocampo (memória) e córtex pré-frontal. O uso frequente antes dos 18 anos multiplica os riscos de dependência e prejuízos cognitivos. A ciência recomenda adiar ao máximo.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.13: Adultos -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">Perfis · Adultos · 30 a 60 anos</div>
+          <h2>Interações <em>Medicamentosas</em></h2>
+          <p>O THC e CBD interagem com enzimas do fígado (CYP450), podendo alterar níveis sanguíneos de anticoagulantes, remédios para pressão e antidepressivos.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.14: Idosos -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">Perfis · Idosos · 60+ anos</div>
+          <h2>Microdoses <em>Supervisionadas</em></h2>
+          <p>O uso medicinal para dores crônicas e sono tem crescido. Cuidados com risco de hipotensão e tonturas — iniciar sempre com microdoses orais supervisionadas.</p>
+        </div>
+      </div>
+
+      <!-- Beat 5.15: Gestantes + Saúde Mental -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="max-width: 700px; text-align: center;">
+          <div class="beat-tag" style="justify-content: center;">Perfis · Atenção Máxima</div>
+          <h2>Gestantes <em>&amp; Saúde Mental</em></h2>
+          <div class="sw-alert" style="background: rgba(184, 71, 42, 0.08); border-color: var(--rust); margin-top: 20px; text-align: left;">
+            <div class="sw-alert-title">Gestantes e Lactantes</div>
+            <p><strong>Não existe dose segura conhecida na gravidez ou amamentação.</strong> Canabinoides atravessam a barreira placentária e são excretados no leite materno, afetando a formação neural do bebê.</p>
+          </div>
+          <div class="sw-alert" style="background: rgba(184, 71, 42, 0.08); border-color: var(--rust); margin-top: 12px; text-align: left;">
+            <div class="sw-alert-title">Predisposição em Saúde Mental</div>
+            <p>Pessoas com histórico familiar de esquizofrenia, psicose ou bipolaridade devem evitar substâncias com alto THC — pode antecipar crises psicóticas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       CENA 05: O MANIFESTO TIWSHIRTS, FAQ & ZINE (Vídeo 5 — o real)
+       Conteúdo: FAQ sem rodeios, O Manifesto TiwShirts, Rodapé Oficial
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-5" data-scene="5">
+    <div class="sw-theater" id="theater-5">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_6_poster.jpg" alt="Manifesto TiwShirts">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_6.mp4" muted playsinline preload="auto" loop></video>
+    </div>
+
+    <div class="sw-beats">
+      <!-- Beat 6.1: FAQ Intro -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 680px;">
+          <div class="beat-tag" style="justify-content: center;">09 — Dúvidas Comuns</div>
+          <h2>Perguntas <em>sem rodeios</em></h2>
+          <p>As respostas que a ciência tem. Direto ao ponto, sem taboos e sem eufemismos.</p>
+        </div>
+      </div>
+
+      <!-- Beat 6.2: Overdose? -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">FAQ 01</div>
+          <h2>Cannabis causa <em>overdose fatal</em>?</h2>
+          <p>Não há registro documentado de morte por toxicidade pura de cannabis em humanos. Os receptores canabinoides não controlam funções cardiorrespiratórias autônomas como os receptores de opioides. Doses excessivas causam desconforto agudo, mas não letalidade física.</p>
+        </div>
+      </div>
+
+      <!-- Beat 6.3: Porta de entrada? -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">FAQ 02</div>
+          <h2>É <em>"porta de entrada"</em> para outras drogas?</h2>
+          <p>A correlação observada no passado decorria do contato com o mercado ilegal misto. Não existe mecanismo bioquímico que force a busca por outras substâncias. Em países com regulação de mercado, essa correlação tende a se dissipar.</p>
+        </div>
+      </div>
+
+      <!-- Beat 6.4: Detecção -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">FAQ 03</div>
+          <h2>Quanto tempo fica <em>detectável</em>?</h2>
+          <p>O THC se acumula em tecido adiposo. Uso esporádico: 3 a 5 dias na urina. Uso habitual/diário: 15 a 30 dias. No sangue, a janela de efeito ativo dura horas, mas metabólitos persistem por dias.</p>
+        </div>
+      </div>
+
+      <!-- Beat 6.5: Dependência -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">FAQ 04</div>
+          <h2>Causa <em>dependência</em>?</h2>
+          <p>Sim. Cerca de 9% a 10% dos usuários desenvolvem padrão de dependência (comparado a 15% para o álcool e 32% para o tabaco). Os sinais incluem necessidade de consumir para dormir ou aliviar angústias diárias.</p>
+        </div>
+      </div>
+
+      <!-- Beat 6.6: Manifesto TiwShirts -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center;">
+          <div class="beat-tag" style="justify-content: center;">Manifesto TiwShirts · Drop 1</div>
+          <h2 style="font-size: clamp(38px, 6vw, 76px);">Informação é <em>Liberdade</em></h2>
+          <p style="margin: 0 auto 28px; max-width: 640px;">
+            Acreditamos que design autêntico, consciência científica e posicionamento corajoso transformam preconceito em discernimento coletivo.
+          </p>
+          <div>
+            <a href="https://tiwshirts.space" target="_blank" class="nav-link nav-loja" style="font-size: 13px; padding: 14px 28px; display: inline-block;">
+              Ver Peças Exclusivas na Loja
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer>
+    <div class="foot-brand">TiwShirts</div>
+    <p style="font-size: 15px; color: var(--off); margin-bottom: 8px;"><strong>Manual do Usuário · Cannabis</strong></p>
+    <p style="max-width: 640px; margin: 0 auto; font-size: 13.5px; opacity: .8;">
+      Conteúdo embasado em fontes científicas: OMS, UNODC, Anvisa, Lancet, NEJM e PubMed.<br>
+      Este material tem caráter exclusivamente educativo e de redução de danos.
+    </p>
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/tiwdoo" class="social-btn" title="Instagram TiwDoo" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@tiwdoo" class="social-btn" title="TikTok TiwDoo" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.59-1.01V14.5c.01 2.32-.6 4.67-2.12 6.44-1.56 1.82-3.9 2.92-6.27 3.06-2.58.14-5.27-.85-7-2.87-1.87-2.2-2.34-5.46-1.21-8.13 1.05-2.48 3.52-4.3 6.22-4.5 1.34-.1 2.72.08 3.97.6V13.2c-.63-.44-1.42-.64-2.18-.53-1.04.14-1.95.84-2.38 1.79-.47.98-.41 2.21.2 3.1.66.97 1.85 1.47 3 .12.9-.27 1.66-1.05 1.88-1.98.05-.2.08-.41.08-.61V.02z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@tiwdoo" class="social-btn" title="YouTube TiwDoo" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.122C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.519a3.016 3.016 0 0 0-2.122 2.122C0 8.058 0 12 0 12s0 3.942.501 5.814a3.016 3.016 0 0 0 2.122 2.122c1.872.519 9.377.519 9.377.519s7.505 0 9.377-.519a3.016 3.016 0 0 0 2.122-2.122C24 15.942 24 12 24 12s0-3.942-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/edu.bovoline" class="social-btn" title="Instagram Edu Bovoline" target="_blank" style="border-color: var(--rust);">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+    </div>
+
+    <div class="producao">
+      Desenvolvido por <a href="https://www.instagram.com/tiwdoo" target="_blank">@tiwDoo</a> &
+      <a href="https://www.instagram.com/edu.bovoline" target="_blank">@edu.bovoline</a>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       ENGINE SCRIPTS (SCROLL SCRUBBER + 3D GLOBO + ACORDEON)
+       ======================================================================== -->
+  <script>
+    /* --- LÓGICA DE ACORDEÃO --- */
+    function toggleAcord(btn) {
+      const item = btn.parentElement;
+      const conteudo = item.querySelector('.acord-conteudo');
+      const isOpen = btn.classList.contains('ativo');
+
+      document.querySelectorAll('.acord-btn.ativo').forEach(b => {
+        b.classList.remove('ativo');
+        b.parentElement.querySelector('.acord-conteudo').style.maxHeight = '0';
+      });
+
+      if (!isOpen) {
+        btn.classList.add('ativo');
+        conteudo.style.maxHeight = conteudo.scrollHeight + 'px';
+      }
+    }
+
+    /* --- MOTOR SCROLL-WORLD (DESMEMBRADO & SINCRONIZADO) --- */
+    const SCENES = [
+      { id: 1, title: 'O Santuário Botânico' },
+      { id: 2, title: 'O Laboratório Molecular' },
+      { id: 3, title: 'A Sala de Cartografia' },
+      { id: 4, title: 'A Botica & Redução de Danos' },
+      { id: 5, title: 'O Manifesto TiwShirts' }
+    ];
+
+    const isPhone = () => window.innerWidth <= 860 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+
+    // No mobile, ajusta o src para as versões otimizadas -m.mp4
+    // Nota: theater-5 usa scene_6 (o vídeo 5 e 6 são iguais, pulamos o 5)
+    const MOBILE_SRC_MAP = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 6 };
+    if (isPhone()) {
+      SCENES.forEach(sc => {
+        const theater = document.getElementById(`theater-${sc.id}`);
+        if (!theater) return;
+        const v = theater.querySelector('.sw-video');
+        if (v) v.src = `assets/scroll-world/vid/scene_${MOBILE_SRC_MAP[sc.id]}-m.mp4`;
+      });
+    }
+
+    const scenesData = SCENES.map(sc => {
+      const theaterEl = document.getElementById(`theater-${sc.id}`);
+      const videoEl = theaterEl ? theaterEl.querySelector('.sw-video') : null;
+
+      if (videoEl) {
+        // Revela o vídeo suavemente assim que o primeiro frame é decodificado
+        const activateVideo = () => {
+          theaterEl.classList.add('video-active');
+        };
+
+        videoEl.addEventListener('loadeddata', activateVideo);
+        videoEl.addEventListener('canplay', activateVideo);
+        videoEl.addEventListener('seeked', () => {
+          activateVideo();
+          if (videoEl._pendingSeek !== undefined) {
+            const nextSeek = videoEl._pendingSeek;
+            videoEl._pendingSeek = undefined;
+            performSeek(videoEl, nextSeek);
+          }
+        });
+
+        if (videoEl.readyState >= 2) {
+          activateVideo();
+        }
+      }
+
+      return {
+        ...sc,
+        theaterEl,
+        videoEl
+      };
+    });
+
+    function performSeek(video, targetSec) {
+      if (!video || video.readyState < 1) return;
+      if (video.seeking) {
+        video._pendingSeek = targetSec;
+        return;
+      }
+      const maxSec = Math.max(0, (video.duration || 10) - 0.05);
+      const clamped = Math.max(0, Math.min(maxSec, targetSec));
+      if (Math.abs(video.currentTime - clamped) > 0.04) {
+        try {
+          video.currentTime = clamped;
+        } catch (err) {
+          // Proteção silenciosa contra disputas internas de decodificação
+        }
+      }
+    }
+
+    function jumpToScene(num) {
+      const target = document.getElementById(`cena-${num}`);
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+
+    let activeSceneNum = 1;
+    const hudAct = document.getElementById('hudAct');
+    const hudTitle = document.getElementById('hudTitle');
+    const hudFill = document.getElementById('hudProgressFill');
+    const hudDots = document.querySelectorAll('.hud-dot');
+    const navLinks = document.querySelectorAll('.nav-link[data-scene]');
+
+    let ticking = false;
+    function updateScrollWorld() {
+      const vh = window.innerHeight;
+      const scenesElements = document.querySelectorAll('.sw-scene');
+
+      scenesElements.forEach((sceneEl, idx) => {
+        const rect = sceneEl.getBoundingClientRect();
+        const scObj = scenesData[idx];
+        if (!scObj || !scObj.videoEl) return;
+
+        // Se a cena está na tela ou muito próxima
+        if (rect.bottom > -vh * 0.2 && rect.top < vh * 1.2) {
+          const totalScrollable = rect.height - vh;
+          const currentScrolled = -rect.top;
+          const progress = Math.min(1, Math.max(0, currentScrolled / Math.max(1, totalScrollable)));
+
+          const duration = scObj.videoEl.duration || 10;
+          performSeek(scObj.videoEl, progress * duration);
+
+          // Atualiza HUD se for a cena em destaque visual
+          if (rect.top <= vh * 0.45 && rect.bottom >= vh * 0.45) {
+            const currentNum = idx + 1;
+            if (activeSceneNum !== currentNum) {
+              activeSceneNum = currentNum;
+              if (hudAct) hudAct.textContent = `CENA 0${currentNum} // 06`;
+              if (hudTitle) hudTitle.textContent = scObj.title;
+
+              hudDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+              navLinks.forEach(l => l.classList.toggle('active', parseInt(l.dataset.scene) === currentNum));
+            }
+            if (hudFill) hudFill.style.width = `${Math.round(progress * 100)}%`;
+          }
+        }
+      });
+
+      // Perspectiva 3D dinâmica nos cards conforme o scroll
+      const allCards = document.querySelectorAll('.sw-card');
+      const centerY = vh / 2;
+
+      allCards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        if (cardRect.bottom > -80 && cardRect.top < vh + 80) {
+          const cardCenter = cardRect.top + cardRect.height / 2;
+          const dist = (cardCenter - centerY) / centerY; // -1 (topo) a +1 (base)
+          
+          // Inclinação suave 3D conforme o scroll avança pelo ambiente
+          const tiltX = Math.max(-8, Math.min(8, dist * -6));
+          const translateZ = Math.max(-25, Math.min(15, (1 - Math.abs(dist)) * 20));
+          const opacity = Math.max(0.4, Math.min(1, 1.2 - Math.abs(dist) * 0.6));
+
+          card.style.transform = `perspective(1200px) rotateX(${tiltX.toFixed(1)}deg) translateZ(${translateZ.toFixed(0)}px)`;
+          card.style.opacity = opacity.toFixed(2);
+        }
+      });
+    }
+
+    // Parallax 3D suave ao mover o mouse no desktop
+    if (!isPhone()) {
+      window.addEventListener('mousemove', e => {
+        const mouseX = ((e.clientX / window.innerWidth) - 0.5) * 6; // ±3 graus
+        const mouseY = ((e.clientY / window.innerHeight) - 0.5) * -6;
+        document.querySelectorAll('.sw-card').forEach(c => {
+          c.style.setProperty('--rx-mouse', `${mouseY.toFixed(1)}deg`);
+          c.style.setProperty('--ry-mouse', `${mouseX.toFixed(1)}deg`);
+        });
+      }, { passive: true });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          try {
+            updateScrollWorld();
+          } finally {
+            ticking = false;
+          }
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateScrollWorld);
+    // Inicializa de imediato
+    updateScrollWorld();
+
+    /* --- LÓGICA DO GLOBO TERRESTRE 3D EM CANVAS --- */
+    (function () {
+      const canvas = document.getElementById('globeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const container = document.getElementById('globeContainer');
+
+      let width, height, radius;
+      let rotationY = 1.5;
+      let autoRotation = 0.003;
+      let isDragging = false;
+      let lastX;
+
+      const BORDEAUX = '#b8472a';
+      const LIGHT_GREEN = '#d9c267';
+      const TERRA = '#8c7c4f';
+      const SUJEIRA = '#5c5436';
+
+      const HIGHLIGHTS = {
+        'UY': BORDEAUX, 'CA': BORDEAUX, 'US': BORDEAUX, 'DE': BORDEAUX, 'MT': BORDEAUX, 'LU': BORDEAUX, 'TH': BORDEAUX, 'CZ': BORDEAUX, 'GE': BORDEAUX,
+        'BR': LIGHT_GREEN, 'AU': LIGHT_GREEN, 'IL': LIGHT_GREEN, 'CO': LIGHT_GREEN, 'MX': LIGHT_GREEN, 'AR': LIGHT_GREEN, 'CL': LIGHT_GREEN,
+        'NL': TERRA, 'PT': TERRA, 'ES': TERRA, 'ZA': TERRA, 'JM': TERRA, 'IT': TERRA
+      };
+
+      const worldMaskRows = [
+        "000000000000000111111111111100000000000000000000000000000000",
+        "000000000000001111111111111110000000000111111111111111000000",
+        "000000000000111111111111111111100000111111111111111111110000",
+        "000000000011111111111111111110000011111111111111111111111000",
+        "000001111111111111111111111000000111111111111111111111111110",
+        "000011111111111111111111110000001111111111111111110001111110",
+        "000111111111111111111111000000000111111111111110000000011110",
+        "001111111111111111111000000000000011111111111000000000011100",
+        "000111111111111111110000000000000001111111110000000000011000",
+        "000011111111111111100000000000000001111111100000000000000000",
+        "000001111111111111000000000000000001111111100000000000000000",
+        "000000011111111100000000000000000011111111111000000000000000",
+        "000000001111111000000000000000000111111111111110000000000000",
+        "000000001111110000000000000000011111111111111110000000000000",
+        "000000000111110000000000000000011111111111111111000000011000",
+        "000000000011100000000000000000111111111111111111000000111000",
+        "000000000011100000000000000000111111111111110000000001111100",
+        "000000000001100000000000000000001111111110000000000001111000",
+        "000000000001100000000000000000000111111100000000000001110000",
+        "000000000000100000000000000000000011111000000000000000000000"
+      ];
+
+      const MAR = '#0c0a07';
+      const dots = [];
+      const density = 3.5;
+
+      function setup() {
+        resize();
+        createDots();
+        draw();
+      }
+
+      function resize() {
+        const size = container.clientWidth;
+        const dpr = window.devicePixelRatio || 1;
+        width = size;
+        height = size;
+        canvas.width = size * dpr;
+        canvas.height = size * dpr;
+        ctx.scale(dpr, dpr);
+        radius = size * 0.45;
+      }
+
+      function createDots() {
+        for (let lat = -90; lat <= 90; lat += density) {
+          const dotsInRow = Math.max(1, Math.round(360 * Math.cos(lat * Math.PI / 180) / density));
+          for (let i = 0; i < dotsInRow; i++) {
+            const lng = (i / dotsInRow) * 360 - 180;
+            if (isLand(lat, lng)) {
+              dots.push({ lat, lng, id: getCountryID(lat, lng) });
+            }
+          }
+        }
+      }
+
+      function isLand(lat, lng) {
+        const row = Math.floor((90 - lat) / 180 * worldMaskRows.length);
+        const col = Math.floor((lng + 180) / 360 * worldMaskRows[0].length);
+        if (row >= 0 && row < worldMaskRows.length && col >= 0 && col < worldMaskRows[0].length) {
+          return worldMaskRows[row][col] === "1";
+        }
+        return false;
+      }
+
+      function getCountryID(lat, lng) {
+        if (lat > -33 && lat < 5 && lng > -74 && lng < -35) return 'BR';
+        if (lat > 42 && lat < 70 && lng > -130 && lng < -60) return 'CA';
+        if (lat > 25 && lat < 49 && lng > -125 && lng < -70) return 'US';
+        if (lat > -35 && lat < -30 && lng > -58 && lng < -53) return 'UY';
+        if (lat > 47 && lat < 55 && lng > 5 && lng < 15) return 'DE';
+        if (lat > 37 && lat < 42 && lng > -10 && lng < -6) return 'PT';
+        if (lat > 36 && lat < 43 && lng > -9 && lng < 3) return 'ES';
+        if (lat > 37 && lat < 47 && lng > 7 && lng < 18) return 'IT';
+        if (lat > -44 && lat < -10 && lng > 113 && lng < 154) return 'AU';
+        if (lat > 5 && lat < 21 && lng > 97 && lng < 105) return 'TH';
+        if (lat > 51 && lat < 54 && lng > 3 && lng < 8) return 'NL';
+        if (lat > 31 && lat < 33 && lng > 34 && lng < 36) return 'IL';
+        if (lat > 14 && lat < 32 && lng > -118 && lng < -86) return 'MX';
+        if (lat > -55 && lat < -22 && lng > -73 && lng < -54) return 'AR';
+        if (lat > 48 && lat < 51 && lng > 12 && lng < 18) return 'CZ';
+        if (lat > 41 && lat < 43 && lng > 40 && lng < 46) return 'GE';
+        if (lat > -35 && lat < -22 && lng > 16 && lng < 33) return 'ZA';
+        if (lat > 17 && lat < 19 && lng > -78 && lng < -76) return 'JM';
+        return null;
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        if (!isDragging) rotationY += autoRotation;
+
+        const tilt = 23.5 * Math.PI / 180;
+        const projected = [];
+
+        ctx.beginPath();
+        ctx.fillStyle = MAR;
+        ctx.arc(width / 2, height / 2, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = 0.5;
+        for (let lng = -180; lng < 180; lng += 30) {
+          ctx.beginPath();
+          for (let lat = -90; lat <= 90; lat += 5) {
+            const p = project(lat, lng, rotationY, tilt);
+            if (p.z > 0) {
+              if (lat === -90) ctx.moveTo(p.x + width / 2, p.y + height / 2);
+              else ctx.lineTo(p.x + width / 2, p.y + height / 2);
+            }
+          }
+          ctx.stroke();
+        }
+
+        for (let i = 0; i < dots.length; i++) {
+          const dot = dots[i];
+          const p = project(dot.lat, dot.lng, rotationY, tilt);
+          if (p.z >= -50) {
+            projected.push({ x: p.x, y: p.y, z: p.z, id: dot.id });
+          }
+        }
+
+        projected.sort((a, b) => a.z - b.z);
+
+        projected.forEach(p => {
+          const depth = (p.z + radius) / (radius * 2);
+          const opacity = Math.max(0.1, depth);
+          const isHighlighted = p.id !== null;
+
+          ctx.beginPath();
+          ctx.fillStyle = isHighlighted ? HIGHLIGHTS[p.id] : SUJEIRA;
+          ctx.globalAlpha = isHighlighted ? 1 : 0.45 * opacity;
+
+          const dotSize = isHighlighted ? 2.8 : 1.6;
+          ctx.arc(p.x + width / 2, p.y + height / 2, dotSize, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      function project(lat, lng, rotY, tilt) {
+        const phi = (90 - lat) * Math.PI / 180;
+        const theta = (lng + 180) * Math.PI / 180 + rotY;
+
+        let x = radius * Math.sin(phi) * Math.cos(theta);
+        let y = -radius * Math.cos(phi);
+        let z = radius * Math.sin(phi) * Math.sin(theta);
+
+        const yOld = y;
+        y = y * Math.cos(tilt) - z * Math.sin(tilt);
+        z = yOld * Math.sin(tilt) + z * Math.cos(tilt);
+
+        return { x, y, z };
+      }
+
+      container.addEventListener('mousedown', e => {
+        isDragging = true;
+        lastX = e.clientX;
+      });
+
+      window.addEventListener('mousemove', e => {
+        if (isDragging) {
+          const dx = e.clientX - lastX;
+          rotationY += dx * 0.01;
+          lastX = e.clientX;
+        }
+      });
+
+      window.addEventListener('mouseup', () => isDragging = false);
+
+      container.addEventListener('touchstart', e => {
+        isDragging = true;
+        lastX = e.touches[0].clientX;
+      });
+      container.addEventListener('touchmove', e => {
+        if (isDragging) {
+          const dx = e.touches[0].clientX - lastX;
+          rotationY += dx * 0.01;
+          lastX = e.touches[0].clientX;
+          e.preventDefault();
+        }
+      }, { passive: false });
+      container.addEventListener('touchend', () => isDragging = false);
+
+      setup();
+      window.addEventListener('resize', resize);
+    })();
+  </script>
+</body>
+</html>
