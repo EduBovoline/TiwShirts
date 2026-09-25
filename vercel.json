@@ -1,5 +1,9 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/blog", "destination": "/manual", "permanent": true },
+    { "source": "/blog.html", "destination": "/manual", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/manual", "destination": "/manual.html" },
     { "source": "/manualdousuario-cannabis", "destination": "/manual.html" },
