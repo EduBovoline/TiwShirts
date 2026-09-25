@@ -1,0 +1,9 @@
+# TiwShirts Robots.txt
+# Permisso de rastreamento para buscadores (Google, Bing, DuckDuckGo, etc.)
+User-agent: *
+Allow: /
+Disallow: /uploads/
+Disallow: /.thumbnail
+
+# Sitemap Oficial
+Sitemap: https://tiwshirts.space/sitemap.xml

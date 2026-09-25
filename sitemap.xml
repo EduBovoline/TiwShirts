@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://tiwshirts.space/</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/capa-hero.webp</image:loc>
+      <image:title>TiwShirts — Streetwear Autêntico e Consciência</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/maconheiro-1.jpeg</image:loc>
+      <image:title>Camiseta Maconheiro Classic — TiwShirts</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/legaliza-1.jpeg</image:loc>
+      <image:title>Camiseta Legaliza Pra Pobre Também Classic — TiwShirts</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/justdoobit-black-1.jpeg</image:loc>
+      <image:title>Camiseta Just Doob It Oversized Suedine — TiwShirts</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/maconhasalvavidas-1.jpeg</image:loc>
+      <image:title>Camiseta Maconha Salva Vidas — TiwShirts</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/medicinaancestral-1.jpeg</image:loc>
+      <image:title>Camiseta Medicina Ancestral — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/manual</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/capa-hero.webp</image:loc>
+      <image:title>Manual do Usuário Cannabis — TiwShirts World</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/full-vento.jpeg</image:loc>
+      <image:title>Manual do Usuário Ciência e Redução de Danos</image:title>
+    </image:image>
+  </url>
+</urlset>
