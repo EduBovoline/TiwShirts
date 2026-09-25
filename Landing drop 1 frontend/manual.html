@@ -572,18 +572,18 @@
        ======================================================================== -->
   <div class="flight-hud" id="flightHud">
     <div>
-      <div class="hud-act" id="hudAct">CENA 01 // 05</div>
-      <div class="hud-title" id="hudTitle">A Estufa Botânica</div>
+      <div class="hud-act" id="hudAct">BLOCO 01 // 05</div>
+      <div class="hud-title" id="hudTitle">Origens &amp; Fundamentos</div>
     </div>
     <div class="hud-progress-bar">
       <div class="hud-progress-fill" id="hudProgressFill"></div>
     </div>
     <div class="hud-dots">
-      <button class="hud-dot active" onclick="jumpToScene(1)" title="Cena 1: Origens"></button>
-      <button class="hud-dot" onclick="jumpToScene(2)" title="Cena 2: Ciência &amp; Corpo"></button>
-      <button class="hud-dot" onclick="jumpToScene(3)" title="Cena 3: Observatório Global"></button>
-      <button class="hud-dot" onclick="jumpToScene(4)" title="Cena 4: Santuário do Chá &amp; Redução de Danos"></button>
-      <button class="hud-dot" onclick="jumpToScene(5)" title="Cena 5: Bancada TiwShirts &amp; Manifesto"></button>
+      <button class="hud-dot active" onclick="jumpToScene(1)" title="Bloco 1: Origens &amp; Fundamentos"></button>
+      <button class="hud-dot" onclick="jumpToScene(2)" title="Bloco 2: Ciência &amp; O Corpo"></button>
+      <button class="hud-dot" onclick="jumpToScene(3)" title="Bloco 3: Panorama Global &amp; Leis"></button>
+      <button class="hud-dot" onclick="jumpToScene(4)" title="Bloco 4: Redução de Danos &amp; Prática"></button>
+      <button class="hud-dot" onclick="jumpToScene(5)" title="Bloco 5: Mitos &amp; Manifesto Tiw"></button>
     </div>
   </div>
 
@@ -1093,11 +1093,11 @@
        ======================================================================== -->
   <script>
     const SCENES = [
-      { id: 1, title: 'A Estufa Botânica' },
-      { id: 2, title: 'O Laboratório Molecular' },
-      { id: 3, title: 'A Sala de Cartografia' },
-      { id: 4, title: 'O Santuário do Chá & Redução de Danos' },
-      { id: 5, title: 'A Bancada TiwShirts & Manifesto' }
+      { id: 1, title: 'Origens & Fundamentos' },
+      { id: 2, title: 'Ciência & O Corpo' },
+      { id: 3, title: 'Panorama Global & Leis' },
+      { id: 4, title: 'Redução de Danos & Prática' },
+      { id: 5, title: 'Mitos & Manifesto Tiw' }
     ];
 
     const isPhone = () => window.innerWidth <= 860 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
@@ -1204,7 +1204,7 @@
             const currentNum = idx + 1;
             if (activeSceneNum !== currentNum) {
               activeSceneNum = currentNum;
-              if (hudAct) hudAct.textContent = `CENA 0${currentNum} // 05`;
+              if (hudAct) hudAct.textContent = `BLOCO 0${currentNum} // 05`;
               if (hudTitle) hudTitle.textContent = scObj.title;
 
               hudDots.forEach((d, i) => d.classList.toggle('active', i === idx));
