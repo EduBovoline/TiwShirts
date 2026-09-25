@@ -1,1401 +1,1268 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual do Usuário · Cannabis</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Big+Shoulders+Stencil+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap"
-    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Manual do Usuário · Cannabis — TiwShirts World</title>
+  <meta name="description" content="Tudo o que você precisa saber sobre cannabis no mundo pós-proibicionista. Com respeito, ciência e sem julgamento. TiwShirts.">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  
   <style>
+    /* ==========================================================================
+       FONTES LOCAIS: LEMON MILK & CINZEL
+       ========================================================================== */
+    @font-face {
+      font-family: 'Lemon Milk';
+      src: url('assets/fonts/lemon_milk/LEMONMILK-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lemon Milk';
+      src: url('assets/fonts/lemon_milk/LEMONMILK-Medium.otf') format('opentype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lemon Milk';
+      src: url('assets/fonts/lemon_milk/LEMONMILK-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
 
-  :root {
-    --ink:        #0c0a07;
-    --ink-soft:   #1a1611;
-    --paper:      #d6c692;
-    --paper-2:    #c6b582;
-    --paper-3:    #b5a370;
-    --paper-deep: #8c7c4f;
-    --off:        #ede5cd;
-    --rust:       #b8472a;
-    --rust-deep:  #832d18;
-    --tape:       #d9c267;
-    --bone:       #f1e9d2;
-    --bone-2:     #e7dcbc;
-  }
+    @font-face {
+      font-family: 'Cinzel';
+      src: url('assets/fonts/cinzel/Cinzel-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Cinzel';
+      src: url('assets/fonts/cinzel/Cinzel-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Cinzel';
+      src: url('assets/fonts/cinzel/Cinzel-Black.otf') format('opentype');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; background: var(--ink); }
-  body {
-    font-family: 'DM Sans', system-ui, sans-serif;
-    background: var(--bone);
-    color: var(--ink);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-  ::selection { background: var(--rust); color: var(--off); }
+    :root {
+      --ink:        #0c0a07;
+      --ink-soft:   #1a1611;
+      --paper:      #d6c692;
+      --paper-2:    #c6b582;
+      --paper-3:    #b5a370;
+      --paper-deep: #8c7c4f;
+      --off:        #ede5cd;
+      --rust:       #b8472a;
+      --rust-deep:  #832d18;
+      --tape:       #d9c267;
+      --bone:       #f1e9d2;
+      --bone-2:     #e7dcbc;
+      --card-bg:    rgba(12, 10, 7, 0.74);
+      --card-light: rgba(237, 229, 205, 0.86);
+      
+      --font-poster:  'Lemon Milk', sans-serif;
+      --font-classic: 'Cinzel', serif;
+      --font-mono:    'DM Mono', ui-monospace, monospace;
+      --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+    }
 
-  /* GRAIN + VIGNETTE */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='.5'/></svg>");
-    pointer-events: none;
-    mix-blend-mode: overlay;
-    opacity: .35;
-    z-index: 200;
-  }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--ink); }
+    body {
+      font-family: var(--font-body);
+      background: var(--ink);
+      color: var(--bone);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--rust); color: var(--off); }
 
-  /* TYPE PRIMITIVES */
-  .poster {
-    font-family: 'Anton', 'Big Shoulders Stencil Display', Impact, sans-serif;
-    font-weight: 400;
-    line-height: .9;
-    letter-spacing: -.005em;
-  }
-  .mono {
-    font-family: 'DM Mono', ui-monospace, monospace;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .14em;
-  }
+    /* FILM GRAIN CINEMATOGRÁFICO */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='.35'/></svg>");
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      opacity: .35;
+      z-index: 999;
+    }
 
-  /* CAPA / HERO */
-  .capa {
-    position: relative;
-    min-height: 100vh;
-    background: var(--ink);
-    display: flex;
-    overflow: hidden;
-    isolation: isolate;
-  }
-  .capa-bg {
-    position: absolute; inset: 0;
-    background-image: url("https://tiwshirts.space/Assets/TiwShirts%20capa%20Sugiro%20maconha%20bg.webp");
-    background-size: cover;
-    background-position: center 20%;
-    opacity: .30;
-    filter: contrast(1.2) saturate(.5) sepia(.2);
-    z-index: 0;
-  }
-  .capa-bg::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(12,10,7,.7) 0%, rgba(12,10,7,.4) 45%, rgba(12,10,7,1) 100%);
-  }
-  .capa-inner {
-    position: relative; z-index: 2;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 32px 32px 40px;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 24px;
-  }
-  .capa-top {
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
-  }
-  .stamp {
-    border: 1.5px solid var(--paper-deep);
-    color: var(--paper);
-    padding: 8px 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
-    transform: rotate(-1.2deg);
-  }
-  .capa-mid {
-    align-self: center;
-    text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 22px;
-    padding: 24px 0;
-  }
-  .capa-folha { animation: float 5s ease-in-out infinite; }
-  .capa-folha img {
-    width: clamp(110px, 16vw, 190px);
-    height: auto;
-    display: block;
-    filter: drop-shadow(0 16px 34px rgba(0,0,0,.6)) contrast(1.05);
-  }
-  @keyframes float {
-    0%,100% { transform: translateY(0) rotate(-1.5deg); }
-    50% { transform: translateY(-10px) rotate(1.5deg); }
-  }
-  .capa-titulo {
-    font-family: 'Anton', sans-serif;
-    font-size: clamp(64px, 13vw, 200px);
-    color: var(--off);
-    text-transform: uppercase;
-    text-shadow: 0 3px 0 rgba(0,0,0,.4);
-  }
-  .capa-titulo em { color: var(--rust); font-style: italic; }
-  .capa-subtitulo {
-    font-family: 'DM Sans', sans-serif;
-    color: var(--paper);
-    font-size: clamp(15px, 2vw, 18px);
-    max-width: 52ch;
-    line-height: 1.5;
-  }
-  .capa-subtitulo strong { color: var(--off); font-weight: 700; }
-  .capa-scroll {
-    justify-self: center;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    color: var(--paper-deep);
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: .25em; text-transform: uppercase;
-  }
-  .capa-scroll .arrow { font-size: 18px; animation: bounce 1.8s ease-in-out infinite; }
-  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+    /* TOP NAVIGATION */
+    nav.top-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      background: rgba(12,10,7,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(214, 198, 146, 0.18);
+      padding: 0 clamp(16px, 4vw, 36px);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+      color: var(--off);
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 15px;
+      letter-spacing: -.01em;
+      text-transform: uppercase;
+    }
+    .nav-logo-img {
+      width: 32px; height: 32px;
+      object-fit: contain;
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8));
+    }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
+    .nav-link {
+      color: var(--paper-2);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 2px;
+      transition: all .2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--off);
+      background: rgba(184, 71, 42, 0.25);
+    }
+    .nav-loja {
+      background: var(--rust) !important;
+      color: var(--off) !important;
+      margin-left: 8px;
+      font-weight: 500;
+    }
+    .nav-loja:hover { background: var(--rust-deep) !important; }
 
-  /* MARQUEE */
-  .marquee {
-    background: var(--rust);
-    color: var(--off);
-    overflow: hidden;
-    padding: 13px 0;
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
-  }
-  .marquee-track {
-    display: flex; gap: 44px;
-    white-space: nowrap;
-    width: max-content;
-    animation: scroll 36s linear infinite;
-    font-family: 'Anton', sans-serif;
-    text-transform: uppercase;
-    font-size: 20px; letter-spacing: .04em;
-  }
-  .marquee-track span { display: inline-flex; align-items: center; gap: 44px; }
-  .marquee-track i { font-style: normal; opacity: .55; font-family: 'DM Mono', monospace; font-size: 13px; }
-  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    /* TELEMETRY HUD */
+    .flight-hud {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: rgba(12, 10, 7, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(214, 198, 146, 0.25);
+      padding: 10px 18px;
+      border-radius: 4px;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+    }
+    .hud-act {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--tape);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+    }
+    .hud-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--bone);
+    }
+    .hud-progress-bar {
+      width: 64px;
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .hud-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--rust);
+      transition: width 0.1s linear;
+    }
+    .hud-dots { display: flex; gap: 6px; }
+    .hud-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      border: 0; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .hud-dot.active { background: var(--rust); transform: scale(1.4); }
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--ink);
-    border-bottom: 1px solid rgba(255,255,255,.1);
-    padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 58px;
-  }
-  .nav-logo {
-    font-family: 'Archivo Black', sans-serif;
-    color: var(--off);
-    font-size: 16px;
-    letter-spacing: -.01em;
-    display: flex; align-items: center; gap: 12px;
-    text-transform: uppercase;
-  }
-  .nav-logo img {
-    width: 30px; height: 30px;
-    object-fit: cover;
-    border: 1.5px solid var(--paper-deep);
-  }
-  .nav-links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; align-items: center; }
-  .nav-links::-webkit-scrollbar { display: none; }
-  .nav-link {
-    color: var(--paper);
-    text-decoration: none;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
-    padding: 7px 11px;
-    white-space: nowrap;
-    border-bottom: 1px solid transparent;
-    transition: color .15s, border-color .15s;
-  }
-  .nav-link:hover { color: var(--rust); border-bottom-color: var(--rust); }
-  .nav-loja {
-    background: var(--rust) !important;
-    color: var(--off) !important;
-    border: 0 !important;
-    margin-left: 10px;
-    padding: 9px 14px !important;
-  }
-  .nav-loja:hover { background: var(--rust-deep) !important; }
+    /* ==========================================================================
+       SCROLL-WORLD SCENE ARCHITECTURE (STICKY THEATER COM BEATS ESPACIAIS)
+       ========================================================================== */
+    .sw-scene {
+      position: relative;
+    }
+    #cena-1 { height: 600vh; z-index: 10; }  /* Estufa: Capa, botânica, compostos, linha do tempo desmembrada */
+    #cena-2 { height: 720vh; z-index: 20; }  /* Laboratório: SEC + Cérebro, Coração, Pulmões, Sono, Cérebros Jovens */
+    #cena-3 { height: 440vh; z-index: 30; }  /* Mapas: Globo 3D, mundo, o caso do Brasil */
+    #cena-4 { height: 720vh; z-index: 40; }  /* Santuário do Chá: Variedades, vias, redução de danos, emergência */
+    #cena-5 { height: 600vh; z-index: 50; }  /* Bancada Tiw: FAQ desmembrado em 4 momentos + manifesto */
 
-  /* SEÇÕES (reading) */
-  section {
-    padding: 88px 24px;
-    max-width: 940px;
-    margin: 0 auto;
-    position: relative; z-index: 1;
-  }
-  .section-numero {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
-    color: var(--rust);
-    margin-bottom: 18px;
-    display: flex; align-items: center; gap: 14px;
-  }
-  .section-numero::after {
-    content: ''; height: 1.5px; width: 48px;
-    background: var(--rust); display: inline-block; opacity: .6;
-  }
-  h2 {
-    font-family: 'Anton', sans-serif;
-    font-size: clamp(40px, 6.5vw, 84px);
-    line-height: .92;
-    color: var(--ink);
-    text-transform: uppercase;
-    letter-spacing: -.01em;
-    margin-bottom: 24px;
-    text-wrap: balance;
-  }
-  h2 em { color: var(--rust); font-style: italic; }
-  h3 {
-    font-family: 'Anton', sans-serif;
-    font-size: clamp(22px, 3.2vw, 32px);
-    color: var(--ink);
-    text-transform: uppercase;
-    letter-spacing: -.005em;
-    margin-bottom: 16px;
-    margin-top: 44px;
-  }
-  h3 em { color: var(--rust); font-style: italic; }
-  p {
-    color: var(--ink-soft);
-    font-size: clamp(15px, 2vw, 17px);
-    margin-bottom: 16px;
-    max-width: 680px;
-  }
-  strong { color: var(--ink); font-weight: 700; }
+    /* PALCO DE VÍDEO FIXADO NA TELA ENQUANTO A CENA ROLA */
+    .sw-theater {
+      position: sticky;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink);
+    }
+    .sw-poster {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      z-index: 1;
+      opacity: 1;
+    }
+    .sw-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      pointer-events: none;
+    }
+    .sw-theater.video-active .sw-video { opacity: 1; }
 
-  /* DESTAQUE (ink feature sections) */
-  .destaque {
-    background: var(--ink);
-    color: var(--off);
-    padding: 96px 24px;
-    border-top: 4px solid var(--ink);
-    border-bottom: 4px solid var(--ink);
-    position: relative; z-index: 1;
-  }
-  .destaque-inner { max-width: 940px; margin: 0 auto; }
-  .destaque h2 { color: var(--off); }
-  .destaque h2 em { color: var(--rust); }
-  .destaque h3 { color: var(--paper); }
-  .destaque p { color: var(--paper); }
-  .destaque strong { color: var(--off); }
-  .destaque .section-numero { color: var(--tape); }
-  .destaque .section-numero::after { background: var(--tape); }
+    /* VINHETA CINEMATOGRÁFICA */
+    .sw-theater::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(12,10,7,0.2) 0%, rgba(12,10,7,0.72) 100%),
+        linear-gradient(180deg, rgba(12,10,7,0.85) 0%, rgba(12,10,7,0.1) 25%, rgba(12,10,7,0.1) 75%, rgba(12,10,7,0.92) 100%);
+      z-index: 3;
+      pointer-events: none;
+    }
 
-  /* CARDS */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 0;
-    margin-top: 32px;
-    border-top: 1.5px solid var(--ink);
-    border-left: 1.5px solid var(--ink);
-  }
-  .card {
-    background: var(--bone-2);
-    border-right: 1.5px solid var(--ink);
-    border-bottom: 1.5px solid var(--ink);
-    padding: 26px 24px 28px;
-    transition: background .18s;
-    position: relative;
-  }
-  .card::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 0; height: 3px;
-    background: var(--rust); transition: width .25s;
-  }
-  .card:hover { background: var(--off); }
-  .card:hover::before { width: 100%; }
-  .card h4 {
-    font-family: 'Anton', sans-serif;
-    font-size: 22px; text-transform: uppercase; letter-spacing: -.005em;
-    color: var(--ink); margin-bottom: 10px;
-  }
-  .card p { font-size: 14px; color: var(--ink-soft); margin: 0; max-width: none; }
+    /* BEATS QUE FLUTUAM SOBRE O VÍDEO */
+    .sw-beats {
+      position: relative;
+      z-index: 10;
+      margin-top: -100vh;
+      padding-bottom: 25vh;
+    }
+    .sw-beat {
+      min-height: 95vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 4vw;
+      perspective: 1200px;
+      perspective-origin: center center;
+    }
+    .sw-beat.hero { min-height: 100vh; }
+    .sw-beat.align-left,
+    .sw-beat.align-right,
+    .sw-beat.align-center {
+      justify-content: center;
+    }
 
-  .destaque .cards { border-top-color: rgba(255,255,255,.2); border-left-color: rgba(255,255,255,.2); }
-  /* CARDS ESCUROS (in destaque) */
-  .cards-dark {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 0;
-    border-top: 1.5px solid rgba(255,255,255,.2);
-    border-left: 1.5px solid rgba(255,255,255,.2);
-  }
-  .card-dark {
-    background: #14110d;
-    border-right: 1.5px solid rgba(255,255,255,.2);
-    border-bottom: 1.5px solid rgba(255,255,255,.2);
-    padding: 26px 24px 28px;
-    position: relative;
-    transition: background .18s;
-  }
-  .card-dark::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 0; height: 3px;
-    background: var(--rust); transition: width .25s;
-  }
-  .card-dark:hover { background: #1c1812; }
-  .card-dark:hover::before { width: 100%; }
-  .card-dark h4 {
-    font-family: 'Anton', sans-serif;
-    font-size: 22px; text-transform: uppercase; letter-spacing: -.005em;
-    color: var(--off); margin-bottom: 10px;
-  }
-  .card-dark p { font-size: 14px; color: var(--paper); margin: 0; max-width: none; }
+    .sw-card {
+      margin: 0 auto;
+      max-width: 820px;
+    }
 
-  /* ALERTA */
-  .alerta {
-    background: var(--bone-2);
-    border: 1.5px solid var(--ink);
-    border-left: 5px solid var(--rust);
-    padding: 22px 26px;
-    margin: 34px 0;
-    max-width: 720px;
-  }
-  .alerta-titulo {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-    color: var(--rust); margin-bottom: 8px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .alerta-titulo::before { content: '●'; font-size: 9px; }
-  .alerta p { margin: 0; color: var(--ink); font-size: 15px; max-width: none; }
-  .alerta-ok { border-left-color: var(--paper-deep); }
-  .alerta-ok .alerta-titulo { color: var(--paper-deep); }
+    /* ESCRITAS FLUTUANDO DIRETAMENTE SOBRE O VÍDEO (SEM PLACAS / SEM FUNDO) */
+    .sw-card {
+      width: 100%;
+      max-width: 860px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      padding: clamp(10px, 2vw, 24px);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+      will-change: transform, opacity;
+    }
 
-  /* TABELA */
-  .tabela-wrap {
-    overflow-x: auto;
-    margin: 34px 0;
-    border: 1.5px solid var(--ink);
-  }
-  table { width: 100%; border-collapse: collapse; }
-  thead { background: var(--ink); }
-  thead th {
-    padding: 15px 20px;
-    color: var(--off);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: .15em; text-transform: uppercase; font-weight: 500;
-    text-align: left;
-  }
-  tbody tr:nth-child(even) { background: var(--bone-2); }
-  tbody td {
-    padding: 14px 20px;
-    font-size: 14px;
-    color: var(--ink-soft);
-    border-bottom: 1px solid var(--paper-3);
-  }
-  tbody tr:last-child td { border-bottom: 0; }
-  tbody td:first-child { font-weight: 700; color: var(--ink); font-family: 'DM Sans', sans-serif; }
+    .sw-card::before, .sw-card::after { display: none; }
 
-  /* MAPA PAÍSES */
-  .paises { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
-  .pais-tag {
-    background: transparent;
-    border: 1.5px solid var(--paper-deep);
-    padding: 7px 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px; letter-spacing: .04em;
-    color: var(--off);
-    display: flex; align-items: center; gap: 6px;
-  }
-  .pais-tag span { font-size: 16px; }
-  .pais-tag.completo { background: var(--rust); color: var(--off); border-color: var(--rust); }
-  .pais-tag.medicinal { border-color: var(--tape); color: var(--paper); }
-  .pais-tag.parcial { border-color: var(--paper-deep); color: var(--paper); opacity: .8; }
+    .sw-card.light {
+      background: transparent;
+      color: var(--bone);
+      border: none;
+      box-shadow: none;
+    }
 
-  /* LEGENDA */
-  .legenda { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 24px; }
-  .legenda-item {
-    display: flex; align-items: center; gap: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
-    color: var(--paper);
-  }
-  .legenda-dot { width: 12px; height: 12px; }
+    /* GRID SPLIT PARA OBSERVATÓRIO E GLOBO */
+    .sw-split-deck {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+      text-align: left;
+    }
+    @media (max-width: 900px) {
+      .sw-split-deck {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
 
-  /* LINHA DO TEMPO */
-  .timeline { position: relative; padding-left: 42px; margin-top: 36px; }
-  .timeline::before {
-    content: ''; position: absolute; left: 11px; top: 4px; bottom: 4px;
-    width: 2px; background: var(--paper-3);
-  }
-  .timeline-item { position: relative; margin-bottom: 34px; }
-  .timeline-item::before {
-    content: ''; position: absolute; left: -36px; top: 5px;
-    width: 11px; height: 11px; background: var(--rust);
-    border: 2px solid var(--bone);
-  }
-  .timeline-ano {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--rust); margin-bottom: 5px;
-  }
-  .timeline-item h4 {
-    font-family: 'Anton', sans-serif;
-    font-size: 19px; text-transform: uppercase; letter-spacing: -.005em;
-    color: var(--ink); margin-bottom: 6px;
-  }
-  .timeline-item p { font-size: 14px; margin: 0; }
+    /* TIPOGRAFIA EDITORIAL FLUTUANTE COM CONTRASTE CINEMATOGRÁFICO */
+    .beat-tag {
+      font-family: var(--font-classic);
+      font-size: 12px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--tape);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+    .light .beat-tag { color: var(--tape); }
+    .beat-tag::after {
+      content: '';
+      height: 1.5px; width: 40px;
+      background: currentColor; opacity: .8;
+    }
 
-  /* ACORDEON */
-  .acordeon { margin-top: 36px; border-top: 1.5px solid var(--ink); }
-  .acord-item { border-bottom: 1.5px solid var(--ink); }
-  .acord-btn {
-    width: 100%; background: transparent; border: none;
-    padding: 20px 4px;
-    display: flex; justify-content: space-between; align-items: center; gap: 16px;
-    cursor: pointer; text-align: left;
-    font-family: 'Anton', sans-serif;
-    font-size: 20px; text-transform: uppercase; letter-spacing: -.005em;
-    color: var(--ink);
-    transition: padding-left .15s, color .15s;
-  }
-  .acord-btn:hover { padding-left: 14px; color: var(--rust); }
-  .acord-btn.ativo { color: var(--rust); padding-left: 14px; }
-  .acord-icone {
-    font-family: 'DM Mono', monospace;
-    font-size: 22px; transition: transform .3s; flex-shrink: 0; color: var(--rust);
-  }
-  .acord-btn.ativo .acord-icone { transform: rotate(45deg); }
-  .acord-conteudo { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
-  .acord-conteudo-inner {
-    padding: 0 4px 26px;
-    font-size: 14px; color: var(--ink-soft); line-height: 1.7; max-width: 720px;
-  }
-  .acord-conteudo-inner p { font-size: 14px; }
+    h1, h2 {
+      font-family: var(--font-poster);
+      font-weight: 700;
+      font-size: clamp(34px, 5.8vw, 70px);
+      line-height: .94;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      margin-bottom: 18px;
+      color: var(--off);
+      text-shadow: 0 3px 18px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.85);
+    }
+    h2 em, h1 em { color: var(--rust); font-style: normal; }
 
-  /* LISTA VISUAL */
-  .lista-visual { list-style: none; margin: 24px 0; }
-  .lista-visual li {
-    display: flex; gap: 16px; align-items: baseline;
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(255,255,255,.14);
-    font-size: 15px; color: var(--paper);
-  }
-  .lista-visual li:last-child { border-bottom: none; }
-  .lista-visual li .li-icone {
-    flex-shrink: 0;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px; letter-spacing: .1em;
-    color: var(--rust);
-    min-width: 28px;
-  }
+    p {
+      font-size: clamp(16px, 1.8vw, 18px);
+      margin-bottom: 16px;
+      max-width: 720px;
+      color: var(--paper);
+      line-height: 1.65;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.9);
+    }
+    .light p { color: var(--paper); }
+    strong { color: var(--off); font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+    .light strong { color: var(--off); }
 
-  /* DIVISOR */
-  .divisor {
-    border: none; height: 1.5px; background: var(--paper-3);
-    max-width: 940px; margin: 0 auto;
-  }
+    /* GRIDS DE DESTAQUES FLUTUANTES (MINIMALISTAS) */
+    .beat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .beat-box {
+      background: rgba(12, 10, 7, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(214, 198, 146, 0.2);
+      border-left: 3px solid var(--rust);
+      border-radius: 2px;
+      padding: 18px 20px;
+      transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), border-color .25s ease, background .25s ease, box-shadow .25s ease;
+      cursor: default;
+    }
+    .light .beat-box {
+      background: rgba(12, 10, 7, 0.45);
+      border-color: rgba(214, 198, 146, 0.2);
+      border-left-color: var(--tape);
+    }
+    .beat-box:hover {
+      border-color: var(--tape);
+      background: rgba(12, 10, 7, 0.75);
+      transform: translateY(-4px) scale(1.015);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65);
+    }
+    .beat-box h4 {
+      font-family: var(--font-poster);
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      margin-bottom: 6px;
+      color: var(--off);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+    .light .beat-box h4 { color: var(--off); }
+    .beat-box p {
+      font-size: 13.5px;
+      margin: 0;
+      color: var(--paper);
+      max-width: none;
+      line-height: 1.5;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+    .light .beat-box p { color: var(--paper); }
 
-  /* RODAPÉ */
-  footer {
-    background: #060503;
-    color: var(--paper);
-    text-align: center;
-    padding: 64px 24px 40px;
-    font-size: 14px;
-    position: relative; z-index: 1;
-  }
-  .foot-brand {
-    font-family: 'Anton', sans-serif;
-    font-size: clamp(44px, 9vw, 96px);
-    text-transform: uppercase;
-    color: var(--off);
-    line-height: .9;
-    margin-bottom: 14px;
-  }
-  footer strong { color: var(--off); }
-  footer p { margin: 6px auto; max-width: 600px; color: var(--paper); }
-  .social-links { display: flex; justify-content: center; gap: 14px; margin: 26px 0; }
-  .social-btn {
-    background: rgba(255,255,255,.08);
-    width: 44px; height: 44px;
-    display: flex; align-items: center; justify-content: center;
-    transition: background .25s, transform .25s; text-decoration: none;
-    border: 1px solid rgba(255,255,255,.12);
-  }
-  .social-btn:hover { background: var(--rust); transform: translateY(-2px); border-color: var(--rust); }
-  .social-btn svg { width: 19px; height: 19px; fill: var(--off); transition: fill .25s; }
-  .footer-divider { width: 56px; height: 2px; background: var(--rust); margin: 30px auto; }
-  .producao { font-size: 12px; margin-top: 18px; letter-spacing: .04em; font-family: 'DM Mono', monospace; text-transform: uppercase; }
-  .producao a { color: var(--off); text-decoration: none; border-bottom: 1px solid var(--rust); }
-  .producao a:hover { color: var(--rust); }
+    /* ALERTAS LEVES */
+    .sw-alert {
+      background: rgba(184, 71, 42, 0.16);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(184, 71, 42, 0.5);
+      border-left: 4px solid var(--rust);
+      padding: 16px 20px;
+      margin: 20px 0;
+      border-radius: 2px;
+    }
+    .sw-alert-title {
+      font-family: var(--font-classic);
+      font-size: 11.5px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .sw-alert p { margin: 0; font-size: 14.5px; color: var(--bone); }
 
-  /* GLOBO */
-  .globe-wrapper {
-    width: 100%; max-width: 460px; margin: 40px auto;
-    aspect-ratio: 1; position: relative; cursor: grab; user-select: none;
-  }
-  .globe-wrapper:active { cursor: grabbing; }
-  #globeCanvas { width: 100%; height: 100%; display: block; }
-  .globe-overlay {
-    position: absolute; inset: 0; pointer-events: none; border-radius: 50%;
-    background: radial-gradient(circle at 32% 30%, transparent 42%, rgba(0,0,0,.65) 100%);
-    box-shadow: inset 0 0 80px rgba(0,0,0,.85), 0 0 30px rgba(184,71,42,.18);
-  }
+    /* TABELA COMPARATIVA TRANSLÚCIDA */
+    .sw-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid rgba(214, 198, 146, 0.2);
+      background: rgba(12, 10, 7, 0.5);
+      backdrop-filter: blur(12px);
+      border-radius: 2px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    thead { background: rgba(0,0,0,0.7); }
+    thead th {
+      padding: 12px 16px;
+      color: var(--tape);
+      font-family: var(--font-classic);
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      text-align: left;
+    }
+    tbody tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: var(--paper);
+    }
+    tbody td:first-child { font-weight: 700; color: var(--off); font-family: var(--font-poster); font-size: 12px; letter-spacing: .04em; }
+    .light tbody td { color: var(--paper); }
+    .light tbody td:first-child { color: var(--off); }
 
-  /* RESPONSIVO */
-  @media (max-width: 700px) {
-    nav { padding: 0 14px; }
-    .nav-logo { font-size: 13px; }
-    .nav-logo img { width: 26px; height: 26px; }
-    .nav-link { padding: 6px 8px; font-size: 10px; }
-    section { padding: 64px 20px; }
-    .destaque { padding: 64px 20px; }
-    .cards, .cards-dark { grid-template-columns: 1fr; }
-    .capa-inner { padding: 24px 20px 32px; }
-    .capa-top { flex-direction: column; gap: 10px; }
-  }
+    /* GLOBO 3D INTERATIVO (NO FLUXO DA CENA) */
+    .globe-wrapper {
+      width: 100%;
+      max-width: 340px;
+      height: 340px;
+      margin: 0 auto;
+      cursor: grab;
+    }
+    .globe-wrapper:active { cursor: grabbing; }
+    #globeCanvas { width: 100%; height: 100%; display: block; border-radius: 50%; }
+    .paises { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+    .pais-tag {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(214, 198, 146, 0.25);
+      padding: 5px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--off);
+      border-radius: 2px;
+    }
 
+    /* LISTA NUMERADA — PROTOCOLO DE ACOLHIMENTO */
+    .passos-lista {
+      list-style: none;
+      margin: 18px 0;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .passos-lista li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 14px;
+      color: var(--paper);
+    }
+    .passos-lista li:last-child { border-bottom: 0; }
+    .passo-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--tape);
+      font-size: 12px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060503;
+      border-top: 2px solid var(--rust);
+      padding: 70px 24px;
+      text-align: center;
+      position: relative;
+      z-index: 20;
+    }
+    .foot-brand {
+      font-family: var(--font-poster);
+      font-size: 48px;
+      color: var(--off);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .producao {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--paper-2);
+      margin-top: 20px;
+    }
+    .producao a { color: var(--rust); text-decoration: none; font-weight: 700; }
+
+    @media (max-width: 860px) {
+      .flight-hud { bottom: 12px; right: 12px; left: 12px; justify-content: space-between; padding: 8px 12px; }
+      .hud-title { display: none; }
+      .sw-card { padding: 22px 18px; }
+      .nav-links { display: none; }
+      .globe-wrapper { max-width: 280px; height: 280px; }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- CAPA -->
-  <header class="capa">
-    <div class="capa-bg"></div>
-    <div class="capa-inner">
-      <div class="capa-top">
-        <div class="stamp">Dossiê educativo · grátis</div>
-        <div class="stamp" style="transform:rotate(1.4deg)">Edição 2025 · 9 capítulos</div>
-      </div>
-      <div class="capa-mid">
-    <div class="capa-folha">
-      <img src="https://tiwshirts.space/Assets/Bud%20Flower%20-%20TiwDoo%20TiwShirts%201%20Xilogravura.webp" alt="Bud Flower TiwDoo">
-    </div>
-    <h1 class="capa-titulo">Manual do<br><em>Usuário.</em></h1>
-    <p class="capa-subtitulo">Tudo o que você precisa saber sobre cannabis no mundo pós-proibicionista. <strong>Com respeito, ciência e sem julgamento.</strong></p>
-    </div>
-      <div class="capa-scroll"><span>Role pra ler</span><span class="arrow">↓</span></div>
-    </div>
-  </header>
-
-  <!-- MARQUEE -->
-  <div class="marquee">
-    <div class="marquee-track">
-      <span>MANUAL ABERTO <i>◇</i> 9 CAPÍTULOS <i>◇</i> CIÊNCIA SEM JULGAMENTO <i>◇</i> REDUÇÃO DE DANOS <i>◇</i> HISTÓRIA &amp; LEI <i>◇</i> SEM PAYWALL <i>◇</i> VISTA O QUE PENSA <i>◇</i> </span>
-      <span>MANUAL ABERTO <i>◇</i> 9 CAPÍTULOS <i>◇</i> CIÊNCIA SEM JULGAMENTO <i>◇</i> REDUÇÃO DE DANOS <i>◇</i> HISTÓRIA &amp; LEI <i>◇</i> SEM PAYWALL <i>◇</i> VISTA O QUE PENSA <i>◇</i> </span>
-    </div>
-  </div>
-
-  <!-- NAVEGAÇÃO -->
-  <nav>
-    <div class="nav-logo">
-      <img src="https://tiwshirts.space/Assets/avatar-tiodu%20xilogravura%201.webp" alt="Logo TiwShirts">
-      Manual do Usuário
-    </div>
+  <!-- ========================================================================
+       TOPBAR COM LOGO TIW OFICIAL
+       ======================================================================== -->
+  <nav class="top-nav">
+    <a href="#top" class="nav-logo">
+      <img src="assets/logo-tiw.png" alt="TiwShirts Logo" class="nav-logo-img">
+      TiwShirts
+    </a>
     <div class="nav-links">
-      <a href="#o-que-e" class="nav-link">O que é</a>
-      <a href="#historia" class="nav-link">História</a>
-      <a href="#mundo" class="nav-link">No mundo</a>
-      <a href="#corpo" class="nav-link">No corpo</a>
-      <a href="#tipos" class="nav-link">Tipos</a>
-      <a href="#uso-responsavel" class="nav-link">Uso responsável</a>
-      <a href="#saude" class="nav-link">Saúde</a>
-      <a href="#grupos" class="nav-link">Para cada um</a>
-      <a href="#perguntas" class="nav-link">Perguntas</a>
-      <a href="index.html" class="nav-link nav-loja">Ver o drop ↗</a>
+      <a href="#cena-1" class="nav-link active" data-scene="1">01 Origens</a>
+      <a href="#cena-2" class="nav-link" data-scene="2">02 Ciência</a>
+      <a href="#cena-3" class="nav-link" data-scene="3">03 Mundo</a>
+      <a href="#cena-4" class="nav-link" data-scene="4">04 Cuidado</a>
+      <a href="#cena-5" class="nav-link" data-scene="5">05 Manifesto</a>
+      <a href="https://tiwshirts.space" target="_blank" class="nav-link nav-loja">Loja Tiw</a>
     </div>
   </nav>
 
-  <!-- SEÇÃO 1: O QUE É -->
-  <section id="o-que-e">
-    <div class="section-numero">01 — Fundamentos</div>
-    <h2>O que é a <em>cannabis</em>?</h2>
-    <p>A cannabis é uma planta originária da Ásia Central, cultivada e usada pela humanidade há pelo menos
-      <strong>10.000 anos</strong> — para fibras, alimento, medicina e rituais. Hoje é a substância psicoativa ilícita
-      mais consumida no mundo.
-    </p>
-    <p>Sua planta produz centenas de compostos químicos chamados <strong>canabinoides</strong>, os mais conhecidos sendo
-      o THC (tetrahidrocanabinol, responsável pelos efeitos psicoativos) e o CBD (canabidiol, sem efeito psicoativo,
-      usado terapeuticamente).</p>
-
-    <div class="cards">
-      <div class="card">
-
-        <h4>THC</h4>
-        <p>Principal canabinoide psicoativo. Produz sensação de euforia, relaxamento, alteração do tempo e do apetite.
-          Em doses altas pode causar ansiedade.</p>
-      </div>
-      <div class="card">
-
-        <h4>CBD</h4>
-        <p>Não causa "barato". Tem propriedades ansiolíticas, anti-inflamatórias e anticonvulsivantes. Usado amplamente
-          na medicina legal.</p>
-      </div>
-      <div class="card">
-
-        <h4>Terpenos</h4>
-        <p>Compostos aromáticos que influenciam o sabor, o cheiro e modulam os efeitos dos canabinoides. São o "perfil"
-          de cada variedade.</p>
-      </div>
-      <div class="card">
-
-        <h4>Efeito Entourage</h4>
-        <p>Canabinoides e terpenos juntos produzem efeitos maiores do que cada um isolado. A planta inteira é mais
-          complexa do que qualquer extrato.</p>
-      </div>
+  <!-- ========================================================================
+       TELEMETRY HUD
+       ======================================================================== -->
+  <div class="flight-hud" id="flightHud">
+    <div>
+      <div class="hud-act" id="hudAct">CENA 01 // 05</div>
+      <div class="hud-title" id="hudTitle">A Estufa Botânica</div>
     </div>
-  </section>
-
-  <hr class="divisor">
-
-  <!-- SEÇÃO 2: HISTÓRIA -->
-  <section id="historia">
-    <div class="section-numero">02 — Contexto histórico</div>
-    <h2>De remédio milenar à <em>proibição</em> e de volta</h2>
-    <p>A cannabis não é uma "droga moderna". Sua criminalização é recente — e está sendo revertida. Entender essa
-      trajetória é fundamental para compreender o momento atual.</p>
-
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-ano">~ 8.000 a.C.</div>
-        <h4>Primeiros registros</h4>
-        <p>Usada como fibra (cânhamo) e alimento no noroeste da China. Registros de uso medicinal aparecem no Egito
-          Antigo e na Índia.</p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">Século XIX</div>
-        <h4>Medicina ocidental</h4>
-        <p>A cannabis era ingredient comum em xaropes e remédios farmacêuticos na Europa e nos EUA. Vendida livremente
-          em farmácias.</p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">1937</div>
-        <h4>Marihuana Tax Act (EUA)</h4>
-        <p>O governo americano começa a criminalizar a cannabis, fortemente ligado a discursos racistas contra mexicanos
-          e afro-americanos.</p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">1961</div>
-        <h4>Convenção Única sobre Drogas (ONU)</h4>
-        <p>A cannabis é classificada na Lista IV (mais restritiva), tornando sua proibição um padrão internacional.</p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">1996</div>
-        <h4>Califórnia legaliza uso medicinal</h4>
-        <p>Primeiro estado americano a regulamentar o uso terapêutico — marco do início do movimento pós-proibicionista
-          moderno.</p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">2013</div>
-        <h4>Uruguai lidera a América Latina</h4>
-        <p>Primeiro país do mundo a legalizar completamente a produção, venda e consumo de cannabis para adultos.</p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">2018</div>
-        <h4>Canadá — legalização total</h4>
-        <p>Segundo país do mundo (e primeiro do G7) a legalizar cannabis recreativa em todo o território nacional.</p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">2020</div>
-        <h4>ONU reclassifica a cannabis</h4>
-        <p>A Comissão de Drogas da ONU remove a cannabis da Lista IV — reconhecendo oficialmente seu valor medicinal.
-        </p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-ano">2024–2025</div>
-        <h4>Expansão global</h4>
-        <p>Alemanha, Tailândia, vários estados dos EUA e países da Europa avançam em regulamentação. O debate chega ao
-          Brasil com mais força.</p>
-      </div>
+    <div class="hud-progress-bar">
+      <div class="hud-progress-fill" id="hudProgressFill"></div>
     </div>
-  </section>
-
-  <!-- SEÇÃO DESTAQUE: MUNDO -->
-  <div class="destaque" id="mundo">
-    <div class="destaque-inner">
-      <div class="section-numero">03 — Panorama global</div>
-      <h2>Cannabis no <em>mundo</em> hoje</h2>
-      <p>O mapa da cannabis está mudando rapidamente. Dezenas de países já regulamentaram o uso medicinal e mais de 10
-        legalizaram o uso adulto (recreativo).</p>
-
-      <div class="legenda">
-        <div class="legenda-item">
-          <div class="legenda-dot" style="background:var(--rust)"></div> Legalização completa (adultos)
-        </div>
-        <div class="legenda-item">
-          <div class="legenda-dot" style="background:var(--tape)"></div> Uso medicinal regulamentado
-        </div>
-        <div class="legenda-item">
-          <div class="legenda-dot" style="background:var(--paper-deep)"></div> Descriminalização parcial
-        </div>
-      </div>
-
-      <div class="globe-wrapper" id="globeContainer">
-        <canvas id="globeCanvas"></canvas>
-        <div class="globe-overlay"></div>
-      </div>
-
-      <div class="paises">
-        <div class="pais-tag completo"><span>🇺🇾</span> Uruguai</div>
-        <div class="pais-tag completo"><span>🇨🇦</span> Canadá</div>
-        <div class="pais-tag completo"><span>🇺🇸</span> EUA (24+ estados)</div>
-        <div class="pais-tag completo"><span>🇩🇪</span> Alemanha</div>
-        <div class="pais-tag completo"><span>🇲🇹</span> Malta</div>
-        <div class="pais-tag completo"><span>🇱🇺</span> Luxemburgo</div>
-        <div class="pais-tag completo"><span>🇹🇭</span> Tailândia</div>
-        <div class="pais-tag completo"><span>🇨🇿</span> Rep. Tcheca</div>
-        <div class="pais-tag completo"><span>🇬🇪</span> Geórgia</div>
-        <div class="pais-tag medicinal"><span>🇧🇷</span> Brasil (medicinal)</div>
-        <div class="pais-tag medicinal"><span>🇦🇺</span> Austrália</div>
-        <div class="pais-tag medicinal"><span>🇮🇱</span> Israel</div>
-        <div class="pais-tag medicinal"><span>🇨🇴</span> Colômbia</div>
-        <div class="pais-tag medicinal"><span>🇲🇽</span> México</div>
-        <div class="pais-tag medicinal"><span>🇦🇷</span> Argentina</div>
-        <div class="pais-tag medicinal"><span>🇨🇱</span> Chile</div>
-        <div class="pais-tag parcial"><span>🇳🇱</span> Holanda</div>
-        <div class="pais-tag parcial"><span>🇵🇹</span> Portugal</div>
-        <div class="pais-tag parcial"><span>🇪🇸</span> Espanha</div>
-        <div class="pais-tag parcial"><span>🇿🇦</span> África do Sul</div>
-        <div class="pais-tag parcial"><span>🇯🇲</span> Jamaica</div>
-        <div class="pais-tag parcial"><span>🇮🇹</span> Itália</div>
-      </div>
-
-      <h3>E o Brasil?</h3>
-      <p>O Brasil avança — embora lentamente. A Anvisa aprovou em 2019 o uso de produtos à base de cannabis para fins
-        medicinais mediante prescrição. Desde então, o mercado regulado de óleos e extratos cresceu muito. O debate
-        sobre descriminalização e regulação para uso adulto está cada vez mais presente no Congresso e na sociedade.</p>
-
-      <div class="cards" style="margin-top:28px">
-        <div class="card-dark">
-
-          <h4>Uso Medicinal</h4>
-          <p>Regulamentado pela Anvisa. Produtos importados e nacionais disponíveis com prescrição médica.</p>
-        </div>
-        <div class="card-dark">
-
-          <h4>Autocultivo</h4>
-          <p>Decisões judiciais têm reconhecido o direito ao cultivo para fins medicinais em casos individuais.</p>
-        </div>
-        <div class="card-dark">
-
-          <h4>Descriminalização</h4>
-          <p>O STF debate a descriminalização do porte para uso pessoal. Enquanto isso, a lei segue ambígua.</p>
-        </div>
-      </div>
+    <div class="hud-dots">
+      <button class="hud-dot active" onclick="jumpToScene(1)" title="Cena 1: Origens"></button>
+      <button class="hud-dot" onclick="jumpToScene(2)" title="Cena 2: Ciência &amp; Corpo"></button>
+      <button class="hud-dot" onclick="jumpToScene(3)" title="Cena 3: Observatório Global"></button>
+      <button class="hud-dot" onclick="jumpToScene(4)" title="Cena 4: Santuário do Chá &amp; Redução de Danos"></button>
+      <button class="hud-dot" onclick="jumpToScene(5)" title="Cena 5: Bancada TiwShirts &amp; Manifesto"></button>
     </div>
   </div>
 
-  <!-- SEÇÃO 4: CORPO -->
-  <section id="corpo">
-    <div class="section-numero">04 — Ciência</div>
-    <h2>O que acontece <em>no seu corpo</em></h2>
-    <p>A cannabis age no <strong>Sistema Endocanabinoide (SEC)</strong> — um sistema presente em todos os mamíferos,
-      descoberto nos anos 1990, que regula humor, memória, apetite, dor, sono e imunidade.</p>
-    <p>Nosso próprio corpo produz canabinoides naturais (endocanabinoides) como anandamida e 2-AG. Os canabinoides da
-      planta "imitam" essas moléculas.</p>
+  <div id="top"></div>
 
-    <div class="cards">
-      <div class="card">
-
-        <h4>Cérebro</h4>
-        <p>THC ativa receptores CB1, alterando percepção, humor, memória de curto prazo e coordenação motora.</p>
-      </div>
-      <div class="card">
-
-        <h4>Coração</h4>
-        <p>Pode acelerar os batimentos nas primeiras horas. Pessoas com histórico cardíaco devem ter atenção redobrada.
-        </p>
-      </div>
-      <div class="card">
-
-        <h4>Pulmões</h4>
-        <p>Fumar qualquer coisa agride os pulmões. Vaporização reduz (mas não elimina) esse risco. Edibles não afetam a
-          respiração.</p>
-      </div>
-      <div class="card">
-
-        <h4>Sono</h4>
-        <p>Pode ajudar a adormecer mais rápido, mas altera as fases do sono. Uso crônico pode reduzir sonhos (fase REM).
-        </p>
-      </div>
+  <!-- ========================================================================
+       CENA 01: A ESTUFA BOTÂNICA & ORIGENS (Vídeo: scene_1.mp4)
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-1" data-scene="1">
+    <div class="sw-theater" id="theater-1">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_1_poster.jpg" alt="Estufa Botânica">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_1.mp4" muted playsinline preload="auto"></video>
     </div>
 
-    <div class="alerta">
-      <div class="alerta-titulo">Atenção</div>
-      <p><strong>Adolescentes e jovens até 25 anos:</strong> o cérebro ainda está em desenvolvimento. Uso precoce e
-        frequente está associado a maior risco de dependência e impactos no desenvolvimento cognitivo. A ciência é clara
-        aqui: quanto mais cedo e mais frequente, maior o risco.</p>
-    </div>
-
-    <div class="alerta alerta-ok">
-      <div class="alerta-titulo">Contexto</div>
-      <p>Para adultos saudáveis, o uso moderado e ocasional apresenta riscos significativamente menores do que muitas
-        substâncias legais, como o álcool. O risco existe, mas é proporcional à frequência, quantidade e vulnerabilidade
-        individual.</p>
-    </div>
-  </section>
-
-  <hr class="divisor">
-
-  <!-- SEÇÃO 5: TIPOS E FORMAS -->
-  <section id="tipos">
-    <div class="section-numero">05 — Formas de uso</div>
-    <h2>Tipos, formas <em>e diferenças</em></h2>
-
-    <h3>Variedades principais</h3>
-    <div class="tabela-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Variedade</th>
-            <th>Perfil de efeito</th>
-            <th>THC/CBD</th>
-            <th>Uso comum</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Sativa</td>
-            <td>Energizante, cerebral, criativa</td>
-            <td>Alto THC</td>
-            <td>Diurno, social, artístico</td>
-          </tr>
-          <tr>
-            <td>Indica</td>
-            <td>Relaxante, corporal, sedativo</td>
-            <td>Alto THC</td>
-            <td>Noturno, dor, insônia</td>
-          </tr>
-          <tr>
-            <td>Híbrida</td>
-            <td>Variável, misto</td>
-            <td>Variável</td>
-            <td>Depende da linhagem</td>
-          </tr>
-          <tr>
-            <td>CBD dominante</td>
-            <td>Sem efeito psicoativo</td>
-            <td>Baixo/zero THC</td>
-            <td>Medicinal, ansiedade, inflamação</td>
-          </tr>
-          <tr>
-            <td>Cânhamo</td>
-            <td>Sem efeito psicoativo</td>
-            <td>Mínimo THC</td>
-            <td>Fibra, alimento, CBD industrial</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3>Formas de consumo</h3>
-    <div class="cards">
-      <div class="card">
-
-        <h4>Inalação (fumo)</h4>
-        <p>Efeito rápido (minutos). Duração: 1–3h. Risco pulmonar presente. A forma mais comum, mas não a mais segura.
-        </p>
+    <div class="sw-beats">
+      <!-- Beat 1.1: Capa Heroica -->
+      <div class="sw-beat hero align-center">
+        <div class="sw-card" style="text-align: center; max-width: 860px;">
+          <div class="beat-tag" style="justify-content: center;">Edição Oficial · Baseada em Evidências</div>
+          <div style="margin: 4px 0 16px;">
+            <img src="assets/logo-tiw.png" alt="TiwShirts" style="width: 160px; max-width: 60vw; height: auto; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.6));">
+          </div>
+          <h1 style="font-size: clamp(42px, 8vw, 88px); margin-bottom: 14px;">
+            Manual do<br>Usuário · <em>Cannabis.</em>
+          </h1>
+          <p style="margin: 0 auto; font-size: clamp(16px, 2vw, 19px); max-width: 580px;">
+            Tudo o que você precisa saber sobre a planta no mundo pós-proibicionista. <strong>Com respeito, ciência e sem julgamento.</strong>
+          </p>
+          <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--tape);">
+            ↓ ROLE PARA INICIAR A VIAGEM
+          </div>
+        </div>
       </div>
-      <div class="card">
 
-        <h4>Vaporização</h4>
-        <p>Aquece sem combustão. Reduz substâncias tóxicas comparado ao fumo. Efeito rápido, mais controlado.</p>
+      <!-- Beat 1.2: O que é a cannabis -->
+      <div class="sw-beat align-left">
+        <div class="sw-card light">
+          <div class="beat-tag">01 — Fundamentos</div>
+          <h2>O que é a <em>cannabis</em>?</h2>
+          <p>Originária da Ásia Central, é cultivada e usada pela humanidade há pelo menos <strong>10.000 anos</strong> — para fibras, alimento, medicina e rituais. A história da nossa convivência com a flor é dez vezes maior que o parêntese da proibição.</p>
+          <p style="margin-top: 10px;">Hoje é a substância psicoativa mais consumida no mundo. Sua flor produz centenas de compostos bioativos chamados <strong>canabinoides</strong> e terpenos que conversam de forma direta com a nossa fisiologia.</p>
+        </div>
       </div>
-      <div class="card">
 
-        <h4>Comestíveis (edibles)</h4>
-        <p>Efeito demora 30min–2h para surgir, dura 4–8h. Fácil de exagerar. Começar com doses muito baixas é essencial.
-        </p>
+      <!-- Beat 1.3A: THC vs CBD -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">01.1 — A Dualidade Molecular</div>
+          <h2>THC <em>vs</em> CBD</h2>
+          <p>As duas moléculas mais abundantes da flor operam como forças complementares no organismo:</p>
+          <div class="beat-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+            <div class="beat-box" style="border-left-color: var(--rust);">
+              <h4>THC (Tetrahidrocanabinol)</h4>
+              <p>O principal composto psicoativo. Produz euforia, relaxamento profundo, expansão dos sentidos e apetite. Em doses além do limite individual, pode provocar taquicardia ou ansiedade transitória.</p>
+            </div>
+            <div class="beat-box" style="border-left-color: var(--tape);">
+              <h4>CBD (Canabidiol)</h4>
+              <p>Não produz qualquer alteração da percepção ou embriaguez. Atua como modulador protetor: tem ação ansiolítica, anti-inflamatória e anticonvulsivante reconhecida por agências de saúde em todo o mundo.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card">
 
-        <h4>Óleos e tinturas</h4>
-        <p>Sublingual (embaixo da língua) tem absorção rápida. Comum para uso medicinal. Dosagem precisa.</p>
+      <!-- Beat 1.3B: Terpenos & Efeito Entourage -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">01.2 — Sinergia Botânica</div>
+          <h2>Terpenos &amp; <em>A Orquestra</em></h2>
+          <p>A experiência da cannabis não se resume à porcentagem de THC ou CBD. A assinatura viva da planta vive na sinergia dos seus óleos essenciais:</p>
+          <div class="beat-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+            <div class="beat-box" style="border-left-color: var(--paper-deep);">
+              <h4>Terpenos Aromáticos</h4>
+              <p>Mirceno (terroso e relaxante), limoneno (cítrico e elevador), cariofileno (picante e anti-inflamatório). Eles ditam o sabor, o aroma e guiam como os canabinoides cruzam as membranas celulares.</p>
+            </div>
+            <div class="beat-box" style="border-left-color: var(--rust);">
+              <h4>O Efeito Entourage</h4>
+              <p>Isolar uma única molécula em laboratório quase nunca replica o poder da flor integral. A orquestra completa de compostos naturais trabalhando juntos gera uma ação mais estável e eficaz.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card">
 
-        <h4>Tópicos</h4>
-        <p>Cremes, óleos para a pele. Age localmente (dor, inflamação). Não causa efeito psicoativo.</p>
+      <!-- Beat 1.4: Linha do Tempo Histórica -->
+      <!-- Beat 1.4A: Tradição Milenar e Farmácias -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 780px;">
+          <div class="beat-tag" style="justify-content: center;">02.1 — Origens &amp; Boticas</div>
+          <h2>Convivência <em>milenar</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto 20px;">
+            Cultivada há mais de 10.000 anos na Ásia Central como fibra, alimento e medicina no Egito Antigo e na Índia. No século XIX, a cannabis era ingrediente corrente em elixires farmacêuticos europeus e norte-americanos, vendida livremente no balcão das boticas.
+          </p>
+        </div>
       </div>
-      <div class="card">
 
-        <h4>Cápsulas</h4>
-        <p>Dosagem precisa, sem sabor. Absorção similar ao comestível. Muito usado em contexto medicinal.</p>
+      <!-- Beat 1.4B: Proibição Política e Queda do Tabu -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 780px;">
+          <div class="beat-tag" style="justify-content: center;">02.2 — O Parêntese da Proibição</div>
+          <h2>A política <em>venceu a ciência</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto;">
+            Em 1937, o <em>Marihuana Tax Act</em> nos EUA criminalizou a planta por conveniência fiscal e perseguição a minorias, modelo replicado pela ONU em 1961. Hoje, essa barreira cai: a reclassificação internacional reconhece o valor medicinal e dezenas de nações adotam a regulação científica.
+          </p>
+        </div>
       </div>
-    </div>
-
-    <div class="alerta">
-      <div class="alerta-titulo">Regra de ouro dos edibles</div>
-      <p><strong>"Começa baixo, vai devagar."</strong> Com comestíveis, espere pelo menos 2 horas antes de consumir
-        mais. O maior erro é achar que não está fazendo efeito e tomar mais — o resultado pode ser uma experiência muito
-        desconfortável.</p>
     </div>
   </section>
 
-  <!-- SEÇÃO DESTAQUE: USO RESPONSÁVEL -->
-  <div class="destaque" id="uso-responsavel">
-    <div class="destaque-inner">
-      <div class="section-numero">06 — Uso responsável</div>
-      <h2>Como usar com <em>consciência</em></h2>
-      <p>Redução de danos não é incentivo ao uso — é respeito por quem já usa ou vai usar. Informação salva vidas e
-        evita experiências ruins.</p>
 
-      <div class="cards" style="margin-top:28px">
-        <div class="card-dark">
+  <!-- ========================================================================
+       CENA 02: O LABORATÓRIO MOLECULAR & CIÊNCIA (Vídeo: scene_2.mp4)
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-2" data-scene="2">
+    <div class="sw-theater" id="theater-2">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_2_poster.jpg" alt="Laboratório Molecular">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_2.mp4" muted playsinline preload="auto"></video>
+    </div>
 
-          <h4>Set & Setting</h4>
-          <p>O estado mental (set) e o ambiente (setting) são os maiores fatores da sua experiência. Estresse + cannabis
-            = risco maior de ansiedade.</p>
-        </div>
-        <div class="card-dark">
-
-          <h4>Dose e potência</h4>
-          <p>Variedades modernas são muito mais potentes do que décadas atrás. Menos é mais, especialmente com quem está
-            começando.</p>
-        </div>
-        <div class="card-dark">
-
-          <h4>Mistura</h4>
-          <p>Cannabis + álcool + outras substâncias aumenta muito os riscos. Não misture, especialmente com opioides ou
-            benzodiazepínicos.</p>
-        </div>
-        <div class="card-dark">
-
-          <h4>Direção</h4>
-          <p>Cannabis prejudica reflexos e julgamento. Não dirija sob efeito — nunca. O tempo de comprometimento é
-            variável e pode ser longo.</p>
-        </div>
-        <div class="card-dark">
-
-          <h4>Frequência</h4>
-          <p>Uso diário aumenta risco de dependência e tolerância. Ter dias "sem" é uma estratégia eficaz de manutenção
-            da saúde.</p>
-        </div>
-        <div class="card-dark">
-
-          <h4>Consentimento</h4>
-          <p>Nunca ofereça cannabis sem avisar o que é e sua potência. Especialmente em comidas. Isso é uma questão
-            ética e legal.</p>
+    <div class="sw-beats">
+      <!-- Beat 2.1: Sistema Endocanabinoide -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">03 — A Ciência do Corpo</div>
+          <h2>O Sistema <em>Endocanabinoide</em></h2>
+          <p>Você não precisa acender ou consumir nada para ter canabinoides circulando no sangue. O <strong>Sistema Endocanabinoide (SEC)</strong> é uma das maiores redes de receptores celulares do corpo humano, descoberta nos anos 1990 pelo Dr. Raphael Mechoulam.</p>
+          <p style="margin-top: 10px;">Ele funciona como maestro biológico: equilibra humor, sono, imunidade, dor e memória celular produzindo moléculas naturais como a <strong>anandamida</strong> (a molécula da serenidade) e o <strong>2-AG</strong>.</p>
         </div>
       </div>
 
-      <h3>Se a experiência ficar difícil</h3>
-      <p>Experiências de ansiedade ou pânico são mais comuns do que se imagina, especialmente com doses altas ou em
-        ambientes estressantes. Elas passam — e não são perigosas para pessoas saudáveis.</p>
-      <ul class="lista-visual" style="border: 1.5px solid rgba(255,255,255,0.14); padding:0 20px;">
-        <li>
-          <div class="li-icone">01</div>
-          <div>Deite-se num lugar confortável e seguro.</div>
-        </li>
-        <li>
-          <div class="li-icone">02</div>
-          <div>Beba água. Coma algo doce ou salgado.</div>
-        </li>
-        <li>
-          <div class="li-icone">03</div>
-          <div>Respire devagar: 4 segundos inhaling, segura 4, solta 6.</div>
-        </li>
-        <li>
-          <div class="li-icone">04</div>
-          <div>Lembre: vai passar. O efeito tem duração limitada.</div>
-        </li>
-        <li>
-          <div class="li-icone">05</div>
-          <div>Cheirar ou segurar pimenta-do-reino pode atenuar o efeito do THC (pesquisa emergente).</div>
-        </li>
-      </ul>
-    </div>
-  </div>
+      <!-- Beat 2.2: O Cérebro (CB1) -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">03.1 — Mecanismo Neural</div>
+          <h2>O Cérebro <em>(Receptores CB1)</em></h2>
+          <p>Os receptores CB1 concentram-se no hipocampo, córtex e gânglios basais. Ao serem ativados, desaceleram a urgência mecânica do tempo, relaxam a musculatura e expandem o fluxo associativo de ideias.</p>
+          <div class="beat-box" style="max-width: 480px; margin-top: 14px; border-left-color: var(--tape);">
+            <h4>Foco &amp; Percepção</h4>
+            <p>Doses equilibradas induzem introspecção profunda e descompressão de estímulos cotidianos.</p>
+          </div>
+        </div>
+      </div>
 
-  <!-- SEÇÃO 7: SAÚDE -->
-  <section id="saude">
-    <div class="section-numero">07 — Cannabis e saúde</div>
-    <h2>Usos <em>terapêuticos</em> reconhecidos</h2>
-    <p>A pesquisa científica sobre cannabis explodiu na última década. Há evidências sólidas para alguns usos, e
-      emergentes para outros. Aqui está o estado atual da ciência:</p>
+      <!-- Beat 2.3: O Coração -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">03.2 — Sistema Cardiovascular</div>
+          <h2>O <em>Coração</em> &amp; Fluxo</h2>
+          <p>Ocorre vasodilatação periférica imediata: os vasos relaxam e a pressão arterial tende a cair levemente, fazendo o músculo cardíaco compensar com um aumento de <strong>20 a 30 batimentos por minuto</strong>.</p>
+          <div class="beat-box" style="max-width: 480px; margin-top: 14px; border-left-color: var(--rust);">
+            <h4>Atenção Cardíaca</h4>
+            <p>Taquicardia transitória e benigna em pessoas saudáveis, mas que exige cautela e acompanhamento médico para quem possui arritmias ou histórico coronariano prévio.</p>
+          </div>
+        </div>
+      </div>
 
-    <div class="tabela-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Condição</th>
-            <th>Evidência</th>
-            <th>Composto principal</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Epilepsia (síndrome de Dravet e Lennox-Gastaut)</td>
-            <td>Forte (FDA aprovado)</td>
-            <td>CBD</td>
-          </tr>
-          <tr>
-            <td>Dor crônica e neuropática</td>
-            <td>Forte</td>
-            <td>THC/CBD</td>
-          </tr>
-          <tr>
-            <td>Espasticidade em esclerose múltipla</td>
-            <td>Forte</td>
-            <td>THC/CBD</td>
-          </tr>
-          <tr>
-            <td>Náusea e vômito (quimioterapia)</td>
-            <td>Forte</td>
-            <td>THC</td>
-          </tr>
-          <tr>
-            <td>Ansiedade</td>
-            <td>Moderada</td>
-            <td>CBD</td>
-          </tr>
-          <tr>
-            <td>PTSD (estresse pós-traumático)</td>
-            <td>Moderada</td>
-            <td>THC/CBD</td>
-          </tr>
-          <tr>
-            <td>Insônia</td>
-            <td>Moderada</td>
-            <td>THC/CBD</td>
-          </tr>
-          <tr>
-            <td>Autismo (comportamento)</td>
-            <td>Emergente</td>
-            <td>CBD</td>
-          </tr>
-          <tr>
-            <td>Glaucoma</td>
-            <td>Limitada (efeito temporário)</td>
-            <td>THC</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- Beat 2.4: Os Pulmões -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">03.3 — Sistema Respiratório</div>
+          <h2>Os <em>Pulmões</em>: Fumo vs Vapor</h2>
+          <p>A fumaça da combustão de qualquer matéria vegetal queima acima de 600°C, liberando monóxido de carbono e alcatrão que inflamam os alvéolos pulmonares.</p>
+          <div class="beat-box" style="max-width: 480px; margin-top: 14px; border-left-color: var(--tape);">
+            <h4>Redução de Danos Ativa</h4>
+            <p>A vaporização (170°C a 200°C) e os óleos sublinguais entregam os canabinoides e terpenos puros sem atingir o ponto de queima, preservando a saúde respiratória.</p>
+          </div>
+        </div>
+      </div>
 
-    <h3>Dependência — o que a ciência diz</h3>
-    <p>Sim, é possível desenvolver dependência de cannabis — chamada de Transtorno por Uso de Cannabis. Cerca de
-      <strong>9% dos usuários</strong> desenvolvem alguma forma de dependência (comparado a 15% do álcool e 32% da
-      nicotina).
-    </p>
-    <p>Sinais de atenção: usar diariamente, sentir necessidade para relaxar ou dormir, tentar parar e não conseguir,
-      usar mesmo quando prejudica trabalho ou relacionamentos.</p>
+      <!-- Beat 2.5: O Sono e a Fase REM -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">03.4 — Neurobiologia do Descanso</div>
+          <h2>O <em>Sono</em> &amp; A Fase REM</h2>
+          <p>A planta é conhecida por diminuir a latência para dormir, ajudando a desacelerar a mente agitada no fim do dia.</p>
+          <div class="beat-box" style="max-width: 480px; margin-top: 14px; border-left-color: var(--rust);">
+            <h4>A Arquitetura dos Sonhos</h4>
+            <p>O consumo diário pesado suprime a fase REM — o ciclo crucial para consolidação da memória emocional e produção de sonhos nítidos. O segredo está no intervalo e no equilíbrio.</p>
+          </div>
+        </div>
+      </div>
 
-    <div class="alerta">
-      <div class="alerta-titulo">Se precisar de ajuda</div>
-      <p>O CAPS AD (Centro de Atenção Psicossocial – Álcool e Drogas) oferece atendimento gratuito pelo SUS. CAPS AD:
-        <strong>buscar na prefeitura local</strong>. CVV (apoio emocional): <strong>188</strong>. Acolhimento sem
-        julgamento.
-      </p>
+      <!-- Beat 2.6: Alerta Cérebros Jovens & Dependência -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="max-width: 740px; text-align: center;">
+          <div class="beat-tag" style="justify-content: center;">⚠ Fisiologia sem Meias Palavras</div>
+          <h2>Cérebros <em>até 25 anos</em></h2>
+          <div class="sw-alert" style="text-align: left; margin: 18px 0;">
+            <div class="sw-alert-title">Maturação do Córtex Pré-Frontal</div>
+            <p>O cérebro humano está em plena construção neural até os 25 anos de idade. O uso precoce e frequente na adolescência está diretamente associado a prejuízos cognitivos e maior propensão à dependência. <strong>Quanto mais tarde o início, menores os riscos.</strong></p>
+          </div>
+          <p style="font-size: 14.5px; opacity: .88; margin: 0 auto;">
+            <strong>Sobre dependência:</strong> cerca de 9% a 10% dos usuários desenvolvem dependência psicológica (frente a 15% para o álcool e 32% para o tabaco). Identificar o hábito é o primeiro passo de autonomia.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <hr class="divisor">
 
-  <!-- SEÇÃO 8: PARA CADA GRUPO -->
-  <section id="grupos">
-    <div class="section-numero">08 — Para cada pessoa</div>
-    <h2>Orientações por <em>perfil</em></h2>
-    <p>Cada pessoa tem uma relação diferente com a cannabis. Aqui, abordamos grupos específicos com respeito e
-      informação direcionada.</p>
+  <!-- ========================================================================
+       CENA 03: A SALA DE CARTOGRAFIA & OBSERVATÓRIO GLOBAL (Vídeo: scene_3.mp4)
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-3" data-scene="3">
+    <div class="sw-theater" id="theater-3">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_3_poster.jpg" alt="Sala de Mapas">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_3.mp4" muted playsinline preload="auto"></video>
+    </div>
 
-    <div class="acordeon">
+    <div class="sw-beats">
+      <!-- Beat 3.1: Globo 3D Interativo -->
+      <div class="sw-beat align-center">
+        <div class="sw-card">
+          <div class="sw-split-deck">
+            <div>
+              <div class="beat-tag">04 — Geopolítica Global</div>
+              <h2>Cannabis no <em>mundo</em> hoje</h2>
+              <p>
+                O mapa da regulamentação está redesenhando saúde pública, impostos e segurança jurídica. A proibição tornou-se a exceção no mundo desenvolvido:
+              </p>
+              <div class="paises">
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> Uruguai (Legal)</div>
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> Canadá (Legal)</div>
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> Alemanha (Legal)</div>
+                <div class="pais-tag" style="border-color: var(--rust);"><span style="color:var(--rust)">●</span> EUA 24+ Estados</div>
+                <div class="pais-tag" style="border-color: var(--tape);"><span style="color:var(--tape)">●</span> Brasil (Medicinal)</div>
+                <div class="pais-tag" style="border-color: var(--tape);"><span style="color:var(--tape)">●</span> Austrália & Israel</div>
+                <div class="pais-tag" style="border-color: var(--paper-deep);"><span style="color:var(--paper-deep)">●</span> Portugal & Holanda</div>
+              </div>
+              <p style="font-size: 11.5px; margin-top: 14px; color: var(--paper-2); font-family: var(--font-mono);">
+                ↻ Arraste com o mouse ou deslize o dedo para girar o globo em 360°.
+              </p>
+            </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Adolescentes · até 18 anos <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>O cérebro humano se desenvolve até os 25 anos. A cannabis afeta especialmente o hipocampo (memória) e o
-              córtex pré-frontal (decisões, controle de impulsos). Estudos mostram que uso frequente antes dos 16 anos
-              está associado a maior risco de problemas cognitivos e dependência.</p>
-            <p>Se você é adolescente e já experimenta: <strong>saiba o que está usando</strong>, não use só, não misture
-              com álcool, e nunca em situações de risco (escola, carro, esportes). Se sentir que está "precisando" usar,
-              converse com alguém de confiança.</p>
-            <p>Para pais: proibição sem diálogo raramente funciona. Conversa aberta, sem julgamento, é mais eficaz do
-              que punição.</p>
+            <div style="display: flex; justify-content: center;">
+              <div class="globe-wrapper" id="globeContainer">
+                <canvas id="globeCanvas"></canvas>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Adultos jovens · 18–30 anos <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>A maioria dos usuários está nessa faixa. Os riscos são menores do que em adolescentes, mas não
-              inexistentes. Atenção especial a: variedades de alto THC (muito mais potentes hoje), uso como forma de
-              escapar de ansiedade ou problemas emocionais, e o impacto no desempenho acadêmico ou profissional com uso
-              diário.</p>
-            <p><strong>Use com intenção</strong>: saber por que você está usando faz diferença. Recreação, socialização,
-              criatividade — são motivos válidos. Mas se estiver usando para "anestesiar" sentimentos difíceis, esse é
-              um sinal importante.</p>
+      <!-- Beat 3.2: O Cenário no Brasil -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Cenário Nacional</div>
+          <h2>E no <em>Brasil</em>?</h2>
+          <p>O Brasil vive uma transição entre a judicialização e a conquista de direitos estáveis para pacientes e cidadãos.</p>
+          <div class="beat-grid" style="margin-top: 16px;">
+            <div class="beat-box">
+              <h4>Anvisa (RDC 327)</h4>
+              <p>Venda aprovada em farmácias e importação de extratos e óleos com prescrição médica formal.</p>
+            </div>
+            <div class="beat-box">
+              <h4>Autocultivo Conquistado</h4>
+              <p>Mães de crianças com epilepsia e pacientes crônicos conquistaram na Justiça o direito de plantar sem risco penal.</p>
+            </div>
+            <div class="beat-box">
+              <h4>O Debate no STF</h4>
+              <p>Critérios objetivos de peso para uso pessoal, para evitar prisões desproporcionais e discriminação de classe e raça.</p>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Adultos · 30–60 anos <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>Uso recreativo e medicinal são igualmente comuns nessa faixa. Muitos redescobrem a cannabis após anos de
-              afastamento e se surpreendem com a potência das variedades modernas — que podem ser 3–5x mais fortes do
-              que nos anos 80/90.</p>
-            <p>Se tomar medicamentos: <strong>verifique interações com seu médico</strong>. Cannabis pode interferir com
-              anticoagulantes (varfarina), ansiolíticos, antidepressivos e outros. Para dor crônica, insônia ou
-              ansiedade, o uso medicinal com acompanhamento é uma opção legítima.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Idosos · 60+ <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>O uso medicinal entre idosos cresceu muito nos últimos anos — principalmente para dor, insônia e
-              qualidade de vida. O sistema endocanabinoide muda com a idade, e os efeitos podem ser mais pronunciados.
-            </p>
-            <p><strong>Atenção especial a:</strong> risco de tontura e queda (especialmente no início), interações
-              medicamentosas (muito mais comuns nessa faixa), e início de uso sempre com doses muito baixas. A via
-              medicinal (óleos, cápsulas) é geralmente preferível ao fumo. Sempre com acompanhamento médico.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Grávidas e lactantes <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p><strong>Não há dose segura conhecida durante a gravidez ou amamentação.</strong> Os canabinoides cruzam a
-              placenta e são excretados no leite materno. Estudos associam uso durante a gravidez a menor peso ao nascer
-              e alterações no neurodesenvolvimento.</p>
-            <p>Mesmo para náuseas da gravidez (um uso comum), os riscos não são bem estabelecidos. Converse com seu
-              médico ou obstetra sobre alternativas seguras.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Saúde mental <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>Cannabis pode <em>piorar</em> certas condições: psicose, esquizofrenia, transtorno bipolar (especialmente
-              na fase maníaca), e transtorno de pânico. Há evidência de que THC em altas doses pode precipitar episódios
-              psicóticos em pessoas predispostas.</p>
-            <p>Por outro lado, CBD mostra potencial ansiolítico e alguns pesquisadores estudam seu papel no PTSD. A
-              distinção THC/CBD é fundamental aqui. Se tiver histórico de psicose na família ou diagnóstico de
-              esquizofrenia, evite THC.</p>
-            <p><strong>Sempre discuta com seu psiquiatra</strong> antes de usar, especialmente se tomar medicação
-              psiquiátrica.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          No Brasil · aspectos legais <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>No Brasil, a Lei 11.343/2006 distingue entre usuário e traficante, mas não define quantidades. Na
-              prática, quem é pego com pequena quantidade pode ser enquadrado como usuário (sujeito a medidas
-              educativas, não prisão) ou como traficante, a critério do juiz — o que gera muita insegurança jurídica.
-            </p>
-            <p>O STF debate desde 2015 a descriminalização do porte para uso pessoal. Em 2024/2025, o julgamento avança
-              com decisões que tendem à descriminalização, mas ainda sem conclusão definitiva.</p>
-            <p><strong>Praticamente:</strong> portar pequenas quantidades é arriscado, especialmente para jovens negros
-              e periféricos que são desproporcionalmente abordados. Conheça seus direitos: você tem direito a não se
-              incriminar, a ter advogado, e a não ser tratado com violência.</p>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- SEÇÃO 9: PERGUNTAS FREQUENTES -->
-  <section id="perguntas">
-    <div class="section-numero">09 — Dúvidas comuns</div>
-    <h2>Perguntas <em>sem rodeios</em></h2>
 
-    <div class="acordeon">
+  <!-- ========================================================================
+       CENA 04: O SANTUÁRIO DO CHÁ & REDUÇÃO DE DANOS (Vídeo: scene_4.mp4)
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-4" data-scene="4">
+    <div class="sw-theater" id="theater-4">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_4_poster.jpg" alt="Santuário do Chá e Redução de Danos">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_4.mp4" muted playsinline preload="auto"></video>
+    </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Cannabis causa overdose? <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>Não há registro documentado de morte por overdose de cannabis em humanos. A dose letal teórica é
-              astronomicamente alta — impossível de atingir pelo consumo normal. Isso não significa que doses muito
-              altas sejam seguras: podem causar taquicardia, vômitos, pânico e experiências muito desconfortáveis, mas
-              não são fatais em pessoas saudáveis.</p>
+    <div class="sw-beats">
+      <!-- Beat 4.1A: Sativa vs Indica -->
+      <div class="sw-beat align-left">
+        <div class="sw-card">
+          <div class="beat-tag">05.1 — A Polaridade Botânica</div>
+          <h2>Sativa <em>vs</em> Indica</h2>
+          <p>O perfil químico e a combinação de terpenos ditam a velocidade e o tom da experiência no corpo:</p>
+          <div class="beat-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+            <div class="beat-box" style="border-left-color: var(--tape);">
+              <h4>Sativa: A Flor Diurna</h4>
+              <p>Perfil energizante, cerebral e expansivo. Estimula a curiosidade criativa, o foco artístico e o convívio social descontraído, sem gerar peso muscular.</p>
+            </div>
+            <div class="beat-box" style="border-left-color: var(--rust);">
+              <h4>Indica: O Descanso Noturno</h4>
+              <p>Relaxamento físico profundo, alívio de tensões musculares e sedação corporal. Tradicionalmente preferida para o encerramento do dia, alívio de dores e suporte ao sono.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Cannabis é "porta de entrada" para outras drogas? <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>A correlação existe — quem usa outras drogas frequentemente usou cannabis antes. Mas isso não significa
-              causalidade. A maioria dos usuários de cannabis nunca usa drogas mais pesadas. A "porta de entrada" mais
-              frequentemente apontada por pesquisadores é o contexto social (mercado ilegal misturado) e não a
-              substância em si. Em países com cannabis regulada, esse efeito tende a diminuir.</p>
+      <!-- Beat 4.1B: Híbridas & CBD Dominante -->
+      <div class="sw-beat align-right">
+        <div class="sw-card">
+          <div class="beat-tag">05.2 — Equilíbrio &amp; Terapêutica</div>
+          <h2>Híbridas &amp; <em>Linhagens CBD</em></h2>
+          <p>A botânica moderna permite selecionar perfis específicos para cada momento de vida e necessidade clínica:</p>
+          <div class="beat-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+            <div class="beat-box" style="border-left-color: var(--paper-deep);">
+              <h4>Híbridas Balanceadas</h4>
+              <p>Cruzamentos refinados que combinam a clareza mental da sativa com o relaxamento corporal suave da indica, proporcionando funcionalidade no dia a dia.</p>
+            </div>
+            <div class="beat-box" style="border-left-color: var(--tape);">
+              <h4>CBD Dominante</h4>
+              <p>Flores e extratos com alta concentração de CBD e traços mínimos de THC. Entregam ação ansiolítica e anti-inflamatória limpa, sem provocar qualquer alteração de consciência.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Posso usar cannabis e tomar remédios? <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>Depende do remédio. Cannabis é metabolizada pelo sistema enzimático CYP450 no fígado — o mesmo
-              responsável por metabolizar muitos medicamentos. Pode aumentar ou diminuir o nível de anticoagulantes
-              (varfarina), benzodiazepínicos, antidepressivos, imunossupressores e outros. Sempre informe ao seu médico
-              se usa cannabis — sem medo de julgamento.</p>
+      <!-- Beat 4.2: Vias de Consumo & Tabela -->
+      <div class="sw-beat align-right">
+        <div class="sw-card light">
+          <div class="beat-tag">Farmacocinética das Vias</div>
+          <h2>Como cada via <em>age no tempo</em></h2>
+          <div class="sw-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Método</th>
+                  <th>Início</th>
+                  <th>Pico</th>
+                  <th>Duração</th>
+                  <th>Impacto Pulmonar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Fumo (Combustão)</td>
+                  <td>2 a 5 min</td>
+                  <td>30 min</td>
+                  <td>1 a 3h</td>
+                  <td>Alto (alcatrão e calor)</td>
+                </tr>
+                <tr>
+                  <td>Vaporização</td>
+                  <td>3 a 7 min</td>
+                  <td>30 min</td>
+                  <td>1 a 3h</td>
+                  <td>Mínimo (sem queima)</td>
+                </tr>
+                <tr>
+                  <td>Comestíveis (Edibles)</td>
+                  <td>30 min a 2h</td>
+                  <td>2 a 4h</td>
+                  <td>4 a 8h</td>
+                  <td>Zero impacto pulmonar</td>
+                </tr>
+                <tr>
+                  <td>Óleo Sublingual</td>
+                  <td>15 a 45 min</td>
+                  <td>1 a 2h</td>
+                  <td>3 a 6h</td>
+                  <td>Zero impacto pulmonar</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sw-alert" style="margin-top: 14px;">
+            <div class="sw-alert-title">Regra de Ouro dos Comestíveis</div>
+            <p><strong>"Começa baixo, vai devagar."</strong> Espere pelo menos duas horas antes de qualquer dose extra. No fígado, o THC vira <em>11-hidroxi-THC</em>, gerando uma intensidade muito mais pesada e duradoura.</p>
           </div>
         </div>
       </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Quanto tempo fica no exame de sangue/urina? <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>THC é lipossolúvel (se acumula em gordura), o que torna sua detecção longa. Uso ocasional: 3–4 dias na
-              urina. Uso regular: 1–3 semanas. Uso diário crônico: até 30 dias ou mais. No sangue, o efeito ativo dura
-              horas, mas metabólitos podem aparecer por dias. Cabelo pode detectar por meses. Esses valores variam muito
-              com metabolismo individual, hidratação e % de gordura corporal.</p>
-          </div>
+      <!-- Beat 4.3A: Set & Setting + Álcool -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 780px;">
+          <div class="beat-tag" style="justify-content: center;">06.1 — O Estado &amp; O Ambiente</div>
+          <h2>Set, Setting <em>&amp; Misturas</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto 16px;">
+            <strong>O estado psicológico interno (Set) e a segurança do ambiente externo (Setting) definem a experiência.</strong> Nunca consuma sob pressão, pânico ou em locais desconhecidos. Evite misturar com álcool: o etanol multiplica a taxa de absorção de THC no sangue, o estopim clássico para quedas de pressão e mal-estar súbito.
+          </p>
         </div>
       </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          CBD "sem THC" é realmente inofensivo? <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>CBD é bem tolerado pela maioria das pessoas, inclusive pela OMS, que concluiu que não tem potencial de
-              abuso. Mas não é totalmente sem efeitos: pode causar sonolência, diarreia, mudanças de apetite em alguns.
-              A questão maior é a qualidade dos produtos — no mercado não regulado, muitos óleos não contêm a quantidade
-              de CBD anunciada, ou contêm mais THC do que deveriam. Busque produtos com laudos de terceiros.</p>
-          </div>
+      <!-- Beat 4.3B: Trânsito e Consentimento -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 780px;">
+          <div class="beat-tag" style="justify-content: center;">06.2 — Responsabilidade &amp; Ética</div>
+          <h2>Trânsito zero <em>&amp; Consentimento</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto;">
+            <strong>Reflexos motores e julgamento de distância sofrem atraso mensurável: nunca dirija.</strong> E o princípio elementar de integridade: jamais ofereça alimentos com cannabis sem consentimento explícito e aviso prévio de dosagem. O respeito ao limite do outro é inegociável.
+          </p>
         </div>
       </div>
 
-      <div class="acord-item">
-        <button class="acord-btn" onclick="toggleAcord(this)">
-          Posso parar de fumar cigarros usando cannabis? <span class="acord-icone">+</span>
-        </button>
-        <div class="acord-conteudo">
-          <div class="acord-conteudo-inner">
-            <p>Não há evidência robusta de que cannabis ajude na cessação do tabaco. Na verdade, muitos usuários
-              combinam as duas substâncias (baseado com tabaco), o que aumenta os riscos de ambas. Se o objetivo é
-              largar o cigarro, as terapias de reposição de nicotina e medicamentos específicos têm respaldo científico
-              muito maior.</p>
-          </div>
+      <!-- Beat 4.4: Protocolo de Emergência -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="max-width: 800px;">
+          <div class="beat-tag">Acolhimento &amp; Calma</div>
+          <h2>Se a onda <em>bater torto</em></h2>
+          <p>Crises de ansiedade ocorrem quando a dose ultrapassa o limiar pessoal. <strong>Lembre-se: é temporário e vai passar.</strong></p>
+          <ul class="passos-lista">
+            <li><span class="passo-num">01</span>Vá para um local arejado, fresco, silencioso e com pouca luz.</li>
+            <li><span class="passo-num">02</span>Beba água fresca em pequenos goles e consuma um alimento leve com açúcar ou sal.</li>
+            <li><span class="passo-num">03</span>Respiração ritmada: inspire 4 segundos pelo nariz, segure 4 segundos, solte pela boca em 6 segundos.</li>
+            <li><span class="passo-num">04</span>Mastigue ou cheire grãos de pimenta-do-reino preta — o terpeno <em>beta-cariofileno</em> ameniza a sobrecarga do THC.</li>
+            <li><span class="passo-num">05</span>Se precisar de apoio emocional gratuito e sigiloso, ligue para o CVV (188) ou procure o CAPS-AD da sua região.</li>
+          </ul>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- RODAPÉ -->
+
+  <!-- ========================================================================
+       CENA 05: A BANCADA TIWSHIRTS & MANIFESTO (Vídeo: scene_5.mp4)
+       ======================================================================== -->
+  <section class="sw-scene" id="cena-5" data-scene="5">
+    <div class="sw-theater" id="theater-5">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_6_poster.jpg?v=2" alt="Manifesto TiwShirts">
+      <video class="sw-video" src="assets/scroll-world/vid/scene_5.mp4?v=2" muted playsinline preload="auto"></video>
+    </div>
+
+    <div class="sw-beats">
+      <!-- Beat 5.1: Overdose Fatal -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 760px;">
+          <div class="beat-tag" style="justify-content: center;">07.1 — Limite Fisiológico</div>
+          <h2>Existe <em>overdose fatal?</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto; max-width: 680px;">
+            <strong>Não há registro documentado de morte por toxicidade de cannabis em humanos.</strong> Os receptores canabinoides CB1 e CB2 não existem no tronco encefálico, a região que comanda os batimentos cardíacos e a respiração autônoma.
+          </p>
+        </div>
+      </div>
+
+      <!-- Beat 5.2: Porta de Entrada -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 760px;">
+          <div class="beat-tag" style="justify-content: center;">07.2 — O Mito Histórico</div>
+          <h2>A cannabis é <em>"porta de entrada"?</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto; max-width: 680px;">
+            <strong>O vínculo histórico decorreu do mercado clandestino misto, não de bioquímica.</strong> Quando o mesmo ponto ilegal vende todas as substâncias, o contato é forçado. Onde o balcão é regulado e separado, essa correlação estatística desaparece.
+          </p>
+        </div>
+      </div>
+
+      <!-- Beat 5.3: Tempo no Corpo -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 760px;">
+          <div class="beat-tag" style="justify-content: center;">07.3 — Farmacocinética &amp; Detecção</div>
+          <h2>Quanto tempo <em>fica no corpo?</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto; max-width: 680px;">
+            <strong>Por ser lipossolúvel, o THC se fixa nas células de gordura e sai devagar.</strong> Em uso esporádico, os testes acusam metabólitos na urina por 3 a 7 dias. Em usuários diários frequentes, a janela de detecção pode se estender por até 30 dias.
+          </p>
+        </div>
+      </div>
+
+      <!-- Beat 5.4: Gestantes e Lactantes -->
+      <div class="sw-beat align-center">
+        <div class="sw-card light" style="text-align: center; max-width: 760px;">
+          <div class="beat-tag" style="justify-content: center;">07.4 — Gestação &amp; Lactação</div>
+          <h2>Gestantes e lactantes <em>podem usar?</em></h2>
+          <p style="font-size: clamp(17px, 2.1vw, 21px); line-height: 1.6; margin: 0 auto; max-width: 680px;">
+            <strong>Tolerância zero recomendada pela medicina.</strong> Canabinoides cruzam a placenta com facilidade e saem em alta concentração no leite materno, afetando a neurogênese e a arquitetura sináptica em formação.
+          </p>
+        </div>
+      </div>
+
+      <!-- Beat 5.5: Manifesto TiwShirts -->
+      <div class="sw-beat align-center">
+        <div class="sw-card" style="text-align: center; max-width: 820px;">
+          <div class="beat-tag" style="justify-content: center;">Manifesto TiwShirts · Drop 1</div>
+          <div style="margin: 6px 0 16px;">
+            <img src="assets/logo-tiw.png" alt="Tiw" style="width: 130px; height: auto; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.7));">
+          </div>
+          <h2 style="font-size: clamp(38px, 6vw, 76px); margin-bottom: 16px;">Informação é <em>Liberdade.</em></h2>
+          <p style="margin: 0 auto 28px; max-width: 620px; font-size: 17px;">
+            Acreditamos que design autêntico, corte têxtil de alta gramatura, rigor científico e posicionamento corajoso transformam preconceito em discernimento coletivo.
+          </p>
+          <div>
+            <a href="https://tiwshirts.space" target="_blank" class="nav-link nav-loja" style="font-size: 13px; padding: 14px 28px; display: inline-block;">
+              Conhecer as Peças na Loja Tiw ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
   <footer>
     <div class="foot-brand">TiwShirts</div>
-    <p><strong>Manual do Usuário · Cannabis</strong></p>
-    <p>Produzido com base em evidências científicas atualizadas (2025). Este material é informativo e educativo — não
-      substitui orientação médica individualizada.</p>
-
-    <div class="footer-divider"></div>
-
-    <div class="social-links">
-      <!-- TIWDOO INSTAGRAM -->
-      <a href="https://www.instagram.com/tiwdoo" class="social-btn" title="Instagram TiwDoo" target="_blank">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-        </svg>
-      </a>
-      <!-- TIWDOO TIKTOK -->
-      <a href="https://www.tiktok.com/@tiwdoo" class="social-btn" title="TikTok TiwDoo" target="_blank">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.59-1.01V14.5c.01 2.32-.6 4.67-2.12 6.44-1.56 1.82-3.9 2.92-6.27 3.06-2.58.14-5.27-.85-7-2.87-1.87-2.2-2.34-5.46-1.21-8.13 1.05-2.48 3.52-4.3 6.22-4.5 1.34-.1 2.72.08 3.97.6V13.2c-.63-.44-1.42-.64-2.18-.53-1.04.14-1.95.84-2.38 1.79-.47.98-.41 2.21.2 3.1.66.97 1.85 1.47 3 .12.9-.27 1.66-1.05 1.88-1.98.05-.2.08-.41.08-.61V.02z" />
-        </svg>
-      </a>
-      <!-- TIWDOO YOUTUBE -->
-      <a href="https://www.youtube.com/@tiwdoo" class="social-btn" title="YouTube TiwDoo" target="_blank">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.122C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.519a3.016 3.016 0 0 0-2.122 2.122C0 8.058 0 12 0 12s0 3.942.501 5.814a3.016 3.016 0 0 0 2.122 2.122c1.872.519 9.377.519 9.377.519s7.505 0 9.377-.519a3.016 3.016 0 0 0 2.122-2.122C24 15.942 24 12 24 12s0-3.942-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-        </svg>
-      </a>
-      <!-- EDU BOVOLINE -->
-      <a href="https://www.instagram.com/edu.bovoline" class="social-btn" title="Instagram Edu Bovoline" target="_blank"
-        style="margin-left: 20px; border: 1px solid var(--rust);">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-        </svg>
-      </a>
-    </div>
-
+    <p style="font-size: 15px; color: var(--off); margin-bottom: 8px;"><strong>Manual do Usuário · Cannabis</strong></p>
+    <p style="max-width: 640px; margin: 0 auto; font-size: 13px; opacity: .8; color: var(--paper);">
+      Conteúdo embasado em evidências: OMS, UNODC, Anvisa, Lancet, NEJM e PubMed.<br>
+      Este material tem caráter exclusivamente educativo e de redução de danos.
+    </p>
     <div class="producao">
-      Desenvolvido por <a href="https://www.instagram.com/tiwdoo" target="_blank">@tiwDoo</a> &
+      Desenvolvido por <a href="https://www.instagram.com/tiwdoo" target="_blank">@tiwDoo</a> &amp;
       <a href="https://www.instagram.com/edu.bovoline" target="_blank">@edu.bovoline</a>
     </div>
-
-    <p style="margin-top:20px; font-size:12px; color: var(--paper-deep); opacity:0.85;">Fontes: OMS · UNODC · Anvisa ·
-      NEJM · Lancet · PubMed · Transform Drug Policy Foundation · EMCDDA<br>Referências científicas disponíveis mediante
-      solicitação.</p>
   </footer>
 
+
+  <!-- ========================================================================
+       SCRIPTS: SCRUB SYNC + 3D GLOBO + PERSPECTIVA DINÂMICA
+       ======================================================================== -->
   <script>
-    function toggleAcord(btn) {
-      const item = btn.parentElement;
-      const conteudo = item.querySelector('.acord-conteudo');
-      const isOpen = btn.classList.contains('ativo');
+    const SCENES = [
+      { id: 1, title: 'A Estufa Botânica' },
+      { id: 2, title: 'O Laboratório Molecular' },
+      { id: 3, title: 'A Sala de Cartografia' },
+      { id: 4, title: 'O Santuário do Chá & Redução de Danos' },
+      { id: 5, title: 'A Bancada TiwShirts & Manifesto' }
+    ];
 
-      // fecha todos
-      document.querySelectorAll('.acord-btn.ativo').forEach(b => {
-        b.classList.remove('ativo');
-        b.parentElement.querySelector('.acord-conteudo').style.maxHeight = '0';
+    const isPhone = () => window.innerWidth <= 860 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+
+    // No mobile, ajusta o src para as versões otimizadas -m.mp4
+    if (isPhone()) {
+      SCENES.forEach(sc => {
+        const theater = document.getElementById(`theater-${sc.id}`);
+        if (!theater) return;
+        const v = theater.querySelector('.sw-video');
+        if (v) v.src = `assets/scroll-world/vid/scene_${sc.id}-m.mp4?v=2`;
       });
+    }
 
-      if (!isOpen) {
-        btn.classList.add('ativo');
-        conteudo.style.maxHeight = conteudo.scrollHeight + 'px';
+    const scenesData = SCENES.map(sc => {
+      const theaterEl = document.getElementById(`theater-${sc.id}`);
+      const videoEl = theaterEl ? theaterEl.querySelector('.sw-video') : null;
+
+      if (videoEl) {
+        const activateVideo = () => {
+          theaterEl.classList.add('video-active');
+        };
+
+        videoEl.addEventListener('loadeddata', activateVideo);
+        videoEl.addEventListener('canplay', activateVideo);
+        videoEl.addEventListener('seeked', () => {
+          activateVideo();
+          if (videoEl._pendingSeek !== undefined) {
+            const nextSeek = videoEl._pendingSeek;
+            videoEl._pendingSeek = undefined;
+            performSeek(videoEl, nextSeek);
+          }
+        });
+
+        if (videoEl.readyState >= 2) {
+          activateVideo();
+        }
+      }
+
+      return {
+        ...sc,
+        theaterEl,
+        videoEl
+      };
+    });
+
+    function performSeek(video, targetSec) {
+      if (!video) return;
+      if (video.readyState < 1) {
+        if (!video._loadingInitiated) {
+          video._loadingInitiated = true;
+          try { video.load(); } catch (e) {}
+        }
+        return;
+      }
+      if (video.seeking) {
+        video._pendingSeek = targetSec;
+        return;
+      }
+      const maxSec = Math.max(0, (video.duration || 10) - 0.05);
+      const clamped = Math.max(0, Math.min(maxSec, targetSec));
+      if (Math.abs(video.currentTime - clamped) > 0.04) {
+        try {
+          video.currentTime = clamped;
+        } catch (err) {}
       }
     }
 
-    // Animação suave de entrada nas seções
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
+    function jumpToScene(num) {
+      const target = document.getElementById(`cena-${num}`);
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+
+    let activeSceneNum = 1;
+    const hudAct = document.getElementById('hudAct');
+    const hudTitle = document.getElementById('hudTitle');
+    const hudFill = document.getElementById('hudProgressFill');
+    const hudDots = document.querySelectorAll('.hud-dot');
+    const navLinks = document.querySelectorAll('.nav-link[data-scene]');
+
+    let ticking = false;
+    function updateScrollWorld() {
+      const vh = window.innerHeight;
+      const scenesElements = document.querySelectorAll('.sw-scene');
+
+      scenesElements.forEach((sceneEl, idx) => {
+        const rect = sceneEl.getBoundingClientRect();
+        const scObj = scenesData[idx];
+        if (!scObj || !scObj.videoEl) return;
+
+        // Se a cena está no viewport
+        if (rect.bottom > -vh * 0.2 && rect.top < vh * 1.2) {
+          const totalScrollable = rect.height - vh;
+          const currentScrolled = -rect.top;
+          const progress = Math.min(1, Math.max(0, currentScrolled / Math.max(1, totalScrollable)));
+
+          const duration = scObj.videoEl.duration || 10;
+          performSeek(scObj.videoEl, progress * duration);
+
+          if (rect.top <= vh * 0.45 && rect.bottom >= vh * 0.45) {
+            const currentNum = idx + 1;
+            if (activeSceneNum !== currentNum) {
+              activeSceneNum = currentNum;
+              if (hudAct) hudAct.textContent = `CENA 0${currentNum} // 05`;
+              if (hudTitle) hudTitle.textContent = scObj.title;
+
+              hudDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+              navLinks.forEach(l => l.classList.toggle('active', parseInt(l.dataset.scene) === currentNum));
+            }
+            if (hudFill) hudFill.style.width = `${Math.round(progress * 100)}%`;
+          }
         }
       });
-    }, { threshold: 0.1 });
 
-    document.querySelectorAll('section, .destaque').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(24px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      observer.observe(el);
-    });
+      // Inclinação suave 3D nos cartões durante a rolagem
+      const allCards = document.querySelectorAll('.sw-card');
+      const centerY = vh / 2;
 
-    /* --- LÓGICA DO GLOBO TERRESTRE (CANVAS 3D) --- */
+      allCards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        if (cardRect.bottom > -80 && cardRect.top < vh + 80) {
+          const cardCenter = cardRect.top + cardRect.height / 2;
+          const dist = (cardCenter - centerY) / centerY;
+          const tiltX = Math.max(-7, Math.min(7, dist * -5));
+          const translateZ = Math.max(-20, Math.min(12, (1 - Math.abs(dist)) * 16));
+          const opacity = Math.max(0.45, Math.min(1, 1.2 - Math.abs(dist) * 0.55));
+
+          card.style.transform = `perspective(1200px) rotateX(${tiltX.toFixed(1)}deg) translateZ(${translateZ.toFixed(0)}px)`;
+          card.style.opacity = opacity.toFixed(2);
+        }
+      });
+    }
+
+    // Parallax suave com mouse no desktop
+    if (!isPhone()) {
+      window.addEventListener('mousemove', e => {
+        const mouseX = ((e.clientX / window.innerWidth) - 0.5) * 6;
+        const mouseY = ((e.clientY / window.innerHeight) - 0.5) * -6;
+        document.querySelectorAll('.sw-card').forEach(c => {
+          c.style.setProperty('--rx-mouse', `${mouseY.toFixed(1)}deg`);
+          c.style.setProperty('--ry-mouse', `${mouseX.toFixed(1)}deg`);
+        });
+      }, { passive: true });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          try {
+            updateScrollWorld();
+          } finally {
+            ticking = false;
+          }
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateScrollWorld);
+    updateScrollWorld();
+
+    /* --- GLOBO TERRESTRE 3D EM CANVAS (NO FLUXO DA CENA 3) --- */
     (function () {
       const canvas = document.getElementById('globeCanvas');
       if (!canvas) return;
@@ -1460,7 +1327,7 @@
         canvas.width = size * dpr;
         canvas.height = size * dpr;
         ctx.scale(dpr, dpr);
-        radius = size * 0.45;
+        radius = size * 0.44;
       }
 
       function createDots() {
@@ -1476,7 +1343,6 @@
       }
 
       function isLand(lat, lng) {
-        // Mapeamento da máscara ASCII para coordenadas
         const row = Math.floor((90 - lat) / 180 * worldMaskRows.length);
         const col = Math.floor((lng + 180) / 360 * worldMaskRows[0].length);
         if (row >= 0 && row < worldMaskRows.length && col >= 0 && col < worldMaskRows[0].length) {
@@ -1492,8 +1358,8 @@
         if (lat > -35 && lat < -30 && lng > -58 && lng < -53) return 'UY';
         if (lat > 47 && lat < 55 && lng > 5 && lng < 15) return 'DE';
         if (lat > 37 && lat < 42 && lng > -10 && lng < -6) return 'PT';
-        if (lat > 36 && lat < 43 && lng > -9 && lng < 3) return 'ES';   // Espanha
-        if (lat > 37 && lat < 47 && lng > 7 && lng < 18) return 'IT';   // Itália
+        if (lat > 36 && lat < 43 && lng > -9 && lng < 3) return 'ES';
+        if (lat > 37 && lat < 47 && lng > 7 && lng < 18) return 'IT';
         if (lat > -44 && lat < -10 && lng > 113 && lng < 154) return 'AU';
         if (lat > 5 && lat < 21 && lng > 97 && lng < 105) return 'TH';
         if (lat > 51 && lat < 54 && lng > 3 && lng < 8) return 'NL';
@@ -1501,9 +1367,9 @@
         if (lat > 14 && lat < 32 && lng > -118 && lng < -86) return 'MX';
         if (lat > -55 && lat < -22 && lng > -73 && lng < -54) return 'AR';
         if (lat > 48 && lat < 51 && lng > 12 && lng < 18) return 'CZ';
-        if (lat > 41 && lat < 43 && lng > 40 && lng < 46) return 'GE';  // Geórgia
-        if (lat > -35 && lat < -22 && lng > 16 && lng < 33) return 'ZA'; // África do Sul
-        if (lat > 17 && lat < 19 && lng > -78 && lng < -76) return 'JM'; // Jamaica
+        if (lat > 41 && lat < 43 && lng > 40 && lng < 46) return 'GE';
+        if (lat > -35 && lat < -22 && lng > 16 && lng < 33) return 'ZA';
+        if (lat > 17 && lat < 19 && lng > -78 && lng < -76) return 'JM';
         return null;
       }
 
@@ -1514,13 +1380,11 @@
         const tilt = 23.5 * Math.PI / 180;
         const projected = [];
 
-        // 1. O MAPA FUNDO (AZUL MARINHO)
         ctx.beginPath();
         ctx.fillStyle = MAR;
         ctx.arc(width / 2, height / 2, radius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Grade Sutil
         ctx.beginPath();
         ctx.strokeStyle = 'rgba(255,255,255,0.08)';
         ctx.lineWidth = 0.5;
@@ -1536,7 +1400,6 @@
           ctx.stroke();
         }
 
-        // 2. PROJETAR PONTOS (TERRA / PAÍSES)
         for (let i = 0; i < dots.length; i++) {
           const dot = dots[i];
           const p = project(dot.lat, dot.lng, rotationY, tilt);
@@ -1568,12 +1431,10 @@
         const phi = (90 - lat) * Math.PI / 180;
         const theta = (lng + 180) * Math.PI / 180 + rotY;
 
-        // Esférico -> Cartesiano
         let x = radius * Math.sin(phi) * Math.cos(theta);
         let y = -radius * Math.cos(phi);
         let z = radius * Math.sin(phi) * Math.sin(theta);
 
-        // Aplicar inclinação axial (Tilt)
         const yOld = y;
         y = y * Math.cos(tilt) - z * Math.sin(tilt);
         z = yOld * Math.sin(tilt) + z * Math.cos(tilt);
@@ -1615,5 +1476,4 @@
     })();
   </script>
 </body>
-
 </html>
