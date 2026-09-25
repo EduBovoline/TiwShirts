@@ -663,7 +663,7 @@
   <section class="sw-scene" id="cena-1" data-scene="1">
     <div class="sw-theater" id="theater-1">
       <img class="sw-poster" src="assets/scroll-world/stills/scene_1_poster.jpg" alt="Estufa Botânica">
-      <video class="sw-video" src="assets/scroll-world/vid/scene_1.mp4" muted playsinline preload="auto"></video>
+      <video class="sw-video" data-scene="1" muted playsinline preload="metadata"></video>
     </div>
 
     <div class="sw-beats">
@@ -766,7 +766,7 @@
   <section class="sw-scene" id="cena-2" data-scene="2">
     <div class="sw-theater" id="theater-2">
       <img class="sw-poster" src="assets/scroll-world/stills/scene_2_poster.jpg" alt="Laboratório Molecular">
-      <video class="sw-video" src="assets/scroll-world/vid/scene_2.mp4" muted playsinline preload="auto"></video>
+      <video class="sw-video" data-scene="2" muted playsinline preload="none"></video>
     </div>
 
     <div class="sw-beats">
@@ -856,7 +856,7 @@
   <section class="sw-scene" id="cena-3" data-scene="3">
     <div class="sw-theater" id="theater-3">
       <img class="sw-poster" src="assets/scroll-world/stills/scene_3_poster.jpg" alt="Sala de Mapas">
-      <video class="sw-video" src="assets/scroll-world/vid/scene_3.mp4" muted playsinline preload="auto"></video>
+      <video class="sw-video" data-scene="3" muted playsinline preload="none"></video>
     </div>
 
     <div class="sw-beats">
@@ -925,7 +925,7 @@
   <section class="sw-scene" id="cena-4" data-scene="4">
     <div class="sw-theater" id="theater-4">
       <img class="sw-poster" src="assets/scroll-world/stills/scene_4_poster.jpg" alt="Santuário do Chá e Redução de Danos">
-      <video class="sw-video" src="assets/scroll-world/vid/scene_4.mp4" muted playsinline preload="auto"></video>
+      <video class="sw-video" data-scene="4" muted playsinline preload="none"></video>
     </div>
 
     <div class="sw-beats">
@@ -1069,7 +1069,7 @@
   <section class="sw-scene" id="cena-5" data-scene="5">
     <div class="sw-theater" id="theater-5">
       <img class="sw-poster" src="assets/scroll-world/stills/scene_6_poster.jpg?v=2" alt="Manifesto TiwShirts">
-      <video class="sw-video" src="assets/scroll-world/vid/scene_5.mp4?v=2" muted playsinline preload="auto"></video>
+      <video class="sw-video" data-scene="5" muted playsinline preload="none"></video>
     </div>
 
     <div class="sw-beats">
@@ -1170,14 +1170,19 @@
 
     const isPhone = () => window.innerWidth <= 860 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
 
-    // No mobile, ajusta o src para as versões otimizadas -m.mp4
-    if (isPhone()) {
-      SCENES.forEach(sc => {
-        const theater = document.getElementById(`theater-${sc.id}`);
-        if (!theater) return;
-        const v = theater.querySelector('.sw-video');
-        if (v) v.src = `assets/scroll-world/vid/scene_${sc.id}-m.mp4?v=2`;
-      });
+    function getVideoSrc(sceneId) {
+      return isPhone()
+        ? `assets/scroll-world/vid/scene_${sceneId}-m.mp4`
+        : `assets/scroll-world/vid/scene_${sceneId}.mp4`;
+    }
+
+    function initVideo(videoEl, sceneId) {
+      if (!videoEl || videoEl._initDone) return;
+      videoEl._initDone = true;
+      videoEl.src = getVideoSrc(sceneId);
+      try {
+        videoEl.load();
+      } catch (e) {}
     }
 
     const scenesData = SCENES.map(sc => {
@@ -1212,13 +1217,41 @@
       };
     });
 
+    // Inicia imediatamente apenas o vídeo da Cena 1 (dobra de entrada)
+    if (scenesData[0] && scenesData[0].videoEl) {
+      initVideo(scenesData[0].videoEl, 1);
+    }
+
+    // Lazy Loading progressivo inteligente das cenas 2..5 via IntersectionObserver com 800px de margem
+    if ('IntersectionObserver' in window) {
+      const sceneObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const scId = parseInt(entry.target.dataset.scene);
+            const scObj = scenesData.find(s => s.id === scId);
+            if (scObj && scObj.videoEl) {
+              initVideo(scObj.videoEl, scId);
+            }
+          }
+        });
+      }, {
+        rootMargin: "800px 0px"
+      });
+
+      document.querySelectorAll('.sw-scene').forEach(sc => sceneObserver.observe(sc));
+    } else {
+      scenesData.forEach(sc => {
+        if (sc.videoEl) initVideo(sc.videoEl, sc.id);
+      });
+    }
+
     function performSeek(video, targetSec) {
       if (!video) return;
+      if (!video._initDone && video.dataset.scene) {
+        initVideo(video, parseInt(video.dataset.scene));
+      }
       if (video.readyState < 1) {
-        if (!video._loadingInitiated) {
-          video._loadingInitiated = true;
-          try { video.load(); } catch (e) {}
-        }
+        video._pendingSeek = targetSec;
         return;
       }
       if (video.seeking) {
@@ -1249,10 +1282,13 @@
     const hudDots = document.querySelectorAll('.hud-dot');
     const navLinks = document.querySelectorAll('.nav-link[data-scene]');
 
+    // Cache DOM queries uma única vez para 60fps garantidos
+    const scenesElements = Array.from(document.querySelectorAll('.sw-scene'));
+    const allCards = Array.from(document.querySelectorAll('.sw-card'));
+
     let ticking = false;
     function updateScrollWorld() {
       const vh = window.innerHeight;
-      const scenesElements = document.querySelectorAll('.sw-scene');
 
       scenesElements.forEach((sceneEl, idx) => {
         const rect = sceneEl.getBoundingClientRect();
@@ -1284,7 +1320,6 @@
       });
 
       // Inclinação suave 3D nos cartões durante a rolagem
-      const allCards = document.querySelectorAll('.sw-card');
       const centerY = vh / 2;
 
       allCards.forEach(card => {
