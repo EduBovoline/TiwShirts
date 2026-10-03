@@ -45,4 +45,16 @@
       <image:title>Manual do Usuário Ciência e Redução de Danos</image:title>
     </image:image>
   </url>
+  <url>
+    <loc>https://tiwshirts.space/blog</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/blog/quem-tem-atuacao-real-na-pauta-em-sp</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
