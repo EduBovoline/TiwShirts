@@ -83,9 +83,28 @@
   }
   </script>
 
+  <link rel="preload" as="image" href="assets/scroll-world/stills/scene_1_poster.webp" fetchpriority="high">
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/lemon_milk/LEMONMILK-Bold.woff2" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <!-- Meta Pixel Code - TiwShirts Oficial -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2509347146216109');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2509347146216109&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
   
   <style>
     /* ==========================================================================
@@ -93,21 +112,24 @@
        ========================================================================== */
     @font-face {
       font-family: 'Lemon Milk';
-      src: url('assets/fonts/lemon_milk/LEMONMILK-Regular.otf') format('opentype');
+      src: url('assets/fonts/lemon_milk/LEMONMILK-Regular.woff2') format('woff2'),
+           url('assets/fonts/lemon_milk/LEMONMILK-Regular.otf') format('opentype');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Lemon Milk';
-      src: url('assets/fonts/lemon_milk/LEMONMILK-Medium.otf') format('opentype');
+      src: url('assets/fonts/lemon_milk/LEMONMILK-Medium.woff2') format('woff2'),
+           url('assets/fonts/lemon_milk/LEMONMILK-Medium.otf') format('opentype');
       font-weight: 500;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Lemon Milk';
-      src: url('assets/fonts/lemon_milk/LEMONMILK-Bold.otf') format('opentype');
+      src: url('assets/fonts/lemon_milk/LEMONMILK-Bold.woff2') format('woff2'),
+           url('assets/fonts/lemon_milk/LEMONMILK-Bold.otf') format('opentype');
       font-weight: 700;
       font-style: normal;
       font-display: swap;
@@ -115,21 +137,24 @@
 
     @font-face {
       font-family: 'Cinzel';
-      src: url('assets/fonts/cinzel/Cinzel-Regular.otf') format('opentype');
+      src: url('assets/fonts/cinzel/Cinzel-Regular.woff2') format('woff2'),
+           url('assets/fonts/cinzel/Cinzel-Regular.otf') format('opentype');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Cinzel';
-      src: url('assets/fonts/cinzel/Cinzel-Bold.otf') format('opentype');
+      src: url('assets/fonts/cinzel/Cinzel-Bold.woff2') format('woff2'),
+           url('assets/fonts/cinzel/Cinzel-Bold.otf') format('opentype');
       font-weight: 700;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Cinzel';
-      src: url('assets/fonts/cinzel/Cinzel-Black.otf') format('opentype');
+      src: url('assets/fonts/cinzel/Cinzel-Black.woff2') format('woff2'),
+           url('assets/fonts/cinzel/Cinzel-Black.otf') format('opentype');
       font-weight: 900;
       font-style: normal;
       font-display: swap;
@@ -619,6 +644,10 @@
       .nav-links { display: none; }
       .globe-wrapper { max-width: 280px; height: 280px; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      .sw-card { transition: none !important; }
+      html { scroll-behavior: auto !important; }
+    }
   </style>
 </head>
 
@@ -629,7 +658,7 @@
        ======================================================================== -->
   <nav class="top-nav">
     <a href="#top" class="nav-logo">
-      <img src="assets/logo-tiw.png" alt="TiwShirts Logo" class="nav-logo-img">
+      <img src="assets/logo-tiw-sm.webp" alt="TiwShirts Logo" class="nav-logo-img" width="32" height="32" decoding="async">
       TiwShirts
     </a>
     <div class="nav-links">
@@ -669,7 +698,7 @@
        ======================================================================== -->
   <section class="sw-scene" id="cena-1" data-scene="1">
     <div class="sw-theater" id="theater-1">
-      <img class="sw-poster" src="assets/scroll-world/stills/scene_1_poster.jpg" alt="Estufa Botânica">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_1_poster.webp" fetchpriority="high" decoding="async" width="1920" height="1080" alt="Estufa Botânica">
       <video class="sw-video" data-scene="1" muted playsinline preload="metadata"></video>
     </div>
 
@@ -679,7 +708,7 @@
         <div class="sw-card" style="text-align: center; max-width: 860px;">
           <div class="beat-tag" style="justify-content: center;">Edição Oficial · Baseada em Evidências</div>
           <div style="margin: 4px 0 16px;">
-            <img src="assets/logo-tiw.png" alt="TiwShirts" style="width: 160px; max-width: 60vw; height: auto; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.6));">
+            <img src="assets/logo-tiw-sm.webp" alt="TiwShirts" width="160" height="74" decoding="async" style="width: 160px; max-width: 60vw; height: auto; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.6));">
           </div>
           <h1 style="font-size: clamp(42px, 8vw, 88px); margin-bottom: 14px;">
             Manual do<br>Usuário · <em>Cannabis.</em>
@@ -772,7 +801,7 @@
        ======================================================================== -->
   <section class="sw-scene" id="cena-2" data-scene="2">
     <div class="sw-theater" id="theater-2">
-      <img class="sw-poster" src="assets/scroll-world/stills/scene_2_poster.jpg" alt="Laboratório Molecular">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_2_poster.webp" loading="lazy" decoding="async" width="1920" height="1080" alt="Laboratório Molecular">
       <video class="sw-video" data-scene="2" muted playsinline preload="none"></video>
     </div>
 
@@ -862,7 +891,7 @@
        ======================================================================== -->
   <section class="sw-scene" id="cena-3" data-scene="3">
     <div class="sw-theater" id="theater-3">
-      <img class="sw-poster" src="assets/scroll-world/stills/scene_3_poster.jpg" alt="Sala de Mapas">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_3_poster.webp" loading="lazy" decoding="async" width="1920" height="1080" alt="Sala de Mapas">
       <video class="sw-video" data-scene="3" muted playsinline preload="none"></video>
     </div>
 
@@ -931,7 +960,7 @@
        ======================================================================== -->
   <section class="sw-scene" id="cena-4" data-scene="4">
     <div class="sw-theater" id="theater-4">
-      <img class="sw-poster" src="assets/scroll-world/stills/scene_4_poster.jpg" alt="Santuário do Chá e Redução de Danos">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_4_poster.webp" loading="lazy" decoding="async" width="1920" height="1080" alt="Santuário do Chá e Redução de Danos">
       <video class="sw-video" data-scene="4" muted playsinline preload="none"></video>
     </div>
 
@@ -1075,7 +1104,7 @@
        ======================================================================== -->
   <section class="sw-scene" id="cena-5" data-scene="5">
     <div class="sw-theater" id="theater-5">
-      <img class="sw-poster" src="assets/scroll-world/stills/scene_6_poster.jpg?v=2" alt="Manifesto TiwShirts">
+      <img class="sw-poster" src="assets/scroll-world/stills/scene_6_poster.webp" loading="lazy" decoding="async" width="1920" height="1080" alt="Manifesto TiwShirts">
       <video class="sw-video" data-scene="5" muted playsinline preload="none"></video>
     </div>
 
@@ -1129,7 +1158,7 @@
         <div class="sw-card" style="text-align: center; max-width: 820px;">
           <div class="beat-tag" style="justify-content: center;">Manifesto TiwShirts · Drop 1</div>
           <div style="margin: 6px 0 16px;">
-            <img src="assets/logo-tiw.png" alt="Tiw" style="width: 130px; height: auto; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.7));">
+            <img src="assets/logo-tiw-sm.webp" alt="Tiw" width="130" height="60" loading="lazy" decoding="async" style="width: 130px; height: auto; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.7));">
           </div>
           <h2 style="font-size: clamp(38px, 6vw, 76px); margin-bottom: 16px;">Informação é <em>Liberdade.</em></h2>
           <p style="margin: 0 auto 28px; max-width: 620px; font-size: 17px;">
@@ -1329,6 +1358,7 @@
       // Inclinação suave 3D nos cartões durante a rolagem
       const centerY = vh / 2;
 
+      const updates = [];
       allCards.forEach(card => {
         const cardRect = card.getBoundingClientRect();
         if (cardRect.bottom > -80 && cardRect.top < vh + 80) {
@@ -1337,21 +1367,27 @@
           const tiltX = Math.max(-7, Math.min(7, dist * -5));
           const translateZ = Math.max(-20, Math.min(12, (1 - Math.abs(dist)) * 16));
           const opacity = Math.max(0.45, Math.min(1, 1.2 - Math.abs(dist) * 0.55));
-
-          card.style.transform = `perspective(1200px) rotateX(${tiltX.toFixed(1)}deg) translateZ(${translateZ.toFixed(0)}px)`;
-          card.style.opacity = opacity.toFixed(2);
+          updates.push([card, `perspective(1200px) rotateX(${tiltX.toFixed(1)}deg) translateZ(${translateZ.toFixed(0)}px)`, opacity.toFixed(2)]);
         }
+      });
+      updates.forEach(([card, tf, op]) => {
+        card.style.transform = tf;
+        card.style.opacity = op;
       });
     }
 
     // Parallax suave com mouse no desktop
     if (!isPhone()) {
+      let mmTicking = false, mmX = 0, mmY = 0;
       window.addEventListener('mousemove', e => {
-        const mouseX = ((e.clientX / window.innerWidth) - 0.5) * 6;
-        const mouseY = ((e.clientY / window.innerHeight) - 0.5) * -6;
-        document.querySelectorAll('.sw-card').forEach(c => {
-          c.style.setProperty('--rx-mouse', `${mouseY.toFixed(1)}deg`);
-          c.style.setProperty('--ry-mouse', `${mouseX.toFixed(1)}deg`);
+        mmX = ((e.clientX / window.innerWidth) - 0.5) * 6;
+        mmY = ((e.clientY / window.innerHeight) - 0.5) * -6;
+        if (mmTicking) return;
+        mmTicking = true;
+        requestAnimationFrame(() => {
+          document.documentElement.style.setProperty('--rx-mouse', `${mmY.toFixed(1)}deg`);
+          document.documentElement.style.setProperty('--ry-mouse', `${mmX.toFixed(1)}deg`);
+          mmTicking = false;
         });
       }, { passive: true });
     }
