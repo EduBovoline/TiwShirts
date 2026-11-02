@@ -505,7 +505,7 @@ a:hover { color:#F5F5F5; }
   <section id="atacado" style="padding:80px 5vw;border-top:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg, rgba(45,90,39,0.08) 0%, transparent 100%);text-align:center;">
     <div class="fade-up" style="font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:0.2em;color:#C5A880;margin-bottom:10px;">ATACADO B2B · LOJAS E HEADSHOPS</div>
     <h3 class="fade-up" style="font-family:'Lemon Milk',sans-serif;font-weight:600;font-size:clamp(24px,3.5vw,36px);margin:0 0 14px;text-transform:uppercase;">CONDIÇÕES COMERCIAIS PARA LOJISTAS</h3>
-    <p class="fade-up" style="font-size:14px;color:#8E8E93;max-width:620px;margin:0 auto 24px;line-height:1.7;">Markup real de 2.01x com mais de 100% de margem líquida no balcão. Grade completa nas três linhas (Clássica 30.1 a R$ 69 e OverHeavy / OverLight a R$ 89 no atacado), pedido mínimo inicial de 20 a 24 peças e apresentação pronta pra vitrine.</p>
+    <p class="fade-up" style="font-size:14px;color:#8E8E93;max-width:620px;margin:0 auto 24px;line-height:1.7;">Markup de 2.01x com mais de 100% de margem líquida no balcão. Compra mínima de 15 peças com grade livre entre as três linhas e apresentação pronta pra vitrine.</p>
     <button class="fade-up" onClick="{{ openB2bModal }}" style="display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;cursor:pointer;">SOLICITAR CATÁLOGO DE ATACADO →</button>
   </section>
 
@@ -684,7 +684,7 @@ a:hover { color:#F5F5F5; }
           </div>
           <button onClick="{{ closeB2bModal }}" style="background:none;border:none;color:#8E8E93;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;padding:4px;letter-spacing:0.1em;">✕ FECHAR</button>
         </div>
-        <p style="font-size:13px;color:#8E8E93;line-height:1.6;margin:0 0 22px;">Preencha os dados da sua loja ou headshop para baixar a Lâmina Comercial B2B e falar direto com o nosso comercial. Pedido mínimo inicial de 20 a 24 peças.</p>
+        <p style="font-size:13px;color:#8E8E93;line-height:1.6;margin:0 0 22px;">Preencha os dados da sua loja ou headshop para baixar a Lâmina Comercial B2B e falar direto com o comercial. Compra mínima: 15 peças.</p>
         
         <form onSubmit="{{ submitB2B }}" style="display:flex;flex-direction:column;gap:14px;">
           <div>
@@ -883,7 +883,7 @@ class Component extends DCLogic {
     const cidade = document.getElementById("b2b-cidade") ? document.getElementById("b2b-cidade").value : "";
     const zap = document.getElementById("b2b-zap") ? document.getElementById("b2b-zap").value : "";
 
-    const msg = "Salve! Sou " + nome + ", da loja " + loja + " (" + cidade + "). Quero receber a tabela de atacado (pedido mínimo de 20 a 24 peças) e o catálogo oficial da TiwShirts. Meu contato: " + zap;
+    const msg = "Salve! Sou " + nome + ", da loja " + loja + " (" + cidade + "). Quero receber a tabela de atacado (compra mínima de 15 peças) e o catálogo oficial da TiwShirts. Meu contato: " + zap;
 
     // Dispara download da lâmina PDF
     const link = document.createElement("a");
