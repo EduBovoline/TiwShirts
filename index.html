@@ -505,7 +505,7 @@ a:hover { color:#F5F5F5; }
   <section id="atacado" style="padding:80px 5vw;border-top:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg, rgba(45,90,39,0.08) 0%, transparent 100%);text-align:center;">
     <div class="fade-up" style="font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:0.2em;color:#C5A880;margin-bottom:10px;">ATACADO B2B · LOJAS E HEADSHOPS</div>
     <h3 class="fade-up" style="font-family:'Lemon Milk',sans-serif;font-weight:600;font-size:clamp(24px,3.5vw,36px);margin:0 0 14px;text-transform:uppercase;">CONDIÇÕES COMERCIAIS PARA LOJISTAS</h3>
-    <p class="fade-up" style="font-size:14px;color:#8E8E93;max-width:620px;margin:0 auto 24px;line-height:1.7;">Markup de 2.01x com mais de 100% de margem líquida no balcão. Compra mínima de 15 peças com grade livre entre as três linhas e apresentação pronta pra vitrine.</p>
+    <p class="fade-up" style="font-size:14px;color:#8E8E93;max-width:640px;margin:0 auto 24px;line-height:1.7;">Markup de 2.01x com mais de 100% de margem líquida no balcão. Grade completa nas três linhas oficiais e apresentação pronta pra vitrine. Cadastre sua loja para receber a Lâmina Comercial e a tabela de fornecimento.</p>
     <button class="fade-up" onClick="{{ openB2bModal }}" style="display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:500;cursor:pointer;">SOLICITAR CATÁLOGO DE ATACADO →</button>
   </section>
 
@@ -522,8 +522,9 @@ a:hover { color:#F5F5F5; }
           <a href="https://instagram.com/tiwshirts" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:#F5F5F5;font-size:14px;margin-bottom:6px;">@tiwshirts</a>
         </div>
         <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;margin-bottom:10px;">ATENDIMENTO</div>
-          <a href="{{ whatsappFooterLink }}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:#F5F5F5;font-size:14px;">Fale no WhatsApp</a>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;margin-bottom:10px;">PEDIDOS & SUPORTE</div>
+          <button onClick="{{ openCart }}" style="background:none;border:none;padding:0;color:#F5F5F5;font-size:14px;cursor:pointer;display:block;margin-bottom:6px;font-family:'Inter',sans-serif;">Acompanhar Meu Pedido</button>
+          <a href="mailto:contato@tiwshirts.space" style="display:block;text-decoration:none;color:#8E8E93;font-size:13px;">contato@tiwshirts.space</a>
         </div>
       </div>
     </div>
@@ -580,7 +581,7 @@ a:hover { color:#F5F5F5; }
           <div style="margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);">
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
               <div style="font-family:'Lemon Milk',sans-serif;font-size:26px;color:#F5F5F5;">{{ activeLook.price }}</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;">D2C Oficial</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;">Checkout Seguro no Site</div>
             </div>
             
             <sc-if value="{{ activeLook.statusBadge }}" hint-placeholder-val="{{ false }}">
@@ -588,8 +589,7 @@ a:hover { color:#F5F5F5; }
             </sc-if>
 
             <button onClick="{{ addToCart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:600;cursor:pointer;">ADICIONAR AO CARRINHO →</button>
-
-            <a href="{{ activeLook.waLink }}" target="_blank" rel="noopener" style="margin-top:8px;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:#2D5A27;color:#F5F5F5;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;font-weight:500;">OU FALAR NO WHATSAPP</a>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#8E8E93;text-align:center;margin-top:10px;">Pagamento via Pix ou Cartão no checkout · Atualizações por e-mail e WhatsApp</div>
           </div>
         </div>
       </div>
@@ -599,17 +599,20 @@ a:hover { color:#F5F5F5; }
   <!-- CARRINHO (botão flutuante) -->
   <button onClick="{{ openCart }}" style="position:fixed;bottom:24px;right:24px;z-index:90;display:flex;align-items:center;gap:10px;padding:14px 20px;background:#2D5A27;color:#F5F5F5;border:none;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.5);">🛒 CARRINHO <span style="background:#F5F5F5;color:#080808;border-radius:999px;padding:2px 9px;font-weight:700;">{{ cartCount }}</span></button>
 
-  <!-- CARRINHO (gaveta) -->
+  <!-- CARRINHO & CHECKOUT NATIVO (gaveta) -->
   <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;z-index:120;background:rgba(8,8,8,0.94);display:flex;align-items:center;justify-content:center;padding:24px;" onClick="{{ closeCart }}">
-      <div onClick="{{ stopProp }}" style="background:#121212;border:1px solid rgba(255,255,255,0.12);max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:28px;">
+      <div onClick="{{ stopProp }}" style="background:#121212;border:1px solid rgba(255,255,255,0.12);max-width:560px;width:100%;max-height:92vh;overflow:auto;padding:28px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-          <div style="font-family:'Lemon Milk',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase;">Seu Carrinho</div>
+          <div style="font-family:'Lemon Milk',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase;">Checkout & Pedido</div>
           <button onClick="{{ closeCart }}" style="background:none;border:none;color:#8E8E93;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;">✕ FECHAR</button>
         </div>
 
         <sc-if value="{{ showEmptyMessage }}" hint-placeholder-val="{{ false }}">
-          <div style="color:#8E8E93;font-size:14px;padding:30px 0;text-align:center;">Seu carrinho está vazio.</div>
+          <div style="color:#8E8E93;font-size:14px;padding:30px 0;text-align:center;">
+            Seu carrinho está vazio no momento.<br>
+            <span style="font-size:12px;color:#666;">Escolha suas peças na coleção para finalizar a compra aqui mesmo no site.</span>
+          </div>
         </sc-if>
 
         <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{ false }}">
@@ -633,40 +636,94 @@ a:hover { color:#F5F5F5; }
           </div>
 
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;">TOTAL</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;">TOTAL DO PEDIDO</div>
             <div style="font-family:'Lemon Milk',sans-serif;font-size:24px;">{{ cartTotalLabel }}</div>
           </div>
 
           <sc-if value="{{ checkoutResultIsError }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:12px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);border-radius:6px;padding:14px;">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#f87171;font-weight:700;margin-bottom:6px;">✕ NÃO FOI POSSÍVEL FECHAR</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#f87171;font-weight:700;margin-bottom:6px;">✕ NÃO FOI POSSÍVEL PROCESSAR</div>
               <div style="font-size:12px;color:#D1D1D6;line-height:1.5;">{{ checkoutResult.message }}</div>
             </div>
           </sc-if>
 
           <form onSubmit="{{ submitCheckout }}" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
-            <input id="cart-nome" type="text" required aria-label="Nome completo" placeholder="Nome completo" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
-            <input id="cart-phone" type="tel" required aria-label="WhatsApp com DDD" placeholder="WhatsApp com DDD (11) 99999-9999" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
-            <input id="cart-email" type="email" aria-label="E-mail" placeholder="E-mail (opcional)" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
-            <button type="submit" style="margin-top:4px;padding:15px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:600;cursor:pointer;">FECHAR PEDIDO →</button>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-bottom:2px;">1. DADOS PARA ENTREGA E RASTREAMENTO</div>
+            <input id="cart-nome" type="text" required aria-label="Nome completo" placeholder="Nome completo *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <input id="cart-email" type="email" required aria-label="E-mail para acompanhamento" placeholder="E-mail para rastreio *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+              <input id="cart-phone" type="tel" required aria-label="WhatsApp para avisos" placeholder="WhatsApp c/ DDD *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            </div>
+            <div style="display:grid;grid-template-columns:130px 1fr;gap:10px;">
+              <input id="cart-cep" type="text" required aria-label="CEP" placeholder="CEP *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+              <input id="cart-address" type="text" required aria-label="Endereço de entrega" placeholder="Rua, número, bairro, cidade/UF *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            </div>
+
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-top:6px;">2. FORMA DE PAGAMENTO NO CHECKOUT</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <button type="button" onClick="{{ selectPayPix }}" style="{{ payPixBtnStyle }}">⚡ PIX INSTANTÂNEO</button>
+              <button type="button" onClick="{{ selectPayCard }}" style="{{ payCardBtnStyle }}">💳 CARTÃO DE CRÉDITO</button>
+            </div>
+
+            <button type="submit" style="margin-top:8px;padding:16px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:700;cursor:pointer;">PAGAR E FINALIZAR PEDIDO →</button>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;text-align:center;">Você receberá a confirmação e o código de rastreio por e-mail e no WhatsApp cadastrado.</div>
           </form>
         </sc-if>
 
         <sc-if value="{{ checkoutResultIsSuccess }}" hint-placeholder-val="{{ false }}">
-          <div style="margin-top:16px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.35);border-radius:6px;padding:16px;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ade80;font-weight:700;margin-bottom:6px;">✓ PEDIDO RESERVADO</div>
-            <div style="font-size:13px;color:#D1D1D6;line-height:1.5;">Pedido <strong>{{ checkoutResult.orderId }}</strong> · {{ checkoutResultTotalLabel }}</div>
-            <div style="font-size:12px;color:#8E8E93;line-height:1.5;margin-top:8px;">Seu estoque já está reservado por 30 minutos. Conclua o pagamento abaixo.</div>
+          <div style="margin-top:8px;background:#0d0d0d;border:1px solid rgba(74,222,128,0.35);border-radius:6px;padding:20px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ade80;font-weight:700;">✓ PEDIDO {{ checkoutResult.orderId }}</div>
+              <div style="font-family:'Lemon Milk',sans-serif;font-size:18px;color:#F5F5F5;">{{ checkoutResultTotalLabel }}</div>
+            </div>
 
-            <sc-if value="{{ mercadopagoConfigured }}" hint-placeholder-val="{{ false }}">
-              <button onClick="{{ payWithMercadoPago }}" style="margin-top:12px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:#009ee3;color:#fff;border:none;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">PAGAR NO MERCADO PAGO (Pix/Cartão) →</button>
+            <!-- BLOCO DE PAGAMENTO PIX NA TELA -->
+            <sc-if value="{{ showPixPaymentBox }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#141414;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:16px;margin-top:12px;text-align:center;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C5A880;letter-spacing:0.08em;margin-bottom:10px;">ESCANEIE O QR CODE OU COPIE O CÓDIGO PIX ABAIXO</div>
+                <div style="background:#fff;padding:10px;border-radius:6px;display:inline-block;margin-bottom:12px;">
+                  <img src="{{ checkoutResult.pixQrUrl }}" alt="QR Code Pix TiwShirts" style="width:190px;height:190px;display:block;" />
+                </div>
+                <div style="text-align:left;margin-bottom:10px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;margin-bottom:4px;">PIX COPIA E COLA:</div>
+                  <input type="text" readonly value="{{ checkoutResult.pixCode }}" aria-label="Código Pix Copia e Cola" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#D1D1D6;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;" />
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button type="button" onClick="{{ copyPixCode }}" style="flex:1;padding:12px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">{{ pixCopiedLabel }}</button>
+                  <button type="button" onClick="{{ confirmPixPaid }}" style="flex:1;padding:12px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">JÁ REALIZEI O PIX →</button>
+                </div>
+              </div>
             </sc-if>
 
-            <sc-if value="{{ checkoutResult.mpError }}" hint-placeholder-val="{{ false }}">
-              <div style="margin-top:10px;font-size:12px;color:#f87171;line-height:1.4;">{{ checkoutResult.mpError }}</div>
+            <!-- BLOCO DE PAGAMENTO CARTÃO -->
+            <sc-if value="{{ showCardPaymentBox }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#141414;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:16px;margin-top:12px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C5A880;letter-spacing:0.06em;margin-bottom:10px;">PAGAMENTO COM CARTÃO DE CRÉDITO</div>
+                <sc-if value="{{ checkoutResult.mpError }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-bottom:10px;font-size:12px;color:#f59e0b;line-height:1.5;">{{ checkoutResult.mpError }}</div>
+                </sc-if>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button type="button" onClick="{{ payWithMercadoPago }}" style="flex:1;padding:13px;background:#009ee3;color:#fff;border:none;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">ABRIR CHECKOUT DE CARTÃO →</button>
+                  <button type="button" onClick="{{ switchOrderToPix }}" style="padding:13px;background:rgba(255,255,255,0.08);color:#F5F5F5;border:1px solid rgba(255,255,255,0.15);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;">PAGAR COM PIX NA TELA</button>
+                </div>
+              </div>
             </sc-if>
 
-            <a href="{{ checkoutWaLink }}" target="_blank" rel="noopener" style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#25D366;color:#080808;text-decoration:none;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;">OU FECHAR NO WHATSAPP →</a>
+            <!-- LINHA DO TEMPO DE ACOMPANHAMENTO DO PEDIDO -->
+            <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C5A880;letter-spacing:0.08em;margin-bottom:12px;">STATUS E ACOMPANHAMENTO DO PEDIDO</div>
+              <div style="display:flex;flex-direction:column;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11.5px;">
+                <div style="color:#4ade80;">✓ 1. Pedido registrado e estoque reservado</div>
+                <div style="{{ step2Style }}">{{ step2Label }}</div>
+                <div style="color:#8E8E93;">○ 3. Separação, conferência e vedação no Pote Hermético</div>
+                <div style="color:#8E8E93;">○ 4. Despacho na transportadora e envio do código de rastreio</div>
+              </div>
+              <div style="margin-top:14px;background:rgba(45,90,39,0.18);border:1px solid rgba(74,222,128,0.25);padding:12px;border-radius:4px;font-size:12px;color:#D1D1D6;line-height:1.6;">
+                As atualizações de cada etapa e o código de rastreio são enviados automaticamente para:<br>
+                • <strong>E-mail:</strong> {{ checkoutResult.email }}<br>
+                • <strong>WhatsApp (avisos automáticos):</strong> {{ checkoutResult.phone }}
+              </div>
+            </div>
           </div>
         </sc-if>
       </div>
@@ -684,8 +741,15 @@ a:hover { color:#F5F5F5; }
           </div>
           <button onClick="{{ closeB2bModal }}" style="background:none;border:none;color:#8E8E93;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;padding:4px;letter-spacing:0.1em;">✕ FECHAR</button>
         </div>
-        <p style="font-size:13px;color:#8E8E93;line-height:1.6;margin:0 0 22px;">Preencha os dados da sua loja ou headshop para baixar a Lâmina Comercial B2B e falar direto com o comercial. Compra mínima: 15 peças.</p>
+        <p style="font-size:13px;color:#8E8E93;line-height:1.6;margin:0 0 22px;">Preencha os dados da sua loja ou headshop para baixar a Lâmina Comercial B2B. Nossa equipe enviará a tabela e as condições comerciais para o seu e-mail e WhatsApp de cadastro.</p>
         
+        <sc-if value="{{ b2bSuccess }}" hint-placeholder-val="{{ false }}">
+          <div style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.35);border-radius:6px;padding:18px;margin-bottom:14px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ade80;font-weight:700;margin-bottom:6px;">✓ CREDENCIAMENTO REGISTRADO ({{ b2bProtocol }})</div>
+            <div style="font-size:13px;color:#D1D1D6;line-height:1.6;">O download da Lâmina Comercial PDF foi iniciado. Você receberá as condições de fornecimento diretamente no e-mail e WhatsApp cadastrados.</div>
+          </div>
+        </sc-if>
+
         <form onSubmit="{{ submitB2B }}" style="display:flex;flex-direction:column;gap:14px;">
           <div>
             <label for="b2b-nome" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">NOME DO RESPONSÁVEL *</label>
@@ -695,17 +759,21 @@ a:hover { color:#F5F5F5; }
             <label for="b2b-loja" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">NOME DA LOJA OU INSTAGRAM *</label>
             <input id="b2b-loja" type="text" required placeholder="Ex: Loja Raiz ou @lojaexemplo" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
           </div>
+          <div>
+            <label for="b2b-email" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">E-MAIL COMERCIAL *</label>
+            <input id="b2b-email" type="email" required placeholder="contato@sualoja.com.br" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+          </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <div>
               <label for="b2b-cidade" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">CIDADE / UF *</label>
               <input id="b2b-cidade" type="text" required placeholder="Ex: Sorocaba / SP" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
             </div>
             <div>
-              <label for="b2b-zap" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">WHATSAPP COMERCIAL *</label>
+              <label for="b2b-zap" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">WHATSAPP DE CADASTRO *</label>
               <input id="b2b-zap" type="tel" required placeholder="(15) 99999-9999" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
             </div>
           </div>
-          <button type="submit" style="margin-top:8px;background:#2D5A27;color:#F5F5F5;border:none;padding:15px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">SOLICITAR CATÁLOGO & LÂMINA PDF →</button>
+          <button type="submit" style="margin-top:8px;background:#2D5A27;color:#F5F5F5;border:none;padding:15px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">BAIXAR LÂMINA PDF & CADASTRAR LOJA →</button>
           <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;text-align:center;">Atendimento exclusivo para lojistas e revendedores autorizados.</div>
         </form>
       </div>
@@ -716,18 +784,52 @@ a:hover { color:#F5F5F5; }
 
 </x-dc>
 <script type="text/x-dc" data-dc-script>
-const WHATSAPP = "5515981512083";
 const GREEN = "#2D5A27";
-// Backend de estoque (2 camadas). Em produção, troque pelo domínio do backend (Render/Railway).
-const BACKEND_URL = (typeof window !== "undefined" && window.TIW_BACKEND_URL) || "http://localhost:3333";
-
-function waLink(text) {
-  return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(text);
-}
+const BACKEND_URL = (typeof window !== "undefined" && window.TIW_BACKEND_URL) || "";
 
 function fmtPrice(n) {
   const v = Number(n) || 0;
   return "R$ " + v.toFixed(2).replace(".", ",");
+}
+
+function emvField(id, val) {
+  const s = String(val);
+  const len = String(s.length).padStart(2, "0");
+  return id + len + s;
+}
+
+function crc16ccitt(str) {
+  let crc = 0xffff;
+  for (let i = 0; i < str.length; i++) {
+    crc ^= str.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if ((crc & 0x8000) !== 0) {
+        crc = ((crc << 1) ^ 0x1021) & 0xffff;
+      } else {
+        crc = (crc << 1) & 0xffff;
+      }
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function buildLocalPixPayload(amount, txid) {
+  const gui = emvField("00", "br.gov.bcb.pix");
+  const keyField = emvField("01", "+5515981512083");
+  const mai = emvField("26", gui + keyField);
+  const cleanTxid = String(txid || "TIWSHIRTS").replace(/[^a-zA-Z0-9]/g, "").slice(0, 25) || "TIW";
+  const payload =
+    emvField("00", "01") +
+    mai +
+    emvField("52", "0000") +
+    emvField("53", "986") +
+    (amount > 0 ? emvField("54", Number(amount).toFixed(2)) : "") +
+    emvField("58", "BR") +
+    emvField("59", "TIWSHIRTS") +
+    emvField("60", "SOROCABA") +
+    emvField("62", emvField("05", cleanTxid)) +
+    "6304";
+  return payload + crc16ccitt(payload);
 }
 
 class Component extends DCLogic {
@@ -738,12 +840,17 @@ class Component extends DCLogic {
     variantIdx: 0,
     selectedSizeIdx: 0,
     b2bModalOpen: false,
+    b2bSuccess: false,
+    b2bProtocol: "",
     cart: [],
     cartOpen: false,
+    paymentMethod: "pix",
+    pixCopied: false,
+    pixConfirmed: false,
     checkoutResult: null,
   };
 
-  catalog = null;   // catálogo vivo vindo do backend (/api/catalog)
+  catalog = null;
   leadBlank = "2 a 4 dias";
   leadReprint = "7 a 10 dias";
   mercadopagoConfigured = false;
@@ -872,20 +979,58 @@ class Component extends DCLogic {
   }
 
   closeModal = () => this.setState({ modalOpen: false });
-  openB2bModal = () => this.setState({ b2bModalOpen: true });
+  openB2bModal = () => this.setState({ b2bModalOpen: true, b2bSuccess: false });
   closeB2bModal = () => this.setState({ b2bModalOpen: false });
   stopProp = (e) => e.stopPropagation();
 
-  submitB2B = (e) => {
+  selectPayPix = () => this.setState({ paymentMethod: "pix" });
+  selectPayCard = () => this.setState({ paymentMethod: "card" });
+  switchOrderToPix = () => {
+    if (this.state.checkoutResult) {
+      this.setState({ checkoutResult: { ...this.state.checkoutResult, paymentMethod: "pix" } });
+    }
+  };
+
+  copyPixCode = () => {
+    const code = this.state.checkoutResult && this.state.checkoutResult.pixCode;
+    if (code && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).catch(() => {});
+    }
+    this.setState({ pixCopied: true });
+    setTimeout(() => this.setState({ pixCopied: false }), 3500);
+  };
+
+  confirmPixPaid = () => {
+    this.setState({ pixConfirmed: true });
+    try {
+      const saved = JSON.parse(localStorage.getItem("tiw_last_order") || "null");
+      if (saved) {
+        saved.pixConfirmed = true;
+        localStorage.setItem("tiw_last_order", JSON.stringify(saved));
+      }
+    } catch (e) {}
+  };
+
+  submitB2B = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
     const nome = document.getElementById("b2b-nome") ? document.getElementById("b2b-nome").value : "";
     const loja = document.getElementById("b2b-loja") ? document.getElementById("b2b-loja").value : "";
+    const email = document.getElementById("b2b-email") ? document.getElementById("b2b-email").value : "";
     const cidade = document.getElementById("b2b-cidade") ? document.getElementById("b2b-cidade").value : "";
     const zap = document.getElementById("b2b-zap") ? document.getElementById("b2b-zap").value : "";
 
-    const msg = "Salve! Sou " + nome + ", da loja " + loja + " (" + cidade + "). Quero receber a tabela de atacado (compra mínima de 15 peças) e o catálogo oficial da TiwShirts. Meu contato: " + zap;
+    let protocol = "B2B-" + Math.floor(10000 + Math.random() * 90000);
+    try {
+      const res = await fetch(BACKEND_URL + "/api/b2b", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, loja, email, cidade, zap }),
+      });
+      const data = await res.json();
+      if (data && data.protocol) protocol = data.protocol;
+    } catch (err) {}
 
-    // Dispara download da lâmina PDF
+    // Dispara download automático da lâmina PDF sem redirecionar para WhatsApp
     const link = document.createElement("a");
     link.href = "assets/Lamina_Comercial_Atacado_TiwShirts.pdf";
     link.download = "Lamina_Comercial_Atacado_TiwShirts.pdf";
@@ -894,25 +1039,22 @@ class Component extends DCLogic {
     link.click();
     document.body.removeChild(link);
 
-    // Abre WhatsApp comercial
-    window.open(waLink(msg), "_blank");
-
-    this.setState({ b2bModalOpen: false });
+    this.setState({ b2bSuccess: true, b2bProtocol: protocol });
   };
 
   getDefaultSizes(variantIdx) {
     if (variantIdx === 2) {
       return [
-        { sku: "G1", size: "G1", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
-        { sku: "G2", size: "G2", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
-        { sku: "G3", size: "G3", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+        { sku: "G1", size: "G1", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
+        { sku: "G2", size: "G2", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
+        { sku: "G3", size: "G3", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
       ];
     }
     return [
-      { sku: "P", size: "P", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
-      { sku: "M", size: "M", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
-      { sku: "G", size: "G", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
-      { sku: "GG", size: "GG", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+      { sku: "P", size: "P", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
+      { sku: "M", size: "M", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
+      { sku: "G", size: "G", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
+      { sku: "GG", size: "GG", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
     ];
   }
 
@@ -932,15 +1074,15 @@ class Component extends DCLogic {
       ? backendOption.price
       : (parseFloat((variant.price || "0").replace(/[^0-9,]/g, "").replace(",", ".")) || 0);
 
-    const itemSku = size.sku || (active.id + "-" + this.state.variantIdx + "-" + size.size);
+    const itemSku = size.sku || (active.id + "_" + this.state.variantIdx + "_" + size.size);
     const existing = this.state.cart.find((c) => c.sku === itemSku);
     let cart;
     if (existing) {
-      cart = this.state.cart.map((c) => (c.sku === size.sku ? { ...c, qty: c.qty + 1 } : c));
+      cart = this.state.cart.map((c) => (c.sku === itemSku ? { ...c, qty: c.qty + 1 } : c));
     } else {
       cart = [...this.state.cart, { sku: itemSku, name: active.name, fit: variant.fit, size: size.size, price, qty: 1, status: size.status }];
     }
-    this.setState({ cart, cartOpen: true });
+    this.setState({ modalOpen: false, cart, cartOpen: true, checkoutResult: null, pixConfirmed: false });
   };
 
   changeQty = (index, delta) => {
@@ -955,62 +1097,119 @@ class Component extends DCLogic {
     this.setState({ cart: this.state.cart.filter((_, i) => i !== index) });
   };
 
-  openCart = () => this.setState({ cartOpen: true, checkoutResult: null });
+  openCart = () => {
+    let savedOrder = this.state.checkoutResult;
+    if (!savedOrder && this.state.cart.length === 0) {
+      try {
+        savedOrder = JSON.parse(localStorage.getItem("tiw_last_order") || "null");
+      } catch (e) {}
+    }
+    this.setState({ cartOpen: true, checkoutResult: savedOrder });
+  };
+
   closeCart = () => this.setState({ cartOpen: false });
 
   submitCheckout = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
     const name = (document.getElementById("cart-nome") && document.getElementById("cart-nome").value) || "";
-    const phone = (document.getElementById("cart-phone") && document.getElementById("cart-phone").value) || "";
     const email = (document.getElementById("cart-email") && document.getElementById("cart-email").value) || "";
-    const items = this.state.cart.map((c) => ({ sku: c.sku, qty: c.qty }));
+    const phone = (document.getElementById("cart-phone") && document.getElementById("cart-phone").value) || "";
+    const cep = (document.getElementById("cart-cep") && document.getElementById("cart-cep").value) || "";
+    const address = (document.getElementById("cart-address") && document.getElementById("cart-address").value) || "";
+    const paymentMethod = this.state.paymentMethod || "pix";
+
+    const items = this.state.cart.map((c) => ({
+      sku: c.sku,
+      qty: c.qty,
+      price: c.price,
+      name: c.name,
+      fit: c.fit,
+      size: c.size,
+    }));
     if (!items.length) return;
 
-    let backendSuccess = false;
+    const totalAmount = this.state.cart.reduce((s, c) => s + c.price * c.qty, 0);
+
     try {
       const res = await fetch(BACKEND_URL + "/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customer: { name, phone, email }, items }),
+        body: JSON.stringify({
+          customer: { name, email, phone, cep, address },
+          items,
+          payment_method: paymentMethod,
+        }),
       });
       const data = await res.json();
       if (data && data.success) {
-        backendSuccess = true;
-        this.setState({ cart: [], checkoutResult: { type: "success", orderId: data.order_id, total: data.total } });
+        const pixCode = data.pix_code || buildLocalPixPayload(data.total || totalAmount, data.order_id);
+        const pixQrUrl = data.pix_qr_url || ("https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" + encodeURIComponent(pixCode));
+        const resultObj = {
+          type: "success",
+          orderId: data.order_id,
+          total: data.total || totalAmount,
+          paymentMethod,
+          pixCode,
+          pixQrUrl,
+          initPoint: data.init_point || null,
+          name,
+          email,
+          phone,
+          cep,
+          address,
+        };
+        try { localStorage.setItem("tiw_last_order", JSON.stringify(resultObj)); } catch (e) {}
+        this.setState({ cart: [], checkoutResult: resultObj, pixConfirmed: false });
+        if (paymentMethod === "card" && data.init_point) {
+          window.location.href = data.init_point;
+        }
         return;
-      } else if (data && data.error && !data.error.includes("offline")) {
+      } else if (data && data.error) {
         this.setState({ checkoutResult: { type: "error", message: data.error } });
         return;
       }
     } catch (err) {
-      // Backend offline: segue para checkout direto no WhatsApp sem perder a venda
+      // Fallback local na própria tela (zero WhatsApp)
     }
 
-    if (!backendSuccess) {
-      const cartSummary = this.state.cart.map((c) => `• ${c.qty}x ${c.name} (${c.fit}), Tam ${c.size} · ${fmtPrice(c.price * c.qty)}`).join("\n");
-      const totalAmount = this.state.cart.reduce((s, c) => s + c.price * c.qty, 0);
-      const totalLabel = fmtPrice(totalAmount);
-      const waText = `Salve TiwShirts! Quero fechar meu pedido feito no site:\n\n${cartSummary}\n\nTotal: ${totalLabel}\nNome: ${name || "Cliente"}\nWhatsApp: ${phone || ""}\n${email ? "E-mail: " + email + "\n" : ""}\nComo faço o Pix para envio?`;
-      
-      const orderId = "PED-" + Math.floor(1000 + Math.random() * 9000);
-      this.setState({ cart: [], checkoutResult: { type: "success", orderId, total: totalAmount } });
-      window.open(waLink(waText), "_blank");
-    }
+    const orderId = "TIW-" + Date.now().toString(36).toUpperCase().slice(-4) + "-" + Math.floor(100 + Math.random() * 900);
+    const pixCode = buildLocalPixPayload(totalAmount, orderId);
+    const pixQrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" + encodeURIComponent(pixCode);
+    const resultObj = {
+      type: "success",
+      orderId,
+      total: totalAmount,
+      paymentMethod,
+      pixCode,
+      pixQrUrl,
+      initPoint: null,
+      name,
+      email,
+      phone,
+      cep,
+      address,
+    };
+    try { localStorage.setItem("tiw_last_order", JSON.stringify(resultObj)); } catch (e) {}
+    this.setState({ cart: [], checkoutResult: resultObj, pixConfirmed: false });
   };
 
   payWithMercadoPago = async () => {
-    const orderId = this.state.checkoutResult && this.state.checkoutResult.orderId;
-    if (!orderId) return;
+    const order = this.state.checkoutResult;
+    if (!order || !order.orderId) return;
+    if (order.initPoint) {
+      window.location.href = order.initPoint;
+      return;
+    }
     try {
-      const res = await fetch(BACKEND_URL + `/api/orders/${orderId}/pay`, { method: "POST", headers: { "Content-Type": "application/json" } });
+      const res = await fetch(BACKEND_URL + `/api/orders/${order.orderId}/pay`, { method: "POST", headers: { "Content-Type": "application/json" } });
       const data = await res.json();
       if (data && data.init_point) {
         window.location.href = data.init_point;
       } else {
-        this.setState({ checkoutResult: { ...this.state.checkoutResult, mpError: (data && data.error) || "Não foi possível iniciar o pagamento." } });
+        this.setState({ checkoutResult: { ...order, mpError: "Gateway de cartão em manutenção no momento. Você pode concluir agora mesmo com o QR Code Pix na tela." } });
       }
     } catch (err) {
-      this.setState({ checkoutResult: { ...this.state.checkoutResult, mpError: "Backend offline. Use o WhatsApp para pagar." } });
+      this.setState({ checkoutResult: { ...order, mpError: "Gateway de cartão indisponível no momento. Clique ao lado para pagar com o QR Code Pix imediato na tela." } });
     }
   };
 
@@ -1027,7 +1226,6 @@ class Component extends DCLogic {
         }
       })
       .catch(() => {
-        // Backend offline: o site segue funcional no fallback WhatsApp, sem status real.
         this.catalog = null;
       });
   }
@@ -1069,7 +1267,6 @@ class Component extends DCLogic {
     const imgFrom = variant.imgFrom || 0;
     const activeImage = active.images[this.state.activeImageIdx] || active.images[imgFrom] || active.images[0];
 
-    // Catálogo vivo: sobrepõe tamanhos e status do backend (ordem de variantes = ordem do catálogo)
     const backendProduct = this.catalogById[active.id];
     const backendOption = backendProduct && backendProduct.options ? backendProduct.options[this.state.variantIdx] : null;
     const sizes = (backendOption && backendOption.sizes && backendOption.sizes.length)
@@ -1107,20 +1304,6 @@ class Component extends DCLogic {
       },
     } : null;
 
-    let waMsg;
-    if (selectedSize) {
-      if (selectedSize.status === "PRONTA_ENTREGA") {
-        waMsg = `Salve TiwShirts! Quero fechar agora a camiseta "${active.name}" (${variant.fit}), tamanho ${selectedSize.size}. Vi no site que tem PRONTA-ENTREGA. Como faço o Pix para envio?`;
-      } else if (selectedSize.status === "SOB_ENCOMENDA") {
-        waMsg = `Salve TiwShirts! Quero a camiseta "${active.name}" (${variant.fit}), tamanho ${selectedSize.size}. Vi que está sob encomenda (${selectedSize.lead}). Quero garantir a minha!`;
-      } else {
-        waMsg = `Salve TiwShirts! Quero a camiseta "${active.name}" (${variant.fit}), tamanho ${selectedSize.size}. Vi que está esgotada (${selectedSize.lead}). Me avisa quando voltar?`;
-      }
-    } else {
-      waMsg = `Oi! Quero a camiseta "${active.name}" na modelagem ${variant.fit}. Gostaria de confirmar disponibilidade.`;
-    }
-    const waLinkUrl = waLink(waMsg);
-
     const looks = this.looksData.map((look, i) => ({
       id: look.id,
       name: look.name,
@@ -1157,7 +1340,6 @@ class Component extends DCLogic {
       hasSizes: sizes.length > 0,
       sizes: sizeButtons,
       statusBadge,
-      
       images: active.images.map((img, ii) => ({
         dotStyle: {
           width: "8px",
@@ -1168,7 +1350,6 @@ class Component extends DCLogic {
         },
         select: () => this.setState({ activeImageIdx: ii }),
       })),
-      waLink: waLinkUrl,
     };
 
     const cartCount = this.state.cart.reduce((s, c) => s + c.qty, 0);
@@ -1181,7 +1362,7 @@ class Component extends DCLogic {
       qty: c.qty,
       priceLabel: fmtPrice(c.price),
       lineTotal: fmtPrice(c.price * c.qty),
-      statusLabel: c.status === "PRONTA_ENTREGA" ? "Pronta entrega" : c.status === "SOB_ENCOMENDA" ? "Sob encomenda" : "",
+      statusLabel: c.status === "PRONTA_ENTREGA" ? "Pronta entrega" : c.status === "SOB_ENCOMENDA" ? "Envio em 2 a 4 dias" : "",
       inc: () => this.changeQty(i, 1),
       dec: () => this.changeQty(i, -1),
       remove: () => this.removeFromCart(i),
@@ -1192,9 +1373,37 @@ class Component extends DCLogic {
     const checkoutResultIsError = !!(this.state.checkoutResult && this.state.checkoutResult.type === "error");
     const showEmptyMessage = cartEmpty && !checkoutResultIsSuccess;
     const checkoutResultTotalLabel = checkoutResultIsSuccess ? fmtPrice(this.state.checkoutResult.total) : "";
-    const checkoutWaLink = checkoutResultIsSuccess
-      ? waLink(`Salve TiwShirts! Acabei de fechar o pedido ${this.state.checkoutResult.orderId} no site (total ${fmtPrice(this.state.checkoutResult.total)}). Me passa o Pix para pagamento?`)
-      : "#";
+
+    const isPix = this.state.paymentMethod !== "card";
+    const payPixBtnStyle = {
+      padding: "12px",
+      fontFamily: "'JetBrains Mono',monospace",
+      fontSize: "11.5px",
+      fontWeight: "600",
+      cursor: "pointer",
+      border: isPix ? "1px solid #4ade80" : "1px solid rgba(255,255,255,0.15)",
+      background: isPix ? "rgba(74,222,128,0.15)" : "#080808",
+      color: isPix ? "#4ade80" : "#8E8E93",
+    };
+    const payCardBtnStyle = {
+      padding: "12px",
+      fontFamily: "'JetBrains Mono',monospace",
+      fontSize: "11.5px",
+      fontWeight: "600",
+      cursor: "pointer",
+      border: !isPix ? "1px solid #F5F5F5" : "1px solid rgba(255,255,255,0.15)",
+      background: !isPix ? "#F5F5F5" : "#080808",
+      color: !isPix ? "#080808" : "#8E8E93",
+    };
+
+    const orderMethod = checkoutResultIsSuccess ? (this.state.checkoutResult.paymentMethod || "pix") : "pix";
+    const showPixPaymentBox = checkoutResultIsSuccess && orderMethod === "pix";
+    const showCardPaymentBox = checkoutResultIsSuccess && orderMethod === "card";
+    const pixCopiedLabel = this.state.pixCopied ? "✓ CÓDIGO PIX COPIADO!" : "COPIAR CÓDIGO PIX";
+    const step2Style = { color: this.state.pixConfirmed ? "#4ade80" : "#f59e0b" };
+    const step2Label = this.state.pixConfirmed
+      ? "✓ 2. Pagamento informado · Em confirmação automática"
+      : "● 2. Aguardando confirmação do pagamento";
 
     return {
       heroVideoRef: this.heroVideoRef,
@@ -1205,6 +1414,8 @@ class Component extends DCLogic {
       closeModal: this.closeModal,
       stopProp: this.stopProp,
       b2bModalOpen: this.state.b2bModalOpen,
+      b2bSuccess: this.state.b2bSuccess,
+      b2bProtocol: this.state.b2bProtocol,
       openB2bModal: this.openB2bModal,
       closeB2bModal: this.closeB2bModal,
       submitB2B: this.submitB2B,
@@ -1219,19 +1430,27 @@ class Component extends DCLogic {
       checkoutResultIsSuccess,
       checkoutResultIsError,
       checkoutResultTotalLabel,
-      checkoutWaLink,
+      showPixPaymentBox,
+      showCardPaymentBox,
+      pixCopiedLabel,
+      step2Style,
+      step2Label,
+      payPixBtnStyle,
+      payCardBtnStyle,
+      selectPayPix: this.selectPayPix,
+      selectPayCard: this.selectPayCard,
+      switchOrderToPix: this.switchOrderToPix,
+      copyPixCode: this.copyPixCode,
+      confirmPixPaid: this.confirmPixPaid,
       addToCart: this.addToCart,
       openCart: this.openCart,
       closeCart: this.closeCart,
       submitCheckout: this.submitCheckout,
       payWithMercadoPago: this.payWithMercadoPago,
       mercadopagoConfigured: this.mercadopagoConfigured,
-      whatsappFooterLink: waLink("Oi! Quero saber mais sobre a TiwShirts."),
-      whatsappAtacadoLink: waLink("Olá! Sou lojista e tenho interesse em revender TiwShirts na minha loja física. Gostaria de receber o catálogo e condições de atacado."),
     };
   }
 }
 </script>
 </body>
 </html>
-
