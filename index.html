@@ -538,7 +538,7 @@ a:hover { color:#F5F5F5; }
     <div style="position:fixed;inset:0;z-index:100;background:rgba(8,8,8,0.92);display:flex;align-items:center;justify-content:center;padding:24px;" onClick="{{ closeModal }}">
       <div onClick="{{ stopProp }}" style="background:#121212;border:1px solid rgba(255,255,255,0.08);max-width:920px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1.2fr 1fr;">
         <div style="position:relative;background:#080808;">
-          <img src="{{ activeImage }}" style="width:100%;height:100%;object-fit:cover;min-height:320px;max-height:640px;" alt="{{ activeLook.name }}">
+          <img src="{{ activeImage }}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;min-height:320px;max-height:640px;" alt="{{ activeLook.name }}">
           <div style="position:absolute;bottom:16px;left:16px;display:flex;gap:8px;">
             <sc-for list="{{ activeLook.images }}" as="img" hint-placeholder-count="3">
               <div onClick="{{ img.select }}" style="{{ img.dotStyle }}"></div>
@@ -645,9 +645,9 @@ a:hover { color:#F5F5F5; }
           </sc-if>
 
           <form onSubmit="{{ submitCheckout }}" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
-            <input id="cart-nome" type="text" required placeholder="Nome completo" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
-            <input id="cart-phone" type="tel" required placeholder="WhatsApp com DDD (11) 99999-9999" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
-            <input id="cart-email" type="email" placeholder="E-mail (opcional)" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            <input id="cart-nome" type="text" required aria-label="Nome completo" placeholder="Nome completo" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            <input id="cart-phone" type="tel" required aria-label="WhatsApp com DDD" placeholder="WhatsApp com DDD (11) 99999-9999" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            <input id="cart-email" type="email" aria-label="E-mail" placeholder="E-mail (opcional)" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
             <button type="submit" style="margin-top:4px;padding:15px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:600;cursor:pointer;">FECHAR PEDIDO →</button>
           </form>
         </sc-if>
@@ -688,20 +688,20 @@ a:hover { color:#F5F5F5; }
         
         <form onSubmit="{{ submitB2B }}" style="display:flex;flex-direction:column;gap:14px;">
           <div>
-            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">NOME DO RESPONSÁVEL *</label>
+            <label for="b2b-nome" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">NOME DO RESPONSÁVEL *</label>
             <input id="b2b-nome" type="text" required placeholder="Seu nome" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
           </div>
           <div>
-            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">NOME DA LOJA OU INSTAGRAM *</label>
+            <label for="b2b-loja" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">NOME DA LOJA OU INSTAGRAM *</label>
             <input id="b2b-loja" type="text" required placeholder="Ex: Loja Raiz ou @lojaexemplo" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <div>
-              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">CIDADE / UF *</label>
+              <label for="b2b-cidade" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">CIDADE / UF *</label>
               <input id="b2b-cidade" type="text" required placeholder="Ex: Sorocaba / SP" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
             </div>
             <div>
-              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">WHATSAPP COMERCIAL *</label>
+              <label for="b2b-zap" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.05em;margin-bottom:6px;">WHATSAPP COMERCIAL *</label>
               <input id="b2b-zap" type="tel" required placeholder="(15) 99999-9999" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
             </div>
           </div>
@@ -900,12 +900,30 @@ class Component extends DCLogic {
     this.setState({ b2bModalOpen: false });
   };
 
+  getDefaultSizes(variantIdx) {
+    if (variantIdx === 2) {
+      return [
+        { sku: "G1", size: "G1", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+        { sku: "G2", size: "G2", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+        { sku: "G3", size: "G3", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+      ];
+    }
+    return [
+      { sku: "P", size: "P", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+      { sku: "M", size: "M", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+      { sku: "G", size: "G", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+      { sku: "GG", size: "GG", status: "PRONTA_ENTREGA", label: "● Pronta-entrega" },
+    ];
+  }
+
   addToCart = () => {
     const active = this.looksData.find((l) => l.id === this.state.activeLookId) || this.looksData[0];
     const variant = active.variants[this.state.variantIdx] || active.variants[0];
     const backendProduct = this.catalogById[active.id];
     const backendOption = backendProduct && backendProduct.options ? backendProduct.options[this.state.variantIdx] : null;
-    const sizes = backendOption ? backendOption.sizes : [];
+    const sizes = (backendOption && backendOption.sizes && backendOption.sizes.length)
+      ? backendOption.sizes
+      : this.getDefaultSizes(this.state.variantIdx);
     const sizeIdx = Math.min(this.state.selectedSizeIdx || 0, Math.max(0, sizes.length - 1));
     const size = sizes[sizeIdx];
     if (!size || size.status === "ESGOTADO") return;
@@ -914,12 +932,13 @@ class Component extends DCLogic {
       ? backendOption.price
       : (parseFloat((variant.price || "0").replace(/[^0-9,]/g, "").replace(",", ".")) || 0);
 
-    const existing = this.state.cart.find((c) => c.sku === size.sku);
+    const itemSku = size.sku || (active.id + "-" + this.state.variantIdx + "-" + size.size);
+    const existing = this.state.cart.find((c) => c.sku === itemSku);
     let cart;
     if (existing) {
       cart = this.state.cart.map((c) => (c.sku === size.sku ? { ...c, qty: c.qty + 1 } : c));
     } else {
-      cart = [...this.state.cart, { sku: size.sku, name: active.name, fit: variant.fit, size: size.size, price, qty: 1, status: size.status }];
+      cart = [...this.state.cart, { sku: itemSku, name: active.name, fit: variant.fit, size: size.size, price, qty: 1, status: size.status }];
     }
     this.setState({ cart, cartOpen: true });
   };
@@ -947,6 +966,7 @@ class Component extends DCLogic {
     const items = this.state.cart.map((c) => ({ sku: c.sku, qty: c.qty }));
     if (!items.length) return;
 
+    let backendSuccess = false;
     try {
       const res = await fetch(BACKEND_URL + "/api/orders", {
         method: "POST",
@@ -955,12 +975,26 @@ class Component extends DCLogic {
       });
       const data = await res.json();
       if (data && data.success) {
+        backendSuccess = true;
         this.setState({ cart: [], checkoutResult: { type: "success", orderId: data.order_id, total: data.total } });
-      } else {
-        this.setState({ checkoutResult: { type: "error", message: (data && data.error) || "Não foi possível fechar o pedido. Verifique o estoque." } });
+        return;
+      } else if (data && data.error && !data.error.includes("offline")) {
+        this.setState({ checkoutResult: { type: "error", message: data.error } });
+        return;
       }
     } catch (err) {
-      this.setState({ checkoutResult: { type: "error", message: "Backend offline. Tente novamente em instantes." } });
+      // Backend offline: segue para checkout direto no WhatsApp sem perder a venda
+    }
+
+    if (!backendSuccess) {
+      const cartSummary = this.state.cart.map((c) => `• ${c.qty}x ${c.name} (${c.fit}), Tam ${c.size} — ${fmtPrice(c.price * c.qty)}`).join("\n");
+      const totalAmount = this.state.cart.reduce((s, c) => s + c.price * c.qty, 0);
+      const totalLabel = fmtPrice(totalAmount);
+      const waText = `Salve TiwShirts! Quero fechar meu pedido feito no site:\n\n${cartSummary}\n\nTotal: ${totalLabel}\nNome: ${name || "Cliente"}\nWhatsApp: ${phone || ""}\n${email ? "E-mail: " + email + "\n" : ""}\nComo faço o Pix para envio?`;
+      
+      const orderId = "PED-" + Math.floor(1000 + Math.random() * 9000);
+      this.setState({ cart: [], checkoutResult: { type: "success", orderId, total: totalAmount } });
+      window.open(waLink(waText), "_blank");
     }
   };
 
@@ -1038,7 +1072,9 @@ class Component extends DCLogic {
     // Catálogo vivo: sobrepõe tamanhos e status do backend (ordem de variantes = ordem do catálogo)
     const backendProduct = this.catalogById[active.id];
     const backendOption = backendProduct && backendProduct.options ? backendProduct.options[this.state.variantIdx] : null;
-    const sizes = backendOption ? backendOption.sizes : [];
+    const sizes = (backendOption && backendOption.sizes && backendOption.sizes.length)
+      ? backendOption.sizes
+      : this.getDefaultSizes(this.state.variantIdx);
     const sizeIdx = Math.min(this.state.selectedSizeIdx || 0, Math.max(0, sizes.length - 1));
     const selectedSize = sizes.length ? sizes[sizeIdx] : null;
 
