@@ -32,7 +32,7 @@ const CATALOG = [
   { product: 'salvavidas', combos: [ { line: 'pf', color: 'branco' }, { line: 'casca', color: 'preto' }, { line: 'espacoso', color: 'preto' } ] },
   { product: 'tricomas',   combos: [ { line: 'pf', color: 'preto', label: 'Purple Haze' }, { line: 'pf', color: 'azul-marinho', label: 'Sour Diesel' }, { line: 'pf', color: 'offwhite', label: 'OG Kush' } ] },
   { product: 'sugiro',     combos: [ { line: 'pf', color: 'preto' }, { line: 'casca', color: 'preto' }, { line: 'espacoso', color: 'preto' } ] },
-  { product: 'medicina',   combos: [ { line: 'pf', color: 'branco' }, { line: 'casca', color: 'preto' }, { line: 'espacoso', color: 'preto' } ] },
+  { product: 'medicina',   combos: [ { line: 'pf', color: 'branco' } ] },
 ];
 
 module.exports = (req, res) => {
