@@ -588,8 +588,8 @@ a:hover { color:#F5F5F5; }
               <div style="{{ activeLook.statusBadge.style }}">{{ activeLook.statusBadge.text }}</div>
             </sc-if>
 
-            <button onClick="{{ addToCart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:600;cursor:pointer;">ADICIONAR AO CARRINHO →</button>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#8E8E93;text-align:center;margin-top:10px;">Pagamento via Pix ou Cartão no checkout · Atualizações por e-mail e WhatsApp</div>
+            <button onClick="{{ addToCart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:600;cursor:pointer;">{{ activeLook.ctaText }}</button>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#8E8E93;text-align:center;margin-top:10px;">Pix com Taxa Zero ou Cartão em até 12x via InfinitePay · Pote Hermético Oficial</div>
           </div>
         </div>
       </div>
@@ -661,12 +661,12 @@ a:hover { color:#F5F5F5; }
 
             <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-top:6px;">2. FORMA DE PAGAMENTO NO CHECKOUT</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <button type="button" onClick="{{ selectPayPix }}" style="{{ payPixBtnStyle }}">⚡ PIX INSTANTÂNEO</button>
-              <button type="button" onClick="{{ selectPayCard }}" style="{{ payCardBtnStyle }}">💳 CARTÃO DE CRÉDITO</button>
+              <button type="button" onClick="{{ selectPayPix }}" style="{{ payPixBtnStyle }}">⚡ PIX INSTANTÂNEO (TAXA ZERO)</button>
+              <button type="button" onClick="{{ selectPayCard }}" style="{{ payCardBtnStyle }}">💳 CARTÃO / INFINITEPAY</button>
             </div>
 
             <button type="submit" style="margin-top:8px;padding:16px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:700;cursor:pointer;">PAGAR E FINALIZAR PEDIDO →</button>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;text-align:center;">Você receberá a confirmação e o código de rastreio por e-mail e no WhatsApp cadastrado.</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;text-align:center;">Checkout seguro via InfinitePay & Pix Direto · Código de rastreio enviado por e-mail e WhatsApp.</div>
           </form>
         </sc-if>
 
@@ -692,19 +692,21 @@ a:hover { color:#F5F5F5; }
                   <button type="button" onClick="{{ copyPixCode }}" style="flex:1;padding:12px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">{{ pixCopiedLabel }}</button>
                   <button type="button" onClick="{{ confirmPixPaid }}" style="flex:1;padding:12px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">JÁ REALIZEI O PIX →</button>
                 </div>
+                <button type="button" onClick="{{ payWithInfinitePay }}" style="width:100%;margin-top:8px;padding:11px;background:rgba(255,255,255,0.06);color:#C5A880;border:1px solid rgba(197,168,128,0.3);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;">PREFERE CARTÃO EM ATÉ 12X? ABRIR CHECKOUT INFINITEPAY →</button>
               </div>
             </sc-if>
 
-            <!-- BLOCO DE PAGAMENTO CARTÃO -->
+            <!-- BLOCO DE PAGAMENTO CARTÃO / INFINITEPAY -->
             <sc-if value="{{ showCardPaymentBox }}" hint-placeholder-val="{{ false }}">
               <div style="background:#141414;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:16px;margin-top:12px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C5A880;letter-spacing:0.06em;margin-bottom:10px;">PAGAMENTO COM CARTÃO DE CRÉDITO</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C5A880;letter-spacing:0.06em;margin-bottom:8px;">CHECKOUT INFINITEPAY · CARTÃO EM ATÉ 12X OU PIX</div>
+                <div style="font-size:12px;color:#8E8E93;margin-bottom:12px;line-height:1.5;">Conclua seu pagamento no ambiente seguro da InfinitePay com aprovação imediata.</div>
                 <sc-if value="{{ checkoutResult.mpError }}" hint-placeholder-val="{{ false }}">
                   <div style="margin-bottom:10px;font-size:12px;color:#f59e0b;line-height:1.5;">{{ checkoutResult.mpError }}</div>
                 </sc-if>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                  <button type="button" onClick="{{ payWithMercadoPago }}" style="flex:1;padding:13px;background:#009ee3;color:#fff;border:none;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">ABRIR CHECKOUT DE CARTÃO →</button>
-                  <button type="button" onClick="{{ switchOrderToPix }}" style="padding:13px;background:rgba(255,255,255,0.08);color:#F5F5F5;border:1px solid rgba(255,255,255,0.15);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;">PAGAR COM PIX NA TELA</button>
+                  <button type="button" onClick="{{ payWithInfinitePay }}" style="flex:1;padding:13px;background:#2D5A27;color:#fff;border:none;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">ABRIR CHECKOUT INFINITEPAY →</button>
+                  <button type="button" onClick="{{ switchOrderToPix }}" style="padding:13px;background:rgba(255,255,255,0.08);color:#F5F5F5;border:1px solid rgba(255,255,255,0.15);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;">QR CODE PIX NA TELA</button>
                 </div>
               </div>
             </sc-if>
@@ -786,6 +788,33 @@ a:hover { color:#F5F5F5; }
 <script type="text/x-dc" data-dc-script>
 const GREEN = "#2D5A27";
 const BACKEND_URL = (typeof window !== "undefined" && window.TIW_BACKEND_URL) || "";
+const DEFAULT_INFINITEPAY_HANDLE = (typeof window !== "undefined" && window.TIW_INFINITEPAY_HANDLE) || "edu_bovoline";
+
+// Inventário físico real — 11 peças prontas (Envio imediato / 24h)
+const FINISHED_INVENTORY = {
+  "justdoobit_casca_preto_m":      1,
+  "justdoobit_pf_preto_g":         1,
+  "justdoobit_pf_branco_g":        1,
+  "tricomas_pf_azul-marinho_m":    1,
+  "tricomas_pf_preto_g":           1,
+  "sugiro_pf_preto_gg":            1,
+  "salvavidas_casca_preto_g":      1,
+  "medicina_casca_offwhite_g":     1,
+  "salvavidas_casca_offwhite_g":   1,
+  "medicina_pf_branco_m":          1,
+  "salvavidas_pf_preto_m":         1,
+};
+
+// Inventário físico real — 9 bases em estoque (Envio em 3 dias úteis)
+const BLANK_INVENTORY = {
+  "casca:offwhite:M":     1,
+  "casca:preto:GG":       1,
+  "espacoso:preto:G1":    1,
+  "espacoso:preto:G2":    2,
+  "espacoso:preto:G3":    1,
+  "espacoso:offwhite:G1": 1,
+  "espacoso:branco:G1":   2,
+};
 
 function fmtPrice(n) {
   const v = Number(n) || 0;
@@ -832,6 +861,38 @@ function buildLocalPixPayload(amount, txid) {
   return payload + crc16ccitt(payload);
 }
 
+function buildLocalInfinitePayUrl(handle, orderId, items, customer) {
+  const cleanHandle = String(handle || DEFAULT_INFINITEPAY_HANDLE).replace(/^\$/, "").trim();
+  const origin = (typeof window !== "undefined" && window.location && window.location.origin) || "https://tiwshirts.space";
+  const redirectUrl = origin + "/?pedido=" + encodeURIComponent(orderId) + "&status=pago";
+
+  const infiniteItems = items.map((it) => {
+    const parts = String(it.sku || "").split("_");
+    const refCode = (parts[0] || "TIW").toUpperCase();
+    const fitClean = String(it.fit || "Streetwear").replace(/\([^)]*\)/g, "").trim();
+    const desc = ("Camiseta TiwShirts " + fitClean + " (" + it.size + ") [" + refCode + "]").replace(/\s+/g, " ").trim();
+    return {
+      name: desc,
+      price: Math.round((Number(it.price) || 139) * 100),
+      quantity: Number(it.qty) || 1,
+    };
+  });
+
+  const cleanPhone = String((customer && customer.phone) || "").replace(/\D/g, "");
+  const cleanCep = String((customer && customer.cep) || "").replace(/\D/g, "");
+
+  const params = new URLSearchParams();
+  params.set("items", JSON.stringify(infiniteItems));
+  params.set("order_nsu", orderId);
+  params.set("redirect_url", redirectUrl);
+  if (customer && customer.name) params.set("customer_name", customer.name);
+  if (customer && customer.email) params.set("customer_email", customer.email);
+  if (cleanPhone) params.set("customer_cellphone", cleanPhone);
+  if (cleanCep) params.set("address_cep", cleanCep);
+
+  return "https://checkout.infinitepay.io/" + encodeURIComponent(cleanHandle) + "?" + params.toString();
+}
+
 class Component extends DCLogic {
   state = {
     modalOpen: false,
@@ -851,9 +912,7 @@ class Component extends DCLogic {
   };
 
   catalog = null;
-  leadBlank = "2 a 4 dias";
-  leadReprint = "7 a 10 dias";
-  mercadopagoConfigured = false;
+  infinitepayHandle = DEFAULT_INFINITEPAY_HANDLE;
 
   looksData = [
     {
@@ -864,9 +923,9 @@ class Component extends DCLogic {
       desc: "A palavra que usaram pra apontar o dedo agora vai estampada no peito. Sem pedir licença e sem baixar o tom. Tipografia frontal limpa na barra da peça, disponível nas três linhas oficiais: Clássica (Algodão 30.1), OverHeavy (Suedine 220g) e OverLight (Extra G do G1 ao G3).",
       images: ["assets/maconheiro-1.jpeg", "assets/maconheiro-2.jpeg", "assets/maconheiro-8.jpeg", "assets/maconheiro-9.jpeg", "assets/pote-shoot-vert-1.webp"],
       variants: [
-        { label: "Linha Clássica 30.1 (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 (P ao GG)" },
-        { label: "Linha OverHeavy 220g (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g (P ao GG)" },
-        { label: "Linha OverLight Extra G (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G (G1 ao G3)" },
+        { lineId: "pf", colorId: "preto", label: "Clássica 30.1 Preta (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Preta (P ao GG)" },
+        { lineId: "casca", colorId: "preto", label: "OverHeavy 220g Preta (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Preta (P ao GG)" },
+        { lineId: "espacoso", colorId: "preto", label: "OverLight Extra G Preta (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Preta (G1 ao G3)" },
       ],
       gridSpan: "span 1",
     },
@@ -878,9 +937,9 @@ class Component extends DCLogic {
       desc: "Se a lei só funciona pra quem pode pagar receita cara e importação, o nome disso não é avanço. É privilégio. Tipografia de alto contraste sobre malha preta, disponível na Clássica 30.1, na OverHeavy Suedine 220g e na OverLight Extra G.",
       images: ["assets/legaliza-1.jpeg", "assets/legaliza-2.jpeg", "assets/legaliza-7.jpeg", "assets/legaliza-8.jpeg", "assets/legaliza-9.jpeg", "assets/legaliza-10.jpeg", "assets/pote-shoot-vert-1.webp"],
       variants: [
-        { label: "Linha Clássica 30.1 (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 (P ao GG)" },
-        { label: "Linha OverHeavy 220g (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g (P ao GG)" },
-        { label: "Linha OverLight Extra G (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G (G1 ao G3)" },
+        { lineId: "pf", colorId: "preto", label: "Clássica 30.1 Preta (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Preta (P ao GG)" },
+        { lineId: "casca", colorId: "preto", label: "OverHeavy 220g Preta (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Preta (P ao GG)" },
+        { lineId: "espacoso", colorId: "preto", label: "OverLight Extra G Preta (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Preta (G1 ao G3)" },
       ],
       gridSpan: "span 1",
     },
@@ -889,12 +948,16 @@ class Component extends DCLogic {
       name: "Just Doob It",
       tagRight: "CLÁSSICA 30.1 · OVERHEAVY 220G · OVERLIGHT G1-G3",
       thumb: "assets/justdoobit-black-1.jpeg",
-      desc: "Ícone da cultura de rua reinterpretado no traço autoral da TiwShirts. Sem discurso longo: quem conhece a referência entende no primeiro olhar. Disponível na Clássica 30.1 branca, na OverHeavy Suedine 220g preta e na OverLight Extra G preta.",
+      desc: "Ícone da cultura de rua reinterpretado no traço autoral da TiwShirts. Sem discurso longo: quem conhece a referência entende no primeiro olhar. Disponível nas linhas Clássica 30.1, OverHeavy Suedine 220g e OverLight Extra G (G1 ao G3).",
       images: ["assets/justdoobit-black-1.jpeg", "assets/justdoobit-black-2.jpeg", "assets/justdoobit-black-focus.jpeg", "assets/justdoobit-black-8.jpeg", "assets/justdoobit-black-9.jpeg", "assets/justdoobit-white-1.jpeg", "assets/justdoobit-white-2.jpeg", "assets/justdoobit-white-7.jpeg", "assets/justdoobit-white-8.jpeg", "assets/pote-shoot-vert-1.webp"],
       variants: [
-        { label: "Clássica 30.1 Branca (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Branca (P ao GG)", imgFrom: 5 },
-        { label: "OverHeavy 220g Preta (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Preta (P ao GG)", imgFrom: 0 },
-        { label: "OverLight Extra G Preta (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Preta (G1 ao G3)", imgFrom: 0 },
+        { lineId: "pf", colorId: "preto", label: "Clássica 30.1 Preta (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Preta (P ao GG)", imgFrom: 0 },
+        { lineId: "pf", colorId: "branco", label: "Clássica 30.1 Branca (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Branca (P ao GG)", imgFrom: 5 },
+        { lineId: "casca", colorId: "preto", label: "OverHeavy 220g Preta (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Preta (P ao GG)", imgFrom: 0 },
+        { lineId: "casca", colorId: "offwhite", label: "OverHeavy 220g Off-White (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Off-White (P ao GG)", imgFrom: 5 },
+        { lineId: "espacoso", colorId: "preto", label: "OverLight Extra G Preta (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Preta (G1 ao G3)", imgFrom: 0 },
+        { lineId: "espacoso", colorId: "branco", label: "OverLight Extra G Branca (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Branca (G1 ao G3)", imgFrom: 5 },
+        { lineId: "espacoso", colorId: "offwhite", label: "OverLight Extra G Off-White (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Off-White (G1 ao G3)", imgFrom: 5 },
       ],
       gridSpan: "span 2",
       wide: true,
@@ -905,12 +968,16 @@ class Component extends DCLogic {
       name: "Maconha Salva Vidas",
       tagRight: "CLÁSSICA 30.1 · OVERHEAVY 220G · OVERLIGHT G1-G3",
       thumb: "assets/maconhasalvavidas-1.jpeg",
-      desc: "Fato clínico e realidade de milhares de famílias que não cabem mais debaixo do tapete. Arte central de alta definição com contraste verde-limão, disponível na Clássica 30.1 branca, na OverHeavy Suedine 220g preta e na OverLight Extra G preta.",
+      desc: "Fato clínico e realidade de milhares de famílias que não cabem mais debaixo do tapete. Arte central de alta definição com contraste verde-limão, disponível nas linhas Clássica 30.1, OverHeavy Suedine 220g e OverLight Extra G (G1 ao G3).",
       images: ["assets/maconhasalvavidas-1.jpeg", "assets/maconhasalvavidas-2.jpeg", "assets/maconhasalvavidas-3.jpeg", "assets/maconhasalvavidas-4.jpeg", "assets/maconhasalvavidas-5.jpeg", "assets/maconhasalvavidas-6.jpeg", "assets/maconhasalvavidas-7.jpeg", "assets/maconhasalvavidas-black-1.jpeg", "assets/maconhasalvavidas-black-6.jpeg", "assets/maconhasalvavidas-black-7.jpeg", "assets/maconhasalvavidas-black-8.jpeg", "assets/maconhasalvavidas-black-full.png", "assets/pote-shoot-vert-1.webp"],
       variants: [
-        { label: "Clássica 30.1 Branca (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Branca (P ao GG)", imgFrom: 0 },
-        { label: "OverHeavy 220g Preta (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Preta (P ao GG)", imgFrom: 7 },
-        { label: "OverLight Extra G Preta (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Preta (G1 ao G3)", imgFrom: 7 },
+        { lineId: "pf", colorId: "preto", label: "Clássica 30.1 Preta (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Preta (P ao GG)", imgFrom: 7 },
+        { lineId: "pf", colorId: "branco", label: "Clássica 30.1 Branca (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Branca (P ao GG)", imgFrom: 0 },
+        { lineId: "casca", colorId: "preto", label: "OverHeavy 220g Preta (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Preta (P ao GG)", imgFrom: 7 },
+        { lineId: "casca", colorId: "offwhite", label: "OverHeavy 220g Off-White (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Off-White (P ao GG)", imgFrom: 0 },
+        { lineId: "espacoso", colorId: "preto", label: "OverLight Extra G Preta (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Preta (G1 ao G3)", imgFrom: 7 },
+        { lineId: "espacoso", colorId: "branco", label: "OverLight Extra G Branca (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Branca (G1 ao G3)", imgFrom: 0 },
+        { lineId: "espacoso", colorId: "offwhite", label: "OverLight Extra G Off-White (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Off-White (G1 ao G3)", imgFrom: 0 },
       ],
       gridSpan: "span 1",
     },
@@ -919,12 +986,16 @@ class Component extends DCLogic {
       name: "Eu Amo Tricomas",
       tagRight: "PURPLE HAZE · SOUR DIESEL · OG KUSH",
       thumb: "assets/tricomas-purple-1.jpeg",
-      desc: "Onde mora a química real da planta: terpenos, canabinoides e resina vistos na lupa. Estudo botânico em três colorways exclusivas (Purple Haze no preto, Sour Diesel no azul-marinho e OG Kush no off-white), todas na Linha Clássica 100% Algodão Penteado 30.1.",
+      desc: "Onde mora a química real da planta: terpenos, canabinoides e resina vistos na lupa. Estudo botânico em três colorways exclusivas (Purple Haze no preto, Sour Diesel no azul-marinho e OG Kush no off-white), disponível nas linhas Clássica 30.1, OverHeavy 220g e OverLight Extra G.",
       images: ["assets/tricomas-purple-1.jpeg", "assets/tricomas-purple-2.jpeg", "assets/tricomas-purple-5.jpeg", "assets/tricomas-purple-6.jpeg", "assets/tricomas-sourdiesel-1.jpeg", "assets/tricomas-sourdiesel-2.jpeg", "assets/tricomas-sourdiesel-5.jpeg", "assets/tricomas-sourdiesel-6.jpeg", "assets/tricomas-ogkush-1.jpeg", "assets/tricomas-ogkush-2.jpeg", "assets/tricomas-ogkush-5.jpeg", "assets/tricomas-ogkush-6.jpeg", "assets/pote-shoot-vert-1.webp"],
       variants: [
-        { label: "Purple Haze · Clássica 30.1 · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Purple Haze (Preto)", imgFrom: 0 },
-        { label: "Sour Diesel · Clássica 30.1 · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Sour Diesel (Azul Marinho)", imgFrom: 4 },
-        { label: "OG Kush · Clássica 30.1 · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 OG Kush (Off-White)", imgFrom: 8 },
+        { lineId: "pf", colorId: "preto", label: "Purple Haze · Clássica 30.1 Preta · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Purple Haze (Preta)", imgFrom: 0 },
+        { lineId: "pf", colorId: "azul-marinho", label: "Sour Diesel · Clássica 30.1 Azul · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Sour Diesel (Azul Marinho)", imgFrom: 4 },
+        { lineId: "pf", colorId: "offwhite", label: "OG Kush · Clássica 30.1 Off-White · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 OG Kush (Off-White)", imgFrom: 8 },
+        { lineId: "casca", colorId: "preto", label: "Purple Haze · OverHeavy 220g Preta · R$ 179", price: "R$ 179", fit: "Linha OverHeavy 220g Purple Haze (Preta)", imgFrom: 0 },
+        { lineId: "casca", colorId: "offwhite", label: "OG Kush · OverHeavy 220g Off-White · R$ 179", price: "R$ 179", fit: "Linha OverHeavy 220g OG Kush (Off-White)", imgFrom: 8 },
+        { lineId: "espacoso", colorId: "preto", label: "Purple Haze · OverLight Extra G Preta · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Purple Haze (Preta)", imgFrom: 0 },
+        { lineId: "espacoso", colorId: "offwhite", label: "OG Kush · OverLight Extra G Off-White · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G OG Kush (Off-White)", imgFrom: 8 },
       ],
       gridSpan: "span 2",
       wide: true,
@@ -938,9 +1009,9 @@ class Component extends DCLogic {
       desc: "Menos pânico moral e mais leitura. O problema nunca foi a planta, sempre foi a falta de repertório de quem julga sem ler uma linha. Lettering rascunhado à mão sobre malha preta, disponível na Clássica 30.1, na OverHeavy Suedine 220g e na OverLight Extra G.",
       images: ["assets/sugiromaconha-1.jpeg", "assets/sugiromaconha-2.jpeg", "assets/sugiromaconha-6.jpeg", "assets/sugiromaconha-7.jpeg", "assets/pote-shoot-vert-1.webp"],
       variants: [
-        { label: "Linha Clássica 30.1 (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 (P ao GG)" },
-        { label: "Linha OverHeavy 220g (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g (P ao GG)" },
-        { label: "Linha OverLight Extra G (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G (G1 ao G3)" },
+        { lineId: "pf", colorId: "preto", label: "Clássica 30.1 Preta (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Preta (P ao GG)" },
+        { lineId: "casca", colorId: "preto", label: "OverHeavy 220g Preta (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Preta (P ao GG)" },
+        { lineId: "espacoso", colorId: "preto", label: "OverLight Extra G Preta (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Preta (G1 ao G3)" },
       ],
       gridSpan: "span 1",
       thumb2: "assets/sugiromaconha-2.jpeg",
@@ -948,12 +1019,15 @@ class Component extends DCLogic {
     {
       id: "medicina",
       name: "Medicina Ancestral",
-      tagRight: "LINHA CLÁSSICA 30.1 · BRANCA",
+      tagRight: "CLÁSSICA 30.1 · OVERHEAVY 220G · OVERLIGHT G1-G3",
       thumb: "assets/medicinaancestral-1.jpeg",
-      desc: "Séculos de conhecimento botânico e uso tradicional não apagam por decreto. Arte autoral em preto e vermelho que resgata a raiz histórica da planta em malha 100% Algodão Penteado 30.1 branca.",
+      desc: "Séculos de conhecimento botânico e uso tradicional não apagam por decreto. Arte autoral em preto e vermelho aplicada exclusivamente em malhas claras (Branca e Off-White), nas linhas Clássica 30.1, OverHeavy 220g e OverLight Extra G.",
       images: ["assets/medicinaancestral-1.jpeg", "assets/medicinaancestral-2.jpeg", "assets/medicinaancestral-7.jpeg", "assets/medicinaancestral-8.jpeg", "assets/medicinaancestral-9.jpeg", "assets/medicinaancestral-10.jpeg", "assets/pote-shoot-vert-1.webp"],
       variants: [
-        { label: "Clássica 30.1 Branca (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Branca (P ao GG)", imgFrom: 0 },
+        { lineId: "pf", colorId: "branco", label: "Clássica 30.1 Branca (P ao GG) · R$ 139", price: "R$ 139", fit: "Linha Clássica 30.1 Branca (P ao GG)", imgFrom: 0 },
+        { lineId: "casca", colorId: "offwhite", label: "OverHeavy 220g Off-White (P ao GG) · R$ 179", price: "R$ 179", fit: "Linha OverHeavy Suedine 220g Off-White (P ao GG)", imgFrom: 0 },
+        { lineId: "espacoso", colorId: "branco", label: "OverLight Extra G Branca (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Branca (G1 ao G3)", imgFrom: 0 },
+        { lineId: "espacoso", colorId: "offwhite", label: "OverLight Extra G Off-White (G1 ao G3) · R$ 179", price: "R$ 179", fit: "Linha OverLight Extra G Off-White (G1 ao G3)", imgFrom: 0 },
       ],
       gridSpan: "span 1",
       thumb2: "assets/medicinaancestral-2.jpeg",
@@ -972,8 +1046,77 @@ class Component extends DCLogic {
     };
   }
 
+  getSizesForVariant(lookId, variantIdx) {
+    const look = this.looksData.find((l) => l.id === lookId) || this.looksData[0];
+    const variant = (look && look.variants && look.variants[variantIdx]) || (look && look.variants[0]) || {};
+    const lineId = variant.lineId || "pf";
+    const colorId = variant.colorId || "preto";
+
+    const backendProduct = this.catalogById[lookId];
+    const backendOption = backendProduct && backendProduct.options
+      ? (backendProduct.options.find((o) => o.line_id === lineId && o.color_id === colorId) || backendProduct.options[variantIdx])
+      : null;
+
+    if (backendOption && backendOption.sizes && backendOption.sizes.length) {
+      return backendOption.sizes;
+    }
+
+    const sizeList = lineId === "espacoso" ? ["G1", "G2", "G3"] : ["P", "M", "G", "GG"];
+    return sizeList.map((sz) => {
+      const sku = lookId + "_" + lineId + "_" + colorId + "_" + sz.toLowerCase();
+      const finishedQty = FINISHED_INVENTORY[sku] || 0;
+      const blankQty = BLANK_INVENTORY[lineId + ":" + colorId + ":" + sz] || 0;
+      if (finishedQty > 0) {
+        return { sku, size: sz, finished_qty: finishedQty, blank_qty: blankQty, status: "PRONTA_ENTREGA", label: "● Envio imediato (24h)", lead: "24h" };
+      }
+      if (blankQty > 0) {
+        return { sku, size: sz, finished_qty: 0, blank_qty: blankQty, status: "ENVIO_3_DIAS", label: "● Envio em 3 dias úteis", lead: "3 dias úteis" };
+      }
+      return { sku, size: sz, finished_qty: 0, blank_qty: 0, status: "PRE_COMPRA", label: "● Envio em 7 a 10 dias úteis", lead: "7 a 10 dias úteis" };
+    });
+  }
+
+  findBestSizeIdx(sizes) {
+    if (!sizes || !sizes.length) return 0;
+    const immediateIdx = sizes.findIndex((s) => s.status === "PRONTA_ENTREGA");
+    if (immediateIdx >= 0) return immediateIdx;
+    const threeDaysIdx = sizes.findIndex((s) => s.status === "ENVIO_3_DIAS");
+    if (threeDaysIdx >= 0) return threeDaysIdx;
+    return 0;
+  }
+
   openLook(id) {
-    this.setState({ modalOpen: true, activeLookId: id, activeImageIdx: 0, variantIdx: 0 });
+    const look = this.looksData.find((l) => l.id === id) || this.looksData[0];
+    let bestVariantIdx = 0;
+    let bestSizeIdx = 0;
+
+    if (look && look.variants) {
+      // Prioriza abrir na variante que tem peça a pronta-entrega (24h)
+      let foundImmediate = false;
+      for (let vi = 0; vi < look.variants.length; vi++) {
+        const sizes = this.getSizesForVariant(id, vi);
+        const imm = sizes.findIndex((s) => s.status === "PRONTA_ENTREGA");
+        if (imm >= 0) {
+          bestVariantIdx = vi;
+          bestSizeIdx = imm;
+          foundImmediate = true;
+          break;
+        }
+      }
+      if (!foundImmediate) {
+        const sizes0 = this.getSizesForVariant(id, 0);
+        bestSizeIdx = this.findBestSizeIdx(sizes0);
+      }
+    }
+
+    const vObj = (look && look.variants && look.variants[bestVariantIdx]) || {};
+    this.setState({
+      modalOpen: true,
+      activeLookId: id,
+      activeImageIdx: vObj.imgFrom || 0,
+      variantIdx: bestVariantIdx,
+      selectedSizeIdx: bestSizeIdx,
+    });
   }
 
   closeModal = () => this.setState({ modalOpen: false });
@@ -1028,7 +1171,6 @@ class Component extends DCLogic {
       if (data && data.protocol) protocol = data.protocol;
     } catch (err) {}
 
-    // Dispara download automático da lâmina PDF sem redirecionar para WhatsApp
     const link = document.createElement("a");
     link.href = "assets/Lamina_Comercial_Atacado_TiwShirts.pdf";
     link.download = "Lamina_Comercial_Atacado_TiwShirts.pdf";
@@ -1040,45 +1182,31 @@ class Component extends DCLogic {
     this.setState({ b2bSuccess: true, b2bProtocol: protocol });
   };
 
-  getDefaultSizes(variantIdx) {
-    if (variantIdx === 2) {
-      return [
-        { sku: "G1", size: "G1", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
-        { sku: "G2", size: "G2", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
-        { sku: "G3", size: "G3", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
-      ];
-    }
-    return [
-      { sku: "P", size: "P", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
-      { sku: "M", size: "M", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
-      { sku: "G", size: "G", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
-      { sku: "GG", size: "GG", status: "PRONTA_ENTREGA", label: "● Disponível para envio" },
-    ];
-  }
-
   addToCart = () => {
     const active = this.looksData.find((l) => l.id === this.state.activeLookId) || this.looksData[0];
     const variant = active.variants[this.state.variantIdx] || active.variants[0];
-    const backendProduct = this.catalogById[active.id];
-    const backendOption = backendProduct && backendProduct.options ? backendProduct.options[this.state.variantIdx] : null;
-    const sizes = (backendOption && backendOption.sizes && backendOption.sizes.length)
-      ? backendOption.sizes
-      : this.getDefaultSizes(this.state.variantIdx);
+    const sizes = this.getSizesForVariant(active.id, this.state.variantIdx);
     const sizeIdx = Math.min(this.state.selectedSizeIdx || 0, Math.max(0, sizes.length - 1));
     const size = sizes[sizeIdx];
-    if (!size || size.status === "ESGOTADO") return;
+    if (!size) return;
 
-    const price = backendOption
-      ? backendOption.price
-      : (parseFloat((variant.price || "0").replace(/[^0-9,]/g, "").replace(",", ".")) || 0);
-
-    const itemSku = size.sku || (active.id + "_" + this.state.variantIdx + "_" + size.size);
+    const price = parseFloat((variant.price || "0").replace(/[^0-9,]/g, "").replace(",", ".")) || 139;
+    const itemSku = size.sku || (active.id + "_" + (variant.lineId || "pf") + "_" + (variant.colorId || "preto") + "_" + size.size.toLowerCase());
     const existing = this.state.cart.find((c) => c.sku === itemSku);
     let cart;
     if (existing) {
       cart = this.state.cart.map((c) => (c.sku === itemSku ? { ...c, qty: c.qty + 1 } : c));
     } else {
-      cart = [...this.state.cart, { sku: itemSku, name: active.name, fit: variant.fit, size: size.size, price, qty: 1, status: size.status }];
+      cart = [...this.state.cart, {
+        sku: itemSku,
+        name: active.name,
+        fit: variant.fit,
+        size: size.size,
+        price,
+        qty: 1,
+        status: size.status,
+        lead: size.lead,
+      }];
     }
     this.setState({ modalOpen: false, cart, cartOpen: true, checkoutResult: null, pixConfirmed: false });
   };
@@ -1123,17 +1251,19 @@ class Component extends DCLogic {
       name: c.name,
       fit: c.fit,
       size: c.size,
+      lead: c.lead,
     }));
     if (!items.length) return;
 
     const totalAmount = this.state.cart.reduce((s, c) => s + c.price * c.qty, 0);
+    const customer = { name, email, phone, cep, address };
 
     try {
       const res = await fetch(BACKEND_URL + "/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customer: { name, email, phone, cep, address },
+          customer,
           items,
           payment_method: paymentMethod,
         }),
@@ -1142,6 +1272,7 @@ class Component extends DCLogic {
       if (data && data.success) {
         const pixCode = data.pix_code || buildLocalPixPayload(data.total || totalAmount, data.order_id);
         const pixQrUrl = data.pix_qr_url || ("https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" + encodeURIComponent(pixCode));
+        const checkoutUrl = data.checkout_url || data.init_point || buildLocalInfinitePayUrl(this.infinitepayHandle, data.order_id, items, customer);
         const resultObj = {
           type: "success",
           orderId: data.order_id,
@@ -1149,7 +1280,8 @@ class Component extends DCLogic {
           paymentMethod,
           pixCode,
           pixQrUrl,
-          initPoint: data.init_point || null,
+          checkoutUrl,
+          initPoint: checkoutUrl,
           name,
           email,
           phone,
@@ -1158,8 +1290,8 @@ class Component extends DCLogic {
         };
         try { localStorage.setItem("tiw_last_order", JSON.stringify(resultObj)); } catch (e) {}
         this.setState({ cart: [], checkoutResult: resultObj, pixConfirmed: false });
-        if (paymentMethod === "card" && data.init_point) {
-          window.location.href = data.init_point;
+        if (paymentMethod === "card" && checkoutUrl) {
+          window.location.href = checkoutUrl;
         }
         return;
       } else if (data && data.error) {
@@ -1167,12 +1299,13 @@ class Component extends DCLogic {
         return;
       }
     } catch (err) {
-      // Fallback local na própria tela (zero WhatsApp)
+      // Fallback local imediato com Pix EMV + URL InfinitePay
     }
 
     const orderId = "TIW-" + Date.now().toString(36).toUpperCase().slice(-4) + "-" + Math.floor(100 + Math.random() * 900);
     const pixCode = buildLocalPixPayload(totalAmount, orderId);
     const pixQrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" + encodeURIComponent(pixCode);
+    const checkoutUrl = buildLocalInfinitePayUrl(this.infinitepayHandle, orderId, items, customer);
     const resultObj = {
       type: "success",
       orderId,
@@ -1180,7 +1313,8 @@ class Component extends DCLogic {
       paymentMethod,
       pixCode,
       pixQrUrl,
-      initPoint: null,
+      checkoutUrl,
+      initPoint: checkoutUrl,
       name,
       email,
       phone,
@@ -1189,25 +1323,17 @@ class Component extends DCLogic {
     };
     try { localStorage.setItem("tiw_last_order", JSON.stringify(resultObj)); } catch (e) {}
     this.setState({ cart: [], checkoutResult: resultObj, pixConfirmed: false });
+    if (paymentMethod === "card" && checkoutUrl) {
+      window.location.href = checkoutUrl;
+    }
   };
 
-  payWithMercadoPago = async () => {
+  payWithInfinitePay = () => {
     const order = this.state.checkoutResult;
-    if (!order || !order.orderId) return;
-    if (order.initPoint) {
-      window.location.href = order.initPoint;
-      return;
-    }
-    try {
-      const res = await fetch(BACKEND_URL + `/api/orders/${order.orderId}/pay`, { method: "POST", headers: { "Content-Type": "application/json" } });
-      const data = await res.json();
-      if (data && data.init_point) {
-        window.location.href = data.init_point;
-      } else {
-        this.setState({ checkoutResult: { ...order, mpError: "Gateway de cartão em manutenção no momento. Você pode concluir agora mesmo com o QR Code Pix na tela." } });
-      }
-    } catch (err) {
-      this.setState({ checkoutResult: { ...order, mpError: "Gateway de cartão indisponível no momento. Clique ao lado para pagar com o QR Code Pix imediato na tela." } });
+    if (!order) return;
+    const targetUrl = order.checkoutUrl || order.initPoint;
+    if (targetUrl) {
+      window.location.href = targetUrl;
     }
   };
 
@@ -1217,9 +1343,7 @@ class Component extends DCLogic {
       .then((data) => {
         if (data && data.success) {
           this.catalog = data.products || [];
-          if (data.lead_blank) this.leadBlank = data.lead_blank;
-          if (data.lead_reprint) this.leadReprint = data.lead_reprint;
-          this.mercadopagoConfigured = !!data.mercadopago_configured;
+          if (data.infinitepay_handle) this.infinitepayHandle = data.infinitepay_handle;
           this.forceUpdate();
         }
       })
@@ -1238,6 +1362,22 @@ class Component extends DCLogic {
   heroVideoRef = React.createRef();
   componentDidMount() {
     this.loadCatalog();
+
+    // Verifica retorno pós-pagamento do Checkout InfinitePay (?pedido=TIW-...&status=pago)
+    try {
+      const params = new URLSearchParams(window.location.search || "");
+      const paidOrder = params.get("pedido") || params.get("order_nsu");
+      const statusParam = params.get("status");
+      if (paidOrder && (statusParam === "pago" || params.get("receipt_url") || params.get("transaction_nsu"))) {
+        const saved = JSON.parse(localStorage.getItem("tiw_last_order") || "null");
+        if (saved) {
+          saved.pixConfirmed = true;
+          localStorage.setItem("tiw_last_order", JSON.stringify(saved));
+          this.setState({ cartOpen: true, checkoutResult: saved, pixConfirmed: true });
+        }
+      }
+    } catch (e) {}
+
     const v = this.heroVideoRef.current;
     if (v) {
       v.playbackRate = 0.5;
@@ -1265,11 +1405,7 @@ class Component extends DCLogic {
     const imgFrom = variant.imgFrom || 0;
     const activeImage = active.images[this.state.activeImageIdx] || active.images[imgFrom] || active.images[0];
 
-    const backendProduct = this.catalogById[active.id];
-    const backendOption = backendProduct && backendProduct.options ? backendProduct.options[this.state.variantIdx] : null;
-    const sizes = (backendOption && backendOption.sizes && backendOption.sizes.length)
-      ? backendOption.sizes
-      : this.getDefaultSizes(this.state.variantIdx);
+    const sizes = this.getSizesForVariant(active.id, this.state.variantIdx);
     const sizeIdx = Math.min(this.state.selectedSizeIdx || 0, Math.max(0, sizes.length - 1));
     const selectedSize = sizes.length ? sizes[sizeIdx] : null;
 
@@ -1281,14 +1417,16 @@ class Component extends DCLogic {
         fontFamily: "'JetBrains Mono',monospace",
         fontSize: "12px",
         letterSpacing: "0.03em",
-        border: si === sizeIdx ? "1px solid #F5F5F5" : "1px solid rgba(255,255,255,0.15)",
+        border: si === sizeIdx ? "1px solid #F5F5F5" : (s.status === "PRONTA_ENTREGA" ? "1px solid rgba(74,222,128,0.45)" : "1px solid rgba(255,255,255,0.15)"),
         background: si === sizeIdx ? "#F5F5F5" : "transparent",
-        color: si === sizeIdx ? "#080808" : (s.status === "ESGOTADO" ? "#6b6b6b" : "#8E8E93"),
-        cursor: s.status === "ESGOTADO" ? "not-allowed" : "pointer",
-        opacity: s.status === "ESGOTADO" ? 0.55 : 1,
+        color: si === sizeIdx ? "#080808" : (s.status === "PRONTA_ENTREGA" ? "#4ade80" : "#8E8E93"),
+        cursor: "pointer",
       },
       select: () => this.setState({ selectedSizeIdx: si }),
     }));
+
+    const isImmediate = selectedSize && selectedSize.status === "PRONTA_ENTREGA";
+    const isThreeDays = selectedSize && (selectedSize.status === "ENVIO_3_DIAS" || selectedSize.status === "SOB_ENCOMENDA");
 
     const statusBadge = selectedSize ? {
       text: selectedSize.label,
@@ -1296,11 +1434,17 @@ class Component extends DCLogic {
         display: "flex", alignItems: "center", gap: "8px", width: "fit-content",
         padding: "6px 12px", borderRadius: "4px", marginBottom: "12px",
         fontFamily: "'JetBrains Mono',monospace", fontSize: "11px", fontWeight: "600",
-        background: selectedSize.status === "PRONTA_ENTREGA" ? "rgba(74,222,128,0.15)" : selectedSize.status === "SOB_ENCOMENDA" ? "rgba(245,158,11,0.15)" : "rgba(239,68,68,0.15)",
-        color: selectedSize.status === "PRONTA_ENTREGA" ? "#4ade80" : selectedSize.status === "SOB_ENCOMENDA" ? "#f59e0b" : "#f87171",
-        border: "1px solid " + (selectedSize.status === "PRONTA_ENTREGA" ? "rgba(74,222,128,0.35)" : selectedSize.status === "SOB_ENCOMENDA" ? "rgba(245,158,11,0.35)" : "rgba(239,68,68,0.35)"),
+        background: isImmediate ? "rgba(74,222,128,0.15)" : isThreeDays ? "rgba(245,158,11,0.15)" : "rgba(197,168,128,0.14)",
+        color: isImmediate ? "#4ade80" : isThreeDays ? "#f59e0b" : "#C5A880",
+        border: "1px solid " + (isImmediate ? "rgba(74,222,128,0.35)" : isThreeDays ? "rgba(245,158,11,0.35)" : "rgba(197,168,128,0.35)"),
       },
     } : null;
+
+    const ctaText = isImmediate
+      ? "COMPRAR · ENVIO IMEDIATO (24H) →"
+      : isThreeDays
+      ? "ADICIONAR AO CARRINHO (ENVIO 3 DIAS) →"
+      : "ADICIONAR AO CARRINHO (7 A 10 DIAS) →";
 
     const looks = this.looksData.map((look, i) => ({
       id: look.id,
@@ -1310,7 +1454,7 @@ class Component extends DCLogic {
       hasSecond: !!look.thumb2,
       secondThumb: look.thumb2 ? "50%" : "100%",
       tagRight: look.tagRight,
-      priceLabel: look.id === "tricomas" ? "3 Colorways · R$ 139" : "A partir de R$ 139",
+      priceLabel: look.id === "tricomas" ? "3 Colorways · A partir de R$ 139" : "A partir de R$ 139",
       cardStyle: this.cardStyle(look, i),
       open: () => this.openLook(look.id),
     }));
@@ -1319,25 +1463,30 @@ class Component extends DCLogic {
       name: active.name,
       desc: active.desc,
       hasVariants: active.variants.length > 1,
-      variantLabel: active.id === "tricomas" ? "COLORWAY" : "MODELAGEM",
+      variantLabel: active.id === "tricomas" ? "COLORWAY & MODELAGEM" : "MODELAGEM & COR",
       variants: active.variants.map((v, vi) => ({
         label: v.label,
         btnStyle: {
-          padding: "10px 16px",
+          padding: "10px 14px",
           fontFamily: "'JetBrains Mono',monospace",
-          fontSize: "12px",
-          letterSpacing: "0.03em",
+          fontSize: "11.5px",
+          letterSpacing: "0.02em",
           border: vi === this.state.variantIdx ? "1px solid #F5F5F5" : "1px solid rgba(255,255,255,0.15)",
           background: vi === this.state.variantIdx ? "#F5F5F5" : "transparent",
           color: vi === this.state.variantIdx ? "#080808" : "#8E8E93",
           cursor: "pointer",
         },
-        select: () => this.setState({ variantIdx: vi, selectedSizeIdx: 0, activeImageIdx: v.imgFrom || 0 }),
+        select: () => {
+          const nextSizes = this.getSizesForVariant(active.id, vi);
+          const bestIdx = this.findBestSizeIdx(nextSizes);
+          this.setState({ variantIdx: vi, selectedSizeIdx: bestIdx, activeImageIdx: v.imgFrom || 0 });
+        },
       })),
       price: variant.price,
       hasSizes: sizes.length > 0,
       sizes: sizeButtons,
       statusBadge,
+      ctaText,
       images: active.images.map((img, ii) => ({
         dotStyle: {
           width: "8px",
@@ -1360,7 +1509,11 @@ class Component extends DCLogic {
       qty: c.qty,
       priceLabel: fmtPrice(c.price),
       lineTotal: fmtPrice(c.price * c.qty),
-      statusLabel: c.status === "PRONTA_ENTREGA" ? "Pronta entrega" : c.status === "SOB_ENCOMENDA" ? "Envio em 2 a 4 dias" : "",
+      statusLabel: c.status === "PRONTA_ENTREGA"
+        ? "Envio imediato (24h)"
+        : (c.status === "ENVIO_3_DIAS" || c.status === "SOB_ENCOMENDA")
+        ? "Envio em 3 dias úteis"
+        : "Envio em 7 a 10 dias úteis",
       inc: () => this.changeQty(i, 1),
       dec: () => this.changeQty(i, -1),
       remove: () => this.removeFromCart(i),
@@ -1376,7 +1529,7 @@ class Component extends DCLogic {
     const payPixBtnStyle = {
       padding: "12px",
       fontFamily: "'JetBrains Mono',monospace",
-      fontSize: "11.5px",
+      fontSize: "11px",
       fontWeight: "600",
       cursor: "pointer",
       border: isPix ? "1px solid #4ade80" : "1px solid rgba(255,255,255,0.15)",
@@ -1386,7 +1539,7 @@ class Component extends DCLogic {
     const payCardBtnStyle = {
       padding: "12px",
       fontFamily: "'JetBrains Mono',monospace",
-      fontSize: "11.5px",
+      fontSize: "11px",
       fontWeight: "600",
       cursor: "pointer",
       border: !isPix ? "1px solid #F5F5F5" : "1px solid rgba(255,255,255,0.15)",
@@ -1400,7 +1553,7 @@ class Component extends DCLogic {
     const pixCopiedLabel = this.state.pixCopied ? "✓ CÓDIGO PIX COPIADO!" : "COPIAR CÓDIGO PIX";
     const step2Style = { color: this.state.pixConfirmed ? "#4ade80" : "#f59e0b" };
     const step2Label = this.state.pixConfirmed
-      ? "✓ 2. Pagamento informado · Em confirmação automática"
+      ? "✓ 2. Pagamento informado · Pedido em separação"
       : "● 2. Aguardando confirmação do pagamento";
 
     return {
@@ -1444,8 +1597,7 @@ class Component extends DCLogic {
       openCart: this.openCart,
       closeCart: this.closeCart,
       submitCheckout: this.submitCheckout,
-      payWithMercadoPago: this.payWithMercadoPago,
-      mercadopagoConfigured: this.mercadopagoConfigured,
+      payWithInfinitePay: this.payWithInfinitePay,
     };
   }
 }
