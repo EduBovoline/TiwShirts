@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TiwShirts — Painel Operacional (Pedidos & Atacado B2B)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080808;
+      --card-bg: #121212;
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #2D5A27;
+      --accent-light: #4ade80;
+      --sand: #C5A880;
+      --text: #F5F5F5;
+      --text-muted: #8E8E93;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 24px; min-height: 100vh; }
+    header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.1em; color: var(--text); }
+    .badge-live { background: var(--accent); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .btn-refresh { background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--sand); padding: 8px 16px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer; }
+    .btn-refresh:hover { background: rgba(255,255,255,0.15); }
+    
+    .tabs { display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .tab-btn { background: transparent; border: none; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; padding: 8px 16px; cursor: pointer; border-radius: 4px; }
+    .tab-btn.active { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+    
+    .stats-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 16px; }
+    .stat-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; margin-top: 6px; color: var(--text); }
+    
+    .table-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 24px; }
+    .table-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .table-title { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--sand); }
+    
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 12px 16px; background: rgba(255,255,255,0.03); color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 10.5px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+    
+    .order-id { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--sand); }
+    .date-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); }
+    .customer-box { line-height: 1.45; }
+    .customer-name { font-weight: 600; color: #fff; }
+    .customer-address { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .items-list { font-size: 12px; line-height: 1.5; color: #d1d1d6; }
+    .total-val { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--accent-light); }
+    
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 600; text-transform: uppercase; }
+    .badge-pending { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+    .badge-paid { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+    
+    .btn-zap { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; background: #2D5A27; color: #fff; border-radius: 4px; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; margin-top: 6px; }
+    .btn-zap:hover { background: #356b2e; }
+    .empty-state { padding: 40px; text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>TIWSHIRTS · PAINEL DE CONTROLE</h1>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Pedidos D2C & Cadastros de Lojistas B2B (Tempo Real)</div>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="badge-live">● SUPABASE CONECTADO</span>
+      <button class="btn-refresh" onclick="loadAllData()">ATUALIZAR DADOS ⟳</button>
+    </div>
+  </header>
+
+  <div class="stats-strip">
+    <div class="stat-card">
+      <div class="stat-title">Total de Pedidos</div>
+      <div class="stat-val" id="stat-orders-count">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">Faturamento Varejo</div>
+      <div class="stat-val" id="stat-revenue" style="color:var(--accent-light);">R$ 0,00</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">Leads Lojistas B2B</div>
+      <div class="stat-val" id="stat-b2b-count" style="color:var(--sand);">0</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-orders-btn" onclick="switchTab('orders')">PEDIDOS D2C VAREJO</button>
+    <button class="tab-btn" id="tab-b2b-btn" onclick="switchTab('b2b')">LEADS ATACADO B2B</button>
+  </div>
+
+  <!-- TAB: PEDIDOS -->
+  <div id="tab-orders" class="table-card">
+    <div class="table-head">
+      <div class="table-title">Pedidos Registrados (Site Oficial)</div>
+    </div>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Pedido & Data</th>
+            <th>Cliente & Contato</th>
+            <th>Endereço de Entrega</th>
+            <th>Itens Comprados</th>
+            <th>Total & Pagamento</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <tr><td colspan="6" class="empty-state">Carregando pedidos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: B2B -->
+  <div id="tab-b2b" class="table-card" style="display:none;">
+    <div class="table-head">
+      <div class="table-title">Lojistas Cadastrados para Atacado B2B</div>
+    </div>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Protocolo & Data</th>
+            <th>Responsável</th>
+            <th>Loja / Instagram</th>
+            <th>Cidade / UF</th>
+            <th>Contato & WhatsApp</th>
+          </tr>
+        </thead>
+        <tbody id="b2b-tbody">
+          <tr><td colspan="5" class="empty-state">Carregando leads B2B...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://msschydwkaektxjlbmjc.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zc2NoeWR3a2Fla3R4amxibWpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4MTkyMjMsImV4cCI6MjEwOTM5NTIyM30.Jemyb0rGHItevfp8EqZ_jWTEP01yqVdp_iQoRtFuEv0';
+
+    function switchTab(tab) {
+      document.getElementById('tab-orders').style.display = tab === 'orders' ? 'block' : 'none';
+      document.getElementById('tab-b2b').style.display = tab === 'b2b' ? 'block' : 'none';
+      document.getElementById('tab-orders-btn').className = 'tab-btn' + (tab === 'orders' ? ' active' : '');
+      document.getElementById('tab-b2b-btn').className = 'tab-btn' + (tab === 'b2b' ? ' active' : '');
+    }
+
+    function formatDate(isoStr) {
+      if (!isoStr) return '';
+      const d = new Date(isoStr);
+      return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function fmtMoney(val) {
+      return 'R$ ' + Number(val || 0).toFixed(2).replace('.', ',');
+    }
+
+    async function loadAllData() {
+      // 1. Carregar Pedidos
+      try {
+        let orders = [];
+        try {
+          const r = await fetch('/api/orders');
+          const d = await r.json();
+          if (d && d.orders) orders = d.orders;
+        } catch(e) {}
+
+        if (!orders.length) {
+          const r = await fetch(SUPABASE_URL + '/rest/v1/tiw_orders?select=*&order=created_at.desc', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+          orders = await r.json();
+        }
+
+        document.getElementById('stat-orders-count').innerText = orders.length;
+        const rev = orders.reduce((s, o) => s + Number(o.total || 0), 0);
+        document.getElementById('stat-revenue').innerText = fmtMoney(rev);
+
+        const tbodyOrders = document.getElementById('orders-tbody');
+        if (!orders.length) {
+          tbodyOrders.innerHTML = '<tr><td colspan="6" class="empty-state">Nenhum pedido registrado ainda.</td></tr>';
+        } else {
+          tbodyOrders.innerHTML = orders.map(o => {
+            const cust = o.customer || {};
+            const items = o.items || [];
+            const cleanPhone = String(cust.phone || '').replace(/\D/g, '');
+            const zapUrl = cleanPhone ? ('https://wa.me/55' + (cleanPhone.startsWith('55') ? cleanPhone.slice(2) : cleanPhone)) : '#';
+            const isPaid = o.status === 'pago';
+
+            return `<tr>
+              <td>
+                <div class="order-id">${o.order_id}</div>
+                <div class="date-text">${formatDate(o.created_at)}</div>
+              </td>
+              <td>
+                <div class="customer-box">
+                  <div class="customer-name">${cust.name || 'Não informado'}</div>
+                  <div style="font-size:12px;color:var(--text-muted);">${cust.email || ''}</div>
+                  ${cleanPhone ? `<a href="${zapUrl}" target="_blank" class="btn-zap">WHATSAPP: ${cust.phone} ↗</a>` : ''}
+                </div>
+              </td>
+              <td>
+                <div class="customer-box">
+                  <div>${cust.address || 'Endereço não informado'}</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sand);margin-top:2px;">CEP: ${cust.cep || '—'}</div>
+                </div>
+              </td>
+              <td>
+                <div class="items-list">
+                  ${items.map(i => `<div>• <strong>${i.qty}x</strong> ${i.name} (${i.fit || ''}, Tam: ${i.size})</div>`).join('')}
+                </div>
+              </td>
+              <td>
+                <div class="total-val">${fmtMoney(o.total)}</div>
+                <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-top:2px;">${o.payment_method || 'Pix'}</div>
+              </td>
+              <td>
+                <span class="badge ${isPaid ? 'badge-paid' : 'badge-pending'}">${o.status || 'aguardando'}</span>
+              </td>
+            </tr>`;
+          }).join('');
+        }
+      } catch (err) {
+        document.getElementById('orders-tbody').innerHTML = '<tr><td colspan="6" class="empty-state">Erro ao carregar pedidos: ' + err.message + '</td></tr>';
+      }
+
+      // 2. Carregar Leads B2B
+      try {
+        let leads = [];
+        try {
+          const r = await fetch('/api/b2b');
+          const d = await r.json();
+          if (d && d.leads) leads = d.leads;
+        } catch(e) {}
+
+        if (!leads.length) {
+          const r = await fetch(SUPABASE_URL + '/rest/v1/tiw_b2b_leads?select=*&order=created_at.desc', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+          leads = await r.json();
+        }
+
+        document.getElementById('stat-b2b-count').innerText = leads.length;
+        const tbodyB2b = document.getElementById('b2b-tbody');
+        if (!leads.length) {
+          tbodyB2b.innerHTML = '<tr><td colspan="5" class="empty-state">Nenhum cadastro B2B registrado ainda.</td></tr>';
+        } else {
+          tbodyB2b.innerHTML = leads.map(l => {
+            const cleanPhone = String(l.zap || '').replace(/\D/g, '');
+            const zapUrl = cleanPhone ? ('https://wa.me/55' + (cleanPhone.startsWith('55') ? cleanPhone.slice(2) : cleanPhone)) : '#';
+
+            return `<tr>
+              <td>
+                <div class="order-id">${l.protocol}</div>
+                <div class="date-text">${formatDate(l.created_at)}</div>
+              </td>
+              <td style="font-weight:600;color:#fff;">${l.nome || '—'}</td>
+              <td style="color:var(--sand);font-weight:500;">${l.loja || '—'}</td>
+              <td>${l.cidade || '—'}</td>
+              <td>
+                <div style="font-size:12px;color:var(--text-muted);">${l.email || ''}</div>
+                ${cleanPhone ? `<a href="${zapUrl}" target="_blank" class="btn-zap">CHAMAR NO WHATSAPP ↗</a>` : ''}
+              </td>
+            </tr>`;
+          }).join('');
+        }
+      } catch (err) {
+        document.getElementById('b2b-tbody').innerHTML = '<tr><td colspan="5" class="empty-state">Erro ao carregar leads B2B: ' + err.message + '</td></tr>';
+      }
+    }
+
+    loadAllData();
+  </script>
+</body>
+</html>

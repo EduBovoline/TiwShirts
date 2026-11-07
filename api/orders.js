@@ -2,6 +2,11 @@
 // Checkout mais barato do mercado:
 // 1. InfinitePay Checkout Integrado (Pix R$ 0,00 + Cartão até 12x com menor taxa ~3,15%)
 // 2. Pix EMV Direto na Tela (QR Code + Copia e Cola — Taxa R$ 0,00)
+// + Persistência Automática no Supabase (zero perda de dados/endereços)
+
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://msschydwkaektxjlbmjc.supabase.co';
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zc2NoeWR3a2Fla3R4amxibWpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4MTkyMjMsImV4cCI6MjEwOTM5NTIyM30.Jemyb0rGHItevfp8EqZ_jWTEP01yqVdp_iQoRtFuEv0';
+const WHATSAPP_TIW = '5515981512083';
 
 const LINE_PRICES = {
   pf: 139.0,
@@ -10,7 +15,7 @@ const LINE_PRICES = {
 };
 
 const LINE_NAMES = {
-  pf: 'Linha Classica 30.1',
+  pf: 'Linha Clássica 30.1',
   casca: 'Linha OverHeavy 220g',
   espacoso: 'Linha OverLight Extra G',
 };
@@ -161,9 +166,50 @@ async function createInfinitePayCheckout({ handle, orderId, items, customer, sit
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
+
+  // GET: Consultar pedidos registrados
+  if (req.method === 'GET') {
+    try {
+      const resp = await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders?select=*&order=created_at.desc`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        },
+      });
+      const data = await resp.json();
+      return res.status(200).json({ success: true, orders: data });
+    } catch (e) {
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
+  // PATCH: Atualizar status do pedido (ex: pagamento_informado, pago)
+  if (req.method === 'PATCH') {
+    try {
+      const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+      const { order_id, status } = body;
+      if (!order_id) return res.status(400).json({ success: false, error: 'order_id obrigatório' });
+
+      await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(order_id)}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify({ status: status || 'pago' }),
+      });
+
+      return res.status(200).json({ success: true, order_id, status: status || 'pago' });
+    } catch (e) {
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Método não permitido' });
   }
@@ -173,10 +219,24 @@ module.exports = async (req, res) => {
 
     // Se for chamada de Webhook da InfinitePay
     if (req.query && req.query.webhook === 'infinitepay') {
+      const orderNsu = body.order_nsu || body.order_id;
+      if (orderNsu) {
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(orderNsu)}`, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: 'pago' }),
+          });
+        } catch (e) {}
+      }
       return res.status(200).json({
         success: true,
         received: true,
-        order_nsu: body.order_nsu || body.order_id || null,
+        order_nsu: orderNsu || null,
       });
     }
 
@@ -222,6 +282,53 @@ module.exports = async (req, res) => {
       customer,
     });
 
+    const customerData = {
+      name: (customer && customer.name) || '',
+      email: (customer && customer.email) || '',
+      phone: (customer && customer.phone) || '',
+      address: (customer && customer.address) || '',
+      cep: (customer && customer.cep) || '',
+    };
+
+    // 1. Grava no banco Supabase (Zero Perda de Dados)
+    const orderRecord = {
+      order_id: orderId,
+      status: 'aguardando_pagamento',
+      payment_method: payment_method || 'pix',
+      total,
+      customer: customerData,
+      items: normalizedItems,
+      pix_code: pixCode,
+      checkout_url: checkoutUrl,
+    };
+
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify(orderRecord),
+      });
+    } catch (dbErr) {
+      console.error('Erro ao gravar pedido no Supabase:', dbErr);
+    }
+
+    // 2. Link de acionamento do WhatsApp para envio do comprovante Pix
+    const itemsSummary = normalizedItems.map(i => `• ${i.qty}x ${i.name} (${i.fit}, ${i.size})`).join('\n');
+    const waPixText = encodeURIComponent(
+      `Olá TiwShirts! Acabei de gerar o pedido *${orderId}* no valor de *R$ ${total.toFixed(2).replace('.', ',')}* via Pix.\n\n` +
+      `*Cliente:* ${customerData.name}\n` +
+      `*WhatsApp:* ${customerData.phone}\n` +
+      `*Endereço de Entrega:* ${customerData.address}, CEP ${customerData.cep}\n\n` +
+      `*Peças:*\n${itemsSummary}\n\n` +
+      `Segue o comprovante de pagamento!`
+    );
+    const waUrl = `https://wa.me/${WHATSAPP_TIW}?text=${waPixText}`;
+
     return res.status(201).json({
       success: true,
       order_id: orderId,
@@ -233,13 +340,8 @@ module.exports = async (req, res) => {
       pix_qr_url: pixQrUrl,
       checkout_url: checkoutUrl,
       init_point: checkoutUrl, // compatibilidade com frontend
-      customer: {
-        name: (customer && customer.name) || '',
-        email: (customer && customer.email) || '',
-        phone: (customer && customer.phone) || '',
-        address: (customer && customer.address) || '',
-        cep: (customer && customer.cep) || '',
-      },
+      wa_url: waUrl,
+      customer: customerData,
       items: normalizedItems,
       created_at: new Date().toISOString(),
     });

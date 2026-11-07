@@ -692,6 +692,7 @@ a:hover { color:#F5F5F5; }
                   <button type="button" onClick="{{ copyPixCode }}" style="flex:1;padding:12px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">{{ pixCopiedLabel }}</button>
                   <button type="button" onClick="{{ confirmPixPaid }}" style="flex:1;padding:12px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">JÁ REALIZEI O PIX →</button>
                 </div>
+                <a href="{{ checkoutResult.waUrl }}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:rgba(45,90,39,0.35);color:#4ade80;border:1px solid rgba(74,222,128,0.4);border-radius:4px;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;margin-top:8px;">ENVIAR COMPROVANTE NO WHATSAPP (15 98151-2083) →</a>
                 <button type="button" onClick="{{ payWithInfinitePay }}" style="width:100%;margin-top:8px;padding:11px;background:rgba(255,255,255,0.06);color:#C5A880;border:1px solid rgba(197,168,128,0.3);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;">PREFERE CARTÃO EM ATÉ 12X? ABRIR CHECKOUT INFINITEPAY →</button>
               </div>
             </sc-if>
@@ -748,8 +749,11 @@ a:hover { color:#F5F5F5; }
         <sc-if value="{{ b2bSuccess }}" hint-placeholder-val="{{ false }}">
           <div style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.35);border-radius:6px;padding:18px;margin-bottom:14px;">
             <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ade80;font-weight:700;margin-bottom:6px;">✓ CREDENCIAMENTO REGISTRADO ({{ b2bProtocol }})</div>
-            <div style="font-size:13px;color:#D1D1D6;line-height:1.6;">O download da Lâmina Comercial PDF foi iniciado. Você receberá as condições de fornecimento diretamente no e-mail e WhatsApp cadastrados.</div>
+            <div style="font-size:13px;color:#D1D1D6;line-height:1.6;margin-bottom:10px;">O download da Lâmina Comercial PDF foi iniciado e o WhatsApp da TiwShirts foi aberto. Se preferir, clique abaixo para falar diretamente com nossa equipe comercial:</div>
+            <a href="{{ b2bWaUrl }}" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;background:#2D5A27;color:#F5F5F5;border-radius:4px;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.05em;">FALAR COM A TIWSHIRTS NO WHATSAPP →</a>
           </div>
+          <div style="display:none">
+            </div>
         </sc-if>
 
         <form onSubmit="{{ submitB2B }}" style="display:flex;flex-direction:column;gap:14px;">
@@ -902,6 +906,7 @@ class Component extends DCLogic {
     selectedSizeIdx: 0,
     b2bModalOpen: false,
     b2bSuccess: false,
+    b2bWaUrl: "",
     b2bProtocol: "",
     cart: [],
     cartOpen: false,
@@ -1143,6 +1148,26 @@ class Component extends DCLogic {
 
   confirmPixPaid = () => {
     this.setState({ pixConfirmed: true });
+    const order = this.state.checkoutResult;
+    if (order) {
+      try {
+        fetch(BACKEND_URL + "/api/orders", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_id: order.orderId, status: "pagamento_informado" }),
+        }).catch(() => {});
+      } catch (e) {}
+
+      const waUrl = order.waUrl || ("https://wa.me/5515981512083?text=" + encodeURIComponent(
+        "Olá TiwShirts! Acabei de realizar o pagamento Pix do pedido *" + order.orderId + "* (R$ " + Number(order.total || 0).toFixed(2).replace(".", ",") + ").\n" +
+        "Cliente: " + (order.name || "") + "\n" +
+        "Endereço: " + (order.address || "") + ", CEP " + (order.cep || "") + "\n\n" +
+        "Segue o comprovante de pagamento!"
+      ));
+      try {
+        window.open(waUrl, "_blank");
+      } catch (errOpen) {}
+    }
     try {
       const saved = JSON.parse(localStorage.getItem("tiw_last_order") || "null");
       if (saved) {
@@ -1161,6 +1186,13 @@ class Component extends DCLogic {
     const zap = document.getElementById("b2b-zap") ? document.getElementById("b2b-zap").value : "";
 
     let protocol = "B2B-" + Math.floor(10000 + Math.random() * 90000);
+    let waUrl = "https://wa.me/5515981512083?text=" + encodeURIComponent(
+      "Olá TiwShirts! Sou " + nome + ", da loja " + loja + " em " + cidade + ".\n" +
+      "Acabei de baixar a Lâmina B2B (Protocolo " + protocol + ").\n" +
+      "WhatsApp: " + zap + " | E-mail: " + email + "\n" +
+      "Gostaria de consultar a grade e pedido de atacado (múltiplos de 12 peças)."
+    );
+
     try {
       const res = await fetch(BACKEND_URL + "/api/b2b", {
         method: "POST",
@@ -1169,6 +1201,7 @@ class Component extends DCLogic {
       });
       const data = await res.json();
       if (data && data.protocol) protocol = data.protocol;
+      if (data && data.wa_url) waUrl = data.wa_url;
     } catch (err) {}
 
     const link = document.createElement("a");
@@ -1179,7 +1212,11 @@ class Component extends DCLogic {
     link.click();
     document.body.removeChild(link);
 
-    this.setState({ b2bSuccess: true, b2bProtocol: protocol });
+    try {
+      window.open(waUrl, "_blank");
+    } catch (errOpen) {}
+
+    this.setState({ b2bSuccess: true, b2bProtocol: protocol, b2bWaUrl: waUrl });
   };
 
   addToCart = () => {
@@ -1273,6 +1310,7 @@ class Component extends DCLogic {
         const pixCode = data.pix_code || buildLocalPixPayload(data.total || totalAmount, data.order_id);
         const pixQrUrl = data.pix_qr_url || ("https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" + encodeURIComponent(pixCode));
         const checkoutUrl = data.checkout_url || data.init_point || buildLocalInfinitePayUrl(this.infinitepayHandle, data.order_id, items, customer);
+        const waUrl = data.wa_url || ("https://wa.me/5515981512083?text=" + encodeURIComponent("Olá TiwShirts! Pedido " + data.order_id + " gerado via Pix no valor de R$ " + (data.total || totalAmount) + ". Segue o comprovante!"));
         const resultObj = {
           type: "success",
           orderId: data.order_id,
@@ -1282,6 +1320,7 @@ class Component extends DCLogic {
           pixQrUrl,
           checkoutUrl,
           initPoint: checkoutUrl,
+          waUrl,
           name,
           email,
           phone,
@@ -1567,6 +1606,7 @@ class Component extends DCLogic {
       b2bModalOpen: this.state.b2bModalOpen,
       b2bSuccess: this.state.b2bSuccess,
       b2bProtocol: this.state.b2bProtocol,
+      b2bWaUrl: this.state.b2bWaUrl,
       openB2bModal: this.openB2bModal,
       closeB2bModal: this.closeB2bModal,
       submitB2B: this.submitB2B,
