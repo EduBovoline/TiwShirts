@@ -552,15 +552,39 @@ a:hover { color:#F5F5F5; }
           </div>
           <div style="font-family:'Lemon Milk',sans-serif;font-weight:600;font-size:30px;text-transform:uppercase;">{{ activeLook.name }}</div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;line-height:1.8;">{{ activeLook.desc }}</div>
-          <sc-if value="{{ activeLook.hasVariants }}" hint-placeholder-val="{{ false }}">
+          <!-- SELEÇÃO VISUAL DE COR (QUADRADINHO COM A COR) -->
+          <sc-if value="{{ activeLook.hasColors }}" hint-placeholder-val="{{ false }}">
             <div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;">{{ activeLook.variantLabel }}</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.04em;">Escolha a malha e o caimento</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;">
+                  COR: <span style="color:#F5F5F5;font-weight:600;">{{ activeLook.selectedColorName }}</span>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#C5A880;letter-spacing:0.04em;">
+                  ● Toque no tom desejado
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                <sc-for list="{{ activeLook.colorSwatches }}" as="c" hint-placeholder-count="3">
+                  <button onClick="{{ c.select }}" title="{{ c.name }}" style="{{ c.style }}">{{ c.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- SELEÇÃO DE MODELAGEM / LINHA -->
+          <sc-if value="{{ activeLook.hasLines }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.1em;">
+                  MODELAGEM: <span style="color:#F5F5F5;font-weight:600;">{{ activeLook.selectedLineName }}</span>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#C5A880;letter-spacing:0.04em;">
+                  Algodão 30.1 / Suedine 220g / Extra G
+                </div>
               </div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <sc-for list="{{ activeLook.variants }}" as="v" hint-placeholder-count="3">
-                  <button onClick="{{ v.select }}" style="{{ v.btnStyle }}">{{ v.label }}</button>
+                <sc-for list="{{ activeLook.lineButtons }}" as="l" hint-placeholder-count="3">
+                  <button onClick="{{ l.select }}" style="{{ l.btnStyle }}">{{ l.label }}</button>
                 </sc-for>
               </div>
             </div>
@@ -1498,29 +1522,147 @@ class Component extends DCLogic {
       open: () => this.openLook(look.id),
     }));
 
+    const currColorId = variant.colorId || "preto";
+    const currLineId = variant.lineId || "pf";
+
+    const COLOR_INFO = {
+      "preto": {
+        name: active.id === "tricomas" ? "Purple Haze (Preto)" : "Preto",
+        hex: active.id === "tricomas" ? "#191424" : "#141414",
+        border: "rgba(255,255,255,0.25)",
+        checkColor: "#F5F5F5",
+      },
+      "branco": {
+        name: "Branco",
+        hex: "#F8F8F8",
+        border: "rgba(0,0,0,0.35)",
+        checkColor: "#141414",
+      },
+      "offwhite": {
+        name: active.id === "tricomas" ? "OG Kush (Off-White)" : "Off-White",
+        hex: "#E8E4DA",
+        border: "rgba(0,0,0,0.25)",
+        checkColor: "#141414",
+      },
+      "azul-marinho": {
+        name: "Sour Diesel (Azul Marinho)",
+        hex: "#1A2536",
+        border: "rgba(255,255,255,0.25)",
+        checkColor: "#F5F5F5",
+      },
+    };
+
+    const LINE_INFO = {
+      "pf": { name: "Clássica 30.1", price: "R$ 139" },
+      "casca": { name: "OverHeavy 220g", price: "R$ 179" },
+      "espacoso": { name: "OverLight G1-G3", price: "R$ 179" },
+    };
+
+    const uniqueColorIds = [];
+    active.variants.forEach((v) => {
+      const c = v.colorId || "preto";
+      if (!uniqueColorIds.includes(c)) uniqueColorIds.push(c);
+    });
+
+    const colorSwatches = uniqueColorIds.map((cId) => {
+      const info = COLOR_INFO[cId] || { name: cId, hex: "#333", border: "rgba(255,255,255,0.2)", checkColor: "#FFF" };
+      const isSelected = cId === currColorId;
+      return {
+        id: cId,
+        name: info.name,
+        label: isSelected ? "✓" : "",
+        style: {
+          width: "36px",
+          height: "36px",
+          borderRadius: "6px",
+          background: info.hex,
+          border: isSelected ? "2px solid #C5A880" : "1px solid " + info.border,
+          boxShadow: isSelected ? "0 0 0 2px #080808, 0 0 0 4px #C5A880, 0 4px 12px rgba(197,168,128,0.35)" : "0 2px 5px rgba(0,0,0,0.4)",
+          cursor: "pointer",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: info.checkColor,
+          fontSize: "14px",
+          fontWeight: "700",
+          padding: 0,
+          transition: "transform 0.15s ease, box-shadow 0.15s ease",
+          transform: isSelected ? "scale(1.08)" : "scale(1)",
+        },
+        select: () => {
+          let targetIdx = active.variants.findIndex((v) => (v.lineId || "pf") === currLineId && (v.colorId || "preto") === cId);
+          if (targetIdx < 0) {
+            targetIdx = active.variants.findIndex((v) => (v.colorId || "preto") === cId);
+          }
+          if (targetIdx < 0) targetIdx = 0;
+          const nextVar = active.variants[targetIdx];
+          const nextSizes = this.getSizesForVariant(active.id, targetIdx);
+          const bestSize = this.findBestSizeIdx(nextSizes);
+          this.setState({
+            variantIdx: targetIdx,
+            selectedSizeIdx: bestSize,
+            activeImageIdx: (nextVar && nextVar.imgFrom !== undefined) ? nextVar.imgFrom : 0,
+          });
+        },
+      };
+    });
+
+    const uniqueLineIds = [];
+    active.variants.forEach((v) => {
+      const l = v.lineId || "pf";
+      if (!uniqueLineIds.includes(l)) uniqueLineIds.push(l);
+    });
+
+    const lineButtons = uniqueLineIds.map((lId) => {
+      const info = LINE_INFO[lId] || { name: lId, price: "R$ 139" };
+      const isSelected = lId === currLineId;
+      return {
+        id: lId,
+        label: info.name + " · " + info.price,
+        btnStyle: {
+          padding: "8px 14px",
+          fontFamily: "'JetBrains Mono',monospace",
+          fontSize: "11px",
+          letterSpacing: "0.02em",
+          border: isSelected ? "1px solid #F5F5F5" : "1px solid rgba(255,255,255,0.15)",
+          background: isSelected ? "#F5F5F5" : "transparent",
+          color: isSelected ? "#080808" : "#8E8E93",
+          cursor: "pointer",
+          borderRadius: "4px",
+          fontWeight: isSelected ? "600" : "400",
+          transition: "all 0.15s ease",
+        },
+        select: () => {
+          let targetIdx = active.variants.findIndex((v) => (v.lineId || "pf") === lId && (v.colorId || "preto") === currColorId);
+          if (targetIdx < 0) {
+            targetIdx = active.variants.findIndex((v) => (v.lineId || "pf") === lId);
+          }
+          if (targetIdx < 0) targetIdx = 0;
+          const nextVar = active.variants[targetIdx];
+          const nextSizes = this.getSizesForVariant(active.id, targetIdx);
+          const bestSize = this.findBestSizeIdx(nextSizes);
+          this.setState({
+            variantIdx: targetIdx,
+            selectedSizeIdx: bestSize,
+            activeImageIdx: (nextVar && nextVar.imgFrom !== undefined) ? nextVar.imgFrom : 0,
+          });
+        },
+      };
+    });
+
+    const selectedColorInfo = COLOR_INFO[currColorId] || { name: currColorId };
+    const selectedLineInfo = LINE_INFO[currLineId] || { name: currLineId };
+
     const activeLook = {
       name: active.name,
       desc: active.desc,
-      hasVariants: active.variants.length > 1,
-      variantLabel: active.id === "tricomas" ? "COLORWAY & MODELAGEM" : "MODELAGEM & COR",
-      variants: active.variants.map((v, vi) => ({
-        label: v.label,
-        btnStyle: {
-          padding: "10px 14px",
-          fontFamily: "'JetBrains Mono',monospace",
-          fontSize: "11.5px",
-          letterSpacing: "0.02em",
-          border: vi === this.state.variantIdx ? "1px solid #F5F5F5" : "1px solid rgba(255,255,255,0.15)",
-          background: vi === this.state.variantIdx ? "#F5F5F5" : "transparent",
-          color: vi === this.state.variantIdx ? "#080808" : "#8E8E93",
-          cursor: "pointer",
-        },
-        select: () => {
-          const nextSizes = this.getSizesForVariant(active.id, vi);
-          const bestIdx = this.findBestSizeIdx(nextSizes);
-          this.setState({ variantIdx: vi, selectedSizeIdx: bestIdx, activeImageIdx: v.imgFrom || 0 });
-        },
-      })),
+      hasColors: colorSwatches.length > 0,
+      selectedColorName: selectedColorInfo.name.toUpperCase(),
+      colorSwatches,
+      hasLines: lineButtons.length > 1,
+      selectedLineName: selectedLineInfo.name.toUpperCase(),
+      lineButtons,
+      hasVariants: false,
       price: variant.price,
       hasSizes: sizes.length > 0,
       sizes: sizeButtons,
