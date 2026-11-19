@@ -151,9 +151,7 @@ async function createInfinitePayCheckout({ handle, orderId, orderNsu, items, cus
       headers['X-Api-Key'] = process.env.INFINITEPAY_API_KEY;
     }
 
-    const endpoint = process.env.INFINITEPAY_API_KEY
-      ? 'https://api.checkout.infinitepay.io/links'
-      : 'https://api.infinitepay.io/invoices/public/checkout/links';
+    const endpoint = 'https://api.checkout.infinitepay.io/links';
 
     const resp = await fetch(endpoint, {
       method: 'POST',
