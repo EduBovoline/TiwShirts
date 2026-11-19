@@ -8,12 +8,17 @@ const {
   SUPABASE_KEY,
   setCors,
   parseBody,
-  extractBearer,
   adminHeaders,
   sbFetch,
   normalizeCouponCode,
   isMissingTableError,
 } = require('./_supabase');
+
+function extractBearer(req) {
+  const auth = (req.headers && (req.headers.authorization || req.headers.Authorization)) || '';
+  const m = String(auth).match(/^Bearer\s+(.+)$/i);
+  return m ? m[1].trim() : null;
+}
 
 function buildShareUrl(code) {
   const site = (process.env.PUBLIC_SITE_URL || 'https://tiwshirts.space').replace(/\/$/, '');
