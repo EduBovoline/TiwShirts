@@ -40,7 +40,12 @@ async function getAuthenticatedUser(req) {
     const user = await resp.json();
     if (!user || !user.id) return null;
     const isAdmin = Boolean(user.app_metadata && user.app_metadata.role === 'admin');
-    return { user, token, isAdmin };
+    const emailVerified = Boolean(
+      user.email_confirmed_at ||
+      user.confirmed_at ||
+      (user.user_metadata && user.user_metadata.email_verified)
+    );
+    return { user, token, isAdmin, emailVerified };
   } catch (e) {
     return null;
   }
@@ -53,6 +58,13 @@ module.exports = async (req, res) => {
   const auth = await getAuthenticatedUser(req);
   if (!auth) {
     return res.status(401).json({ success: false, error: 'Faça login para acessar a área de parceiros.' });
+  }
+  if (!auth.emailVerified && !auth.isAdmin) {
+    return res.status(403).json({
+      success: false,
+      email_unverified: true,
+      error: 'Confirme seu endereço de e-mail pelo link enviado antes de solicitar cupons.',
+    });
   }
 
   const userHeaders = {
@@ -147,6 +159,18 @@ module.exports = async (req, res) => {
       }
       if (!whatsapp || !pixKey) {
         return res.status(400).json({ success: false, error: 'WhatsApp e chave Pix são obrigatórios para receber suas comissões.' });
+      }
+
+      // Anti-spam: limite de até 3 solicitações pendentes por parceiro
+      const pendRes = await sbFetch(
+        `/rest/v1/tiw_partner_requests?user_id=eq.${encodeURIComponent(auth.user.id)}&status=eq.pendente&select=id`,
+        { headers: userHeaders }
+      );
+      if (pendRes.ok && Array.isArray(pendRes.data) && pendRes.data.length >= 3) {
+        return res.status(429).json({
+          success: false,
+          error: 'Você já possui 3 solicitações em análise. Aguarde a aprovação do administrador.',
+        });
       }
 
       // Check if code already exists in active coupons

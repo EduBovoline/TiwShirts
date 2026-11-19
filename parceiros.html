@@ -117,6 +117,19 @@
 
       <div id="auth-err" class="err-box" style="display:none;"></div>
       <div id="auth-ok" class="ok-box" style="display:none;"></div>
+      <div id="resend-wrap" style="display:none;margin-bottom:14px;">
+        <button type="button" class="btn btn-sand btn-sm" style="width:100%;" id="resend-btn" onclick="resendConfirmationEmail()">Reenviar link de verificação por e-mail</button>
+      </div>
+
+      <button type="button" class="btn" style="width:100%;padding:11px;margin-bottom:14px;background:#fff;color:#111;border-color:#fff;font-weight:700;" onclick="loginWithGoogle()">
+        <span style="font-size:15px;">G</span> Continuar com Google
+      </button>
+
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--text-muted);font-size:11px;font-family:var(--mono);text-transform:uppercase;">
+        <span style="flex:1;height:1px;background:var(--border);"></span>
+        <span>ou com e-mail verificado</span>
+        <span style="flex:1;height:1px;background:var(--border);"></span>
+      </div>
 
       <form onsubmit="handleAuthSubmit(event)">
         <div class="field">
@@ -129,6 +142,9 @@
         </div>
         <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;" id="auth-submit-btn">Entrar na Área do Parceiro →</button>
       </form>
+      <div class="muted" style="margin-top:14px;text-align:center;font-size:11.5px;">
+        🔒 Segurança ativa: confirmação de e-mail obrigatória e aprovação manual de cupons pelo administrador.
+      </div>
     </div>
   </div>
 
@@ -291,6 +307,29 @@
 
     async function ensureSession() {
       try {
+        // 1. Captura retorno de login com Google OAuth ou link de confirmação (#access_token=...)
+        if (window.location.hash && window.location.hash.includes('access_token=')) {
+          const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+          const accessToken = hashParams.get('access_token');
+          const refreshToken = hashParams.get('refresh_token') || '';
+          const expiresIn = Number(hashParams.get('expires_in') || 3600);
+          if (accessToken) {
+            const uResp = await fetch(SUPABASE_URL + '/auth/v1/user', {
+              headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + accessToken },
+            });
+            const uData = uResp.ok ? await uResp.json() : {};
+            session = {
+              access_token: accessToken,
+              refresh_token: refreshToken,
+              expires_at: Date.now() + expiresIn * 1000,
+              email: uData.email || '',
+            };
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+            history.replaceState(null, '', window.location.pathname);
+            return true;
+          }
+        }
+
         const raw = sessionStorage.getItem(SESSION_KEY);
         if (!raw) return false;
         const p = JSON.parse(raw);
@@ -343,11 +382,17 @@
         });
         const data = await resp.json();
         if (!resp.ok) {
-          errEl.textContent = (data && (data.error_description || data.msg || data.message)) || 'Não foi possível autenticar.';
+          const rawMsg = (data && (data.error_description || data.msg || data.message)) || 'Não foi possível autenticar.';
+          const isUnconfirmed = /not confirmed|confirm/i.test(rawMsg);
+          errEl.textContent = isUnconfirmed
+            ? 'Seu e-mail ainda não foi confirmado. Abra sua caixa de entrada e clique no link enviado, ou reenvie abaixo.'
+            : rawMsg;
           errEl.style.display = 'block';
+          document.getElementById('resend-wrap').style.display = isUnconfirmed ? 'block' : 'none';
           return;
         }
         if (data.access_token) {
+          document.getElementById('resend-wrap').style.display = 'none';
           session = {
             access_token: data.access_token,
             refresh_token: data.refresh_token,
@@ -358,8 +403,9 @@
           showPortal();
           await loadPartnerData();
         } else {
-          okEl.textContent = 'Conta criada! Verifique seu e-mail para confirmar o cadastro e depois faça login.';
+          okEl.textContent = 'Conta criada! Enviamos um link de confirmação para ' + email + '. Clique no link recebido no seu e-mail e depois faça login.';
           okEl.style.display = 'block';
+          document.getElementById('resend-wrap').style.display = 'block';
           setAuthMode('signin');
         }
       } catch (err) {
@@ -368,6 +414,54 @@
       } finally {
         btn.disabled = false;
         setAuthMode(authMode);
+      }
+    }
+
+    async function loginWithGoogle() {
+      const errEl = document.getElementById('auth-err');
+      errEl.style.display = 'none';
+      try {
+        const sResp = await fetch(SUPABASE_URL + '/auth/v1/settings', { headers: { apikey: SUPABASE_KEY } });
+        const settings = sResp.ok ? await sResp.json() : {};
+        if (!settings.external || !settings.external.google) {
+          errEl.textContent = 'O login com Google ainda não está habilitado no Supabase Auth. Use o cadastro com e-mail verificado abaixo (ou ative o provedor Google no painel do Supabase).';
+          errEl.style.display = 'block';
+          return;
+        }
+      } catch (e) {}
+      const redirectTo = encodeURIComponent(window.location.origin + '/parceiros');
+      window.location.href = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${redirectTo}`;
+    }
+
+    async function resendConfirmationEmail() {
+      const email = document.getElementById('auth-email').value.trim();
+      const errEl = document.getElementById('auth-err');
+      const okEl = document.getElementById('auth-ok');
+      if (!email) {
+        errEl.textContent = 'Digite seu e-mail no campo abaixo para reenviar o link.';
+        errEl.style.display = 'block';
+        return;
+      }
+      const btn = document.getElementById('resend-btn');
+      btn.disabled = true; btn.textContent = 'Reenviando...';
+      try {
+        const resp = await fetch(SUPABASE_URL + '/auth/v1/resend', {
+          method: 'POST',
+          headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'signup', email }),
+        });
+        if (resp.ok) {
+          errEl.style.display = 'none';
+          okEl.textContent = 'Novo link de verificação enviado para ' + email + '! Confira também a caixa de spam.';
+          okEl.style.display = 'block';
+        } else {
+          errEl.textContent = 'Aguarde 60 segundos antes de solicitar outro e-mail.';
+          errEl.style.display = 'block';
+        }
+      } catch (e) {
+        errEl.textContent = e.message; errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Reenviar link de verificação por e-mail';
       }
     }
 
