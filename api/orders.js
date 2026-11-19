@@ -1,12 +1,18 @@
-// Vercel Serverless Function — POST /api/orders
-// Checkout mais barato do mercado:
-// 1. InfinitePay Checkout Integrado (Pix R$ 0,00 + Cartão até 12x com menor taxa ~3,15%)
+// Vercel Serverless Function — /api/orders
+// 1. InfinitePay Checkout Integrado (Pix R$ 0,00 + Cartão até 12x)
 // 2. Pix EMV Direto na Tela (QR Code + Copia e Cola — Taxa R$ 0,00)
-// + Persistência Automática no Supabase (zero perda de dados/endereços)
+// 3. Suporte a cupons 10+10, cálculo exato em centavos e persistência no Supabase
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://msschydwkaektxjlbmjc.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zc2NoeWR3a2Fla3R4amxibWpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4MTkyMjMsImV4cCI6MjEwOTM5NTIyM30.Jemyb0rGHItevfp8EqZ_jWTEP01yqVdp_iQoRtFuEv0';
-const WHATSAPP_TIW = '5515981512083';
+const {
+  WHATSAPP_TIW,
+  setCors,
+  anonHeaders,
+  adminHeaders,
+  parseBody,
+  sbFetch,
+  isMissingTableError,
+  fetchValidCoupon,
+} = require('./_supabase');
 
 const LINE_PRICES = {
   pf: 139.0,
@@ -51,7 +57,7 @@ function buildPixPayload({ key, merchantName, merchantCity, amount, txid }) {
   const keyField = emvField('01', cleanKey);
   const mai = emvField('26', gui + keyField);
 
-  let payload =
+  const payload =
     emvField('00', '01') +
     mai +
     emvField('52', '0000') +
@@ -66,13 +72,13 @@ function buildPixPayload({ key, merchantName, merchantCity, amount, txid }) {
   return payload + crc16ccitt(payload);
 }
 
-// Gera URL de Checkout Integrado da InfinitePay (URL direta + tentativa via API pública de links)
-async function createInfinitePayCheckout({ handle, orderId, items, customer, siteOrigin }) {
+async function createInfinitePayCheckout({ handle, orderId, orderNsu, items, customer, siteOrigin }) {
   const cleanHandle = String(handle || process.env.INFINITEPAY_HANDLE || 'edu_bovoline').replace(/^\$/, '').trim();
   const baseUrl = siteOrigin || process.env.PUBLIC_SITE_URL || 'https://tiwshirts.space';
   const redirectUrl = `${baseUrl}/?pedido=${encodeURIComponent(orderId)}&status=pago`;
+  const nsu = String(orderNsu || orderId).slice(0, 50);
 
-  // Descrições neutras de vestuário para evitar bloqueios de compliance por palavras-chave nas adquirentes
+  // Descrições neutras de vestuário para evitar bloqueios por palavras-chave nas adquirentes
   const infiniteItems = items.map((it) => {
     const parts = String(it.sku || '').split('_');
     const refCode = (parts[0] || 'tiw').toUpperCase();
@@ -83,7 +89,7 @@ async function createInfinitePayCheckout({ handle, orderId, items, customer, sit
       name: desc,
       description: desc,
       quantity: Number(it.qty) || 1,
-      price: Math.round(Number(it.unit_price) * 100), // em centavos
+      price: Number(it.discounted_unit_cents || Math.round(Number(it.unit_price) * 100)),
     };
   });
 
@@ -93,14 +99,18 @@ async function createInfinitePayCheckout({ handle, orderId, items, customer, sit
     : undefined;
   const cleanCep = String((customer && customer.cep) || '').replace(/\D/g, '');
 
-  // URL universal de Checkout Integrado InfinitePay (funciona sempre com a InfiniteTag)
   const queryParams = new URLSearchParams();
-  queryParams.set('items', JSON.stringify(infiniteItems.map((i) => ({
-    name: i.name,
-    price: i.price,
-    quantity: i.quantity,
-  }))));
-  queryParams.set('order_nsu', orderId);
+  queryParams.set(
+    'items',
+    JSON.stringify(
+      infiniteItems.map((i) => ({
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+      }))
+    )
+  );
+  queryParams.set('order_nsu', nsu);
   queryParams.set('redirect_url', redirectUrl);
   if (customer && customer.name) queryParams.set('customer_name', customer.name);
   if (customer && customer.email) queryParams.set('customer_email', customer.email);
@@ -109,11 +119,10 @@ async function createInfinitePayCheckout({ handle, orderId, items, customer, sit
 
   let checkoutUrl = `https://checkout.infinitepay.io/${encodeURIComponent(cleanHandle)}?${queryParams.toString()}`;
 
-  // Tenta criar link dinâmico via endpoint público da InfinitePay (se a tag já estiver ativa na API)
   try {
     const apiPayload = {
       handle: cleanHandle,
-      order_nsu: orderId,
+      order_nsu: nsu,
       redirect_url: redirectUrl,
       webhook_url: `${baseUrl}/api/orders?webhook=infinitepay`,
       items: infiniteItems.map((i) => ({
@@ -165,46 +174,64 @@ async function createInfinitePayCheckout({ handle, orderId, items, customer, sit
 }
 
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  setCors(res, 'GET, POST, PATCH, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(204).end();
 
-  // GET: Consultar pedidos registrados
+  // GET: Consultar pedidos registrados (somente admin autenticado)
   if (req.method === 'GET') {
+    const headers = adminHeaders(req);
+    if (!headers) {
+      return res.status(401).json({ success: false, error: 'Autenticação administrativa necessária.' });
+    }
     try {
-      const resp = await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders?select=*&order=created_at.desc`, {
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-        },
-      });
-      const data = await resp.json();
-      return res.status(200).json({ success: true, orders: data });
+      const result = await sbFetch('/rest/v1/tiw_orders?select=*&order=created_at.desc', { headers });
+      if (!result.ok) {
+        const status = result.status === 401 || result.status === 403 ? result.status : 500;
+        return res.status(status).json({ success: false, error: 'Erro ao consultar pedidos.' });
+      }
+      return res.status(200).json({ success: true, orders: Array.isArray(result.data) ? result.data : [] });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }
   }
 
-  // PATCH: Atualizar status do pedido (ex: pagamento_informado, pago)
+  // PATCH: Atualizar status do pedido ou comissão (somente admin autenticado)
   if (req.method === 'PATCH') {
+    const headers = adminHeaders(req);
+    if (!headers) {
+      return res.status(401).json({ success: false, error: 'Autenticação administrativa necessária.' });
+    }
     try {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-      const { order_id, status } = body;
+      const body = parseBody(req);
+      const { order_id, status, commission_status } = body;
       if (!order_id) return res.status(400).json({ success: false, error: 'order_id obrigatório' });
 
-      await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(order_id)}`, {
+      const patchData = {};
+      if (status) patchData.status = status;
+      if (status === 'cancelado') {
+        patchData.commission_status = 'cancelado';
+      } else if (commission_status) {
+        patchData.commission_status = commission_status;
+        if (commission_status === 'pago') {
+          patchData.commission_paid_at = new Date().toISOString();
+        }
+      }
+
+      if (Object.keys(patchData).length === 0) {
+        return res.status(400).json({ success: false, error: 'Informe status ou commission_status.' });
+      }
+
+      const updRes = await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(order_id)}`, {
         method: 'PATCH',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal',
-        },
-        body: JSON.stringify({ status: status || 'pago' }),
+        headers: { ...headers, Prefer: 'return=minimal' },
+        body: patchData,
       });
 
-      return res.status(200).json({ success: true, order_id, status: status || 'pago' });
+      if (!updRes.ok) {
+        return res.status(updRes.status).json({ success: false, error: 'Erro ao atualizar pedido.' });
+      }
+
+      return res.status(200).json({ success: true, order_id, ...patchData });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }
@@ -215,21 +242,26 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    const body = parseBody(req);
 
-    // Se for chamada de Webhook da InfinitePay
+    // Webhook da InfinitePay
     if (req.query && req.query.webhook === 'infinitepay') {
-      const orderNsu = body.order_nsu || body.order_id;
-      if (orderNsu) {
+      const rawNsu = body.order_nsu || body.order_id || '';
+      const orderNsu = String(rawNsu).match(/^(TIW-[A-Z0-9]+-[A-Z0-9]+)/i)
+        ? String(rawNsu).match(/^(TIW-[A-Z0-9]+-[A-Z0-9]+)/i)[1]
+        : rawNsu;
+      const secretOk = !process.env.INFINITEPAY_WEBHOOK_SECRET || req.query.secret === process.env.INFINITEPAY_WEBHOOK_SECRET;
+      if (orderNsu && secretOk && process.env.SUPABASE_SERVICE_ROLE_KEY) {
         try {
-          await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(orderNsu)}`, {
+          await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(orderNsu)}`, {
             method: 'PATCH',
             headers: {
-              'apikey': SUPABASE_KEY,
-              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+              Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
               'Content-Type': 'application/json',
+              Prefer: 'return=minimal',
             },
-            body: JSON.stringify({ status: 'pago' }),
+            body: { status: 'pago' },
           });
         } catch (e) {}
       }
@@ -240,24 +272,45 @@ module.exports = async (req, res) => {
       });
     }
 
-    const { customer, items, payment_method } = body;
-
+    const { customer, items, payment_method, coupon_code } = body;
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ success: false, error: 'Carrinho vazio.' });
     }
 
-    let total = 0;
+    let validCoupon = null;
+    if (coupon_code) {
+      const check = await fetchValidCoupon(coupon_code);
+      if (check.valid) {
+        validCoupon = check.coupon;
+      } else if (!check.setupRequired) {
+        return res.status(400).json({ success: false, error: check.message || 'Cupom inválido.' });
+      }
+    }
+
+    const discountPct = validCoupon ? validCoupon.discount_pct : 0;
+    const commissionPct = validCoupon ? validCoupon.commission_pct : 0;
+
+    let subtotalCents = 0;
+    let totalCents = 0;
+
     const normalizedItems = items.map((it) => {
       const sku = String(it.sku || '');
       const parts = sku.split('_');
       const lineId = parts[1] || 'pf';
-      const unitPrice = Number(it.price) || LINE_PRICES[lineId] || 139.0;
+      const unitPrice = Number(LINE_PRICES[lineId] || it.price || 139.0);
       const qty = Math.max(1, Number(it.qty) || 1);
-      total += unitPrice * qty;
+      const unitCents = Math.round(unitPrice * 100);
+      const discountedUnitCents = Math.round((unitCents * (100 - discountPct)) / 100);
+
+      subtotalCents += unitCents * qty;
+      totalCents += discountedUnitCents * qty;
+
       return {
         sku,
         qty,
-        unit_price: unitPrice,
+        unit_price: Number((discountedUnitCents / 100).toFixed(2)),
+        original_unit_price: Number((unitCents / 100).toFixed(2)),
+        discounted_unit_cents: discountedUnitCents,
         name: it.name || 'Camiseta TiwShirts',
         fit: it.fit || 'Linha Clássica 30.1',
         size: it.size || 'M',
@@ -265,19 +318,27 @@ module.exports = async (req, res) => {
       };
     });
 
+    const subtotal = Number((subtotalCents / 100).toFixed(2));
+    const total = Number((totalCents / 100).toFixed(2));
+    const discountAmount = Number((subtotal - total).toFixed(2));
+    const commissionAmount = validCoupon ? Number(((total * commissionPct) / 100).toFixed(2)) : 0;
+    const commissionStatus = validCoupon ? 'pendente' : 'sem_comissao';
+
     const ts = Date.now().toString(36).toUpperCase().slice(-4);
     const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
     const orderId = `TIW-${ts}-${rand}`;
+    const orderNsu = validCoupon ? `${orderId}-${validCoupon.code}`.slice(0, 50) : orderId;
 
     const pixCode = buildPixPayload({
       amount: total,
-      txid: orderId.replace(/[^A-Z0-9]/g, ''),
+      txid: orderNsu.replace(/[^A-Z0-9]/g, ''),
     });
 
     const pixQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=${encodeURIComponent(pixCode)}`;
 
     const checkoutUrl = await createInfinitePayCheckout({
       orderId,
+      orderNsu,
       items: normalizedItems,
       customer,
     });
@@ -290,8 +351,7 @@ module.exports = async (req, res) => {
       cep: (customer && customer.cep) || '',
     };
 
-    // 1. Grava no banco Supabase (Zero Perda de Dados)
-    const orderRecord = {
+    const baseRecord = {
       order_id: orderId,
       status: 'aguardando_pagamento',
       payment_method: payment_method || 'pix',
@@ -302,44 +362,67 @@ module.exports = async (req, res) => {
       checkout_url: checkoutUrl,
     };
 
+    const extendedRecord = {
+      ...baseRecord,
+      subtotal,
+      discount_amount: discountAmount,
+      coupon_code: validCoupon ? validCoupon.code : null,
+      commission_pct: commissionPct,
+      commission_amount: commissionAmount,
+      commission_status: commissionStatus,
+    };
+
     try {
-      await fetch(`${SUPABASE_URL}/rest/v1/tiw_orders`, {
+      const insertRes = await sbFetch('/rest/v1/tiw_orders', {
         method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal',
-        },
-        body: JSON.stringify(orderRecord),
+        headers: anonHeaders({ Prefer: 'return=minimal' }),
+        body: extendedRecord,
       });
+
+      // Fallback caso as novas colunas ainda não tenham sido migradas no Supabase
+      if (!insertRes.ok && (insertRes.status === 400 || isMissingTableError(insertRes))) {
+        await sbFetch('/rest/v1/tiw_orders', {
+          method: 'POST',
+          headers: anonHeaders({ Prefer: 'return=minimal' }),
+          body: baseRecord,
+        });
+      }
     } catch (dbErr) {
       console.error('Erro ao gravar pedido no Supabase:', dbErr);
     }
 
-    // 2. Link de acionamento do WhatsApp para envio do comprovante Pix
-    const itemsSummary = normalizedItems.map(i => `• ${i.qty}x ${i.name} (${i.fit}, ${i.size})`).join('\n');
+    const itemsSummary = normalizedItems.map((i) => `• ${i.qty}x ${i.name} (${i.fit}, ${i.size})`).join('\n');
+    const couponLine = validCoupon
+      ? `\n*Cupom aplicado:* ${validCoupon.code} (-${discountPct}% · Desc. R$ ${discountAmount.toFixed(2).replace('.', ',')})`
+      : '';
     const waPixText = encodeURIComponent(
-      `Olá TiwShirts! Acabei de gerar o pedido *${orderId}* no valor de *R$ ${total.toFixed(2).replace('.', ',')}* via Pix.\n\n` +
-      `*Cliente:* ${customerData.name}\n` +
-      `*WhatsApp:* ${customerData.phone}\n` +
-      `*Endereço de Entrega:* ${customerData.address}, CEP ${customerData.cep}\n\n` +
-      `*Peças:*\n${itemsSummary}\n\n` +
-      `Segue o comprovante de pagamento!`
+      `Olá TiwShirts! Acabei de gerar o pedido *${orderId}* no valor de *R$ ${total.toFixed(2).replace('.', ',')}* via Pix.${couponLine}\n\n` +
+        `*Cliente:* ${customerData.name}\n` +
+        `*WhatsApp:* ${customerData.phone}\n` +
+        `*Endereço de Entrega:* ${customerData.address}, CEP ${customerData.cep}\n\n` +
+        `*Peças:*\n${itemsSummary}\n\n` +
+        `Segue o comprovante de pagamento!`
     );
     const waUrl = `https://wa.me/${WHATSAPP_TIW}?text=${waPixText}`;
 
     return res.status(201).json({
       success: true,
       order_id: orderId,
+      order_nsu: orderNsu,
       status: 'aguardando_pagamento',
       payment_method: payment_method || 'pix',
       checkout_provider: 'infinitepay',
+      subtotal,
+      discount_amount: discountAmount,
       total,
+      coupon_code: validCoupon ? validCoupon.code : null,
+      discount_pct: discountPct,
+      commission_pct: commissionPct,
+      commission_amount: commissionAmount,
       pix_code: pixCode,
       pix_qr_url: pixQrUrl,
       checkout_url: checkoutUrl,
-      init_point: checkoutUrl, // compatibilidade com frontend
+      init_point: checkoutUrl,
       wa_url: waUrl,
       customer: customerData,
       items: normalizedItems,

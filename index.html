@@ -725,6 +725,11 @@ a:hover { color:#F5F5F5; }
     </div>
   </sc-if>
 
+  <!-- SELO DISCRETO DE CUPOM ATIVO (ACIMA DO CARRINHO) -->
+  <sc-if value="{{ hasAppliedCoupon }}" hint-placeholder-val="{{ false }}">
+    <button type="button" onClick="{{ openCart }}" style="position:fixed;bottom:78px;right:24px;z-index:89;display:flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(12,12,12,0.92);color:#4ade80;border:1px solid rgba(74,222,128,0.45);border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.45);">{{ appliedCouponPill }}</button>
+  </sc-if>
+
   <!-- CARRINHO (botão flutuante) -->
   <button onClick="{{ openCart }}" style="position:fixed;bottom:24px;right:24px;z-index:90;display:flex;align-items:center;gap:10px;padding:14px 20px;background:#2D5A27;color:#F5F5F5;border:none;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.5);">🛒 CARRINHO <span style="background:#F5F5F5;color:#080808;border-radius:999px;padding:2px 9px;font-weight:700;">{{ cartCount }}</span></button>
 
@@ -764,9 +769,45 @@ a:hover { color:#F5F5F5; }
             </sc-for>
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;">TOTAL DO PEDIDO</div>
-            <div style="font-family:'Lemon Milk',sans-serif;font-size:24px;">{{ cartTotalLabel }}</div>
+          <!-- CUPOM DE PARCEIRO (10+10) -->
+          <div style="margin-top:16px;padding:12px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);border-radius:4px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#C5A880;letter-spacing:0.08em;margin-bottom:8px;">CUPOM DE PARCEIRO</div>
+            <sc-if value="{{ noAppliedCoupon }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:8px;">
+                <input id="cart-coupon-input" type="text" placeholder="Digite o código (ex: TIW10)" style="flex:1;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;outline:none;" />
+                <button type="button" onClick="{{ handleApplyCoupon }}" style="padding:9px 14px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.06em;">{{ couponApplyLabel }}</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasAppliedCoupon }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.35);padding:8px 12px;border-radius:4px;">
+                <div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#4ade80;font-weight:700;">✓ {{ appliedCoupon.code }} ({{ appliedCoupon.discount_pct }}% OFF)</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;margin-top:2px;">Parceiro: {{ appliedCoupon.partner_name }}</div>
+                </div>
+                <button type="button" onClick="{{ removeCoupon }}" style="background:none;border:none;color:#f87171;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;">✕ Remover</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasCouponError }}" hint-placeholder-val="{{ false }}">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#f87171;margin-top:6px;">{{ couponError }}</div>
+            </sc-if>
+          </div>
+
+          <!-- RESUMO DE VALORES -->
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:6px;">
+            <sc-if value="{{ hasAppliedCoupon }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8E8E93;">
+                <span>SUBTOTAL</span>
+                <span>{{ cartSubtotalLabel }}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#4ade80;">
+                <span>DESCONTO ({{ appliedCoupon.code }} · {{ appliedCoupon.discount_pct }}%)</span>
+                <span>− {{ cartDiscountLabel }}</span>
+              </div>
+            </sc-if>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:4px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;">TOTAL DO PEDIDO</div>
+              <div style="font-family:'Lemon Milk',sans-serif;font-size:24px;">{{ cartTotalLabel }}</div>
+            </div>
           </div>
 
           <sc-if value="{{ checkoutResultIsError }}" hint-placeholder-val="{{ false }}">
@@ -995,19 +1036,21 @@ function buildLocalPixPayload(amount, txid) {
   return payload + crc16ccitt(payload);
 }
 
-function buildLocalInfinitePayUrl(handle, orderId, items, customer) {
+function buildLocalInfinitePayUrl(handle, orderId, items, customer, discountPct, orderNsu) {
   const cleanHandle = String(handle || DEFAULT_INFINITEPAY_HANDLE).replace(/^\$/, "").trim();
   const origin = (typeof window !== "undefined" && window.location && window.location.origin) || "https://tiwshirts.space";
   const redirectUrl = origin + "/?pedido=" + encodeURIComponent(orderId) + "&status=pago";
+  const pct = Number(discountPct) || 0;
 
   const infiniteItems = items.map((it) => {
     const parts = String(it.sku || "").split("_");
     const refCode = (parts[0] || "TIW").toUpperCase();
     const fitClean = String(it.fit || "Streetwear").replace(/\([^)]*\)/g, "").trim();
     const desc = ("Camiseta TiwShirts " + fitClean + " (" + it.size + ") [" + refCode + "]").replace(/\s+/g, " ").trim();
+    const baseCents = Math.round((Number(it.price) || 139) * 100);
     return {
       name: desc,
-      price: Math.round((Number(it.price) || 139) * 100),
+      price: Math.round((baseCents * (100 - pct)) / 100),
       quantity: Number(it.qty) || 1,
     };
   });
@@ -1017,7 +1060,7 @@ function buildLocalInfinitePayUrl(handle, orderId, items, customer) {
 
   const params = new URLSearchParams();
   params.set("items", JSON.stringify(infiniteItems));
-  params.set("order_nsu", orderId);
+  params.set("order_nsu", String(orderNsu || orderId).slice(0, 50));
   params.set("redirect_url", redirectUrl);
   if (customer && customer.name) params.set("customer_name", customer.name);
   if (customer && customer.email) params.set("customer_email", customer.email);
@@ -1045,6 +1088,9 @@ class Component extends DCLogic {
     pixCopied: false,
     pixConfirmed: false,
     checkoutResult: null,
+    appliedCoupon: null,
+    couponError: "",
+    couponLoading: false,
   };
 
   catalog = null;
@@ -1275,7 +1321,10 @@ class Component extends DCLogic {
     const active = this.looksData.find((l) => l.id === this.state.activeLookId) || this.looksData[0];
     if (!active) return;
     const baseUrl = (typeof window !== "undefined" && window.location && window.location.origin) || "https://tiwshirts.space";
-    const shareUrl = baseUrl + "/?peca=" + encodeURIComponent(active.id);
+    const couponQuery = this.state.appliedCoupon && this.state.appliedCoupon.code
+      ? "&cupom=" + encodeURIComponent(this.state.appliedCoupon.code)
+      : "";
+    const shareUrl = baseUrl + "/?peca=" + encodeURIComponent(active.id) + couponQuery;
     if (typeof navigator !== "undefined" && navigator.share) {
       navigator.share({
         title: "TiwShirts · " + active.name,
@@ -1289,6 +1338,54 @@ class Component extends DCLogic {
     }
     this.setState({ shareCopied: true });
     setTimeout(() => this.setState({ shareCopied: false }), 2800);
+  };
+
+  applyCouponCode = async (rawCode, silent) => {
+    const code = String(rawCode || "").trim().toUpperCase().replace(/\s+/g, "");
+    if (!code) {
+      if (!silent) this.setState({ couponError: "Digite um código de cupom." });
+      return;
+    }
+    this.setState({ couponLoading: true, couponError: "" });
+    try {
+      const res = await fetch(BACKEND_URL + "/api/coupons?code=" + encodeURIComponent(code));
+      const data = await res.json();
+      if (data && data.valid && data.coupon) {
+        try {
+          localStorage.setItem(
+            "tiw_active_coupon",
+            JSON.stringify({ ...data.coupon, expiresAt: Date.now() + 7 * 86400 * 1000 })
+          );
+        } catch (e) {}
+        this.setState({ appliedCoupon: data.coupon, couponError: "", couponLoading: false });
+        return;
+      }
+      if (silent) {
+        this.setState({ appliedCoupon: null, couponLoading: false });
+      } else {
+        this.setState({
+          appliedCoupon: null,
+          couponError: (data && (data.message || data.error)) || "Cupom inválido ou inativo.",
+          couponLoading: false,
+        });
+      }
+    } catch (err) {
+      this.setState({
+        couponLoading: false,
+        couponError: silent ? "" : "Não foi possível validar o cupom agora.",
+      });
+    }
+  };
+
+  handleApplyCoupon = () => {
+    const el = document.getElementById("cart-coupon-input");
+    const val = el ? el.value : "";
+    this.applyCouponCode(val, false);
+  };
+
+  removeCoupon = () => {
+    try { localStorage.removeItem("tiw_active_coupon"); } catch (e) {}
+    this.setState({ appliedCoupon: null, couponError: "" });
   };
   openB2bModal = () => this.setState({ b2bModalOpen: true, b2bSuccess: false });
   closeB2bModal = () => this.setState({ b2bModalOpen: false });
@@ -1457,7 +1554,19 @@ class Component extends DCLogic {
     }));
     if (!items.length) return;
 
-    const totalAmount = this.state.cart.reduce((s, c) => s + c.price * c.qty, 0);
+    const applied = this.state.appliedCoupon;
+    const discountPct = applied ? (Number(applied.discount_pct) || 0) : 0;
+    const couponCode = applied ? applied.code : null;
+
+    let subtotalCents = 0;
+    let totalCents = 0;
+    this.state.cart.forEach((c) => {
+      const unitCents = Math.round((Number(c.price) || 139) * 100);
+      const discUnitCents = Math.round((unitCents * (100 - discountPct)) / 100);
+      subtotalCents += unitCents * c.qty;
+      totalCents += discUnitCents * c.qty;
+    });
+    const totalAmount = Number((totalCents / 100).toFixed(2));
     const customer = { name, email, phone, cep, address };
 
     try {
@@ -1468,18 +1577,20 @@ class Component extends DCLogic {
           customer,
           items,
           payment_method: paymentMethod,
+          coupon_code: couponCode,
         }),
       });
       const data = await res.json();
       if (data && data.success) {
-        const pixCode = data.pix_code || buildLocalPixPayload(data.total || totalAmount, data.order_id);
+        const finalTotal = data.total != null ? Number(data.total) : totalAmount;
+        const pixCode = data.pix_code || buildLocalPixPayload(finalTotal, data.order_nsu || data.order_id);
         const pixQrUrl = data.pix_qr_url || ("https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" + encodeURIComponent(pixCode));
-        const checkoutUrl = data.checkout_url || data.init_point || buildLocalInfinitePayUrl(this.infinitepayHandle, data.order_id, items, customer);
-        const waUrl = data.wa_url || ("https://wa.me/5515981512083?text=" + encodeURIComponent("Olá TiwShirts! Pedido " + data.order_id + " gerado via Pix no valor de R$ " + (data.total || totalAmount) + ". Segue o comprovante!"));
+        const checkoutUrl = data.checkout_url || data.init_point || buildLocalInfinitePayUrl(this.infinitepayHandle, data.order_id, items, customer, discountPct, data.order_nsu || data.order_id);
+        const waUrl = data.wa_url || ("https://wa.me/5515981512083?text=" + encodeURIComponent("Olá TiwShirts! Pedido " + data.order_id + " gerado via Pix no valor de R$ " + finalTotal.toFixed(2).replace(".", ",") + (couponCode ? " (Cupom " + couponCode + ")" : "") + ". Segue o comprovante!"));
         const resultObj = {
           type: "success",
           orderId: data.order_id,
-          total: data.total || totalAmount,
+          total: finalTotal,
           paymentMethod,
           pixCode,
           pixQrUrl,
@@ -1507,9 +1618,10 @@ class Component extends DCLogic {
     }
 
     const orderId = "TIW-" + Date.now().toString(36).toUpperCase().slice(-4) + "-" + Math.floor(100 + Math.random() * 900);
-    const pixCode = buildLocalPixPayload(totalAmount, orderId);
+    const orderNsu = couponCode ? (orderId + "-" + couponCode).slice(0, 50) : orderId;
+    const pixCode = buildLocalPixPayload(totalAmount, orderNsu);
     const pixQrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" + encodeURIComponent(pixCode);
-    const checkoutUrl = buildLocalInfinitePayUrl(this.infinitepayHandle, orderId, items, customer);
+    const checkoutUrl = buildLocalInfinitePayUrl(this.infinitepayHandle, orderId, items, customer, discountPct, orderNsu);
     const resultObj = {
       type: "success",
       orderId,
@@ -1519,6 +1631,7 @@ class Component extends DCLogic {
       pixQrUrl,
       checkoutUrl,
       initPoint: checkoutUrl,
+      waUrl: "https://wa.me/5515981512083?text=" + encodeURIComponent("Olá TiwShirts! Pedido " + orderId + " gerado via Pix no valor de R$ " + totalAmount.toFixed(2).replace(".", ",") + (couponCode ? " (Cupom " + couponCode + ")" : "") + ". Segue o comprovante!"),
       name,
       email,
       phone,
@@ -1567,12 +1680,22 @@ class Component extends DCLogic {
   componentDidMount() {
     this.loadCatalog();
 
-    // Verifica retorno pós-pagamento ou abertura direta de peça compartilhada (?peca=tricomas)
+    // Verifica retorno pós-pagamento, peça compartilhada (?peca=) e cupom de parceiro (?cupom= / ?ref=)
     try {
       const params = new URLSearchParams(window.location.search || "");
       const pecaParam = params.get("peca");
       if (pecaParam && this.looksData.some((l) => l.id === pecaParam)) {
         this.openLook(pecaParam);
+      }
+      const couponParam = params.get("cupom") || params.get("ref") || params.get("coupon");
+      if (couponParam) {
+        this.applyCouponCode(couponParam, true);
+      } else {
+        const storedCoupon = JSON.parse(localStorage.getItem("tiw_active_coupon") || "null");
+        if (storedCoupon && storedCoupon.code && (!storedCoupon.expiresAt || storedCoupon.expiresAt > Date.now())) {
+          this.setState({ appliedCoupon: storedCoupon });
+          this.applyCouponCode(storedCoupon.code, true);
+        }
       }
       const paidOrder = params.get("pedido") || params.get("order_nsu");
       const statusParam = params.get("status");
@@ -1832,8 +1955,28 @@ class Component extends DCLogic {
     };
 
     const cartCount = this.state.cart.reduce((s, c) => s + c.qty, 0);
-    const cartTotal = this.state.cart.reduce((s, c) => s + c.price * c.qty, 0);
+    const appliedCoupon = this.state.appliedCoupon;
+    const discountPct = appliedCoupon ? (Number(appliedCoupon.discount_pct) || 0) : 0;
+    let subtotalCents = 0;
+    let totalCents = 0;
+    this.state.cart.forEach((c) => {
+      const unitCents = Math.round((Number(c.price) || 139) * 100);
+      const discUnitCents = Math.round((unitCents * (100 - discountPct)) / 100);
+      subtotalCents += unitCents * c.qty;
+      totalCents += discUnitCents * c.qty;
+    });
+    const cartSubtotal = subtotalCents / 100;
+    const cartTotal = totalCents / 100;
+    const cartDiscount = Math.max(0, cartSubtotal - cartTotal);
+    const cartSubtotalLabel = fmtPrice(cartSubtotal);
+    const cartDiscountLabel = fmtPrice(cartDiscount);
     const cartTotalLabel = fmtPrice(cartTotal);
+    const hasAppliedCoupon = !!(appliedCoupon && appliedCoupon.code);
+    const noAppliedCoupon = !hasAppliedCoupon;
+    const appliedCouponPill = hasAppliedCoupon ? ("✓ " + appliedCoupon.code + " · " + discountPct + "% OFF") : "";
+    const couponApplyLabel = this.state.couponLoading ? "..." : "APLICAR";
+    const hasCouponError = !!this.state.couponError;
+    const couponError = this.state.couponError || "";
     const cartItems = this.state.cart.map((c, i) => ({
       name: c.name,
       fit: c.fit,
@@ -1911,7 +2054,18 @@ class Component extends DCLogic {
       submitB2B: this.submitB2B,
       cartItems,
       cartCount,
+      cartSubtotalLabel,
+      cartDiscountLabel,
       cartTotalLabel,
+      appliedCoupon: appliedCoupon || { code: "", partner_name: "", discount_pct: 0 },
+      hasAppliedCoupon,
+      noAppliedCoupon,
+      appliedCouponPill,
+      couponApplyLabel,
+      hasCouponError,
+      couponError,
+      handleApplyCoupon: this.handleApplyCoupon,
+      removeCoupon: this.removeCoupon,
       cartOpen: this.state.cartOpen,
       cartEmpty,
       hasCartItems,

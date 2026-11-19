@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TiwShirts — Painel Operacional (Pedidos, Afiliados 10+10 & B2B)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080808;
+      --card-bg: #121212;
+      --card-elevated: #171717;
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #2D5A27;
+      --accent-light: #4ade80;
+      --sand: #C5A880;
+      --danger: #f87171;
+      --warn: #f59e0b;
+      --text: #F5F5F5;
+      --text-muted: #8E8E93;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.16) transparent; }
+    body { background: var(--bg); color: var(--text); padding: 24px; min-height: 100vh; }
+
+    /* Login */
+    .login-wrap { min-height: calc(100vh - 48px); display: flex; align-items: center; justify-content: center; }
+    .login-card { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border); padding: 32px; border-radius: 6px; }
+    .login-card h1 { font-family: 'JetBrains Mono', monospace; font-size: 16px; letter-spacing: 0.12em; margin-bottom: 6px; }
+    .login-sub { font-size: 12.5px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .field label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--sand); letter-spacing: 0.08em; text-transform: uppercase; }
+    .field input, .field textarea { width: 100%; background: #080808; border: 1px solid rgba(255,255,255,0.15); color: var(--text); padding: 11px 12px; font-size: 13.5px; border-radius: 4px; outline: none; }
+    .field input:focus { border-color: var(--sand); }
+    .btn-primary { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; }
+    .btn-primary:hover { background: #366d2f; }
+    .err-box { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.35); color: var(--danger); padding: 10px 12px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; margin-bottom: 14px; line-height: 1.45; }
+
+    /* Header & Layout */
+    header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+    header h1 { font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700; letter-spacing: 0.1em; }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .badge-live { background: rgba(45,90,39,0.35); border: 1px solid rgba(74,222,128,0.4); color: var(--accent-light); padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .btn-sm { background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+    .btn-sm:hover { background: rgba(255,255,255,0.14); }
+    .btn-sm.sand { color: var(--sand); border-color: rgba(197,168,128,0.35); }
+    .btn-sm.green { background: rgba(45,90,39,0.55); border-color: rgba(74,222,128,0.4); color: #fff; }
+    .btn-sm.green:hover { background: var(--accent); }
+    .btn-sm.danger { color: var(--danger); border-color: rgba(248,113,113,0.3); }
+
+    .setup-alert { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.4); padding: 14px 18px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; line-height: 1.55; color: #fde68a; }
+    .setup-alert a { color: #fff; font-weight: 600; }
+
+    .stats-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 15px; }
+    .stat-title { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; margin-top: 6px; color: var(--text); }
+
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
+    .tab-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 8px 14px; cursor: pointer; border-radius: 4px; }
+    .tab-btn.active { background: var(--card-bg); color: var(--text); border-color: var(--border); }
+
+    .panel-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 22px; }
+    .panel-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .panel-title { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; text-transform: uppercase; color: var(--sand); letter-spacing: 0.06em; }
+
+    /* Form grid for new coupon */
+    .coupon-form { padding: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; align-items: end; }
+    .coupon-form .field { margin-bottom: 0; }
+    .created-banner { margin: 0 18px 18px; padding: 14px 16px; background: rgba(45,90,39,0.2); border: 1px solid rgba(74,222,128,0.4); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .created-banner code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-light); background: #080808; padding: 4px 8px; border-radius: 4px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th { text-align: left; padding: 11px 14px; background: rgba(255,255,255,0.03); color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 13px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+
+    .mono-gold { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--sand); }
+    .date-text { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-muted); margin-top: 3px; }
+    .muted { color: var(--text-muted); font-size: 11.5px; }
+    .total-val { font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; color: var(--accent-light); }
+    .badge { display: inline-block; padding: 3px 7px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+    .badge-pending { background: rgba(245,158,11,0.15); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+    .badge-paid { background: rgba(74,222,128,0.15); color: var(--accent-light); border: 1px solid rgba(74,222,128,0.3); }
+    .badge-muted { background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.12); }
+    .badge-danger { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+    .actions-col { display: flex; flex-wrap: wrap; gap: 6px; }
+    .empty-state { padding: 36px; text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  </style>
+</head>
+<body>
+
+  <!-- TELA DE LOGIN -->
+  <div id="login-view" class="login-wrap" style="display:none;">
+    <form class="login-card" onsubmit="handleLogin(event)">
+      <h1>TIWSHIRTS · ADMIN</h1>
+      <p class="login-sub">Acesso restrito para gerenciamento de cupons 10+10, pedidos da loja e cadastros B2B.</p>
+      <div id="login-error" class="err-box" style="display:none;"></div>
+      <div class="field">
+        <label for="login-email">E-mail</label>
+        <input id="login-email" type="email" required value="edubovoline@gmail.com" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="login-pass">Senha</label>
+        <input id="login-pass" type="password" required placeholder="Sua senha admin" autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn-primary" id="login-btn">ENTRAR NO PAINEL →</button>
+    </form>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="app-view" style="display:none;">
+    <header>
+      <div>
+        <h1>TIWSHIRTS · PAINEL DE CONTROLE</h1>
+        <div class="muted" style="margin-top:4px;">Cupons &amp; Afiliados (10+10), Pedidos D2C e Leads B2B · <span id="admin-user-email"></span></div>
+      </div>
+      <div class="header-actions">
+        <span class="badge-live">● CONECTADO</span>
+        <button class="btn-sm sand" onclick="loadAllData()">ATUALIZAR ⟳</button>
+        <button class="btn-sm" onclick="handleLogout()">SAIR</button>
+      </div>
+    </header>
+
+    <div id="setup-banner" class="setup-alert" style="display:none;">
+      <strong>Falta rodar a migração SQL no Supabase:</strong> as tabelas <code>tiw_coupons</code> / colunas de comissão ainda não foram criadas no banco.
+      Abra o <a href="https://supabase.com/dashboard/project/msschydwkaektxjlbmjc/sql/new" target="_blank" rel="noopener">SQL Editor do Supabase ↗</a>, cole o arquivo <code>03_WEB_E_SOFTWARE/supabase_affiliates_10_10.sql</code> e clique em <strong>Run</strong>.
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-title">Pedidos Registrados</div>
+        <div class="stat-val" id="stat-orders-count">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Faturamento Pago</div>
+        <div class="stat-val" id="stat-revenue" style="color:var(--accent-light);">R$ 0,00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Comissões a Pagar</div>
+        <div class="stat-val" id="stat-comm-pending" style="color:var(--warn);">R$ 0,00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Cupons Ativos</div>
+        <div class="stat-val" id="stat-coupons-count" style="color:var(--sand);">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Leads Atacado B2B</div>
+        <div class="stat-val" id="stat-b2b-count">0</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-coupons-btn" onclick="switchTab('coupons')">CUPONS &amp; AFILIADOS (10+10)</button>
+      <button class="tab-btn" id="tab-orders-btn" onclick="switchTab('orders')">PEDIDOS D2C VAREJO</button>
+      <button class="tab-btn" id="tab-b2b-btn" onclick="switchTab('b2b')">LEADS ATACADO B2B</button>
+    </div>
+
+    <!-- TAB: CUPONS & AFILIADOS -->
+    <div id="tab-coupons">
+      <div class="panel-card">
+        <div class="panel-head">
+          <div class="panel-title">+ Gerar Novo Cupom de Parceiro</div>
+          <div class="muted">Padrão 10+10: 10% OFF para o cliente + 10% de comissão sobre o valor pago</div>
+        </div>
+        <form class="coupon-form" onsubmit="createCoupon(event)">
+          <div class="field">
+            <label for="cp-code">Código do Cupom *</label>
+            <input id="cp-code" type="text" required placeholder="Ex: CHICO10" style="text-transform:uppercase;font-family:'JetBrains Mono',monospace;" />
+          </div>
+          <div class="field">
+            <label for="cp-partner">Nome do Parceiro *</label>
+            <input id="cp-partner" type="text" required placeholder="Ex: Chico Skate" />
+          </div>
+          <div class="field">
+            <label for="cp-discount">Desconto Cliente (%)</label>
+            <input id="cp-discount" type="number" step="0.5" min="0" max="50" value="10" required />
+          </div>
+          <div class="field">
+            <label for="cp-commission">Comissão Parceiro (%)</label>
+            <input id="cp-commission" type="number" step="0.5" min="0" max="50" value="10" required />
+          </div>
+          <div class="field">
+            <label for="cp-pix">Chave Pix do Parceiro</label>
+            <input id="cp-pix" type="text" placeholder="CPF, e-mail, celular ou aleatória" />
+          </div>
+          <div class="field">
+            <label for="cp-phone">WhatsApp do Parceiro</label>
+            <input id="cp-phone" type="tel" placeholder="(15) 99999-9999" />
+          </div>
+          <div class="field">
+            <label for="cp-max">Limite de Usos (opc.)</label>
+            <input id="cp-max" type="number" min="1" placeholder="Ilimitado" />
+          </div>
+          <div class="field">
+            <label for="cp-expires">Validade (opc.)</label>
+            <input id="cp-expires" type="date" />
+          </div>
+          <div>
+            <button type="submit" class="btn-primary" id="cp-submit-btn">CRIAR CUPOM + LINK →</button>
+          </div>
+        </form>
+        <div id="cp-form-error" class="err-box" style="display:none;margin:0 18px 18px;"></div>
+        <div id="cp-created-banner" class="created-banner" style="display:none;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-light);font-weight:700;margin-bottom:4px;">✓ CUPOM CRIADO</div>
+            <code id="cp-created-link"></code>
+          </div>
+          <div class="actions-col">
+            <button type="button" class="btn-sm" onclick="copyCreatedLink()">COPIAR LINK</button>
+            <a id="cp-created-wa" href="#" target="_blank" rel="noopener" class="btn-sm green">ENVIAR NO WHATSAPP ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-head">
+          <div class="panel-title">Parceiros Ativos &amp; Extrato de Comissões</div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Cupom &amp; Status</th>
+                <th>Parceiro &amp; Pix</th>
+                <th>Regra</th>
+                <th>Usos (Pagos/Total)</th>
+                <th>Vendas Pagas</th>
+                <th>Comissão Pendente</th>
+                <th>Comissão Paga</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="coupons-tbody">
+              <tr><td colspan="8" class="empty-state">Carregando cupons...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PEDIDOS -->
+    <div id="tab-orders" class="panel-card" style="display:none;">
+      <div class="panel-head">
+        <div class="panel-title">Pedidos Registrados (Site Oficial)</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Pedido &amp; Data</th>
+              <th>Cliente &amp; Contato</th>
+              <th>Endereço</th>
+              <th>Itens</th>
+              <th>Cupom &amp; Total</th>
+              <th>Comissão</th>
+              <th>Status &amp; Ações</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr><td colspan="7" class="empty-state">Carregando pedidos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: B2B -->
+    <div id="tab-b2b" class="panel-card" style="display:none;">
+      <div class="panel-head">
+        <div class="panel-title">Lojistas Cadastrados para Atacado B2B</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Protocolo &amp; Data</th>
+              <th>Responsável</th>
+              <th>Loja / Instagram</th>
+              <th>Cidade / UF</th>
+              <th>Contato &amp; WhatsApp</th>
+            </tr>
+          </thead>
+          <tbody id="b2b-tbody">
+            <tr><td colspan="5" class="empty-state">Carregando leads B2B...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://msschydwkaektxjlbmjc.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_oes4HCZimIPiK91wp3grLw_xT5gJJdz';
+    const SESSION_KEY = 'tiw_admin_session';
+
+    let currentSession = null;
+    let lastCreatedCoupon = null;
+    let couponsCache = [];
+
+    function esc(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function fmtMoney(val) {
+      return 'R$ ' + Number(val || 0).toFixed(2).replace('.', ',');
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function cleanPhoneDigits(raw) {
+      const digits = String(raw || '').replace(/\D/g, '');
+      if (!digits) return '';
+      return digits.startsWith('55') ? digits : '55' + digits;
+    }
+
+    function buildPartnerWaUrl(coupon) {
+      const phone = cleanPhoneDigits(coupon.partner_phone);
+      const msg = encodeURIComponent(
+        'Fala ' + coupon.partner_name + '! Seu cupom de parceiro TiwShirts está no ar.\n\n' +
+        'Código: *' + coupon.code + '*\n' +
+        'Link direto: ' + coupon.share_url + '\n\n' +
+        'Regra: seu público ganha *' + coupon.discount_pct + '% OFF* e você recebe *' + coupon.commission_pct + '% de comissão* sobre cada peça paga com o seu link ou cupom.'
+      );
+      return (phone ? 'https://wa.me/' + phone : 'https://wa.me/') + '?text=' + msg;
+    }
+
+    function showLogin(msg) {
+      document.getElementById('login-view').style.display = 'flex';
+      document.getElementById('app-view').style.display = 'none';
+      const errEl = document.getElementById('login-error');
+      if (msg) {
+        errEl.textContent = msg;
+        errEl.style.display = 'block';
+      } else {
+        errEl.style.display = 'none';
+      }
+    }
+
+    function showApp() {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('app-view').style.display = 'block';
+      document.getElementById('admin-user-email').textContent = (currentSession && currentSession.email) || '';
+    }
+
+    async function ensureSession() {
+      try {
+        const raw = sessionStorage.getItem(SESSION_KEY);
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.access_token) return false;
+
+        if (parsed.expires_at && Date.now() > parsed.expires_at - 60000 && parsed.refresh_token) {
+          const r = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
+            method: 'POST',
+            headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh_token: parsed.refresh_token }),
+          });
+          const data = await r.json();
+          if (r.ok && data && data.access_token) {
+            currentSession = {
+              access_token: data.access_token,
+              refresh_token: data.refresh_token || parsed.refresh_token,
+              expires_at: Date.now() + (data.expires_in || 3600) * 1000,
+              email: (data.user && data.user.email) || parsed.email,
+            };
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(currentSession));
+            return true;
+          }
+          sessionStorage.removeItem(SESSION_KEY);
+          return false;
+        }
+        currentSession = parsed;
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-pass').value;
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true;
+      btn.textContent = 'AUTENTICANDO...';
+
+      try {
+        const resp = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+          method: 'POST',
+          headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data || !data.access_token) {
+          showLogin((data && (data.error_description || data.msg || data.message)) || 'E-mail ou senha inválidos.');
+          return;
+        }
+        currentSession = {
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+          expires_at: Date.now() + (data.expires_in || 3600) * 1000,
+          email: (data.user && data.user.email) || email,
+        };
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(currentSession));
+        showApp();
+        await loadAllData();
+      } catch (err) {
+        showLogin('Erro de conexão: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'ENTRAR NO PAINEL →';
+      }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      currentSession = null;
+      showLogin();
+    }
+
+    async function apiFetch(url, options = {}) {
+      if (!currentSession || !currentSession.access_token) {
+        handleLogout();
+        throw new Error('Sessão expirada.');
+      }
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + currentSession.access_token,
+        ...(options.headers || {}),
+      };
+      const resp = await fetch(url, { ...options, headers });
+      if (resp.status === 401) {
+        handleLogout();
+        showLogin('Sessão expirada ou acesso sem permissão de administrador.');
+        throw new Error('Não autorizado (401).');
+      }
+      const data = await resp.json();
+      return { ok: resp.ok, status: resp.status, data };
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tab-coupons').style.display = tab === 'coupons' ? 'block' : 'none';
+      document.getElementById('tab-orders').style.display = tab === 'orders' ? 'block' : 'none';
+      document.getElementById('tab-b2b').style.display = tab === 'b2b' ? 'block' : 'none';
+      document.getElementById('tab-coupons-btn').className = 'tab-btn' + (tab === 'coupons' ? ' active' : '');
+      document.getElementById('tab-orders-btn').className = 'tab-btn' + (tab === 'orders' ? ' active' : '');
+      document.getElementById('tab-b2b-btn').className = 'tab-btn' + (tab === 'b2b' ? ' active' : '');
+    }
+
+    function copyText(text, btn) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+      if (btn) {
+        const orig = btn.textContent;
+        btn.textContent = 'COPIADO ✓';
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      }
+    }
+
+    function copyCreatedLink() {
+      if (lastCreatedCoupon && lastCreatedCoupon.share_url) {
+        copyText(lastCreatedCoupon.share_url);
+      }
+    }
+
+    async function createCoupon(e) {
+      e.preventDefault();
+      const errEl = document.getElementById('cp-form-error');
+      errEl.style.display = 'none';
+      const btn = document.getElementById('cp-submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'SALVANDO...';
+
+      try {
+        const payload = {
+          code: document.getElementById('cp-code').value.trim().toUpperCase().replace(/\s+/g, ''),
+          partner_name: document.getElementById('cp-partner').value.trim(),
+          discount_pct: Number(document.getElementById('cp-discount').value || 10),
+          commission_pct: Number(document.getElementById('cp-commission').value || 10),
+          partner_pix: document.getElementById('cp-pix').value.trim(),
+          partner_phone: document.getElementById('cp-phone').value.trim(),
+          max_uses: document.getElementById('cp-max').value ? Number(document.getElementById('cp-max').value) : null,
+          expires_at: document.getElementById('cp-expires').value || null,
+        };
+        const res = await apiFetch('/api/coupons', { method: 'POST', body: JSON.stringify(payload) });
+        if (!res.ok || !res.data.success) {
+          errEl.textContent = (res.data && res.data.error) || 'Não foi possível criar o cupom.';
+          errEl.style.display = 'block';
+          return;
+        }
+        lastCreatedCoupon = res.data.coupon;
+        document.getElementById('cp-created-link').textContent = lastCreatedCoupon.share_url;
+        document.getElementById('cp-created-wa').href = buildPartnerWaUrl(lastCreatedCoupon);
+        document.getElementById('cp-created-banner').style.display = 'flex';
+        e.target.reset();
+        document.getElementById('cp-discount').value = '10';
+        document.getElementById('cp-commission').value = '10';
+        await loadCoupons();
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'CRIAR CUPOM + LINK →';
+      }
+    }
+
+    async function toggleCouponActive(id, nextActive) {
+      await apiFetch('/api/coupons', { method: 'PATCH', body: JSON.stringify({ id, active: nextActive }) });
+      await loadCoupons();
+    }
+
+    async function settleCouponCommissions(code) {
+      if (!confirm('Marcar todas as comissões pendentes de pedidos pagos do cupom ' + code + ' como PAGAS?')) return;
+      await apiFetch('/api/coupons', { method: 'PATCH', body: JSON.stringify({ action: 'settle_commissions', coupon_code: code }) });
+      await loadAllData();
+    }
+
+    async function deleteCoupon(id, code) {
+      if (!confirm('Excluir permanentemente o cupom ' + code + '? Os pedidos antigos mantêm o histórico.')) return;
+      await apiFetch('/api/coupons?id=' + encodeURIComponent(id), { method: 'DELETE' });
+      await loadCoupons();
+    }
+
+    async function updateOrder(orderId, fields) {
+      await apiFetch('/api/orders', { method: 'PATCH', body: JSON.stringify({ order_id: orderId, ...fields }) });
+      await loadAllData();
+    }
+
+    async function loadCoupons() {
+      const tbody = document.getElementById('coupons-tbody');
+      try {
+        const res = await apiFetch('/api/coupons');
+        if (res.data && res.data.setup_required) {
+          document.getElementById('setup-banner').style.display = 'block';
+        }
+        const coupons = (res.data && res.data.coupons) || [];
+        couponsCache = coupons;
+
+        const activeCount = coupons.filter((c) => c.active).length;
+        const totalCommPending = coupons.reduce((s, c) => s + Number(c.commission_pending || 0), 0);
+        document.getElementById('stat-coupons-count').textContent = activeCount;
+        document.getElementById('stat-comm-pending').textContent = fmtMoney(totalCommPending);
+
+        if (!coupons.length) {
+          tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhum cupom cadastrado ainda. Crie o primeiro acima.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = coupons.map((c) => {
+          const statusBadge = c.active
+            ? '<span class="badge badge-paid">ATIVO</span>'
+            : '<span class="badge badge-muted">PAUSADO</span>';
+          const waUrl = buildPartnerWaUrl(c);
+          const settleBtn = c.commission_pending > 0
+            ? `<button class="btn-sm green" onclick="settleCouponCommissions('${esc(c.code)}')">QUITAR ${fmtMoney(c.commission_pending)}</button>`
+            : '';
+
+          return `<tr>
+            <td>
+              <div class="mono-gold">${esc(c.code)}</div>
+              <div style="margin-top:4px;">${statusBadge}</div>
+            </td>
+            <td>
+              <div style="font-weight:600;">${esc(c.partner_name)}</div>
+              <div class="muted" style="margin-top:2px;">Pix: ${esc(c.partner_pix || '—')}</div>
+              <div class="muted">${esc(c.partner_phone || '')}</div>
+            </td>
+            <td>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;">${c.discount_pct}% OFF</div>
+              <div class="muted" style="font-family:'JetBrains Mono',monospace;">${c.commission_pct}% COM</div>
+            </td>
+            <td>
+              <div style="font-family:'JetBrains Mono',monospace;">${c.orders_paid} / ${c.orders_total}</div>
+              <div class="muted">${c.max_uses ? 'Limite: ' + c.uses_count + '/' + c.max_uses : 'Sem limite'}</div>
+            </td>
+            <td class="total-val">${fmtMoney(c.sales_paid)}</td>
+            <td>
+              <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--warn);">${fmtMoney(c.commission_pending)}</div>
+              ${c.commission_awaiting_payment > 0 ? `<div class="muted">+${fmtMoney(c.commission_awaiting_payment)} aguard. pagto</div>` : ''}
+            </td>
+            <td style="font-family:'JetBrains Mono',monospace;color:var(--accent-light);">${fmtMoney(c.commission_paid)}</td>
+            <td>
+              <div class="actions-col">
+                <button class="btn-sm" onclick="copyText('${esc(c.share_url)}', this)">COPIAR LINK</button>
+                <a href="${esc(waUrl)}" target="_blank" rel="noopener" class="btn-sm sand">WHATSAPP ↗</a>
+                <button class="btn-sm" onclick="toggleCouponActive(${c.id}, ${!c.active})">${c.active ? 'PAUSAR' : 'ATIVAR'}</button>
+                ${settleBtn}
+                <button class="btn-sm danger" onclick="deleteCoupon(${c.id}, '${esc(c.code)}')">EXCLUIR</button>
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Erro ao carregar cupons: ' + esc(err.message) + '</td></tr>';
+      }
+    }
+
+    async function loadOrders() {
+      const tbody = document.getElementById('orders-tbody');
+      try {
+        const res = await apiFetch('/api/orders');
+        const orders = (res.data && res.data.orders) || [];
+
+        document.getElementById('stat-orders-count').textContent = orders.length;
+        const paidRev = orders
+          .filter((o) => o.status === 'pago' || o.status === 'enviado')
+          .reduce((s, o) => s + Number(o.total || 0), 0);
+        document.getElementById('stat-revenue').textContent = fmtMoney(paidRev);
+
+        if (!orders.length) {
+          tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum pedido registrado ainda.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = orders.map((o) => {
+          const cust = o.customer || {};
+          const items = Array.isArray(o.items) ? o.items : [];
+          const phoneDigits = cleanPhoneDigits(cust.phone);
+          const isPaid = o.status === 'pago' || o.status === 'enviado';
+          const isCancelled = o.status === 'cancelado';
+          const statusCls = isPaid ? 'badge-paid' : (isCancelled ? 'badge-danger' : 'badge-pending');
+
+          const commAmt = Number(o.commission_amount || 0);
+          const commStatus = o.commission_status || 'sem_comissao';
+          const commCls = commStatus === 'pago' ? 'badge-paid' : (commStatus === 'pendente' ? 'badge-pending' : (commStatus === 'cancelado' ? 'badge-danger' : 'badge-muted'));
+
+          return `<tr>
+            <td>
+              <div class="mono-gold">${esc(o.order_id)}</div>
+              <div class="date-text">${esc(fmtDate(o.created_at))}</div>
+            </td>
+            <td>
+              <div style="font-weight:600;">${esc(cust.name || 'Não informado')}</div>
+              <div class="muted">${esc(cust.email || '')}</div>
+              ${phoneDigits ? `<a href="https://wa.me/${phoneDigits}" target="_blank" rel="noopener" class="btn-sm green" style="margin-top:6px;">WHATSAPP ↗</a>` : ''}
+            </td>
+            <td>
+              <div>${esc(cust.address || '—')}</div>
+              <div class="date-text">CEP: ${esc(cust.cep || '—')}</div>
+            </td>
+            <td>
+              <div style="font-size:12px;line-height:1.45;">
+                ${items.map((i) => `<div>• <strong>${Number(i.qty || 1)}x</strong> ${esc(i.name)} (${esc(i.fit || '')}, ${esc(i.size)})</div>`).join('')}
+              </div>
+            </td>
+            <td>
+              <div class="total-val">${fmtMoney(o.total)}</div>
+              <div class="muted" style="text-transform:uppercase;margin-top:2px;">${esc(o.payment_method || 'pix')}</div>
+              ${o.coupon_code ? `<div style="margin-top:4px;"><span class="badge badge-paid">${esc(o.coupon_code)}</span> <span class="muted">(-${fmtMoney(o.discount_amount)})</span></div>` : ''}
+            </td>
+            <td>
+              ${o.coupon_code ? `<div style="font-family:'JetBrains Mono',monospace;font-weight:700;">${fmtMoney(commAmt)}</div><div style="margin-top:4px;"><span class="badge ${commCls}">${esc(commStatus)}</span></div>` : '<span class="muted">—</span>'}
+            </td>
+            <td>
+              <div><span class="badge ${statusCls}">${esc(o.status || 'aguardando_pagamento')}</span></div>
+              <div class="actions-col" style="margin-top:8px;">
+                ${!isPaid ? `<button class="btn-sm green" onclick="updateOrder('${esc(o.order_id)}',{status:'pago'})">MARCAR PAGO</button>` : ''}
+                ${!isCancelled ? `<button class="btn-sm danger" onclick="updateOrder('${esc(o.order_id)}',{status:'cancelado'})">CANCELAR</button>` : ''}
+                ${o.coupon_code && commStatus === 'pendente' && isPaid ? `<button class="btn-sm sand" onclick="updateOrder('${esc(o.order_id)}',{commission_status:'pago'})">QUITAR COMISSÃO</button>` : ''}
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Erro ao carregar pedidos: ' + esc(err.message) + '</td></tr>';
+      }
+    }
+
+    async function loadB2B() {
+      const tbody = document.getElementById('b2b-tbody');
+      try {
+        const res = await apiFetch('/api/b2b');
+        const leads = (res.data && res.data.leads) || [];
+        document.getElementById('stat-b2b-count').textContent = leads.length;
+
+        if (!leads.length) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Nenhum cadastro B2B registrado ainda.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = leads.map((l) => {
+          const phoneDigits = cleanPhoneDigits(l.zap);
+          return `<tr>
+            <td>
+              <div class="mono-gold">${esc(l.protocol)}</div>
+              <div class="date-text">${esc(fmtDate(l.created_at))}</div>
+            </td>
+            <td style="font-weight:600;">${esc(l.nome || '—')}</td>
+            <td style="color:var(--sand);font-weight:500;">${esc(l.loja || '—')}</td>
+            <td>${esc(l.cidade || '—')}</td>
+            <td>
+              <div class="muted">${esc(l.email || '')}</div>
+              ${phoneDigits ? `<a href="https://wa.me/${phoneDigits}" target="_blank" rel="noopener" class="btn-sm green" style="margin-top:6px;">WHATSAPP ↗</a>` : ''}
+            </td>
+          </tr>`;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Erro ao carregar leads B2B: ' + esc(err.message) + '</td></tr>';
+      }
+    }
+
+    async function loadAllData() {
+      document.getElementById('setup-banner').style.display = 'none';
+      await Promise.all([loadCoupons(), loadOrders(), loadB2B()]);
+    }
+
+    (async function init() {
+      const ok = await ensureSession();
+      if (ok) {
+        showApp();
+        await loadAllData();
+      } else {
+        showLogin();
+      }
+    })();
+  </script>
+</body>
+</html>
