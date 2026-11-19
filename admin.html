@@ -264,13 +264,15 @@
           <span class="nav-badge green" id="nb-coupons">0</span>
         </button>
 
-        <div class="nav-section-label">Comercial</div>
+        <div class="nav-section-label">Loja</div>
         <button class="nav-item" data-view="catalog" onclick="switchView('catalog')">
-          <span class="nav-item-left"><span class="nav-icon">◫</span> Catálogo &amp; Atacado</span>
+          <span class="nav-item-left"><span class="nav-icon">◫</span> Catálogo &amp; Estoque</span>
           <span class="nav-badge" id="nb-catalog">7</span>
         </button>
+
+        <div class="nav-section-label">Atacado</div>
         <button class="nav-item" data-view="b2b" onclick="switchView('b2b')">
-          <span class="nav-item-left"><span class="nav-icon">▣</span> Leads B2B</span>
+          <span class="nav-item-left"><span class="nav-icon">▣</span> Atacado B2B</span>
           <span class="nav-badge" id="nb-b2b">0</span>
         </button>
 
@@ -305,7 +307,7 @@
           </div>
         </div>
         <div class="topbar-actions">
-          <button class="btn btn-primary btn-sm" onclick="openCouponModal()">+ Novo Cupom 10+10</button>
+          <span id="topbar-ctx-action"></span>
           <button class="btn btn-sand btn-sm" id="refresh-btn" onclick="loadAllData(true)">Atualizar ⟳</button>
         </div>
       </header>
@@ -428,6 +430,22 @@
 
         <!-- ==================== VIEW: COUPONS ==================== -->
         <section id="view-coupons" class="view-section" style="display:none;">
+          <!-- Partner Portal Requests Queue -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">📩 Solicitações de Parceiros (Portal /parceiros)</div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <button class="btn btn-xs btn-sand" onclick="copyText('https://tiwshirts.space/parceiros','Link do Portal de Parceiros copiado!')">Copiar Link /parceiros</button>
+                <a href="/parceiros" target="_blank" rel="noopener" class="btn btn-xs">Abrir Portal ↗</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="partner-requests-list" class="action-list">
+                <div class="empty-state" style="padding:18px;">Carregando solicitações...</div>
+              </div>
+            </div>
+          </div>
+
           <!-- Smart Link Builder -->
           <div class="card">
             <div class="card-head">
@@ -497,8 +515,23 @@
           </div>
         </section>
 
-        <!-- ==================== VIEW: CATALOG & WHOLESALE ==================== -->
+        <!-- ==================== VIEW: CATALOG ==================== -->
         <section id="view-catalog" class="view-section" style="display:none;">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">👕 Catálogo Oficial &amp; Estoque em Tempo Real</div>
+              <span class="muted" id="catalog-meta">7 estampas oficiais</span>
+            </div>
+            <div class="card-body">
+              <div id="catalog-grid" class="catalog-grid">
+                <div class="empty-state">Carregando catálogo...</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW: B2B ==================== -->
+        <section id="view-b2b" class="view-section" style="display:none;">
           <!-- Wholesale Calculator -->
           <div class="card">
             <div class="card-head">
@@ -527,22 +560,6 @@
             </div>
           </div>
 
-          <!-- Live Catalog Grid -->
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">👕 Catálogo Oficial &amp; Estoque em Tempo Real</div>
-              <span class="muted" id="catalog-meta">7 estampas oficiais</span>
-            </div>
-            <div class="card-body">
-              <div id="catalog-grid" class="catalog-grid">
-                <div class="empty-state">Carregando catálogo...</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== VIEW: B2B ==================== -->
-        <section id="view-b2b" class="view-section" style="display:none;">
           <div class="card">
             <div class="toolbar">
               <div class="card-title">▣ Lojistas Cadastrados para Atacado</div>
@@ -607,6 +624,13 @@
                       <div class="action-item-sub">https://tiwshirts.space/</div>
                     </div>
                     <a href="https://tiwshirts.space/" target="_blank" rel="noopener" class="btn btn-sm">Abrir ↗</a>
+                  </div>
+                  <div class="action-item">
+                    <div class="action-item-info">
+                      <div class="action-item-title">Portal do Parceiro (10+10)</div>
+                      <div class="action-item-sub">https://tiwshirts.space/parceiros · Login seguro para solicitar cupons</div>
+                    </div>
+                    <a href="https://tiwshirts.space/parceiros" target="_blank" rel="noopener" class="btn btn-sm btn-sand">Abrir ↗</a>
                   </div>
                   <div class="action-item">
                     <div class="action-item-info">
@@ -763,6 +787,7 @@
     let currentView = 'overview';
     let ordersCache = [];
     let couponsCache = [];
+    let partnerRequestsCache = [];
     let b2bCache = [];
     let catalogCache = [];
     let orderStatusFilter = 'all';
@@ -770,12 +795,22 @@
     let activeOrderId = null;
     let confirmResolver = null;
 
+    const PRODUCT_THUMBS = {
+      maconheiro: 'assets/maconheiro-1.jpeg',
+      legaliza: 'assets/legaliza-1.jpeg',
+      justdoobit: 'assets/justdoobit-black-1.jpeg',
+      salvavidas: 'assets/maconhasalvavidas-1.jpeg',
+      tricomas: 'assets/tricomas-purple-1.jpeg',
+      sugiro: 'assets/sugiromaconha-1.jpeg',
+      medicina: 'assets/medicinaancestral-1.jpeg',
+    };
+
     const VIEW_META = {
       overview: ['Visão Geral', 'Resumo financeiro, pendências do dia e saúde da operação'],
       orders: ['Pedidos D2C Varejo', 'Acompanhe pagamentos, produção, rastreio e mensagens no WhatsApp'],
-      coupons: ['Afiliados & Cupons 10+10', 'Gerencie parceiros, links por peça e acerto de comissões no Pix'],
-      catalog: ['Catálogo & Atacado B2B', 'Estoque ao vivo das 7 estampas e calculadora de pedidos atacado'],
-      b2b: ['Leads Atacado B2B', 'Lojistas cadastrados prontos para abordagem comercial'],
+      coupons: ['Afiliados & Cupons 10+10', 'Aprove solicitações do portal /parceiros, gere links e quite comissões'],
+      catalog: ['Catálogo & Estoque', 'As 7 estampas oficiais com inventário real de pronta-entrega e bases lisas'],
+      b2b: ['Atacado B2B', 'Calculadora de pedidos (múltiplos de 12) e leads de lojistas interessados'],
       settings: ['Conta & Atalhos', 'Segurança da conta admin e links rápidos da infraestrutura'],
     };
 
@@ -860,6 +895,20 @@
       const meta = VIEW_META[view] || ['Central', ''];
       document.getElementById('topbar-title').textContent = meta[0];
       document.getElementById('topbar-sub').textContent = meta[1];
+      const ctxEl = document.getElementById('topbar-ctx-action');
+      if (ctxEl) {
+        if (view === 'coupons') {
+          ctxEl.innerHTML = '<button class="btn btn-primary btn-sm" onclick="openCouponModal()">+ Novo Cupom 10+10</button>';
+        } else if (view === 'orders') {
+          ctxEl.innerHTML = '<button class="btn btn-sm" onclick="exportOrdersCsv()">Exportar Pedidos CSV ↓</button>';
+        } else if (view === 'catalog') {
+          ctxEl.innerHTML = '<a href="/" target="_blank" rel="noopener" class="btn btn-sm">Abrir Loja ↗</a>';
+        } else if (view === 'b2b') {
+          ctxEl.innerHTML = '<button class="btn btn-sm" onclick="exportB2BCsv()">Exportar Leads B2B ↓</button>';
+        } else {
+          ctxEl.innerHTML = '';
+        }
+      }
       toggleMobileSidebar(false);
     }
 
@@ -1008,19 +1057,22 @@
       const btn = document.getElementById('refresh-btn');
       btn.disabled = true; btn.textContent = 'Atualizando...';
       try {
-        const [cpRes, ordRes, b2bRes, catResp] = await Promise.all([
+        const [cpRes, ordRes, b2bRes, prRes, catResp] = await Promise.all([
           apiFetch('/api/coupons'),
           apiFetch('/api/orders'),
           apiFetch('/api/b2b'),
+          apiFetch('/api/partner-requests?scope=admin').catch(() => ({ ok: false, data: { requests: [] } })),
           fetch('/api/catalog').then((r) => r.json()).catch(() => ({ products: [] })),
         ]);
         couponsCache = (cpRes.data && cpRes.data.coupons) || [];
         ordersCache = (ordRes.data && ordRes.data.orders) || [];
         b2bCache = (b2bRes.data && b2bRes.data.leads) || [];
+        partnerRequestsCache = (prRes.data && prRes.data.requests) || [];
         catalogCache = (catResp && catResp.products) || [];
 
         renderOverview();
         renderOrders();
+        renderPartnerRequests();
         renderCoupons();
         populateLinkBuilder();
         renderCatalog();
@@ -1082,6 +1134,14 @@
 
       // Action Queue
       const actions = [];
+      const pendingPartnerReqs = partnerRequestsCache.filter((r) => r.status === 'pendente');
+      pendingPartnerReqs.forEach((r) => {
+        actions.push({
+          title: `Solicitação de cupom ${r.requested_code} (${r.partner_name})`,
+          sub: `Portal /parceiros · WhatsApp: ${r.whatsapp} · Pix: ${r.pix_key}`,
+          btns: `<button class="btn btn-primary btn-xs" onclick="approvePartnerRequest(${r.id}, '${esc(r.requested_code)}')">Aprovar 10+10</button> <button class="btn btn-danger btn-xs" onclick="rejectPartnerRequest(${r.id}, '${esc(r.requested_code)}')">Recusar</button>`,
+        });
+      });
       toShipOrders.forEach((o) => {
         actions.push({
           title: `Separar/Enviar pedido ${o.order_id} (${(o.customer && o.customer.name) || 'Cliente'})`,
@@ -1564,20 +1624,107 @@
       copyText(document.getElementById('lb-url').textContent, 'Link inteligente copiado!');
     }
 
+    /* ================= PARTNER PORTAL REQUESTS ================= */
+    function renderPartnerRequests() {
+      const box = document.getElementById('partner-requests-list');
+      if (!box) return;
+      const pending = partnerRequestsCache.filter((r) => r.status === 'pendente');
+      const recent = partnerRequestsCache.slice(0, 12);
+      if (!recent.length) {
+        box.innerHTML = '<div class="empty-state" style="padding:18px;">Nenhuma solicitação recebida pelo portal <code>/parceiros</code> ainda. Envie o link acima para seus parceiros cadastrarem o pedido de cupom.</div>';
+        return;
+      }
+      box.innerHTML = recent.map((r) => {
+        const stMap = { pendente: ['Pendente', 'b-pending'], aprovado: ['Aprovado', 'b-paid'], recusado: ['Recusado', 'b-cancel'] };
+        const [lbl, cls] = stMap[r.status] || [r.status, 'b-muted'];
+        const phone = cleanPhoneDigits(r.whatsapp);
+        const waApproved = (phone ? 'https://wa.me/' + phone : 'https://wa.me/') + '?text=' + encodeURIComponent(
+          `Fala ${r.partner_name}! Seu cupom *${r.requested_code}* na TiwShirts foi aprovado!\n\nLink direto: https://tiwshirts.space/?cupom=${encodeURIComponent(r.requested_code)}\nAcompanhe suas vendas e comissões em: https://tiwshirts.space/parceiros`
+        );
+        return `<div class="action-item">
+          <div class="action-item-info">
+            <div class="action-item-title">
+              <span class="mono-gold">${esc(r.requested_code)}</span> · ${esc(r.partner_name)}
+              <span class="badge ${cls}" style="margin-left:6px;">${esc(lbl)}</span>
+            </div>
+            <div class="action-item-sub">
+              ${esc(r.email)} · Zap: ${esc(r.whatsapp)} · Pix: ${esc(r.pix_key)}${r.instagram ? ' · ' + esc(r.instagram) : ''}
+            </div>
+            ${r.notes ? `<div class="muted" style="margin-top:3px;">Obs: ${esc(r.notes)}</div>` : ''}
+          </div>
+          <div class="actions-row">
+            ${r.status === 'pendente'
+              ? `<button class="btn btn-primary btn-xs" onclick="approvePartnerRequest(${r.id}, '${esc(r.requested_code)}')">Aprovar 10+10</button>
+                 <button class="btn btn-danger btn-xs" onclick="rejectPartnerRequest(${r.id}, '${esc(r.requested_code)}')">Recusar</button>`
+              : (r.status === 'aprovado' ? `<a href="${esc(waApproved)}" target="_blank" rel="noopener" class="btn btn-sand btn-xs">Avisar WhatsApp ↗</a>` : '')}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    async function approvePartnerRequest(id, code) {
+      const ok = await askConfirm('Aprovar cupom ' + code + '?', 'Isso vai gerar automaticamente o cupom ativo (10% OFF + 10% comissão) e vincular à conta do parceiro no portal /parceiros.');
+      if (!ok) return;
+      try {
+        const res = await apiFetch('/api/partner-requests', {
+          method: 'PATCH',
+          body: JSON.stringify({ id, action: 'approve', discount_pct: 10, commission_pct: 10 }),
+        });
+        if (!res.ok || !res.data.success) {
+          toast((res.data && res.data.error) || 'Não foi possível aprovar.', 'err');
+          return;
+        }
+        toast('Cupom ' + code + ' aprovado e ativado!');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+    }
+
+    async function rejectPartnerRequest(id, code) {
+      const ok = await askConfirm('Recusar solicitação ' + code + '?', 'O parceiro verá o status Recusado no portal /parceiros.', true);
+      if (!ok) return;
+      try {
+        const res = await apiFetch('/api/partner-requests', {
+          method: 'PATCH',
+          body: JSON.stringify({ id, action: 'reject', admin_notes: 'Solicitação recusada pelo administrador.' }),
+        });
+        if (!res.ok || !res.data.success) {
+          toast((res.data && res.data.error) || 'Erro ao recusar.', 'err');
+          return;
+        }
+        toast('Solicitação recusada.');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+    }
+
     /* ================= CATALOG & WHOLESALE CALC ================= */
     function renderCatalog() {
       const grid = document.getElementById('catalog-grid');
-      document.getElementById('catalog-meta').textContent = catalogCache.length + ' estampas oficiais';
+      let totalFinishedAll = 0;
+      catalogCache.forEach((p) => {
+        (p.options || []).forEach((opt) => (opt.sizes || []).forEach((sz) => { totalFinishedAll += Number(sz.finished_qty || 0); }));
+      });
+      document.getElementById('catalog-meta').textContent = `${catalogCache.length} estampas · ${totalFinishedAll} peças pronta-entrega (24h)`;
       if (!catalogCache.length) {
         grid.innerHTML = '<div class="empty-state">Catálogo indisponível no momento.</div>';
         return;
       }
       grid.innerHTML = catalogCache.map((p) => {
-        const img = (p.images && p.images[0]) || p.image || '';
-        const stockTotal = typeof p.stock_total === 'number' ? p.stock_total : null;
-        const stockBadge = stockTotal > 0
-          ? `<span class="badge b-paid">${stockTotal} em estoque</span>`
-          : `<span class="badge b-prod">Sob demanda (7-10d)</span>`;
+        const img = PRODUCT_THUMBS[p.id] || (p.images && p.images[0]) || p.image || '';
+        let finishedQty = 0;
+        let blankQty = 0;
+        const readyList = [];
+        (p.options || []).forEach((opt) => {
+          (opt.sizes || []).forEach((sz) => {
+            const fq = Number(sz.finished_qty || 0);
+            const bq = Number(sz.blank_qty || 0);
+            finishedQty += fq;
+            blankQty += bq;
+            if (fq > 0) readyList.push(`${opt.line_name.replace('Linha ', '')} ${opt.color_name} ${sz.size}`);
+          });
+        });
+        const stockBadge = finishedQty > 0
+          ? `<span class="badge b-paid">${finishedQty} pronta-entrega (24h)</span>`
+          : (blankQty > 0 ? `<span class="badge b-pending">Bases lisas (3d)</span>` : `<span class="badge b-prod">Sob demanda (7-10d)</span>`);
         const directUrl = `https://tiwshirts.space/?peca=${encodeURIComponent(p.id)}`;
         return `<div class="prod-card">
           ${img ? `<img class="prod-img" src="${esc(img)}" alt="${esc(p.name)}" loading="lazy" />` : ''}
@@ -1587,7 +1734,8 @@
               ${stockBadge}
             </div>
             <div class="prod-prices">Clássica R$ 139 · OverHeavy R$ 179 · OverLight R$ 179</div>
-            <div class="actions-row" style="margin-top:auto;padding-top:6px;">
+            ${readyList.length ? `<div class="muted" style="font-size:11px;">Prontas: ${esc(readyList.join(' · '))}</div>` : `<div class="muted" style="font-size:11px;">Produção sob demanda (7 a 10 dias úteis)</div>`}
+            <div class="actions-row" style="margin-top:auto;padding-top:8px;">
               <button class="btn btn-xs" onclick="copyText('${esc(directUrl)}','Link da peça copiado!')">Copiar Link</button>
               <a href="${esc(directUrl)}" target="_blank" rel="noopener" class="btn btn-xs btn-sand">Ver na Loja ↗</a>
             </div>
