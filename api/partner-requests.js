@@ -98,7 +98,7 @@ module.exports = async (req, res) => {
       }
 
       // Partner view: own requests + own approved coupons dashboard
-      const [reqsRes, dashRes] = await Promise.all([
+      let [reqsRes, dashRes] = await Promise.all([
         sbFetch(`/rest/v1/tiw_partner_requests?user_id=eq.${encodeURIComponent(auth.user.id)}&select=*&order=created_at.desc`, {
           headers: userHeaders,
         }),
@@ -108,6 +108,39 @@ module.exports = async (req, res) => {
           body: {},
         }),
       ]);
+
+      // Auto-create request from signup user_metadata if partner just confirmed email and has no requests yet
+      const meta = (auth.user && auth.user.user_metadata) || {};
+      const metaCode = normalizeCouponCode(meta.requested_code);
+      if (
+        reqsRes.ok &&
+        Array.isArray(reqsRes.data) &&
+        reqsRes.data.length === 0 &&
+        metaCode &&
+        metaCode.length >= 3 &&
+        meta.partner_name &&
+        meta.whatsapp &&
+        meta.pix_key
+      ) {
+        const autoIns = await sbFetch('/rest/v1/tiw_partner_requests', {
+          method: 'POST',
+          headers: { ...userHeaders, Prefer: 'return=representation' },
+          body: {
+            user_id: auth.user.id,
+            email: auth.user.email,
+            partner_name: String(meta.partner_name).trim(),
+            requested_code: metaCode,
+            instagram: meta.instagram ? String(meta.instagram).trim() : null,
+            whatsapp: String(meta.whatsapp).trim(),
+            pix_key: String(meta.pix_key).trim(),
+            notes: meta.notes ? String(meta.notes).trim() : null,
+            status: 'pendente',
+          },
+        });
+        if (autoIns.ok && Array.isArray(autoIns.data)) {
+          reqsRes = autoIns;
+        }
+      }
 
       if (!reqsRes.ok && isMissingTableError(reqsRes)) {
         return res.status(200).json({

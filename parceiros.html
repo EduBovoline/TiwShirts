@@ -121,29 +121,57 @@
         <button type="button" class="btn btn-sand btn-sm" style="width:100%;" id="resend-btn" onclick="resendConfirmationEmail()">Reenviar link de verificação por e-mail</button>
       </div>
 
-      <button type="button" class="btn" style="width:100%;padding:11px;margin-bottom:14px;background:#fff;color:#111;border-color:#fff;font-weight:700;" onclick="loginWithGoogle()">
-        <span style="font-size:15px;">G</span> Continuar com Google
-      </button>
-
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--text-muted);font-size:11px;font-family:var(--mono);text-transform:uppercase;">
-        <span style="flex:1;height:1px;background:var(--border);"></span>
-        <span>ou com e-mail verificado</span>
-        <span style="flex:1;height:1px;background:var(--border);"></span>
+      <div id="google-auth-wrap" style="display:none;">
+        <button type="button" class="btn" style="width:100%;padding:11px;margin-bottom:14px;background:#fff;color:#111;border-color:#fff;font-weight:700;" onclick="loginWithGoogle()">
+          <span style="font-size:15px;">G</span> Continuar com Google
+        </button>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--text-muted);font-size:11px;font-family:var(--mono);text-transform:uppercase;">
+          <span style="flex:1;height:1px;background:var(--border);"></span>
+          <span>ou com e-mail verificado</span>
+          <span style="flex:1;height:1px;background:var(--border);"></span>
+        </div>
       </div>
 
       <form onsubmit="handleAuthSubmit(event)">
         <div class="field">
-          <label for="auth-email">Seu E-mail</label>
+          <label for="auth-email">Seu E-mail *</label>
           <input id="auth-email" type="email" required placeholder="voce@exemplo.com" autocomplete="email" />
         </div>
         <div class="field">
-          <label for="auth-pass">Senha</label>
+          <label for="auth-pass">Senha *</label>
           <input id="auth-pass" type="password" required minlength="6" placeholder="Mínimo 6 caracteres" autocomplete="current-password" />
         </div>
+
+        <!-- Campos extras já no Criar Conta para enviar a solicitação num passo só -->
+        <div id="signup-extra-fields" style="display:none;padding-top:8px;border-top:1px solid var(--border);margin-top:6px;">
+          <div class="field">
+            <label for="su-code">Código do Cupom Desejado *</label>
+            <input id="su-code" type="text" minlength="3" maxlength="20" placeholder="Ex: SEUAPELIDO10" style="text-transform:uppercase;font-family:var(--mono);" />
+          </div>
+          <div class="field">
+            <label for="su-name">Seu Nome ou Marca/Perfil *</label>
+            <input id="su-name" type="text" placeholder="Ex: Chico Skate" />
+          </div>
+          <div class="form-2">
+            <div class="field">
+              <label for="su-ig">Instagram</label>
+              <input id="su-ig" type="text" placeholder="@seuperfil" />
+            </div>
+            <div class="field">
+              <label for="su-wa">WhatsApp *</label>
+              <input id="su-wa" type="tel" placeholder="(15) 99999-9999" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="su-pix">Chave Pix (p/ receber 10% de comissão) *</label>
+            <input id="su-pix" type="text" placeholder="CPF, e-mail, celular ou aleatória" />
+          </div>
+        </div>
+
         <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;" id="auth-submit-btn">Entrar na Área do Parceiro →</button>
       </form>
       <div class="muted" style="margin-top:14px;text-align:center;font-size:11.5px;">
-        🔒 Segurança ativa: confirmação de e-mail obrigatória e aprovação manual de cupons pelo administrador.
+        🔒 Confirmação de e-mail obrigatória e aprovação manual pelo administrador.
       </div>
     </div>
   </div>
@@ -163,7 +191,12 @@
     </header>
 
     <main class="container">
-      <div class="kpi-grid">
+      <!-- Aviso de Passo 2 quando o parceiro acabou de entrar e ainda não enviou o pedido de cupom -->
+      <div id="onboarding-banner" class="ok-box" style="display:none;padding:14px 16px;font-size:13px;margin-bottom:18px;">
+        <strong>✓ Conta confirmada! Falta só 1 passo:</strong> escolha abaixo o código do seu cupom 10+10 e informe sua chave Pix para enviar seu pedido ao administrador.
+      </div>
+
+      <div class="kpi-grid" id="partner-kpis">
         <div class="kpi-card">
           <div class="kpi-label">Cupons Ativos</div>
           <div class="kpi-val" style="color:var(--sand);" id="pk-active">0</div>
@@ -182,36 +215,14 @@
         </div>
       </div>
 
-      <div class="grid-2">
-        <!-- LEFT: ACTIVE COUPONS + SMART LINK -->
-        <div>
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">★ Meus Cupons Aprovados</div>
-              <span class="muted">Cookie de 7 dias no navegador</span>
-            </div>
-            <div class="card-body" id="my-coupons-list">
-              <div class="empty-state">Carregando seus cupons...</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">📋 Minhas Solicitações</div>
-            </div>
-            <div class="card-body" id="my-requests-list">
-              <div class="empty-state">Carregando solicitações...</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: REQUEST NEW COUPON -->
-        <div class="card">
+      <div class="grid-2" id="portal-grid">
+        <!-- FORM DE SOLICITAÇÃO (No celular aparece no topo quando o parceiro ainda não tem cupom) -->
+        <div class="card" id="request-form-card">
           <div class="card-head">
             <div class="card-title">+ Solicitar Geração de Cupom 10+10</div>
           </div>
           <div class="card-body">
-            <p class="muted" style="margin-bottom:16px;">Preencha os dados abaixo. Assim que o admin aprovar, seu cupom e link ficam ativos automaticamente aqui no portal.</p>
+            <p class="muted" style="margin-bottom:16px;">Escolha seu código abaixo. Assim que o admin aprovar, seu cupom e link ficam ativos automaticamente aqui no portal.</p>
             <div id="req-err" class="err-box" style="display:none;"></div>
             <div id="req-ok" class="ok-box" style="display:none;"></div>
             <form onsubmit="submitCouponRequest(event)">
@@ -244,6 +255,28 @@
               </div>
               <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;" id="rq-submit-btn">Enviar Solicitação de Cupom →</button>
             </form>
+          </div>
+        </div>
+
+        <!-- CUPONS ATIVOS + HISTÓRICO DE SOLICITAÇÕES -->
+        <div id="coupons-status-col">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">★ Meus Cupons Aprovados</div>
+              <span class="muted">Cookie de 7 dias no navegador</span>
+            </div>
+            <div class="card-body" id="my-coupons-list">
+              <div class="empty-state">Carregando seus cupons...</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">📋 Minhas Solicitações</div>
+            </div>
+            <div class="card-body" id="my-requests-list">
+              <div class="empty-state">Carregando solicitações...</div>
+            </div>
           </div>
         </div>
       </div>
@@ -284,9 +317,17 @@
       authMode = mode;
       document.getElementById('tab-signin').classList.toggle('active', mode === 'signin');
       document.getElementById('tab-signup').classList.toggle('active', mode === 'signup');
+      const extra = document.getElementById('signup-extra-fields');
+      if (extra) {
+        extra.style.display = mode === 'signup' ? 'block' : 'none';
+        ['su-code', 'su-name', 'su-wa', 'su-pix'].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.required = (mode === 'signup');
+        });
+      }
       document.getElementById('auth-submit-btn').textContent = mode === 'signin'
         ? 'Entrar na Área do Parceiro →'
-        : 'Criar Conta Segura de Parceiro →';
+        : 'Criar Conta e Solicitar Cupom 10+10 →';
       document.getElementById('auth-err').style.display = 'none';
       document.getElementById('auth-ok').style.display = 'none';
     }
@@ -375,10 +416,20 @@
         const endpoint = authMode === 'signin'
           ? SUPABASE_URL + '/auth/v1/token?grant_type=password'
           : SUPABASE_URL + '/auth/v1/signup';
+        const authBody = { email, password };
+        if (authMode === 'signup') {
+          authBody.data = {
+            requested_code: document.getElementById('su-code').value.trim().toUpperCase(),
+            partner_name: document.getElementById('su-name').value.trim(),
+            instagram: document.getElementById('su-ig').value.trim(),
+            whatsapp: document.getElementById('su-wa').value.trim(),
+            pix_key: document.getElementById('su-pix').value.trim(),
+          };
+        }
         const resp = await fetch(endpoint, {
           method: 'POST',
           headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify(authBody),
         });
         const data = await resp.json();
         if (!resp.ok) {
@@ -491,6 +542,10 @@
         const coupons = data.coupons || [];
         const requests = data.requests || [];
 
+        const needsFirstRequest = coupons.length === 0 && requests.length === 0;
+        document.getElementById('onboarding-banner').style.display = needsFirstRequest ? 'block' : 'none';
+        document.getElementById('partner-kpis').style.display = needsFirstRequest ? 'none' : 'grid';
+
         document.getElementById('pk-active').textContent = coupons.filter((c) => c.active).length;
         document.getElementById('pk-orders').textContent = coupons.reduce((s, c) => s + Number(c.orders_paid || 0), 0);
         document.getElementById('pk-pending').textContent = fmtMoney(coupons.reduce((s, c) => s + Number(c.commission_pending || 0), 0));
@@ -498,7 +553,7 @@
 
         const cpEl = document.getElementById('my-coupons-list');
         if (!coupons.length) {
-          cpEl.innerHTML = '<div class="empty-state">Você ainda não tem cupons ativos. Envie uma solicitação ao lado para receber seu código 10+10.</div>';
+          cpEl.innerHTML = '<div class="empty-state">Você ainda não tem cupons ativos. Preencha o formulário "+ Solicitar Geração de Cupom 10+10" no topo da página para enviar seu pedido.</div>';
         } else {
           cpEl.innerHTML = coupons.map((c) => {
             const prodOpts = '<option value="">Link geral da loja (todas as peças)</option>' +
@@ -604,6 +659,15 @@
     }
 
     (async function init() {
+      fetch(SUPABASE_URL + '/auth/v1/settings', { headers: { apikey: SUPABASE_KEY } })
+        .then((r) => r.json())
+        .then((s) => {
+          if (s && s.external && s.external.google) {
+            const g = document.getElementById('google-auth-wrap');
+            if (g) g.style.display = 'block';
+          }
+        })
+        .catch(() => {});
       const ok = await ensureSession();
       if (ok) { showPortal(); await loadPartnerData(); }
       else { showAuth(); }
