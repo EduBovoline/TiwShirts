@@ -172,7 +172,7 @@ async function createInfinitePayCheckout({ handle, orderId, orderNsu, items, cus
 }
 
 module.exports = async (req, res) => {
-  setCors(res, 'GET, POST, PATCH, OPTIONS');
+  setCors(res, 'GET, POST, PATCH, DELETE, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(204).end();
 
   // GET: Consultar pedidos registrados (somente admin autenticado)
@@ -230,6 +230,30 @@ module.exports = async (req, res) => {
       }
 
       return res.status(200).json({ success: true, order_id, ...patchData });
+    } catch (e) {
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
+  // DELETE: Excluir pedido (ex.: pedido de teste — somente admin autenticado)
+  if (req.method === 'DELETE') {
+    const headers = adminHeaders(req);
+    if (!headers) {
+      return res.status(401).json({ success: false, error: 'Autenticação administrativa necessária.' });
+    }
+    const orderId = (req.query && req.query.order_id) || '';
+    if (!orderId) {
+      return res.status(400).json({ success: false, error: 'order_id obrigatório para exclusão.' });
+    }
+    try {
+      const delRes = await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(orderId)}`, {
+        method: 'DELETE',
+        headers: { ...headers, Prefer: 'return=minimal' },
+      });
+      if (!delRes.ok) {
+        return res.status(delRes.status).json({ success: false, error: 'Erro ao excluir pedido.' });
+      }
+      return res.status(200).json({ success: true, deleted_order_id: orderId });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }

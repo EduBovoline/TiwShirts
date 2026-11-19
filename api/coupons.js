@@ -87,7 +87,7 @@ async function handleAdminList(res, headers) {
     const total = Number(ord.total || 0);
     const comm = Number(ord.commission_amount || 0);
     const isCancelled = ord.status === 'cancelado' || ord.commission_status === 'cancelado';
-    const isOrderPaid = ord.status === 'pago' || ord.status === 'enviado';
+    const isOrderPaid = ord.status === 'pago' || ord.status === 'producao' || ord.status === 'enviado';
 
     m.orders_total += 1;
     if (!isCancelled) {
@@ -226,7 +226,7 @@ async function handleAdminPatch(res, headers, body) {
       return res.status(400).json({ success: false, error: 'coupon_code obrigatório para quitar comissões.' });
     }
     const settleRes = await sbFetch(
-      `/rest/v1/tiw_orders?coupon_code=eq.${encodeURIComponent(code)}&status=in.(pago,enviado)&commission_status=eq.pendente`,
+      `/rest/v1/tiw_orders?coupon_code=eq.${encodeURIComponent(code)}&status=in.(pago,producao,enviado)&commission_status=eq.pendente`,
       {
         method: 'PATCH',
         headers: { ...headers, Prefer: 'return=representation' },

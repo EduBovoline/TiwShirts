@@ -3,100 +3,226 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TiwShirts — Painel Operacional (Pedidos, Afiliados 10+10 & B2B)</title>
+  <title>TiwShirts — Central do Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #080808;
-      --card-bg: #121212;
-      --card-elevated: #171717;
-      --border: rgba(255, 255, 255, 0.1);
+      --bg: #070708;
+      --sidebar-bg: #0c0c0e;
+      --surface: #121215;
+      --surface-2: #18181c;
+      --surface-hover: #1e1e24;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.16);
       --accent: #2D5A27;
-      --accent-light: #4ade80;
+      --accent-hover: #387031;
+      --green: #4ade80;
       --sand: #C5A880;
-      --danger: #f87171;
       --warn: #f59e0b;
-      --text: #F5F5F5;
-      --text-muted: #8E8E93;
+      --blue: #60a5fa;
+      --purple: #c084fc;
+      --danger: #f87171;
+      --text: #F4F4F5;
+      --text-dim: #A1A1AA;
+      --text-muted: #71717A;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.16) transparent; }
-    body { background: var(--bg); color: var(--text); padding: 24px; min-height: 100vh; }
 
-    /* Login */
-    .login-wrap { min-height: calc(100vh - 48px); display: flex; align-items: center; justify-content: center; }
-    .login-card { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border); padding: 32px; border-radius: 6px; }
-    .login-card h1 { font-family: 'JetBrains Mono', monospace; font-size: 16px; letter-spacing: 0.12em; margin-bottom: 6px; }
-    .login-sub { font-size: 12.5px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+    * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.16) transparent; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; font-size: 13.5px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* ================= LOGIN ================= */
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at top, rgba(45,90,39,0.18), transparent 55%), var(--bg); }
+    .login-card { width: 100%; max-width: 420px; background: var(--surface); border: 1px solid var(--border-strong); padding: 34px; border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.55); }
+    .brand-mark { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: 0.12em; color: var(--text); margin-bottom: 8px; }
+    .brand-dot { width: 10px; height: 10px; border-radius: 3px; background: var(--green); box-shadow: 0 0 12px rgba(74,222,128,0.55); }
+    .login-sub { font-size: 13px; color: var(--text-dim); margin-bottom: 24px; }
+
+    /* ================= APP SHELL ================= */
+    .app-shell { display: flex; min-height: 100vh; }
+    .sidebar { width: 252px; flex-shrink: 0; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 40; transition: transform 0.22s ease; }
+    .sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .sidebar-brand small { display: block; font-family: var(--mono); font-size: 10px; color: var(--sand); letter-spacing: 0.1em; margin-top: 2px; }
+    .sidebar-nav { padding: 14px 12px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+    .nav-section-label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; padding: 12px 10px 6px; }
+    .nav-item { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--text-dim); font-size: 13px; font-weight: 500; cursor: pointer; text-align: left; transition: all 0.14s ease; }
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+    .nav-item.active { background: rgba(45,90,39,0.22); border-color: rgba(74,222,128,0.26); color: #fff; font-weight: 600; }
+    .nav-item-left { display: flex; align-items: center; gap: 10px; }
+    .nav-icon { font-size: 15px; width: 18px; text-align: center; opacity: 0.9; }
+    .nav-badge { font-family: var(--mono); font-size: 10.5px; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--text-dim); }
+    .nav-badge.warn { background: rgba(245,158,11,0.18); color: var(--warn); }
+    .nav-badge.green { background: rgba(74,222,128,0.16); color: var(--green); }
+    .sidebar-footer { padding: 14px 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+    .user-chip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+    .user-avatar { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), #1b3817); color: var(--green); font-family: var(--mono); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .user-meta { min-width: 0; flex: 1; }
+    .user-meta .u-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-meta .u-role { font-family: var(--mono); font-size: 10px; color: var(--green); }
+
+    .main-area { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .topbar { position: sticky; top: 0; z-index: 30; background: rgba(7,7,8,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 26px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .mobile-menu-btn { display: none; background: var(--surface); border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 18px; }
+    .page-title { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+    .page-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .content { padding: 24px 26px 48px; max-width: 1440px; width: 100%; margin: 0 auto; }
+
+    /* ================= BUTTONS & INPUTS ================= */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 14px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.14s ease; white-space: nowrap; }
+    .btn:hover { background: var(--surface-hover); border-color: rgba(255,255,255,0.25); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--accent); border-color: rgba(74,222,128,0.35); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-sand { background: rgba(197,168,128,0.12); border-color: rgba(197,168,128,0.35); color: var(--sand); }
+    .btn-sand:hover { background: rgba(197,168,128,0.22); }
+    .btn-danger { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); color: var(--danger); }
+    .btn-danger:hover { background: rgba(248,113,113,0.2); }
+    .btn-ghost { background: transparent; border-color: transparent; color: var(--text-dim); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+    .btn-sm { padding: 6px 10px; font-size: 11.5px; border-radius: 6px; }
+    .btn-xs { padding: 4px 8px; font-size: 11px; border-radius: 5px; font-family: var(--mono); }
+
     .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    .field label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--sand); letter-spacing: 0.08em; text-transform: uppercase; }
-    .field input, .field textarea { width: 100%; background: #080808; border: 1px solid rgba(255,255,255,0.15); color: var(--text); padding: 11px 12px; font-size: 13.5px; border-radius: 4px; outline: none; }
-    .field input:focus { border-color: var(--sand); }
-    .btn-primary { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; }
-    .btn-primary:hover { background: #366d2f; }
-    .err-box { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.35); color: var(--danger); padding: 10px 12px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; margin-bottom: 14px; line-height: 1.45; }
+    .field label { font-family: var(--mono); font-size: 10.5px; color: var(--sand); letter-spacing: 0.06em; text-transform: uppercase; }
+    .field input, .field select, .field textarea { width: 100%; background: var(--bg); border: 1px solid var(--border-strong); color: var(--text); padding: 10px 12px; font-size: 13px; border-radius: 8px; outline: none; transition: border-color 0.14s ease; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--sand); }
+    .field-hint { font-size: 11.5px; color: var(--text-muted); }
 
-    /* Header & Layout */
-    header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
-    header h1 { font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700; letter-spacing: 0.1em; }
-    .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .badge-live { background: rgba(45,90,39,0.35); border: 1px solid rgba(74,222,128,0.4); color: var(--accent-light); padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-    .btn-sm { background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
-    .btn-sm:hover { background: rgba(255,255,255,0.14); }
-    .btn-sm.sand { color: var(--sand); border-color: rgba(197,168,128,0.35); }
-    .btn-sm.green { background: rgba(45,90,39,0.55); border-color: rgba(74,222,128,0.4); color: #fff; }
-    .btn-sm.green:hover { background: var(--accent); }
-    .btn-sm.danger { color: var(--danger); border-color: rgba(248,113,113,0.3); }
+    .search-box { position: relative; min-width: 240px; flex: 1; max-width: 360px; }
+    .search-box input { width: 100%; background: var(--surface); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 12px 8px 34px; border-radius: 8px; font-size: 12.5px; outline: none; }
+    .search-box input:focus { border-color: var(--sand); }
+    .search-box::before { content: "⌕"; position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 15px; pointer-events: none; }
 
-    .setup-alert { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.4); padding: 14px 18px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; line-height: 1.55; color: #fde68a; }
-    .setup-alert a { color: #fff; font-weight: 600; }
+    /* ================= CARDS & GRIDS ================= */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; position: relative; overflow: hidden; }
+    .kpi-label { font-family: var(--mono); font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; display: flex; justify-content: space-between; align-items: center; }
+    .kpi-val { font-family: var(--mono); font-size: 23px; font-weight: 700; margin-top: 8px; letter-spacing: -0.02em; }
+    .kpi-sub { font-size: 11.5px; color: var(--text-dim); margin-top: 4px; }
 
-    .stats-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 14px; margin-bottom: 22px; }
-    .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 15px; }
-    .stat-title { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; margin-top: 6px; color: var(--text); }
+    .grid-2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; margin-bottom: 22px; }
+    .grid-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 22px; }
 
-    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
-    .tab-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 8px 14px; cursor: pointer; border-radius: 4px; }
-    .tab-btn.active { background: var(--card-bg); color: var(--text); border-color: var(--border); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+    .card-head { padding: 15px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .card-title { font-family: var(--mono); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--sand); display: flex; align-items: center; gap: 8px; }
+    .card-body { padding: 18px; }
 
-    .panel-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 22px; }
-    .panel-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-    .panel-title { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; text-transform: uppercase; color: var(--sand); letter-spacing: 0.06em; }
+    /* ================= FILTER BAR & PILLS ================= */
+    .toolbar { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: rgba(255,255,255,0.015); }
+    .pill-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .pill { padding: 6px 11px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.14s ease; }
+    .pill:hover { border-color: var(--border-strong); color: var(--text); }
+    .pill.active { background: var(--surface-hover); border-color: var(--sand); color: #fff; }
+    .pill .cnt { font-family: var(--mono); font-size: 10.5px; color: var(--text-muted); }
+    .pill.active .cnt { color: var(--sand); }
 
-    /* Form grid for new coupon */
-    .coupon-form { padding: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; align-items: end; }
-    .coupon-form .field { margin-bottom: 0; }
-    .created-banner { margin: 0 18px 18px; padding: 14px 16px; background: rgba(45,90,39,0.2); border: 1px solid rgba(74,222,128,0.4); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .created-banner code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-light); background: #080808; padding: 4px 8px; border-radius: 4px; }
-
+    /* ================= TABLES ================= */
+    .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    th { text-align: left; padding: 11px 14px; background: rgba(255,255,255,0.03); color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid var(--border); white-space: nowrap; }
-    td { padding: 13px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+    th { text-align: left; padding: 11px 14px; background: rgba(255,255,255,0.025); color: var(--text-muted); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 13px 14px; border-bottom: 1px solid rgba(255,255,255,0.045); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
-    tr:hover { background: rgba(255,255,255,0.02); }
+    tbody tr { transition: background 0.12s ease; }
+    tbody tr:hover { background: rgba(255,255,255,0.025); }
+    tr.clickable { cursor: pointer; }
 
-    .mono-gold { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--sand); }
-    .date-text { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-muted); margin-top: 3px; }
+    .mono { font-family: var(--mono); }
+    .mono-gold { font-family: var(--mono); font-weight: 700; color: var(--sand); }
+    .money-green { font-family: var(--mono); font-weight: 700; color: var(--green); }
+    .money-warn { font-family: var(--mono); font-weight: 700; color: var(--warn); }
     .muted { color: var(--text-muted); font-size: 11.5px; }
-    .total-val { font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; color: var(--accent-light); }
-    .badge { display: inline-block; padding: 3px 7px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; }
-    .badge-pending { background: rgba(245,158,11,0.15); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
-    .badge-paid { background: rgba(74,222,128,0.15); color: var(--accent-light); border: 1px solid rgba(74,222,128,0.3); }
-    .badge-muted { background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.12); }
-    .badge-danger { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
-    .actions-col { display: flex; flex-wrap: wrap; gap: 6px; }
-    .empty-state { padding: 36px; text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+    .dim { color: var(--text-dim); font-size: 12px; }
+    .actions-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; font-family: var(--mono); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    .b-pending { background: rgba(245,158,11,0.14); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+    .b-paid { background: rgba(74,222,128,0.14); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+    .b-prod { background: rgba(192,132,252,0.14); color: var(--purple); border: 1px solid rgba(192,132,252,0.3); }
+    .b-shipped { background: rgba(96,165,250,0.14); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+    .b-cancel { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+    .b-muted { background: rgba(255,255,255,0.06); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.12); }
+
+    .empty-state { padding: 42px 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
+    .empty-state strong { display: block; color: var(--text-dim); margin-bottom: 4px; font-size: 14px; }
+
+    /* ================= ACTION QUEUE ================= */
+    .action-list { display: flex; flex-direction: column; gap: 10px; }
+    .action-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; flex-wrap: wrap; }
+    .action-item-info { min-width: 0; flex: 1; }
+    .action-item-title { font-weight: 600; font-size: 13px; }
+    .action-item-sub { font-size: 11.5px; color: var(--text-dim); margin-top: 2px; }
+
+    /* ================= CATALOG GRID ================= */
+    .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .prod-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+    .prod-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #0a0a0c; border-bottom: 1px solid var(--border); }
+    .prod-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .prod-name { font-weight: 700; font-size: 14px; }
+    .prod-prices { font-family: var(--mono); font-size: 11px; color: var(--sand); }
+
+    /* ================= SMART LINK BUILDER ================= */
+    .link-builder { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+    .link-output { margin-top: 12px; padding: 12px 14px; background: var(--bg); border: 1px dashed rgba(197,168,128,0.4); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .link-output code { font-family: var(--mono); font-size: 12px; color: var(--green); word-break: break-all; }
+
+    /* ================= DRAWER & MODAL ================= */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(4px); z-index: 80; display: none; align-items: center; justify-content: center; padding: 18px; }
+    .overlay.open { display: flex; }
+    .overlay.drawer-mode { justify-content: flex-end; padding: 0; }
+    .modal-box { width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 14px; box-shadow: 0 24px 70px rgba(0,0,0,0.7); }
+    .drawer-box { width: 100%; max-width: 520px; height: 100vh; overflow-y: auto; background: var(--surface); border-left: 1px solid var(--border-strong); display: flex; flex-direction: column; }
+    .modal-head { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: 0; background: var(--surface); z-index: 2; }
+    .modal-body { padding: 20px; flex: 1; }
+    .modal-foot { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; position: sticky; bottom: 0; background: var(--surface); }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .detail-block { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+    .detail-block h4 { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--sand); margin-bottom: 10px; }
+    .kv-row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 12.5px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .kv-row:last-child { border-bottom: none; }
+
+    /* ================= TOASTS ================= */
+    .toast-stack { position: fixed; bottom: 20px; right: 20px; z-index: 120; display: flex; flex-direction: column; gap: 8px; max-width: 360px; }
+    .toast { background: var(--surface-2); border: 1px solid var(--border-strong); border-left: 3px solid var(--green); color: var(--text); padding: 11px 14px; border-radius: 8px; font-size: 12.5px; box-shadow: 0 12px 30px rgba(0,0,0,0.55); animation: toastIn 0.18s ease; }
+    .toast.err { border-left-color: var(--danger); }
+    .toast.warn { border-left-color: var(--warn); }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .err-box { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.35); color: var(--danger); padding: 10px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 14px; }
+    .ok-box { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.35); color: var(--green); padding: 10px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 14px; }
+
+    /* ================= RESPONSIVE ================= */
+    .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 35; }
+    @media (max-width: 980px) {
+      .grid-2, .grid-equal, .link-builder { grid-template-columns: 1fr; }
+      .mobile-menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+      .sidebar { position: fixed; left: 0; top: 0; transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-backdrop.open { display: block; }
+      .topbar, .content { padding-left: 16px; padding-right: 16px; }
+    }
+    @media (max-width: 600px) {
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- TELA DE LOGIN -->
+  <!-- ================= LOGIN ================= -->
   <div id="login-view" class="login-wrap" style="display:none;">
     <form class="login-card" onsubmit="handleLogin(event)">
-      <h1>TIWSHIRTS · ADMIN</h1>
-      <p class="login-sub">Acesso restrito para gerenciamento de cupons 10+10, pedidos da loja e cadastros B2B.</p>
+      <div class="brand-mark"><span class="brand-dot"></span> TIWSHIRTS · ADMIN</div>
+      <p class="login-sub">Central operacional para pedidos da loja, programa de afiliados 10+10, catálogo e atacado B2B.</p>
       <div id="login-error" class="err-box" style="display:none;"></div>
       <div class="field">
         <label for="login-email">E-mail</label>
@@ -104,191 +230,529 @@
       </div>
       <div class="field">
         <label for="login-pass">Senha</label>
-        <input id="login-pass" type="password" required placeholder="Sua senha admin" autocomplete="current-password" />
+        <input id="login-pass" type="password" required placeholder="Digite sua senha admin" autocomplete="current-password" />
       </div>
-      <button type="submit" class="btn-primary" id="login-btn">ENTRAR NO PAINEL →</button>
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;" id="login-btn">ENTRAR NA CENTRAL →</button>
     </form>
   </div>
 
-  <!-- DASHBOARD -->
-  <div id="app-view" style="display:none;">
-    <header>
-      <div>
-        <h1>TIWSHIRTS · PAINEL DE CONTROLE</h1>
-        <div class="muted" style="margin-top:4px;">Cupons &amp; Afiliados (10+10), Pedidos D2C e Leads B2B · <span id="admin-user-email"></span></div>
-      </div>
-      <div class="header-actions">
-        <span class="badge-live">● CONECTADO</span>
-        <button class="btn-sm sand" onclick="loadAllData()">ATUALIZAR ⟳</button>
-        <button class="btn-sm" onclick="handleLogout()">SAIR</button>
-      </div>
-    </header>
+  <!-- ================= APP SHELL ================= -->
+  <div id="app-view" class="app-shell" style="display:none;">
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
 
-    <div id="setup-banner" class="setup-alert" style="display:none;">
-      <strong>Falta rodar a migração SQL no Supabase:</strong> as tabelas <code>tiw_coupons</code> / colunas de comissão ainda não foram criadas no banco.
-      Abra o <a href="https://supabase.com/dashboard/project/msschydwkaektxjlbmjc/sql/new" target="_blank" rel="noopener">SQL Editor do Supabase ↗</a>, cole o arquivo <code>03_WEB_E_SOFTWARE/supabase_affiliates_10_10.sql</code> e clique em <strong>Run</strong>.
-    </div>
-
-    <div class="stats-strip">
-      <div class="stat-card">
-        <div class="stat-title">Pedidos Registrados</div>
-        <div class="stat-val" id="stat-orders-count">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Faturamento Pago</div>
-        <div class="stat-val" id="stat-revenue" style="color:var(--accent-light);">R$ 0,00</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Comissões a Pagar</div>
-        <div class="stat-val" id="stat-comm-pending" style="color:var(--warn);">R$ 0,00</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Cupons Ativos</div>
-        <div class="stat-val" id="stat-coupons-count" style="color:var(--sand);">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Leads Atacado B2B</div>
-        <div class="stat-val" id="stat-b2b-count">0</div>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab-btn active" id="tab-coupons-btn" onclick="switchTab('coupons')">CUPONS &amp; AFILIADOS (10+10)</button>
-      <button class="tab-btn" id="tab-orders-btn" onclick="switchTab('orders')">PEDIDOS D2C VAREJO</button>
-      <button class="tab-btn" id="tab-b2b-btn" onclick="switchTab('b2b')">LEADS ATACADO B2B</button>
-    </div>
-
-    <!-- TAB: CUPONS & AFILIADOS -->
-    <div id="tab-coupons">
-      <div class="panel-card">
-        <div class="panel-head">
-          <div class="panel-title">+ Gerar Novo Cupom de Parceiro</div>
-          <div class="muted">Padrão 10+10: 10% OFF para o cliente + 10% de comissão sobre o valor pago</div>
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
+        <div>
+          <div class="brand-mark" style="margin-bottom:0;"><span class="brand-dot"></span> TIWSHIRTS</div>
+          <small>CENTRAL DO ADMIN</small>
         </div>
-        <form class="coupon-form" onsubmit="createCoupon(event)">
-          <div class="field">
-            <label for="cp-code">Código do Cupom *</label>
-            <input id="cp-code" type="text" required placeholder="Ex: CHICO10" style="text-transform:uppercase;font-family:'JetBrains Mono',monospace;" />
+        <button class="btn-ghost btn-xs" style="display:none;" id="close-sidebar-btn" onclick="toggleMobileSidebar(false)">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Operação</div>
+        <button class="nav-item active" data-view="overview" onclick="switchView('overview')">
+          <span class="nav-item-left"><span class="nav-icon">◈</span> Visão Geral</span>
+          <span class="nav-badge warn" id="nb-actions" style="display:none;">0</span>
+        </button>
+        <button class="nav-item" data-view="orders" onclick="switchView('orders')">
+          <span class="nav-item-left"><span class="nav-icon">⬡</span> Pedidos D2C</span>
+          <span class="nav-badge" id="nb-orders">0</span>
+        </button>
+        <button class="nav-item" data-view="coupons" onclick="switchView('coupons')">
+          <span class="nav-item-left"><span class="nav-icon">★</span> Afiliados 10+10</span>
+          <span class="nav-badge green" id="nb-coupons">0</span>
+        </button>
+
+        <div class="nav-section-label">Comercial</div>
+        <button class="nav-item" data-view="catalog" onclick="switchView('catalog')">
+          <span class="nav-item-left"><span class="nav-icon">◫</span> Catálogo &amp; Atacado</span>
+          <span class="nav-badge" id="nb-catalog">7</span>
+        </button>
+        <button class="nav-item" data-view="b2b" onclick="switchView('b2b')">
+          <span class="nav-item-left"><span class="nav-icon">▣</span> Leads B2B</span>
+          <span class="nav-badge" id="nb-b2b">0</span>
+        </button>
+
+        <div class="nav-section-label">Sistema</div>
+        <button class="nav-item" data-view="settings" onclick="switchView('settings')">
+          <span class="nav-item-left"><span class="nav-icon">⚙</span> Conta &amp; Atalhos</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="user-avatar" id="user-initials">EB</div>
+          <div class="user-meta">
+            <div class="u-name" id="admin-user-email">edubovoline@gmail.com</div>
+            <div class="u-role">● ADMIN ATIVO</div>
           </div>
-          <div class="field">
-            <label for="cp-partner">Nome do Parceiro *</label>
-            <input id="cp-partner" type="text" required placeholder="Ex: Chico Skate" />
-          </div>
-          <div class="field">
-            <label for="cp-discount">Desconto Cliente (%)</label>
-            <input id="cp-discount" type="number" step="0.5" min="0" max="50" value="10" required />
-          </div>
-          <div class="field">
-            <label for="cp-commission">Comissão Parceiro (%)</label>
-            <input id="cp-commission" type="number" step="0.5" min="0" max="50" value="10" required />
-          </div>
-          <div class="field">
-            <label for="cp-pix">Chave Pix do Parceiro</label>
-            <input id="cp-pix" type="text" placeholder="CPF, e-mail, celular ou aleatória" />
-          </div>
-          <div class="field">
-            <label for="cp-phone">WhatsApp do Parceiro</label>
-            <input id="cp-phone" type="tel" placeholder="(15) 99999-9999" />
-          </div>
-          <div class="field">
-            <label for="cp-max">Limite de Usos (opc.)</label>
-            <input id="cp-max" type="number" min="1" placeholder="Ilimitado" />
-          </div>
-          <div class="field">
-            <label for="cp-expires">Validade (opc.)</label>
-            <input id="cp-expires" type="date" />
-          </div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <a href="/" target="_blank" rel="noopener" class="btn btn-sm" style="flex:1;">Ver Loja ↗</a>
+          <button class="btn btn-sm btn-danger" onclick="handleLogout()">Sair</button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileSidebar(true)">☰</button>
           <div>
-            <button type="submit" class="btn-primary" id="cp-submit-btn">CRIAR CUPOM + LINK →</button>
-          </div>
-        </form>
-        <div id="cp-form-error" class="err-box" style="display:none;margin:0 18px 18px;"></div>
-        <div id="cp-created-banner" class="created-banner" style="display:none;">
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-light);font-weight:700;margin-bottom:4px;">✓ CUPOM CRIADO</div>
-            <code id="cp-created-link"></code>
-          </div>
-          <div class="actions-col">
-            <button type="button" class="btn-sm" onclick="copyCreatedLink()">COPIAR LINK</button>
-            <a id="cp-created-wa" href="#" target="_blank" rel="noopener" class="btn-sm green">ENVIAR NO WHATSAPP ↗</a>
+            <div class="page-title" id="topbar-title">Visão Geral</div>
+            <div class="page-sub" id="topbar-sub">Resumo financeiro, pendências do dia e saúde da operação</div>
           </div>
         </div>
-      </div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary btn-sm" onclick="openCouponModal()">+ Novo Cupom 10+10</button>
+          <button class="btn btn-sand btn-sm" id="refresh-btn" onclick="loadAllData(true)">Atualizar ⟳</button>
+        </div>
+      </header>
 
-      <div class="panel-card">
-        <div class="panel-head">
-          <div class="panel-title">Parceiros Ativos &amp; Extrato de Comissões</div>
-        </div>
-        <div style="overflow-x:auto;">
-          <table>
-            <thead>
-              <tr>
-                <th>Cupom &amp; Status</th>
-                <th>Parceiro &amp; Pix</th>
-                <th>Regra</th>
-                <th>Usos (Pagos/Total)</th>
-                <th>Vendas Pagas</th>
-                <th>Comissão Pendente</th>
-                <th>Comissão Paga</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="coupons-tbody">
-              <tr><td colspan="8" class="empty-state">Carregando cupons...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <main class="content">
+        <!-- ==================== VIEW: OVERVIEW ==================== -->
+        <section id="view-overview" class="view-section">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Faturamento Pago <span>R$</span></div>
+              <div class="kpi-val money-green" id="kpi-rev">R$ 0,00</div>
+              <div class="kpi-sub" id="kpi-rev-sub">0 pedidos pagos</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Prontos p/ Separar <span>●</span></div>
+              <div class="kpi-val" style="color:var(--blue);" id="kpi-toship">0</div>
+              <div class="kpi-sub" id="kpi-toship-sub">Pagos ou em produção</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Aguardando Pix/Cartão <span>◷</span></div>
+              <div class="kpi-val money-warn" id="kpi-unpaid">0</div>
+              <div class="kpi-sub" id="kpi-unpaid-sub">R$ 0,00 em aberto</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Comissões a Pagar <span>10%</span></div>
+              <div class="kpi-val money-warn" id="kpi-comm">R$ 0,00</div>
+              <div class="kpi-sub" id="kpi-comm-sub">De pedidos já pagos</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Cupons Ativos <span>★</span></div>
+              <div class="kpi-val mono-gold" id="kpi-coupons">0</div>
+              <div class="kpi-sub" id="kpi-coupons-sub">0 cadastrados no total</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Leads Atacado B2B <span>▣</span></div>
+              <div class="kpi-val" id="kpi-b2b">0</div>
+              <div class="kpi-sub">Lojistas interessados</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">⚡ Central de Ações do Dia</div>
+                <span class="muted" id="actions-count-label">Tudo em dia</span>
+              </div>
+              <div class="card-body">
+                <div id="action-queue" class="action-list">
+                  <div class="empty-state">Carregando pendências...</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card">
+                <div class="card-head">
+                  <div class="card-title">📊 Resumo Financeiro (Pagos)</div>
+                </div>
+                <div class="card-body" id="finance-summary">
+                  <div class="kv-row"><span class="dim">Subtotal bruto das peças</span><strong class="mono" id="fin-gross">R$ 0,00</strong></div>
+                  <div class="kv-row"><span class="dim">Descontos via cupom</span><strong class="mono" style="color:var(--danger);" id="fin-disc">- R$ 0,00</strong></div>
+                  <div class="kv-row"><span class="dim">Faturamento recebido</span><strong class="money-green" id="fin-paid">R$ 0,00</strong></div>
+                  <div class="kv-row"><span class="dim">Comissões de parceiros</span><strong class="money-warn" id="fin-comm">- R$ 0,00</strong></div>
+                  <div class="kv-row" style="padding-top:10px;border-top:1px solid var(--border);"><span style="font-weight:600;">Líquido após comissões</span><strong class="money-green" style="font-size:15px;" id="fin-net">R$ 0,00</strong></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <div class="card-title">🏆 Top Parceiros</div>
+                  <button class="btn btn-xs" onclick="switchView('coupons')">Ver todos →</button>
+                </div>
+                <div class="card-body" id="top-partners">
+                  <div class="empty-state" style="padding:18px;">Sem vendas via cupom ainda.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW: ORDERS ==================== -->
+        <section id="view-orders" class="view-section" style="display:none;">
+          <div class="card">
+            <div class="toolbar">
+              <div class="pill-group" id="orders-status-pills">
+                <button class="pill active" data-status="all" onclick="setOrderFilter('all')">Todos <span class="cnt" id="oc-all">0</span></button>
+                <button class="pill" data-status="aguardando_pagamento" onclick="setOrderFilter('aguardando_pagamento')">Aguardando <span class="cnt" id="oc-wait">0</span></button>
+                <button class="pill" data-status="pago" onclick="setOrderFilter('pago')">Pago <span class="cnt" id="oc-paid">0</span></button>
+                <button class="pill" data-status="producao" onclick="setOrderFilter('producao')">Em Produção <span class="cnt" id="oc-prod">0</span></button>
+                <button class="pill" data-status="enviado" onclick="setOrderFilter('enviado')">Enviado <span class="cnt" id="oc-ship">0</span></button>
+                <button class="pill" data-status="cancelado" onclick="setOrderFilter('cancelado')">Cancelado <span class="cnt" id="oc-canc">0</span></button>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1;justify-content:flex-end;">
+                <div class="search-box">
+                  <input id="orders-search" type="text" placeholder="Buscar pedido, cliente, zap ou cupom... (/)" oninput="renderOrders()" />
+                </div>
+                <button class="btn btn-sm" onclick="exportOrdersCsv()">Exportar CSV ↓</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pedido</th>
+                    <th>Cliente</th>
+                    <th>Peças</th>
+                    <th>Cupom &amp; Total</th>
+                    <th>Comissão</th>
+                    <th>Status</th>
+                    <th>Ações Rápidas</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-tbody">
+                  <tr><td colspan="7" class="empty-state">Carregando pedidos...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW: COUPONS ==================== -->
+        <section id="view-coupons" class="view-section" style="display:none;">
+          <!-- Smart Link Builder -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">🔗 Gerador de Link Inteligente (Geral ou Peça Específica)</div>
+              <span class="muted">O cupom fica salvo por 7 dias no navegador de quem clicar</span>
+            </div>
+            <div class="card-body">
+              <div class="link-builder">
+                <div class="field" style="margin-bottom:0;">
+                  <label for="lb-coupon">Parceiro / Cupom</label>
+                  <select id="lb-coupon" onchange="updateLinkBuilder()"></select>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="lb-product">Destino (opcional)</label>
+                  <select id="lb-product" onchange="updateLinkBuilder()">
+                    <option value="">Página inicial da loja (todas as peças)</option>
+                  </select>
+                </div>
+                <div style="display:flex;gap:8px;">
+                  <button class="btn btn-sand" type="button" onclick="copySmartLink()">Copiar Link</button>
+                  <a id="lb-wa-btn" href="#" target="_blank" rel="noopener" class="btn btn-primary">Enviar WhatsApp ↗</a>
+                </div>
+              </div>
+              <div class="link-output">
+                <code id="lb-url">https://tiwshirts.space/?cupom=TIW10</code>
+                <span class="muted" id="lb-rule-hint">10% OFF + 10% comissão</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coupons Table -->
+          <div class="card">
+            <div class="toolbar">
+              <div class="pill-group" id="coupons-filter-pills">
+                <button class="pill active" data-filter="all" onclick="setCouponFilter('all')">Todos</button>
+                <button class="pill" data-filter="active" onclick="setCouponFilter('active')">Ativos</button>
+                <button class="pill" data-filter="paused" onclick="setCouponFilter('paused')">Pausados</button>
+                <button class="pill" data-filter="pending" onclick="setCouponFilter('pending')">Comissão Pendente</button>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1;justify-content:flex-end;">
+                <div class="search-box">
+                  <input id="coupons-search" type="text" placeholder="Buscar código, parceiro ou Pix..." oninput="renderCoupons()" />
+                </div>
+                <button class="btn btn-sm" onclick="exportCouponsCsv()">Exportar CSV ↓</button>
+                <button class="btn btn-primary btn-sm" onclick="openCouponModal()">+ Novo Cupom</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cupom</th>
+                    <th>Parceiro &amp; Pix</th>
+                    <th>Regra</th>
+                    <th>Pedidos</th>
+                    <th>Vendas Pagas</th>
+                    <th>A Pagar</th>
+                    <th>Já Pago</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="coupons-tbody">
+                  <tr><td colspan="8" class="empty-state">Carregando cupons...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW: CATALOG & WHOLESALE ==================== -->
+        <section id="view-catalog" class="view-section" style="display:none;">
+          <!-- Wholesale Calculator -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">📦 Calculadora Rápida de Atacado B2B (MOQ múltiplos de 12)</div>
+              <span class="muted">Clássica R$ 69 · OverHeavy 220g / OverLight G1-G3 R$ 89 · Pote Hermético incluso</span>
+            </div>
+            <div class="card-body">
+              <div class="form-grid-2" style="grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));align-items:end;">
+                <div class="field" style="margin-bottom:0;">
+                  <label for="calc-classica">Qtd. Clássica 30.1 (R$ 69)</label>
+                  <input id="calc-classica" type="number" min="0" value="6" oninput="updateWholesaleCalc()" />
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="calc-overheavy">Qtd. OverHeavy 220g (R$ 89)</label>
+                  <input id="calc-overheavy" type="number" min="0" value="4" oninput="updateWholesaleCalc()" />
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="calc-overlight">Qtd. OverLight G1-G3 (R$ 89)</label>
+                  <input id="calc-overlight" type="number" min="0" value="2" oninput="updateWholesaleCalc()" />
+                </div>
+                <div>
+                  <button class="btn btn-sand" style="width:100%;" onclick="copyWholesaleQuote()">Copiar Proposta WhatsApp</button>
+                </div>
+              </div>
+              <div id="calc-result" style="margin-top:14px;padding:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center;"></div>
+            </div>
+          </div>
+
+          <!-- Live Catalog Grid -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">👕 Catálogo Oficial &amp; Estoque em Tempo Real</div>
+              <span class="muted" id="catalog-meta">7 estampas oficiais</span>
+            </div>
+            <div class="card-body">
+              <div id="catalog-grid" class="catalog-grid">
+                <div class="empty-state">Carregando catálogo...</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW: B2B ==================== -->
+        <section id="view-b2b" class="view-section" style="display:none;">
+          <div class="card">
+            <div class="toolbar">
+              <div class="card-title">▣ Lojistas Cadastrados para Atacado</div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1;justify-content:flex-end;">
+                <div class="search-box">
+                  <input id="b2b-search" type="text" placeholder="Buscar loja, responsável ou cidade..." oninput="renderB2B()" />
+                </div>
+                <button class="btn btn-sm" onclick="exportB2BCsv()">Exportar CSV ↓</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Protocolo &amp; Data</th>
+                    <th>Responsável</th>
+                    <th>Loja / Instagram</th>
+                    <th>Cidade / UF</th>
+                    <th>Contato &amp; Pitch</th>
+                  </tr>
+                </thead>
+                <tbody id="b2b-tbody">
+                  <tr><td colspan="5" class="empty-state">Carregando leads B2B...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW: SETTINGS ==================== -->
+        <section id="view-settings" class="view-section" style="display:none;">
+          <div class="grid-equal">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">🔐 Trocar Senha do Admin</div>
+              </div>
+              <div class="card-body">
+                <div id="pass-msg" style="display:none;"></div>
+                <form onsubmit="handleChangePassword(event)">
+                  <div class="field">
+                    <label for="new-pass-1">Nova Senha</label>
+                    <input id="new-pass-1" type="password" minlength="8" required placeholder="Mínimo 8 caracteres" />
+                  </div>
+                  <div class="field">
+                    <label for="new-pass-2">Confirmar Nova Senha</label>
+                    <input id="new-pass-2" type="password" minlength="8" required placeholder="Repita a nova senha" />
+                  </div>
+                  <button type="submit" class="btn btn-primary" id="change-pass-btn">Atualizar Senha</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">🧭 Atalhos &amp; Infraestrutura</div>
+              </div>
+              <div class="card-body">
+                <div class="action-list">
+                  <div class="action-item">
+                    <div class="action-item-info">
+                      <div class="action-item-title">Loja Oficial TiwShirts</div>
+                      <div class="action-item-sub">https://tiwshirts.space/</div>
+                    </div>
+                    <a href="https://tiwshirts.space/" target="_blank" rel="noopener" class="btn btn-sm">Abrir ↗</a>
+                  </div>
+                  <div class="action-item">
+                    <div class="action-item-info">
+                      <div class="action-item-title">Supabase (Banco &amp; Auth)</div>
+                      <div class="action-item-sub">Projeto msschydwkaektxjlbmjc · RLS ativo</div>
+                    </div>
+                    <a href="https://supabase.com/dashboard/project/msschydwkaektxjlbmjc" target="_blank" rel="noopener" class="btn btn-sm">Abrir ↗</a>
+                  </div>
+                  <div class="action-item">
+                    <div class="action-item-info">
+                      <div class="action-item-title">Vercel (Deploy &amp; Logs)</div>
+                      <div class="action-item-sub">Projeto tiwshirts · APIs serverless ativas</div>
+                    </div>
+                    <a href="https://vercel.com/edubovolines-projects/tiwshirts" target="_blank" rel="noopener" class="btn btn-sm">Abrir ↗</a>
+                  </div>
+                  <div class="action-item">
+                    <div class="action-item-info">
+                      <div class="action-item-title">InfinitePay Checkout</div>
+                      <div class="action-item-sub">Endpoint novo: api.checkout.infinitepay.io/links</div>
+                    </div>
+                    <span class="badge b-paid">ATUALIZADO</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
+  </div>
 
-    <!-- TAB: PEDIDOS -->
-    <div id="tab-orders" class="panel-card" style="display:none;">
-      <div class="panel-head">
-        <div class="panel-title">Pedidos Registrados (Site Oficial)</div>
+  <!-- ================= MODAL: CREATE / EDIT COUPON ================= -->
+  <div id="coupon-modal" class="overlay" onclick="if(event.target===this) closeCouponModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <div class="card-title" id="cm-title">+ Novo Cupom de Parceiro</div>
+          <div class="muted" style="margin-top:2px;">Configure o desconto do cliente e a comissão do parceiro</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeCouponModal()">✕</button>
       </div>
-      <div style="overflow-x:auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Pedido &amp; Data</th>
-              <th>Cliente &amp; Contato</th>
-              <th>Endereço</th>
-              <th>Itens</th>
-              <th>Cupom &amp; Total</th>
-              <th>Comissão</th>
-              <th>Status &amp; Ações</th>
-            </tr>
-          </thead>
-          <tbody id="orders-tbody">
-            <tr><td colspan="7" class="empty-state">Carregando pedidos...</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <form onsubmit="saveCoupon(event)">
+        <div class="modal-body">
+          <input type="hidden" id="cm-id" />
+          <div id="cm-error" class="err-box" style="display:none;"></div>
+
+          <div style="margin-bottom:14px;">
+            <div class="field-hint" style="margin-bottom:6px;">Atalhos de regra:</div>
+            <div class="pill-group">
+              <button type="button" class="pill" onclick="applyRulePreset(10,10)">10% OFF + 10% Com (Padrão)</button>
+              <button type="button" class="pill" onclick="applyRulePreset(15,10)">15% OFF + 10% Com (VIP)</button>
+              <button type="button" class="pill" onclick="applyRulePreset(10,0)">10% OFF + 0% Com (Promo Loja)</button>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="cm-code">Código do Cupom *</label>
+              <input id="cm-code" type="text" required placeholder="Ex: CHICO10" style="text-transform:uppercase;font-family:var(--mono);" />
+            </div>
+            <div class="field">
+              <label for="cm-partner">Nome do Parceiro *</label>
+              <input id="cm-partner" type="text" required placeholder="Ex: Chico Skate" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="cm-discount">Desconto p/ Cliente (%)</label>
+              <input id="cm-discount" type="number" step="0.5" min="0" max="50" value="10" required />
+            </div>
+            <div class="field">
+              <label for="cm-commission">Comissão p/ Parceiro (%)</label>
+              <input id="cm-commission" type="number" step="0.5" min="0" max="50" value="10" required />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="cm-pix">Chave Pix do Parceiro</label>
+              <input id="cm-pix" type="text" placeholder="CPF, e-mail, celular ou aleatória" />
+            </div>
+            <div class="field">
+              <label for="cm-phone">WhatsApp do Parceiro</label>
+              <input id="cm-phone" type="tel" placeholder="(15) 99999-9999" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="cm-max">Limite de Usos (opcional)</label>
+              <input id="cm-max" type="number" min="1" placeholder="Ilimitado" />
+            </div>
+            <div class="field">
+              <label for="cm-expires">Validade (opcional)</label>
+              <input id="cm-expires" type="date" />
+            </div>
+          </div>
+
+          <div class="field" style="margin-bottom:0;">
+            <label for="cm-notes">Instagram / Observações Internas</label>
+            <input id="cm-notes" type="text" placeholder="Ex: @chicoskate · parceiro Sorocaba" />
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn" onclick="closeCouponModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="cm-save-btn">Salvar Cupom →</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <!-- TAB: B2B -->
-    <div id="tab-b2b" class="panel-card" style="display:none;">
-      <div class="panel-head">
-        <div class="panel-title">Lojistas Cadastrados para Atacado B2B</div>
+  <!-- ================= DRAWER: ORDER DETAILS ================= -->
+  <div id="order-drawer" class="overlay drawer-mode" onclick="if(event.target===this) closeOrderDrawer()">
+    <div class="drawer-box">
+      <div class="modal-head">
+        <div>
+          <div class="mono-gold" style="font-size:15px;" id="od-id">TIW-XXXX</div>
+          <div class="muted" id="od-date"></div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeOrderDrawer()">✕</button>
       </div>
-      <div style="overflow-x:auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Protocolo &amp; Data</th>
-              <th>Responsável</th>
-              <th>Loja / Instagram</th>
-              <th>Cidade / UF</th>
-              <th>Contato &amp; WhatsApp</th>
-            </tr>
-          </thead>
-          <tbody id="b2b-tbody">
-            <tr><td colspan="5" class="empty-state">Carregando leads B2B...</td></tr>
-          </tbody>
-        </table>
+      <div class="modal-body" id="od-body"></div>
+      <div class="modal-foot" id="od-foot"></div>
+    </div>
+  </div>
+
+  <!-- ================= CONFIRM MODAL ================= -->
+  <div id="confirm-modal" class="overlay" onclick="if(event.target===this) closeConfirm(false)">
+    <div class="modal-box" style="max-width:420px;">
+      <div class="modal-head">
+        <div class="card-title" id="cf-title">Confirmar ação</div>
+        <button class="btn btn-ghost btn-sm" onclick="closeConfirm(false)">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="cf-msg" style="color:var(--text-dim);font-size:13.5px;line-height:1.55;"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" onclick="closeConfirm(false)">Cancelar</button>
+        <button class="btn btn-primary" id="cf-ok-btn" onclick="closeConfirm(true)">Confirmar</button>
       </div>
     </div>
   </div>
+
+  <!-- ================= TOAST STACK ================= -->
+  <div id="toast-stack" class="toast-stack"></div>
 
   <script>
     const SUPABASE_URL = 'https://msschydwkaektxjlbmjc.supabase.co';
@@ -296,16 +760,37 @@
     const SESSION_KEY = 'tiw_admin_session';
 
     let currentSession = null;
-    let lastCreatedCoupon = null;
+    let currentView = 'overview';
+    let ordersCache = [];
     let couponsCache = [];
+    let b2bCache = [];
+    let catalogCache = [];
+    let orderStatusFilter = 'all';
+    let couponFilter = 'all';
+    let activeOrderId = null;
+    let confirmResolver = null;
+
+    const VIEW_META = {
+      overview: ['Visão Geral', 'Resumo financeiro, pendências do dia e saúde da operação'],
+      orders: ['Pedidos D2C Varejo', 'Acompanhe pagamentos, produção, rastreio e mensagens no WhatsApp'],
+      coupons: ['Afiliados & Cupons 10+10', 'Gerencie parceiros, links por peça e acerto de comissões no Pix'],
+      catalog: ['Catálogo & Atacado B2B', 'Estoque ao vivo das 7 estampas e calculadora de pedidos atacado'],
+      b2b: ['Leads Atacado B2B', 'Lojistas cadastrados prontos para abordagem comercial'],
+      settings: ['Conta & Atalhos', 'Segurança da conta admin e links rápidos da infraestrutura'],
+    };
+
+    const STATUS_MAP = {
+      aguardando_pagamento: { label: 'Aguardando Pagto', cls: 'b-pending' },
+      pago: { label: 'Pago · Separar', cls: 'b-paid' },
+      producao: { label: 'Em Produção', cls: 'b-prod' },
+      enviado: { label: 'Enviado', cls: 'b-shipped' },
+      cancelado: { label: 'Cancelado', cls: 'b-cancel' },
+    };
 
     function esc(str) {
       return String(str == null ? '' : str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     function fmtMoney(val) {
@@ -313,7 +798,7 @@
     }
 
     function fmtDate(iso) {
-      if (!iso) return '';
+      if (!iso) return '—';
       const d = new Date(iso);
       return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     }
@@ -324,33 +809,75 @@
       return digits.startsWith('55') ? digits : '55' + digits;
     }
 
-    function buildPartnerWaUrl(coupon) {
-      const phone = cleanPhoneDigits(coupon.partner_phone);
-      const msg = encodeURIComponent(
-        'Fala ' + coupon.partner_name + '! Seu cupom de parceiro TiwShirts está no ar.\n\n' +
-        'Código: *' + coupon.code + '*\n' +
-        'Link direto: ' + coupon.share_url + '\n\n' +
-        'Regra: seu público ganha *' + coupon.discount_pct + '% OFF* e você recebe *' + coupon.commission_pct + '% de comissão* sobre cada peça paga com o seu link ou cupom.'
-      );
-      return (phone ? 'https://wa.me/' + phone : 'https://wa.me/') + '?text=' + msg;
+    function toast(msg, type) {
+      const stack = document.getElementById('toast-stack');
+      const el = document.createElement('div');
+      el.className = 'toast' + (type ? ' ' + type : '');
+      el.textContent = msg;
+      stack.appendChild(el);
+      setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.25s'; setTimeout(() => el.remove(), 260); }, 3200);
     }
 
+    function askConfirm(title, message, danger) {
+      return new Promise((resolve) => {
+        confirmResolver = resolve;
+        document.getElementById('cf-title').textContent = title;
+        document.getElementById('cf-msg').textContent = message;
+        const okBtn = document.getElementById('cf-ok-btn');
+        okBtn.className = 'btn ' + (danger ? 'btn-danger' : 'btn-primary');
+        document.getElementById('confirm-modal').classList.add('open');
+      });
+    }
+
+    function closeConfirm(val) {
+      document.getElementById('confirm-modal').classList.remove('open');
+      if (confirmResolver) {
+        const fn = confirmResolver;
+        confirmResolver = null;
+        fn(val);
+      }
+    }
+
+    function copyText(text, label) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => toast(label || 'Copiado!')).catch(() => toast('Não foi possível copiar automaticamente.', 'err'));
+      } else {
+        toast('Copie manualmente: ' + text, 'warn');
+      }
+    }
+
+    function toggleMobileSidebar(open) {
+      document.getElementById('sidebar').classList.toggle('open', open);
+      document.getElementById('sidebar-backdrop').classList.toggle('open', open);
+    }
+
+    function switchView(view) {
+      currentView = view;
+      document.querySelectorAll('.view-section').forEach((s) => s.style.display = 'none');
+      const target = document.getElementById('view-' + view);
+      if (target) target.style.display = 'block';
+      document.querySelectorAll('.nav-item').forEach((b) => b.classList.toggle('active', b.dataset.view === view));
+      const meta = VIEW_META[view] || ['Central', ''];
+      document.getElementById('topbar-title').textContent = meta[0];
+      document.getElementById('topbar-sub').textContent = meta[1];
+      toggleMobileSidebar(false);
+    }
+
+    /* ================= AUTH ================= */
     function showLogin(msg) {
       document.getElementById('login-view').style.display = 'flex';
       document.getElementById('app-view').style.display = 'none';
       const errEl = document.getElementById('login-error');
-      if (msg) {
-        errEl.textContent = msg;
-        errEl.style.display = 'block';
-      } else {
-        errEl.style.display = 'none';
-      }
+      if (msg) { errEl.textContent = msg; errEl.style.display = 'block'; }
+      else { errEl.style.display = 'none'; }
     }
 
     function showApp() {
       document.getElementById('login-view').style.display = 'none';
-      document.getElementById('app-view').style.display = 'block';
-      document.getElementById('admin-user-email').textContent = (currentSession && currentSession.email) || '';
+      document.getElementById('app-view').style.display = 'flex';
+      const email = (currentSession && currentSession.email) || '';
+      document.getElementById('admin-user-email').textContent = email;
+      document.getElementById('user-initials').textContent = (email.slice(0, 2) || 'TW').toUpperCase();
     }
 
     async function ensureSession() {
@@ -359,7 +886,6 @@
         if (!raw) return false;
         const parsed = JSON.parse(raw);
         if (!parsed || !parsed.access_token) return false;
-
         if (parsed.expires_at && Date.now() > parsed.expires_at - 60000 && parsed.refresh_token) {
           const r = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
             method: 'POST',
@@ -382,9 +908,7 @@
         }
         currentSession = parsed;
         return true;
-      } catch (e) {
-        return false;
-      }
+      } catch (e) { return false; }
     }
 
     async function handleLogin(e) {
@@ -392,9 +916,7 @@
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-pass').value;
       const btn = document.getElementById('login-btn');
-      btn.disabled = true;
-      btn.textContent = 'AUTENTICANDO...';
-
+      btn.disabled = true; btn.textContent = 'AUTENTICANDO...';
       try {
         const resp = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
           method: 'POST',
@@ -418,8 +940,7 @@
       } catch (err) {
         showLogin('Erro de conexão: ' + err.message);
       } finally {
-        btn.disabled = false;
-        btn.textContent = 'ENTRAR NO PAINEL →';
+        btn.disabled = false; btn.textContent = 'ENTRAR NA CENTRAL →';
       }
     }
 
@@ -427,6 +948,39 @@
       sessionStorage.removeItem(SESSION_KEY);
       currentSession = null;
       showLogin();
+    }
+
+    async function handleChangePassword(e) {
+      e.preventDefault();
+      const p1 = document.getElementById('new-pass-1').value;
+      const p2 = document.getElementById('new-pass-2').value;
+      const box = document.getElementById('pass-msg');
+      box.style.display = 'none';
+      if (p1 !== p2) {
+        box.className = 'err-box'; box.textContent = 'As senhas não conferem.'; box.style.display = 'block';
+        return;
+      }
+      const btn = document.getElementById('change-pass-btn');
+      btn.disabled = true; btn.textContent = 'Atualizando...';
+      try {
+        const resp = await fetch(SUPABASE_URL + '/auth/v1/user', {
+          method: 'PUT',
+          headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + currentSession.access_token, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: p1 }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) {
+          box.className = 'err-box'; box.textContent = (data && (data.msg || data.message || data.error_description)) || 'Erro ao alterar senha.'; box.style.display = 'block';
+          return;
+        }
+        box.className = 'ok-box'; box.textContent = 'Senha alterada com sucesso!'; box.style.display = 'block';
+        e.target.reset();
+        toast('Senha atualizada!');
+      } catch (err) {
+        box.className = 'err-box'; box.textContent = err.message; box.style.display = 'block';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Atualizar Senha';
+      }
     }
 
     async function apiFetch(url, options = {}) {
@@ -442,280 +996,723 @@
       const resp = await fetch(url, { ...options, headers });
       if (resp.status === 401) {
         handleLogout();
-        showLogin('Sessão expirada ou acesso sem permissão de administrador.');
-        throw new Error('Não autorizado (401).');
+        showLogin('Sessão expirada ou sem permissão admin.');
+        throw new Error('Não autorizado.');
       }
       const data = await resp.json();
       return { ok: resp.ok, status: resp.status, data };
     }
 
-    function switchTab(tab) {
-      document.getElementById('tab-coupons').style.display = tab === 'coupons' ? 'block' : 'none';
-      document.getElementById('tab-orders').style.display = tab === 'orders' ? 'block' : 'none';
-      document.getElementById('tab-b2b').style.display = tab === 'b2b' ? 'block' : 'none';
-      document.getElementById('tab-coupons-btn').className = 'tab-btn' + (tab === 'coupons' ? ' active' : '');
-      document.getElementById('tab-orders-btn').className = 'tab-btn' + (tab === 'orders' ? ' active' : '');
-      document.getElementById('tab-b2b-btn').className = 'tab-btn' + (tab === 'b2b' ? ' active' : '');
+    /* ================= LOAD ALL DATA ================= */
+    async function loadAllData(showToast) {
+      const btn = document.getElementById('refresh-btn');
+      btn.disabled = true; btn.textContent = 'Atualizando...';
+      try {
+        const [cpRes, ordRes, b2bRes, catResp] = await Promise.all([
+          apiFetch('/api/coupons'),
+          apiFetch('/api/orders'),
+          apiFetch('/api/b2b'),
+          fetch('/api/catalog').then((r) => r.json()).catch(() => ({ products: [] })),
+        ]);
+        couponsCache = (cpRes.data && cpRes.data.coupons) || [];
+        ordersCache = (ordRes.data && ordRes.data.orders) || [];
+        b2bCache = (b2bRes.data && b2bRes.data.leads) || [];
+        catalogCache = (catResp && catResp.products) || [];
+
+        renderOverview();
+        renderOrders();
+        renderCoupons();
+        populateLinkBuilder();
+        renderCatalog();
+        renderB2B();
+        updateWholesaleCalc();
+        if (activeOrderId) {
+          const stillExists = ordersCache.find((o) => o.order_id === activeOrderId);
+          if (stillExists) renderOrderDrawer(stillExists);
+          else closeOrderDrawer();
+        }
+        if (showToast) toast('Dados atualizados!');
+      } catch (err) {
+        toast('Erro ao carregar dados: ' + err.message, 'err');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Atualizar ⟳';
+      }
     }
 
-    function copyText(text, btn) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(() => {});
+    /* ================= OVERVIEW ================= */
+    function renderOverview() {
+      const isPaidStatus = (s) => s === 'pago' || s === 'producao' || s === 'enviado';
+      const paidOrders = ordersCache.filter((o) => isPaidStatus(o.status));
+      const unpaidOrders = ordersCache.filter((o) => !o.status || o.status === 'aguardando_pagamento');
+      const toShipOrders = ordersCache.filter((o) => o.status === 'pago' || o.status === 'producao');
+
+      const revPaid = paidOrders.reduce((s, o) => s + Number(o.total || 0), 0);
+      const grossPaid = paidOrders.reduce((s, o) => s + Number(o.subtotal || o.total || 0), 0);
+      const discPaid = paidOrders.reduce((s, o) => s + Number(o.discount_amount || 0), 0);
+      const commTotalPaidOrders = paidOrders.reduce((s, o) => s + Number(o.commission_amount || 0), 0);
+      const unpaidVal = unpaidOrders.reduce((s, o) => s + Number(o.total || 0), 0);
+
+      const activeCoupons = couponsCache.filter((c) => c.active);
+      const commPending = couponsCache.reduce((s, c) => s + Number(c.commission_pending || 0), 0);
+      const partnersWithPending = couponsCache.filter((c) => Number(c.commission_pending || 0) > 0);
+
+      document.getElementById('kpi-rev').textContent = fmtMoney(revPaid);
+      document.getElementById('kpi-rev-sub').textContent = paidOrders.length + ' pedido(s) confirmado(s)';
+      document.getElementById('kpi-toship').textContent = toShipOrders.length;
+      document.getElementById('kpi-unpaid').textContent = unpaidOrders.length;
+      document.getElementById('kpi-unpaid-sub').textContent = fmtMoney(unpaidVal) + ' em aberto';
+      document.getElementById('kpi-comm').textContent = fmtMoney(commPending);
+      document.getElementById('kpi-comm-sub').textContent = partnersWithPending.length + ' parceiro(s) aguardando Pix';
+      document.getElementById('kpi-coupons').textContent = activeCoupons.length;
+      document.getElementById('kpi-coupons-sub').textContent = couponsCache.length + ' cadastrado(s)';
+      document.getElementById('kpi-b2b').textContent = b2bCache.length;
+
+      // Sidebar badges
+      document.getElementById('nb-orders').textContent = ordersCache.length;
+      document.getElementById('nb-coupons').textContent = activeCoupons.length;
+      document.getElementById('nb-b2b').textContent = b2bCache.length;
+      document.getElementById('nb-catalog').textContent = catalogCache.length;
+
+      // Financial summary
+      document.getElementById('fin-gross').textContent = fmtMoney(grossPaid);
+      document.getElementById('fin-disc').textContent = '- ' + fmtMoney(discPaid);
+      document.getElementById('fin-paid').textContent = fmtMoney(revPaid);
+      document.getElementById('fin-comm').textContent = '- ' + fmtMoney(commTotalPaidOrders);
+      document.getElementById('fin-net').textContent = fmtMoney(revPaid - commTotalPaidOrders);
+
+      // Action Queue
+      const actions = [];
+      toShipOrders.forEach((o) => {
+        actions.push({
+          title: `Separar/Enviar pedido ${o.order_id} (${(o.customer && o.customer.name) || 'Cliente'})`,
+          sub: `${fmtMoney(o.total)} · Status: ${(STATUS_MAP[o.status] || {}).label || o.status}`,
+          btns: `<button class="btn btn-primary btn-xs" onclick="openOrderDrawer('${esc(o.order_id)}')">Abrir Pedido →</button>`,
+        });
+      });
+      unpaidOrders.slice(0, 5).forEach((o) => {
+        actions.push({
+          title: `Confirmar pagamento de ${o.order_id} (${(o.customer && o.customer.name) || 'Cliente'})`,
+          sub: `${fmtMoney(o.total)} via ${String(o.payment_method || 'pix').toUpperCase()} · ${fmtDate(o.created_at)}`,
+          btns: `<button class="btn btn-primary btn-xs" onclick="updateOrderStatus('${esc(o.order_id)}','pago')">Marcar Pago</button> <button class="btn btn-xs" onclick="openOrderDrawer('${esc(o.order_id)}')">Detalhes</button>`,
+        });
+      });
+      partnersWithPending.forEach((c) => {
+        actions.push({
+          title: `Pagar comissão de ${c.partner_name} (${c.code})`,
+          sub: `Pendente: ${fmtMoney(c.commission_pending)} · Pix: ${c.partner_pix || 'Não cadastrado'}`,
+          btns: `${c.partner_pix ? `<button class="btn btn-xs" onclick="copyText('${esc(c.partner_pix)}','Pix copiado!')">Copiar Pix</button>` : ''} <button class="btn btn-sand btn-xs" onclick="settleCouponCommissions('${esc(c.code)}', ${c.commission_pending})">Quitar</button>`,
+        });
+      });
+
+      const nbAct = document.getElementById('nb-actions');
+      if (actions.length > 0) {
+        nbAct.textContent = actions.length;
+        nbAct.style.display = 'inline-block';
+        document.getElementById('actions-count-label').textContent = actions.length + ' pendência(s)';
+        document.getElementById('action-queue').innerHTML = actions.map((a) => `
+          <div class="action-item">
+            <div class="action-item-info">
+              <div class="action-item-title">${esc(a.title)}</div>
+              <div class="action-item-sub">${esc(a.sub)}</div>
+            </div>
+            <div class="actions-row">${a.btns}</div>
+          </div>
+        `).join('');
+      } else {
+        nbAct.style.display = 'none';
+        document.getElementById('actions-count-label').textContent = 'Tudo em dia';
+        document.getElementById('action-queue').innerHTML = `
+          <div class="empty-state">
+            <strong>Operação limpa ✓</strong>
+            Nenhum pedido travado nem comissão pendente agora.
+            <div style="margin-top:14px;"><button class="btn btn-sand btn-sm" onclick="openCouponModal()">+ Cadastrar novo parceiro 10+10</button></div>
+          </div>`;
       }
-      if (btn) {
-        const orig = btn.textContent;
-        btn.textContent = 'COPIADO ✓';
-        setTimeout(() => { btn.textContent = orig; }, 2000);
+
+      // Top Partners
+      const ranked = [...couponsCache].filter((c) => c.sales_paid > 0 || c.orders_total > 0).sort((a, b) => b.sales_paid - a.sales_paid).slice(0, 5);
+      const topEl = document.getElementById('top-partners');
+      if (!ranked.length) {
+        topEl.innerHTML = '<div class="empty-state" style="padding:16px;">Assim que os cupons gerarem pedidos, o ranking aparece aqui.</div>';
+      } else {
+        topEl.innerHTML = ranked.map((c, idx) => `
+          <div class="kv-row" style="align-items:center;">
+            <div><strong>#${idx + 1} ${esc(c.partner_name)}</strong> <span class="badge b-muted" style="margin-left:4px;">${esc(c.code)}</span></div>
+            <div class="money-green">${fmtMoney(c.sales_paid)} <span class="muted">(${c.orders_paid}p)</span></div>
+          </div>
+        `).join('');
       }
     }
 
-    function copyCreatedLink() {
-      if (lastCreatedCoupon && lastCreatedCoupon.share_url) {
-        copyText(lastCreatedCoupon.share_url);
-      }
+    /* ================= ORDERS ================= */
+    function setOrderFilter(status) {
+      orderStatusFilter = status;
+      document.querySelectorAll('#orders-status-pills .pill').forEach((p) => p.classList.toggle('active', p.dataset.status === status));
+      renderOrders();
     }
 
-    async function createCoupon(e) {
+    function getFilteredOrders() {
+      const q = (document.getElementById('orders-search').value || '').trim().toLowerCase();
+      return ordersCache.filter((o) => {
+        const st = o.status || 'aguardando_pagamento';
+        if (orderStatusFilter !== 'all' && st !== orderStatusFilter) return false;
+        if (!q) return true;
+        const cust = o.customer || {};
+        const hay = [o.order_id, cust.name, cust.phone, cust.email, o.coupon_code, cust.address].join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    function renderOrders() {
+      // Update counters
+      const cnt = (s) => ordersCache.filter((o) => (o.status || 'aguardando_pagamento') === s).length;
+      document.getElementById('oc-all').textContent = ordersCache.length;
+      document.getElementById('oc-wait').textContent = cnt('aguardando_pagamento');
+      document.getElementById('oc-paid').textContent = cnt('pago');
+      document.getElementById('oc-prod').textContent = cnt('producao');
+      document.getElementById('oc-ship').textContent = cnt('enviado');
+      document.getElementById('oc-canc').textContent = cnt('cancelado');
+
+      const list = getFilteredOrders();
+      const tbody = document.getElementById('orders-tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><strong>Nenhum pedido encontrado</strong>Ajuste os filtros ou aguarde novas vendas na loja.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map((o) => {
+        const cust = o.customer || {};
+        const items = Array.isArray(o.items) ? o.items : [];
+        const st = STATUS_MAP[o.status || 'aguardando_pagamento'] || { label: o.status, cls: 'b-muted' };
+        const commAmt = Number(o.commission_amount || 0);
+        const commSt = o.commission_status || 'sem_comissao';
+        const commCls = commSt === 'pago' ? 'b-paid' : (commSt === 'pendente' ? 'b-pending' : (commSt === 'cancelado' ? 'b-cancel' : 'b-muted'));
+
+        return `<tr class="clickable" onclick="openOrderDrawer('${esc(o.order_id)}')">
+          <td>
+            <div class="mono-gold">${esc(o.order_id)}</div>
+            <div class="muted">${esc(fmtDate(o.created_at))}</div>
+          </td>
+          <td>
+            <div style="font-weight:600;">${esc(cust.name || 'Não informado')}</div>
+            <div class="muted">${esc(cust.phone || cust.email || '—')}</div>
+          </td>
+          <td>
+            <div style="font-size:12px;">${items.slice(0, 2).map((i) => `${Number(i.qty || 1)}x ${esc(i.name)} (${esc(i.size)})`).join('<br>')}</div>
+            ${items.length > 2 ? `<div class="muted">+ ${items.length - 2} item(ns)</div>` : ''}
+          </td>
+          <td>
+            <div class="money-green">${fmtMoney(o.total)}</div>
+            <div class="muted" style="text-transform:uppercase;">${esc(o.payment_method || 'pix')} ${o.coupon_code ? `· <span style="color:var(--sand);">${esc(o.coupon_code)}</span>` : ''}</div>
+          </td>
+          <td>
+            ${o.coupon_code ? `<div class="mono" style="font-weight:700;">${fmtMoney(commAmt)}</div><span class="badge ${commCls}" style="margin-top:3px;">${esc(commSt)}</span>` : '<span class="muted">—</span>'}
+          </td>
+          <td><span class="badge ${st.cls}">${esc(st.label)}</span></td>
+          <td onclick="event.stopPropagation()">
+            <div class="actions-row">
+              ${(o.status || 'aguardando_pagamento') === 'aguardando_pagamento' ? `<button class="btn btn-primary btn-xs" onclick="updateOrderStatus('${esc(o.order_id)}','pago')">Marcar Pago</button>` : ''}
+              <button class="btn btn-xs" onclick="openOrderDrawer('${esc(o.order_id)}')">Abrir →</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function openOrderDrawer(orderId) {
+      const order = ordersCache.find((o) => o.order_id === orderId);
+      if (!order) return;
+      activeOrderId = orderId;
+      renderOrderDrawer(order);
+      document.getElementById('order-drawer').classList.add('open');
+    }
+
+    function closeOrderDrawer() {
+      activeOrderId = null;
+      document.getElementById('order-drawer').classList.remove('open');
+    }
+
+    function renderOrderDrawer(o) {
+      const cust = o.customer || {};
+      const items = Array.isArray(o.items) ? o.items : [];
+      const phone = cleanPhoneDigits(cust.phone);
+      const st = STATUS_MAP[o.status || 'aguardando_pagamento'] || { label: o.status, cls: 'b-muted' };
+
+      document.getElementById('od-id').textContent = o.order_id;
+      document.getElementById('od-date').textContent = fmtDate(o.created_at) + ' · ' + String(o.payment_method || 'pix').toUpperCase();
+
+      const labelText = `${cust.name || ''}\n${cust.address || ''}\nCEP: ${cust.cep || ''}\nTel: ${cust.phone || ''}`.trim();
+
+      const waLink = (text) => (phone ? `https://wa.me/${phone}` : 'https://wa.me/') + '?text=' + encodeURIComponent(text);
+      const msgPaid = `Fala ${cust.name || ''}! Confirmamos o pagamento do seu pedido *${o.order_id}* na TiwShirts. Já estamos separando suas peças no pote hermético oficial!`;
+      const msgProd = `Fala ${cust.name || ''}! Seu pedido *${o.order_id}* entrou em produção exclusiva (prazo de 7 a 10 dias úteis). Assim que sair para entrega te mando o rastreio por aqui.`;
+      const msgPix = `Fala ${cust.name || ''}! Vi que o pedido *${o.order_id}* (${fmtMoney(o.total)}) ainda está aguardando pagamento. Precisa do Pix Copia e Cola ou do link de cartão novamente?`;
+
+      document.getElementById('od-body').innerHTML = `
+        <div class="detail-block">
+          <h4>Status do Pedido</h4>
+          <div style="margin-bottom:12px;"><span class="badge ${st.cls}">${esc(st.label)}</span></div>
+          <div class="actions-row">
+            <button class="btn btn-xs ${o.status === 'aguardando_pagamento' ? 'btn-sand' : ''}" onclick="updateOrderStatus('${esc(o.order_id)}','aguardando_pagamento')">Aguardando</button>
+            <button class="btn btn-xs ${o.status === 'pago' ? 'btn-primary' : ''}" onclick="updateOrderStatus('${esc(o.order_id)}','pago')">Pago</button>
+            <button class="btn btn-xs ${o.status === 'producao' ? 'btn-sand' : ''}" onclick="updateOrderStatus('${esc(o.order_id)}','producao')">Em Produção</button>
+            <button class="btn btn-xs ${o.status === 'enviado' ? 'btn-primary' : ''}" onclick="updateOrderStatus('${esc(o.order_id)}','enviado')">Enviado</button>
+            <button class="btn btn-xs btn-danger" onclick="updateOrderStatus('${esc(o.order_id)}','cancelado')">Cancelar</button>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Cliente &amp; Entrega</h4>
+          <div class="kv-row"><span class="dim">Nome</span><strong>${esc(cust.name || '—')}</strong></div>
+          <div class="kv-row"><span class="dim">WhatsApp</span><span class="mono">${esc(cust.phone || '—')}</span></div>
+          <div class="kv-row"><span class="dim">E-mail</span><span>${esc(cust.email || '—')}</span></div>
+          <div class="kv-row"><span class="dim">Endereço</span><span style="text-align:right;">${esc(cust.address || '—')}</span></div>
+          <div class="kv-row"><span class="dim">CEP</span><span class="mono">${esc(cust.cep || '—')}</span></div>
+          <div style="margin-top:10px;">
+            <button class="btn btn-sm btn-sand" onclick='copyText(${JSON.stringify(labelText)}, "Etiqueta de envio copiada!")'>Copiar Etiqueta p/ Envio</button>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Peças &amp; Valores</h4>
+          ${items.map((i) => `<div class="kv-row"><span><strong>${Number(i.qty || 1)}x</strong> ${esc(i.name)} <span class="muted">(${esc(i.fit || '')} · ${esc(i.size)})</span></span><span class="mono">${fmtMoney((i.unit_price || i.price || 0) * (i.qty || 1))}</span></div>`).join('')}
+          ${o.coupon_code ? `<div class="kv-row"><span class="dim">Cupom ${esc(o.coupon_code)}</span><span class="mono" style="color:var(--danger);">- ${fmtMoney(o.discount_amount)}</span></div>` : ''}
+          <div class="kv-row" style="padding-top:8px;"><strong>Total Cobrado</strong><strong class="money-green" style="font-size:15px;">${fmtMoney(o.total)}</strong></div>
+          ${o.coupon_code ? `
+            <div class="kv-row">
+              <span class="dim">Comissão (${o.commission_pct || 10}%) · ${esc(o.commission_status || 'pendente')}</span>
+              <span class="money-warn">${fmtMoney(o.commission_amount)}</span>
+            </div>
+            ${o.commission_status === 'pendente' && o.status !== 'cancelado' ? `<div style="margin-top:8px;"><button class="btn btn-sand btn-xs" onclick="updateOrderFields('${esc(o.order_id)}',{commission_status:'pago'})">Marcar Comissão Paga</button></div>` : ''}
+          ` : ''}
+        </div>
+
+        <div class="detail-block">
+          <h4>Mensagens Prontas no WhatsApp</h4>
+          <div class="actions-row" style="margin-bottom:10px;">
+            <a href="${esc(waLink(msgPaid))}" target="_blank" rel="noopener" class="btn btn-primary btn-xs">Confirmar Pagto ↗</a>
+            <a href="${esc(waLink(msgProd))}" target="_blank" rel="noopener" class="btn btn-xs">Aviso Produção ↗</a>
+            <a href="${esc(waLink(msgPix))}" target="_blank" rel="noopener" class="btn btn-xs">Lembrar Pix ↗</a>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="od-tracking" type="text" placeholder="Código de rastreio (ex: BR123456789)" style="flex:1;background:var(--bg);border:1px solid var(--border-strong);color:var(--text);padding:7px 10px;border-radius:6px;font-size:12px;font-family:var(--mono);" />
+            <button class="btn btn-sand btn-xs" onclick="sendTrackingWa('${esc(o.order_id)}','${esc(cust.name || '')}','${esc(phone)}')">Enviar Rastreio ↗</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('od-foot').innerHTML = `
+        <button class="btn btn-danger btn-sm" style="margin-right:auto;" onclick="deleteOrder('${esc(o.order_id)}')">Excluir Pedido</button>
+        <button class="btn btn-sm" onclick="closeOrderDrawer()">Fechar</button>
+      `;
+    }
+
+    function sendTrackingWa(orderId, name, phone) {
+      const code = (document.getElementById('od-tracking').value || '').trim();
+      if (!code) { toast('Digite o código de rastreio primeiro.', 'warn'); return; }
+      const text = `Fala ${name}! Seu pedido *${orderId}* da TiwShirts foi despachado.\n\nCódigo de rastreio: *${code}*\nAcompanhe pelos Correios/transportadora. Valeu por fortalecer a cena!`;
+      window.open((phone ? `https://wa.me/${phone}` : 'https://wa.me/') + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+      updateOrderStatus(orderId, 'enviado');
+    }
+
+    async function updateOrderStatus(orderId, status) {
+      await updateOrderFields(orderId, { status });
+    }
+
+    async function updateOrderFields(orderId, fields) {
+      try {
+        const res = await apiFetch('/api/orders', { method: 'PATCH', body: JSON.stringify({ order_id: orderId, ...fields }) });
+        if (!res.ok) { toast((res.data && res.data.error) || 'Erro ao atualizar pedido.', 'err'); return; }
+        toast('Pedido ' + orderId + ' atualizado!');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+    }
+
+    async function deleteOrder(orderId) {
+      const ok = await askConfirm('Excluir pedido ' + orderId + '?', 'Essa ação remove permanentemente o pedido do banco de dados. Use apenas para limpar pedidos de teste.', true);
+      if (!ok) return;
+      try {
+        const res = await apiFetch('/api/orders?order_id=' + encodeURIComponent(orderId), { method: 'DELETE' });
+        if (!res.ok) { toast((res.data && res.data.error) || 'Erro ao excluir pedido.', 'err'); return; }
+        closeOrderDrawer();
+        toast('Pedido excluído.');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+    }
+
+    /* ================= COUPONS ================= */
+    function buildPartnerWaUrl(coupon, customUrl) {
+      const phone = cleanPhoneDigits(coupon.partner_phone);
+      const url = customUrl || coupon.share_url;
+      const msg = encodeURIComponent(
+        'Fala ' + coupon.partner_name + '! Seu cupom de parceiro TiwShirts está no ar.\n\n' +
+        'Código: *' + coupon.code + '*\n' +
+        'Link direto: ' + url + '\n\n' +
+        'Regra: seu público ganha *' + coupon.discount_pct + '% OFF* e você recebe *' + coupon.commission_pct + '% de comissão* sobre cada peça paga com o seu link ou cupom.'
+      );
+      return (phone ? 'https://wa.me/' + phone : 'https://wa.me/') + '?text=' + msg;
+    }
+
+    function setCouponFilter(f) {
+      couponFilter = f;
+      document.querySelectorAll('#coupons-filter-pills .pill').forEach((p) => p.classList.toggle('active', p.dataset.filter === f));
+      renderCoupons();
+    }
+
+    function getFilteredCoupons() {
+      const q = (document.getElementById('coupons-search').value || '').trim().toLowerCase();
+      return couponsCache.filter((c) => {
+        if (couponFilter === 'active' && !c.active) return false;
+        if (couponFilter === 'paused' && c.active) return false;
+        if (couponFilter === 'pending' && !(Number(c.commission_pending || 0) > 0)) return false;
+        if (!q) return true;
+        return [c.code, c.partner_name, c.partner_pix, c.partner_phone, c.notes].join(' ').toLowerCase().includes(q);
+      });
+    }
+
+    function renderCoupons() {
+      const list = getFilteredCoupons();
+      const tbody = document.getElementById('coupons-tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><strong>Nenhum cupom encontrado</strong>Clique em "+ Novo Cupom" para cadastrar um parceiro.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map((c) => {
+        const badge = c.active ? '<span class="badge b-paid">Ativo</span>' : '<span class="badge b-muted">Pausado</span>';
+        const waUrl = buildPartnerWaUrl(c);
+        return `<tr>
+          <td>
+            <div class="mono-gold">${esc(c.code)}</div>
+            <div style="margin-top:4px;">${badge}</div>
+          </td>
+          <td>
+            <div style="font-weight:600;">${esc(c.partner_name)}</div>
+            <div class="muted">Pix: ${esc(c.partner_pix || '—')} ${c.partner_pix ? `<button class="btn-ghost btn-xs" onclick="copyText('${esc(c.partner_pix)}','Pix copiado!')" title="Copiar Pix">⧉</button>` : ''}</div>
+            ${c.notes ? `<div class="muted">${esc(c.notes)}</div>` : ''}
+          </td>
+          <td class="mono" style="font-size:11.5px;">
+            <div>${c.discount_pct}% OFF</div>
+            <div class="muted">${c.commission_pct}% COM</div>
+          </td>
+          <td class="mono">
+            <div>${c.orders_paid} / ${c.orders_total}</div>
+            <div class="muted">${c.max_uses ? 'Lim: ' + c.uses_count + '/' + c.max_uses : 'Sem limite'}</div>
+          </td>
+          <td class="money-green">${fmtMoney(c.sales_paid)}</td>
+          <td>
+            <div class="money-warn">${fmtMoney(c.commission_pending)}</div>
+            ${c.commission_awaiting_payment > 0 ? `<div class="muted">+${fmtMoney(c.commission_awaiting_payment)} aberto</div>` : ''}
+          </td>
+          <td class="money-green">${fmtMoney(c.commission_paid)}</td>
+          <td>
+            <div class="actions-row">
+              <button class="btn btn-xs" onclick="copyText('${esc(c.share_url)}','Link copiado!')">Link</button>
+              <a href="${esc(waUrl)}" target="_blank" rel="noopener" class="btn btn-sand btn-xs">WhatsApp ↗</a>
+              <button class="btn btn-xs" onclick="openCouponModal(${c.id})">Editar</button>
+              <button class="btn btn-xs" onclick="toggleCouponActive(${c.id}, ${!c.active})">${c.active ? 'Pausar' : 'Ativar'}</button>
+              ${c.commission_pending > 0 ? `<button class="btn btn-primary btn-xs" onclick="settleCouponCommissions('${esc(c.code)}', ${c.commission_pending})">Quitar</button>` : ''}
+              <button class="btn btn-danger btn-xs" onclick="deleteCoupon(${c.id}, '${esc(c.code)}')">✕</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function applyRulePreset(disc, comm) {
+      document.getElementById('cm-discount').value = disc;
+      document.getElementById('cm-commission').value = comm;
+    }
+
+    function openCouponModal(editId) {
+      document.getElementById('cm-error').style.display = 'none';
+      const codeInput = document.getElementById('cm-code');
+      if (editId) {
+        const c = couponsCache.find((x) => x.id === editId);
+        if (!c) return;
+        document.getElementById('cm-title').textContent = 'Editar Cupom · ' + c.code;
+        document.getElementById('cm-id').value = c.id;
+        codeInput.value = c.code;
+        codeInput.disabled = true;
+        document.getElementById('cm-partner').value = c.partner_name || '';
+        document.getElementById('cm-discount').value = c.discount_pct;
+        document.getElementById('cm-commission').value = c.commission_pct;
+        document.getElementById('cm-pix').value = c.partner_pix || '';
+        document.getElementById('cm-phone').value = c.partner_phone || '';
+        document.getElementById('cm-max').value = c.max_uses || '';
+        document.getElementById('cm-expires').value = c.expires_at ? String(c.expires_at).slice(0, 10) : '';
+        document.getElementById('cm-notes').value = c.notes || '';
+        document.getElementById('cm-save-btn').textContent = 'Salvar Alterações';
+      } else {
+        document.getElementById('cm-title').textContent = '+ Novo Cupom de Parceiro';
+        document.getElementById('cm-id').value = '';
+        codeInput.value = '';
+        codeInput.disabled = false;
+        document.getElementById('cm-partner').value = '';
+        document.getElementById('cm-discount').value = '10';
+        document.getElementById('cm-commission').value = '10';
+        document.getElementById('cm-pix').value = '';
+        document.getElementById('cm-phone').value = '';
+        document.getElementById('cm-max').value = '';
+        document.getElementById('cm-expires').value = '';
+        document.getElementById('cm-notes').value = '';
+        document.getElementById('cm-save-btn').textContent = 'Criar Cupom + Link →';
+      }
+      document.getElementById('coupon-modal').classList.add('open');
+      setTimeout(() => (editId ? document.getElementById('cm-partner') : codeInput).focus(), 60);
+    }
+
+    function closeCouponModal() {
+      document.getElementById('coupon-modal').classList.remove('open');
+    }
+
+    async function saveCoupon(e) {
       e.preventDefault();
-      const errEl = document.getElementById('cp-form-error');
+      const errEl = document.getElementById('cm-error');
       errEl.style.display = 'none';
-      const btn = document.getElementById('cp-submit-btn');
-      btn.disabled = true;
-      btn.textContent = 'SALVANDO...';
+      const id = document.getElementById('cm-id').value;
+      const btn = document.getElementById('cm-save-btn');
+      btn.disabled = true; btn.textContent = 'Salvando...';
+
+      const payload = {
+        code: document.getElementById('cm-code').value.trim().toUpperCase().replace(/\s+/g, ''),
+        partner_name: document.getElementById('cm-partner').value.trim(),
+        discount_pct: Number(document.getElementById('cm-discount').value || 10),
+        commission_pct: Number(document.getElementById('cm-commission').value || 10),
+        partner_pix: document.getElementById('cm-pix').value.trim(),
+        partner_phone: document.getElementById('cm-phone').value.trim(),
+        max_uses: document.getElementById('cm-max').value ? Number(document.getElementById('cm-max').value) : null,
+        expires_at: document.getElementById('cm-expires').value || null,
+        notes: document.getElementById('cm-notes').value.trim(),
+      };
 
       try {
-        const payload = {
-          code: document.getElementById('cp-code').value.trim().toUpperCase().replace(/\s+/g, ''),
-          partner_name: document.getElementById('cp-partner').value.trim(),
-          discount_pct: Number(document.getElementById('cp-discount').value || 10),
-          commission_pct: Number(document.getElementById('cp-commission').value || 10),
-          partner_pix: document.getElementById('cp-pix').value.trim(),
-          partner_phone: document.getElementById('cp-phone').value.trim(),
-          max_uses: document.getElementById('cp-max').value ? Number(document.getElementById('cp-max').value) : null,
-          expires_at: document.getElementById('cp-expires').value || null,
-        };
-        const res = await apiFetch('/api/coupons', { method: 'POST', body: JSON.stringify(payload) });
+        let res;
+        if (id) {
+          res = await apiFetch('/api/coupons', { method: 'PATCH', body: JSON.stringify({ id: Number(id), ...payload }) });
+        } else {
+          res = await apiFetch('/api/coupons', { method: 'POST', body: JSON.stringify(payload) });
+        }
         if (!res.ok || !res.data.success) {
-          errEl.textContent = (res.data && res.data.error) || 'Não foi possível criar o cupom.';
+          errEl.textContent = (res.data && res.data.error) || 'Não foi possível salvar.';
           errEl.style.display = 'block';
           return;
         }
-        lastCreatedCoupon = res.data.coupon;
-        document.getElementById('cp-created-link').textContent = lastCreatedCoupon.share_url;
-        document.getElementById('cp-created-wa').href = buildPartnerWaUrl(lastCreatedCoupon);
-        document.getElementById('cp-created-banner').style.display = 'flex';
-        e.target.reset();
-        document.getElementById('cp-discount').value = '10';
-        document.getElementById('cp-commission').value = '10';
-        await loadCoupons();
+        closeCouponModal();
+        toast(id ? 'Cupom atualizado!' : 'Cupom ' + payload.code + ' criado!');
+        await loadAllData();
       } catch (err) {
-        errEl.textContent = err.message;
-        errEl.style.display = 'block';
+        errEl.textContent = err.message; errEl.style.display = 'block';
       } finally {
         btn.disabled = false;
-        btn.textContent = 'CRIAR CUPOM + LINK →';
       }
     }
 
     async function toggleCouponActive(id, nextActive) {
       await apiFetch('/api/coupons', { method: 'PATCH', body: JSON.stringify({ id, active: nextActive }) });
-      await loadCoupons();
+      toast(nextActive ? 'Cupom ativado!' : 'Cupom pausado.');
+      await loadAllData();
     }
 
-    async function settleCouponCommissions(code) {
-      if (!confirm('Marcar todas as comissões pendentes de pedidos pagos do cupom ' + code + ' como PAGAS?')) return;
+    async function settleCouponCommissions(code, amount) {
+      const ok = await askConfirm('Quitar comissões de ' + code + '?', 'Marcar ' + fmtMoney(amount) + ' em comissões pendentes de pedidos pagos como PAGAS?');
+      if (!ok) return;
       await apiFetch('/api/coupons', { method: 'PATCH', body: JSON.stringify({ action: 'settle_commissions', coupon_code: code }) });
+      toast('Comissões de ' + code + ' marcadas como pagas!');
       await loadAllData();
     }
 
     async function deleteCoupon(id, code) {
-      if (!confirm('Excluir permanentemente o cupom ' + code + '? Os pedidos antigos mantêm o histórico.')) return;
+      const ok = await askConfirm('Excluir cupom ' + code + '?', 'O cupom deixará de funcionar imediatamente. Os pedidos antigos mantêm o histórico.', true);
+      if (!ok) return;
       await apiFetch('/api/coupons?id=' + encodeURIComponent(id), { method: 'DELETE' });
-      await loadCoupons();
-    }
-
-    async function updateOrder(orderId, fields) {
-      await apiFetch('/api/orders', { method: 'PATCH', body: JSON.stringify({ order_id: orderId, ...fields }) });
+      toast('Cupom ' + code + ' excluído.');
       await loadAllData();
     }
 
-    async function loadCoupons() {
-      const tbody = document.getElementById('coupons-tbody');
-      try {
-        const res = await apiFetch('/api/coupons');
-        if (res.data && res.data.setup_required) {
-          document.getElementById('setup-banner').style.display = 'block';
-        }
-        const coupons = (res.data && res.data.coupons) || [];
-        couponsCache = coupons;
+    /* ================= SMART LINK BUILDER ================= */
+    function populateLinkBuilder() {
+      const cpSel = document.getElementById('lb-coupon');
+      const prevCp = cpSel.value;
+      cpSel.innerHTML = couponsCache.length
+        ? couponsCache.map((c) => `<option value="${esc(c.code)}">${esc(c.code)} — ${esc(c.partner_name)}${c.active ? '' : ' (Pausado)'}</option>`).join('')
+        : '<option value="TIW10">TIW10</option>';
+      if (prevCp && couponsCache.some((c) => c.code === prevCp)) cpSel.value = prevCp;
 
-        const activeCount = coupons.filter((c) => c.active).length;
-        const totalCommPending = coupons.reduce((s, c) => s + Number(c.commission_pending || 0), 0);
-        document.getElementById('stat-coupons-count').textContent = activeCount;
-        document.getElementById('stat-comm-pending').textContent = fmtMoney(totalCommPending);
+      const prSel = document.getElementById('lb-product');
+      const prevPr = prSel.value;
+      prSel.innerHTML = '<option value="">Página inicial da loja (todas as peças)</option>' +
+        catalogCache.map((p) => `<option value="${esc(p.id)}">Peça específica: ${esc(p.name)}</option>`).join('');
+      if (prevPr) prSel.value = prevPr;
 
-        if (!coupons.length) {
-          tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhum cupom cadastrado ainda. Crie o primeiro acima.</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = coupons.map((c) => {
-          const statusBadge = c.active
-            ? '<span class="badge badge-paid">ATIVO</span>'
-            : '<span class="badge badge-muted">PAUSADO</span>';
-          const waUrl = buildPartnerWaUrl(c);
-          const settleBtn = c.commission_pending > 0
-            ? `<button class="btn-sm green" onclick="settleCouponCommissions('${esc(c.code)}')">QUITAR ${fmtMoney(c.commission_pending)}</button>`
-            : '';
-
-          return `<tr>
-            <td>
-              <div class="mono-gold">${esc(c.code)}</div>
-              <div style="margin-top:4px;">${statusBadge}</div>
-            </td>
-            <td>
-              <div style="font-weight:600;">${esc(c.partner_name)}</div>
-              <div class="muted" style="margin-top:2px;">Pix: ${esc(c.partner_pix || '—')}</div>
-              <div class="muted">${esc(c.partner_phone || '')}</div>
-            </td>
-            <td>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;">${c.discount_pct}% OFF</div>
-              <div class="muted" style="font-family:'JetBrains Mono',monospace;">${c.commission_pct}% COM</div>
-            </td>
-            <td>
-              <div style="font-family:'JetBrains Mono',monospace;">${c.orders_paid} / ${c.orders_total}</div>
-              <div class="muted">${c.max_uses ? 'Limite: ' + c.uses_count + '/' + c.max_uses : 'Sem limite'}</div>
-            </td>
-            <td class="total-val">${fmtMoney(c.sales_paid)}</td>
-            <td>
-              <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--warn);">${fmtMoney(c.commission_pending)}</div>
-              ${c.commission_awaiting_payment > 0 ? `<div class="muted">+${fmtMoney(c.commission_awaiting_payment)} aguard. pagto</div>` : ''}
-            </td>
-            <td style="font-family:'JetBrains Mono',monospace;color:var(--accent-light);">${fmtMoney(c.commission_paid)}</td>
-            <td>
-              <div class="actions-col">
-                <button class="btn-sm" onclick="copyText('${esc(c.share_url)}', this)">COPIAR LINK</button>
-                <a href="${esc(waUrl)}" target="_blank" rel="noopener" class="btn-sm sand">WHATSAPP ↗</a>
-                <button class="btn-sm" onclick="toggleCouponActive(${c.id}, ${!c.active})">${c.active ? 'PAUSAR' : 'ATIVAR'}</button>
-                ${settleBtn}
-                <button class="btn-sm danger" onclick="deleteCoupon(${c.id}, '${esc(c.code)}')">EXCLUIR</button>
-              </div>
-            </td>
-          </tr>`;
-        }).join('');
-      } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Erro ao carregar cupons: ' + esc(err.message) + '</td></tr>';
-      }
+      updateLinkBuilder();
     }
 
-    async function loadOrders() {
-      const tbody = document.getElementById('orders-tbody');
-      try {
-        const res = await apiFetch('/api/orders');
-        const orders = (res.data && res.data.orders) || [];
-
-        document.getElementById('stat-orders-count').textContent = orders.length;
-        const paidRev = orders
-          .filter((o) => o.status === 'pago' || o.status === 'enviado')
-          .reduce((s, o) => s + Number(o.total || 0), 0);
-        document.getElementById('stat-revenue').textContent = fmtMoney(paidRev);
-
-        if (!orders.length) {
-          tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum pedido registrado ainda.</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = orders.map((o) => {
-          const cust = o.customer || {};
-          const items = Array.isArray(o.items) ? o.items : [];
-          const phoneDigits = cleanPhoneDigits(cust.phone);
-          const isPaid = o.status === 'pago' || o.status === 'enviado';
-          const isCancelled = o.status === 'cancelado';
-          const statusCls = isPaid ? 'badge-paid' : (isCancelled ? 'badge-danger' : 'badge-pending');
-
-          const commAmt = Number(o.commission_amount || 0);
-          const commStatus = o.commission_status || 'sem_comissao';
-          const commCls = commStatus === 'pago' ? 'badge-paid' : (commStatus === 'pendente' ? 'badge-pending' : (commStatus === 'cancelado' ? 'badge-danger' : 'badge-muted'));
-
-          return `<tr>
-            <td>
-              <div class="mono-gold">${esc(o.order_id)}</div>
-              <div class="date-text">${esc(fmtDate(o.created_at))}</div>
-            </td>
-            <td>
-              <div style="font-weight:600;">${esc(cust.name || 'Não informado')}</div>
-              <div class="muted">${esc(cust.email || '')}</div>
-              ${phoneDigits ? `<a href="https://wa.me/${phoneDigits}" target="_blank" rel="noopener" class="btn-sm green" style="margin-top:6px;">WHATSAPP ↗</a>` : ''}
-            </td>
-            <td>
-              <div>${esc(cust.address || '—')}</div>
-              <div class="date-text">CEP: ${esc(cust.cep || '—')}</div>
-            </td>
-            <td>
-              <div style="font-size:12px;line-height:1.45;">
-                ${items.map((i) => `<div>• <strong>${Number(i.qty || 1)}x</strong> ${esc(i.name)} (${esc(i.fit || '')}, ${esc(i.size)})</div>`).join('')}
-              </div>
-            </td>
-            <td>
-              <div class="total-val">${fmtMoney(o.total)}</div>
-              <div class="muted" style="text-transform:uppercase;margin-top:2px;">${esc(o.payment_method || 'pix')}</div>
-              ${o.coupon_code ? `<div style="margin-top:4px;"><span class="badge badge-paid">${esc(o.coupon_code)}</span> <span class="muted">(-${fmtMoney(o.discount_amount)})</span></div>` : ''}
-            </td>
-            <td>
-              ${o.coupon_code ? `<div style="font-family:'JetBrains Mono',monospace;font-weight:700;">${fmtMoney(commAmt)}</div><div style="margin-top:4px;"><span class="badge ${commCls}">${esc(commStatus)}</span></div>` : '<span class="muted">—</span>'}
-            </td>
-            <td>
-              <div><span class="badge ${statusCls}">${esc(o.status || 'aguardando_pagamento')}</span></div>
-              <div class="actions-col" style="margin-top:8px;">
-                ${!isPaid ? `<button class="btn-sm green" onclick="updateOrder('${esc(o.order_id)}',{status:'pago'})">MARCAR PAGO</button>` : ''}
-                ${!isCancelled ? `<button class="btn-sm danger" onclick="updateOrder('${esc(o.order_id)}',{status:'cancelado'})">CANCELAR</button>` : ''}
-                ${o.coupon_code && commStatus === 'pendente' && isPaid ? `<button class="btn-sm sand" onclick="updateOrder('${esc(o.order_id)}',{commission_status:'pago'})">QUITAR COMISSÃO</button>` : ''}
-              </div>
-            </td>
-          </tr>`;
-        }).join('');
-      } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Erro ao carregar pedidos: ' + esc(err.message) + '</td></tr>';
-      }
+    function updateLinkBuilder() {
+      const code = document.getElementById('lb-coupon').value || 'TIW10';
+      const prod = document.getElementById('lb-product').value || '';
+      const url = prod
+        ? `https://tiwshirts.space/?peca=${encodeURIComponent(prod)}&cupom=${encodeURIComponent(code)}`
+        : `https://tiwshirts.space/?cupom=${encodeURIComponent(code)}`;
+      document.getElementById('lb-url').textContent = url;
+      const c = couponsCache.find((x) => x.code === code) || { code, partner_name: 'Parceiro', discount_pct: 10, commission_pct: 10 };
+      document.getElementById('lb-rule-hint').textContent = `${c.discount_pct}% OFF + ${c.commission_pct}% comissão`;
+      document.getElementById('lb-wa-btn').href = buildPartnerWaUrl(c, url);
     }
 
-    async function loadB2B() {
+    function copySmartLink() {
+      copyText(document.getElementById('lb-url').textContent, 'Link inteligente copiado!');
+    }
+
+    /* ================= CATALOG & WHOLESALE CALC ================= */
+    function renderCatalog() {
+      const grid = document.getElementById('catalog-grid');
+      document.getElementById('catalog-meta').textContent = catalogCache.length + ' estampas oficiais';
+      if (!catalogCache.length) {
+        grid.innerHTML = '<div class="empty-state">Catálogo indisponível no momento.</div>';
+        return;
+      }
+      grid.innerHTML = catalogCache.map((p) => {
+        const img = (p.images && p.images[0]) || p.image || '';
+        const stockTotal = typeof p.stock_total === 'number' ? p.stock_total : null;
+        const stockBadge = stockTotal > 0
+          ? `<span class="badge b-paid">${stockTotal} em estoque</span>`
+          : `<span class="badge b-prod">Sob demanda (7-10d)</span>`;
+        const directUrl = `https://tiwshirts.space/?peca=${encodeURIComponent(p.id)}`;
+        return `<div class="prod-card">
+          ${img ? `<img class="prod-img" src="${esc(img)}" alt="${esc(p.name)}" loading="lazy" />` : ''}
+          <div class="prod-body">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div class="prod-name">${esc(p.name)}</div>
+              ${stockBadge}
+            </div>
+            <div class="prod-prices">Clássica R$ 139 · OverHeavy R$ 179 · OverLight R$ 179</div>
+            <div class="actions-row" style="margin-top:auto;padding-top:6px;">
+              <button class="btn btn-xs" onclick="copyText('${esc(directUrl)}','Link da peça copiado!')">Copiar Link</button>
+              <a href="${esc(directUrl)}" target="_blank" rel="noopener" class="btn btn-xs btn-sand">Ver na Loja ↗</a>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function updateWholesaleCalc() {
+      const qC = Math.max(0, Number(document.getElementById('calc-classica').value || 0));
+      const qH = Math.max(0, Number(document.getElementById('calc-overheavy').value || 0));
+      const qL = Math.max(0, Number(document.getElementById('calc-overlight').value || 0));
+      const totalQty = qC + qH + qL;
+      const totalB2B = qC * 69 + (qH + qL) * 89;
+      const totalD2C = qC * 139 + (qH + qL) * 179;
+      const profit = totalD2C - totalB2B;
+      const isMultiple = totalQty >= 12 && totalQty % 12 === 0;
+      const nextMultiple = Math.max(12, Math.ceil(totalQty / 12) * 12);
+
+      document.getElementById('calc-result').innerHTML = `
+        <div>
+          <div class="mono" style="font-size:13px;">Total de peças: <strong>${totalQty}</strong> ${isMultiple ? '<span class="badge b-paid" style="margin-left:6px;">✓ Múltiplo de 12 OK</span>' : `<span class="badge b-pending" style="margin-left:6px;">Faltam ${nextMultiple - totalQty} p/ fechar ${nextMultiple}</span>`}</div>
+          <div class="muted" style="margin-top:4px;">Revenda sugerida D2C: ${fmtMoney(totalD2C)} · Lucro bruto do lojista: <strong style="color:var(--green);">${fmtMoney(profit)}</strong> (~101%)</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="muted">Total Atacado Lojista</div>
+          <div class="money-green" style="font-size:20px;">${fmtMoney(totalB2B)}</div>
+        </div>
+      `;
+    }
+
+    function copyWholesaleQuote() {
+      const qC = Math.max(0, Number(document.getElementById('calc-classica').value || 0));
+      const qH = Math.max(0, Number(document.getElementById('calc-overheavy').value || 0));
+      const qL = Math.max(0, Number(document.getElementById('calc-overlight').value || 0));
+      const totalQty = qC + qH + qL;
+      const totalB2B = qC * 69 + (qH + qL) * 89;
+      const totalD2C = qC * 139 + (qH + qL) * 179;
+      const lines = [];
+      if (qC) lines.push(`• ${qC}x Linha Clássica 30.1 (R$ 69,00) = ${fmtMoney(qC * 69)}`);
+      if (qH) lines.push(`• ${qH}x Linha OverHeavy Suedine 220g (R$ 89,00) = ${fmtMoney(qH * 89)}`);
+      if (qL) lines.push(`• ${qL}x Linha OverLight Extra G1-G3 (R$ 89,00) = ${fmtMoney(qL * 89)}`);
+      const text = `Proposta Atacado TiwShirts (${totalQty} peças — Pote Hermético Oficial incluso):\n\n${lines.join('\n')}\n\nTotal Atacado: *${fmtMoney(totalB2B)}*\nValor sugerido de revenda: ${fmtMoney(totalD2C)}\nGrade 100% livre de estampas, cores e tamanhos (múltiplos de 12).`;
+      copyText(text, 'Proposta B2B copiada para WhatsApp!');
+    }
+
+    /* ================= B2B LEADS ================= */
+    function renderB2B() {
+      const q = (document.getElementById('b2b-search').value || '').trim().toLowerCase();
+      const list = b2bCache.filter((l) => !q || [l.protocol, l.nome, l.loja, l.cidade, l.email].join(' ').toLowerCase().includes(q));
       const tbody = document.getElementById('b2b-tbody');
-      try {
-        const res = await apiFetch('/api/b2b');
-        const leads = (res.data && res.data.leads) || [];
-        document.getElementById('stat-b2b-count').textContent = leads.length;
-
-        if (!leads.length) {
-          tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Nenhum cadastro B2B registrado ainda.</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = leads.map((l) => {
-          const phoneDigits = cleanPhoneDigits(l.zap);
-          return `<tr>
-            <td>
-              <div class="mono-gold">${esc(l.protocol)}</div>
-              <div class="date-text">${esc(fmtDate(l.created_at))}</div>
-            </td>
-            <td style="font-weight:600;">${esc(l.nome || '—')}</td>
-            <td style="color:var(--sand);font-weight:500;">${esc(l.loja || '—')}</td>
-            <td>${esc(l.cidade || '—')}</td>
-            <td>
-              <div class="muted">${esc(l.email || '')}</div>
-              ${phoneDigits ? `<a href="https://wa.me/${phoneDigits}" target="_blank" rel="noopener" class="btn-sm green" style="margin-top:6px;">WHATSAPP ↗</a>` : ''}
-            </td>
-          </tr>`;
-        }).join('');
-      } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Erro ao carregar leads B2B: ' + esc(err.message) + '</td></tr>';
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><strong>Nenhum lead B2B encontrado</strong>Novos lojistas cadastrados no site aparecem aqui.</td></tr>';
+        return;
       }
+      tbody.innerHTML = list.map((l) => {
+        const phone = cleanPhoneDigits(l.zap);
+        const pitch = encodeURIComponent(
+          `Fala ${l.nome || ''}! Aqui é da TiwShirts. Recebemos o cadastro da *${l.loja || 'sua loja'}* para atacado.\n\n` +
+          `Nossa tabela lojista (Pote Hermético Oficial incluso):\n• Clássica 30.1: R$ 69 (revenda R$ 139)\n• OverHeavy 220g / OverLight G1-G3: R$ 89 (revenda R$ 179)\n• Pedido mínimo: 12 peças (múltiplos de 12 com grade 100% livre).\n\nQuer que eu te mande o catálogo completo do Drop?`
+        );
+        return `<tr>
+          <td>
+            <div class="mono-gold">${esc(l.protocol)}</div>
+            <div class="muted">${esc(fmtDate(l.created_at))}</div>
+          </td>
+          <td style="font-weight:600;">${esc(l.nome || '—')}</td>
+          <td style="color:var(--sand);font-weight:500;">${esc(l.loja || '—')}</td>
+          <td>${esc(l.cidade || '—')}</td>
+          <td>
+            <div class="muted" style="margin-bottom:5px;">${esc(l.email || '')}</div>
+            ${phone ? `<a href="https://wa.me/${phone}?text=${pitch}" target="_blank" rel="noopener" class="btn btn-primary btn-xs">Mandar Pitch WhatsApp ↗</a>` : '<span class="muted">Sem WhatsApp</span>'}
+          </td>
+        </tr>`;
+      }).join('');
     }
 
-    async function loadAllData() {
-      document.getElementById('setup-banner').style.display = 'none';
-      await Promise.all([loadCoupons(), loadOrders(), loadB2B()]);
+    /* ================= CSV EXPORTS ================= */
+    function downloadCsv(filename, headers, rows) {
+      const csvCell = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+      const content = '\uFEFF' + [headers.map(csvCell).join(';'), ...rows.map((r) => r.map(csvCell).join(';'))].join('\n');
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+      toast('CSV exportado: ' + filename);
     }
+
+    function exportOrdersCsv() {
+      const list = getFilteredOrders();
+      downloadCsv('tiwshirts-pedidos.csv',
+        ['Pedido', 'Data', 'Status', 'Cliente', 'WhatsApp', 'CEP', 'Endereco', 'Cupom', 'Subtotal', 'Desconto', 'Total', 'Comissao', 'StatusComissao'],
+        list.map((o) => [o.order_id, fmtDate(o.created_at), o.status, o.customer?.name, o.customer?.phone, o.customer?.cep, o.customer?.address, o.coupon_code || '', o.subtotal || o.total, o.discount_amount || 0, o.total, o.commission_amount || 0, o.commission_status || ''])
+      );
+    }
+
+    function exportCouponsCsv() {
+      const list = getFilteredCoupons();
+      downloadCsv('tiwshirts-afiliados-10-10.csv',
+        ['Cupom', 'Parceiro', 'Ativo', 'Pix', 'WhatsApp', 'Desconto%', 'Comissao%', 'PedidosPagos', 'VendasPagas', 'ComissaoPendente', 'ComissaoPaga'],
+        list.map((c) => [c.code, c.partner_name, c.active ? 'Sim' : 'Nao', c.partner_pix || '', c.partner_phone || '', c.discount_pct, c.commission_pct, c.orders_paid, c.sales_paid, c.commission_pending, c.commission_paid])
+      );
+    }
+
+    function exportB2BCsv() {
+      downloadCsv('tiwshirts-leads-b2b.csv',
+        ['Protocolo', 'Data', 'Responsavel', 'Loja', 'Cidade', 'Email', 'WhatsApp'],
+        b2bCache.map((l) => [l.protocol, fmtDate(l.created_at), l.nome, l.loja, l.cidade, l.email, l.zap])
+      );
+    }
+
+    /* ================= SHORTCUTS & INIT ================= */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCouponModal();
+        closeOrderDrawer();
+        closeConfirm(false);
+      }
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        const searchMap = { orders: 'orders-search', coupons: 'coupons-search', b2b: 'b2b-search' };
+        const el = document.getElementById(searchMap[currentView]);
+        if (el) { e.preventDefault(); el.focus(); }
+      }
+    });
 
     (async function init() {
       const ok = await ensureSession();
