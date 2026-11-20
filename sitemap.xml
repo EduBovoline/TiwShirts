@@ -52,6 +52,82 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tiwshirts.space/camiseta/maconheiro</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/maconheiro-1.jpeg</image:loc>
+      <image:title>Camiseta Maconheiro — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/camiseta/legaliza-pra-pobre-tambem</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/legaliza-1.jpeg</image:loc>
+      <image:title>Camiseta Legaliza Pra Pobre Também — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/camiseta/just-doob-it</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/justdoobit-black-1.jpeg</image:loc>
+      <image:title>Camiseta Just Doob It — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/camiseta/maconha-salva-vidas</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/maconhasalvavidas-1.jpeg</image:loc>
+      <image:title>Camiseta Maconha Salva Vidas — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/camiseta/eu-amo-tricomas</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/tricomas-purple-1.jpeg</image:loc>
+      <image:title>Camiseta Eu Amo Tricomas — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/camiseta/sugiro-maconha</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/sugiromaconha-1.jpeg</image:loc>
+      <image:title>Camiseta Sugiro Maconha — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/camiseta/medicina-ancestral</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tiwshirts.space/assets/medicinaancestral-1.jpeg</image:loc>
+      <image:title>Camiseta Medicina Ancestral — TiwShirts</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tiwshirts.space/parceiros</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tiwshirts.space/blog/quem-tem-atuacao-real-na-pauta-em-sp</loc>
     <lastmod>2026-10-03</lastmod>
     <changefreq>monthly</changefreq>
