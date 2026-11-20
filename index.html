@@ -717,6 +717,29 @@ a:hover { color:#F5F5F5; }
 
             <button type="button" onClick="{{ addToCart }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#F5F5F5;color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;font-weight:700;cursor:pointer;">{{ activeLook.ctaText }}</button>
 
+            <!-- SIMULADOR DE FRETE RÁPIDO NO MODAL DA PEÇA -->
+            <div style="padding:10px;background:#090909;border:1px solid rgba(255,255,255,0.08);border-radius:4px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#C5A880;letter-spacing:0.08em;margin-bottom:6px;">SIMULAR FRETE &amp; PRAZO (MELHOR ENVIO)</div>
+              <div style="display:flex;gap:6px;">
+                <input id="modal-cep-input" type="text" placeholder="Seu CEP (8 dígitos)" onInput="{{ handleModalCepInput }}" style="flex:1;background:#050505;border:1px solid rgba(255,255,255,0.14);color:#F5F5F5;padding:7px 10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;outline:none;" />
+                <button type="button" onClick="{{ calculateModalShipping }}" style="padding:7px 11px;background:rgba(197,168,128,0.16);border:1px solid rgba(197,168,128,0.38);color:#C5A880;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;">{{ shippingCalcLabel }}</button>
+              </div>
+              <sc-if value="{{ hasShippingOptions }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#8E8E93;">Destino: {{ shippingDestinationLabel }} (toque para escolher)</div>
+                  <sc-for list="{{ shippingOptionsList }}" as="ship" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ ship.select }}" style="{{ ship.style }}">
+                      <span>{{ ship.title }}</span>
+                      <span style="font-weight:700;">{{ ship.priceLabel }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ hasShippingError }}" hint-placeholder-val="{{ false }}">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#f87171;margin-top:5px;">{{ shippingError }}</div>
+              </sc-if>
+            </div>
+
             <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#8E8E93;text-align:center;line-height:1.45;">
               Pix taxa zero ou até 12x · Pote Hermético · Pronta-entrega única: se esgotar antes da compensação, você escolhe aguardar produção ou reembolso na hora.
             </div>
@@ -793,13 +816,38 @@ a:hover { color:#F5F5F5; }
             </sc-if>
           </div>
 
+          <!-- SIMULADOR DE FRETE NO CARRINHO (ACIMA DO TOTAL) -->
+          <div style="margin-top:12px;padding:12px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);border-radius:4px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#C5A880;letter-spacing:0.08em;">SIMULAR E ESCOLHER FRETE (MELHOR ENVIO)</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;">{{ shippingDestinationLabel }}</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <input id="cart-cep" type="text" required aria-label="CEP" placeholder="Digite seu CEP (8 dígitos) *" onInput="{{ handleCepInput }}" style="flex:1;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;" />
+              <button type="button" onClick="{{ calculateShipping }}" style="padding:9px 14px;background:rgba(197,168,128,0.16);border:1px solid rgba(197,168,128,0.4);color:#C5A880;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">{{ shippingCalcLabel }}</button>
+            </div>
+            <sc-if value="{{ hasShippingOptions }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                <sc-for list="{{ shippingOptionsList }}" as="ship" hint-placeholder-count="3">
+                  <button type="button" onClick="{{ ship.select }}" style="{{ ship.style }}">
+                    <span>{{ ship.title }}</span>
+                    <span style="font-weight:700;">{{ ship.priceLabel }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasShippingError }}" hint-placeholder-val="{{ false }}">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#f87171;margin-top:6px;">{{ shippingError }}</div>
+            </sc-if>
+          </div>
+
           <!-- RESUMO DE VALORES -->
           <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8E8E93;">
+              <span>SUBTOTAL PEÇAS</span>
+              <span>{{ cartSubtotalLabel }}</span>
+            </div>
             <sc-if value="{{ hasAppliedCoupon }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8E8E93;">
-                <span>SUBTOTAL</span>
-                <span>{{ cartSubtotalLabel }}</span>
-              </div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#4ade80;">
                 <span>DESCONTO ({{ appliedCoupon.code }} · {{ appliedCoupon.discount_pct }}%)</span>
                 <span>− {{ cartDiscountLabel }}</span>
@@ -825,7 +873,7 @@ a:hover { color:#F5F5F5; }
           </sc-if>
 
           <form onSubmit="{{ submitCheckout }}" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-bottom:2px;">1. DADOS PARA ENTREGA, ETIQUETA E FRETE (MELHOR ENVIO)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-bottom:2px;">1. DADOS PARA ENTREGA E ETIQUETA</div>
             <div style="display:grid;grid-template-columns:1fr 150px;gap:10px;">
               <input id="cart-nome" type="text" required aria-label="Nome completo" placeholder="Nome completo *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
               <input id="cart-cpf" type="text" required aria-label="CPF para etiqueta de envio" placeholder="CPF (etiqueta) *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;" />
@@ -834,26 +882,6 @@ a:hover { color:#F5F5F5; }
               <input id="cart-email" type="email" required aria-label="E-mail para acompanhamento" placeholder="E-mail para rastreio *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
               <input id="cart-phone" type="tel" required aria-label="WhatsApp para avisos" placeholder="WhatsApp c/ DDD *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
             </div>
-            <div style="display:grid;grid-template-columns:1fr auto;gap:8px;">
-              <input id="cart-cep" type="text" required aria-label="CEP" placeholder="Digite seu CEP (8 dígitos) *" onInput="{{ handleCepInput }}" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;" />
-              <button type="button" onClick="{{ calculateShipping }}" style="padding:0 14px;background:rgba(197,168,128,0.16);border:1px solid rgba(197,168,128,0.4);color:#C5A880;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">{{ shippingCalcLabel }}</button>
-            </div>
-
-            <sc-if value="{{ hasShippingOptions }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#0d0d0d;border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:10px;display:flex;flex-direction:column;gap:6px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;letter-spacing:0.06em;">ESCOLHA A MODALIDADE DE ENVIO ({{ shippingDestinationLabel }})</div>
-                <sc-for items="{{ shippingOptionsList }}" item="ship" index="si">
-                  <button type="button" onClick="{{ ship.select }}" style="{{ ship.style }}">
-                    <span>{{ ship.title }}</span>
-                    <span style="font-weight:700;">{{ ship.priceLabel }}</span>
-                  </button>
-                </sc-for>
-              </div>
-            </sc-if>
-            <sc-if value="{{ hasShippingError }}" hint-placeholder-val="{{ false }}">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#f87171;">{{ shippingError }}</div>
-            </sc-if>
-
             <input id="cart-address" type="text" required aria-label="Endereço de entrega" placeholder="Rua, número, complemento, bairro, cidade/UF *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
 
             <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-top:6px;">2. FORMA DE PAGAMENTO NO CHECKOUT</div>
@@ -1541,6 +1569,13 @@ class Component extends DCLogic {
       }];
     }
     this.setState({ modalOpen: false, cart, cartOpen: true, checkoutResult: null, pixConfirmed: false });
+    if (this.state.lastQuotedCep) {
+      setTimeout(() => {
+        const cEl = document.getElementById("cart-cep");
+        if (cEl && !cEl.value) cEl.value = this.state.lastQuotedCep;
+        this.calculateShipping(this.state.lastQuotedCep);
+      }, 60);
+    }
   };
 
   changeQty = (index, delta) => {
@@ -1549,6 +1584,9 @@ class Component extends DCLogic {
       return { ...c, qty: Math.max(1, c.qty + delta) };
     });
     this.setState({ cart });
+    if (this.state.lastQuotedCep) {
+      setTimeout(() => this.calculateShipping(this.state.lastQuotedCep), 40);
+    }
   };
 
   removeFromCart = (index) => {
@@ -1572,24 +1610,43 @@ class Component extends DCLogic {
     if (!el) return;
     const clean = String(el.value || "").replace(/\D/g, "");
     if (clean.length === 8 && clean !== this.state.lastQuotedCep) {
-      this.calculateShipping();
+      this.calculateShipping(clean);
     }
   };
 
-  calculateShipping = async () => {
-    const el = document.getElementById("cart-cep");
-    const cleanCep = String((el && el.value) || "").replace(/\D/g, "");
+  handleModalCepInput = () => {
+    const el = document.getElementById("modal-cep-input");
+    if (!el) return;
+    const clean = String(el.value || "").replace(/\D/g, "");
+    if (clean.length === 8 && clean !== this.state.lastQuotedCep) {
+      this.calculateShipping(clean);
+    }
+  };
+
+  calculateModalShipping = () => {
+    const el = document.getElementById("modal-cep-input");
+    const clean = String((el && el.value) || "").replace(/\D/g, "");
+    this.calculateShipping(clean);
+  };
+
+  calculateShipping = async (explicitCep) => {
+    const cartEl = document.getElementById("cart-cep");
+    const modalEl = document.getElementById("modal-cep-input");
+    const rawCep = typeof explicitCep === "string" && explicitCep
+      ? explicitCep
+      : ((cartEl && cartEl.value) || (modalEl && modalEl.value) || this.state.lastQuotedCep || "");
+    const cleanCep = String(rawCep).replace(/\D/g, "");
     if (cleanCep.length !== 8) {
       this.setState({ shippingError: "Digite um CEP válido com 8 números.", shippingOptions: [] });
       return;
     }
+    if (cartEl && !cartEl.value) cartEl.value = cleanCep;
+    if (modalEl && !modalEl.value) modalEl.value = cleanCep;
     this.setState({ shippingLoading: true, shippingError: "", lastQuotedCep: cleanCep });
     try {
-      const items = this.state.cart.map((c) => ({
-        sku: c.sku,
-        qty: c.qty,
-        price: c.price,
-      }));
+      const items = this.state.cart.length > 0
+        ? this.state.cart.map((c) => ({ sku: c.sku, qty: c.qty, price: c.price }))
+        : [{ sku: "simulacao", qty: 1, price: 139 }];
       const res = await fetch(BACKEND_URL + "/api/shipping", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1619,10 +1676,14 @@ class Component extends DCLogic {
       this.setState({
         shippingLoading: false,
         shippingError: "",
-        shippingOptions: data.options,
+        shippingOptions: data.options.slice(0, 5),
         selectedShippingIdx: 0,
         shippingDestination: data.destination || null,
       });
+      setTimeout(() => {
+        const cEl = document.getElementById("cart-cep");
+        if (cEl && !cEl.value && this.state.lastQuotedCep) cEl.value = this.state.lastQuotedCep;
+      }, 60);
     } catch (err) {
       this.setState({
         shippingLoading: false,
@@ -2207,7 +2268,9 @@ class Component extends DCLogic {
       shippingDestinationLabel,
       shippingOptionsList,
       handleCepInput: this.handleCepInput,
+      handleModalCepInput: this.handleModalCepInput,
       calculateShipping: this.calculateShipping,
+      calculateModalShipping: this.calculateModalShipping,
       appliedCoupon: appliedCoupon || { code: "", partner_name: "", discount_pct: 0 },
       hasAppliedCoupon,
       noAppliedCoupon,
