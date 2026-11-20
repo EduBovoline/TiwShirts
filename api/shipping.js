@@ -330,19 +330,32 @@ async function handleAddToCart(req, res, body) {
 
   const via = await lookupViaCep(cleanToCep);
 
-  // Dados do remetente (configuráveis via variáveis de ambiente na Vercel)
+  // Busca automaticamente os dados reais do remetente autenticado no Melhor Envio (/api/v2/me)
+  let meUser = null;
+  if (token) {
+    try {
+      const meResp = await fetch(`${getMeBaseUrl()}/api/v2/me`, { headers: getMeHeaders(token) });
+      if (meResp.ok) meUser = await meResp.json();
+    } catch (e) {}
+  }
+
+  const meAddr = (meUser && meUser.address) || {};
+  const meCity = (meAddr.city && meAddr.city.city) || 'Sorocaba';
+  const meUf = (meAddr.city && meAddr.city.state && meAddr.city.state.state_abbr) || 'SP';
+  const meFullName = meUser ? `${meUser.firstname || ''} ${meUser.lastname || ''}`.trim() : '';
+
   const sender = {
-    name: process.env.MELHOR_ENVIO_FROM_NAME || 'TiwShirts',
-    phone: (process.env.MELHOR_ENVIO_FROM_PHONE || '15981512083').replace(/\D/g, ''),
-    email: process.env.MELHOR_ENVIO_FROM_EMAIL || 'edubovoline@gmail.com',
-    document: (process.env.MELHOR_ENVIO_FROM_CPF || '').replace(/\D/g, '') || undefined,
+    name: process.env.MELHOR_ENVIO_FROM_NAME || meFullName || 'TiwShirts',
+    phone: (process.env.MELHOR_ENVIO_FROM_PHONE || (meUser && meUser.phone && meUser.phone.phone) || '15981512083').replace(/\D/g, ''),
+    email: process.env.MELHOR_ENVIO_FROM_EMAIL || (meUser && meUser.email) || 'edubovoline@gmail.com',
+    document: (process.env.MELHOR_ENVIO_FROM_CPF || (meUser && meUser.document) || '').replace(/\D/g, '') || undefined,
     company_document: (process.env.MELHOR_ENVIO_FROM_CNPJ || '').replace(/\D/g, '') || undefined,
     state_register: 'ISENTO',
-    address: process.env.MELHOR_ENVIO_FROM_ADDRESS || 'Sorocaba',
-    number: process.env.MELHOR_ENVIO_FROM_NUMBER || 'SN',
-    district: process.env.MELHOR_ENVIO_FROM_DISTRICT || 'Centro',
-    city: process.env.MELHOR_ENVIO_FROM_CITY || 'Sorocaba',
-    state_abbr: process.env.MELHOR_ENVIO_FROM_UF || 'SP',
+    address: process.env.MELHOR_ENVIO_FROM_ADDRESS || meAddr.address || 'Rua General Antunes Gurjão',
+    number: process.env.MELHOR_ENVIO_FROM_NUMBER || meAddr.number || '196',
+    district: process.env.MELHOR_ENVIO_FROM_DISTRICT || meAddr.district || 'Além Ponte',
+    city: process.env.MELHOR_ENVIO_FROM_CITY || meCity || 'Sorocaba',
+    state_abbr: process.env.MELHOR_ENVIO_FROM_UF || meUf || 'SP',
     country_id: 'BR',
     postal_code: ORIGIN_CEP,
   };
