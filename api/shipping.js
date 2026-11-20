@@ -212,14 +212,11 @@ function buildConsolidatedVolume(totalQty) {
   }));
 }
 
-async function handleCalculate(req, res, params) {
+async function quoteShippingOptions(params = {}) {
   const rawCep = params.to_cep || params.cep || '';
   const cleanToCep = String(rawCep).replace(/\D/g, '');
   if (cleanToCep.length !== 8) {
-    return res.status(400).json({
-      success: false,
-      error: 'Informe um CEP válido com 8 dígitos.',
-    });
+    return { success: false, status: 400, error: 'Informe um CEP válido com 8 dígitos.' };
   }
 
   const products = buildProductsPayload(params.items, params.qty, params.unit_value || params.value);
@@ -273,8 +270,9 @@ async function handleCalculate(req, res, params) {
 
         if (validOptions.length > 0) {
           const destination = await viaCepPromise;
-          return res.status(200).json({
+          return {
             success: true,
+            status: 200,
             mode: 'melhorenvio_live',
             origin_cep: ORIGIN_CEP,
             to_cep: cleanToCep,
@@ -282,7 +280,7 @@ async function handleCalculate(req, res, params) {
             jar_spec: JAR_SPEC,
             total_jars: totalQty,
             options: validOptions,
-          });
+          };
         }
       }
     } catch (e) {
@@ -293,8 +291,9 @@ async function handleCalculate(req, res, params) {
   const destination = await viaCepPromise;
   const fallbackOptions = buildFallbackQuotes(cleanToCep, totalQty, totalInsurance);
 
-  return res.status(200).json({
+  return {
     success: true,
+    status: 200,
     mode: token ? 'contingencia_api' : 'contingencia_cep',
     token_configured: Boolean(token),
     origin_cep: ORIGIN_CEP,
@@ -303,7 +302,14 @@ async function handleCalculate(req, res, params) {
     jar_spec: JAR_SPEC,
     total_jars: totalQty,
     options: fallbackOptions,
-  });
+  };
+}
+
+async function handleCalculate(req, res, params) {
+  const result = await quoteShippingOptions(params);
+  const status = result.status || (result.success ? 200 : 400);
+  const { status: _ignored, ...payload } = result;
+  return res.status(status).json(payload);
 }
 
 async function handleAddToCart(req, res, body) {
@@ -463,3 +469,5 @@ module.exports = async (req, res) => {
     return res.status(500).json({ success: false, error: err.message || 'Erro no cálculo de frete.' });
   }
 };
+
+module.exports.quoteShippingOptions = quoteShippingOptions;

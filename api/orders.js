@@ -13,6 +13,7 @@ const {
   isMissingTableError,
   fetchValidCoupon,
 } = require('./_supabase');
+const { quoteShippingOptions } = require('./shipping');
 
 const LINE_PRICES = {
   pf: 139.0,
@@ -354,18 +355,35 @@ module.exports = async (req, res) => {
     const subtotal = Number((subtotalCents / 100).toFixed(2));
     const productsTotal = Number((totalCents / 100).toFixed(2));
     const discountAmount = Number((subtotal - productsTotal).toFixed(2));
-    const shippingAmount = shipping && Number(shipping.price) > 0
-      ? Number(Number(shipping.price).toFixed(2))
-      : 0;
-    const shippingInfo = shipping && shippingAmount >= 0 && shipping.name
-      ? {
-          service_id: Number(shipping.service_id || shipping.id || 1),
-          name: String(shipping.name || ''),
-          company: String(shipping.company || 'Correios'),
-          price: shippingAmount,
-          delivery_days: Number(shipping.delivery_days || 5),
+
+    // Validação estrita de frete no servidor (nunca confia no shipping.price enviado pelo navegador)
+    let shippingAmount = 0;
+    let shippingInfo = null;
+    const cleanCustomerCep = String((customer && customer.cep) || '').replace(/\D/g, '');
+    if (cleanCustomerCep.length === 8) {
+      try {
+        const serverQuote = await quoteShippingOptions({
+          to_cep: cleanCustomerCep,
+          items: normalizedItems,
+        });
+        if (serverQuote && serverQuote.success && Array.isArray(serverQuote.options) && serverQuote.options.length > 0) {
+          const requestedServiceId = shipping ? Number(shipping.service_id || shipping.id) : null;
+          const matched = (requestedServiceId
+            ? serverQuote.options.find((opt) => Number(opt.service_id) === requestedServiceId)
+            : null) || serverQuote.options[0];
+          shippingAmount = Number(Number(matched.price || 0).toFixed(2));
+          shippingInfo = {
+            service_id: Number(matched.service_id || matched.id || 1),
+            name: String(matched.name || ''),
+            company: String(matched.company || 'Correios'),
+            price: shippingAmount,
+            delivery_days: Number(matched.delivery_days || 5),
+            verified_server_side: true,
+          };
         }
-      : null;
+      } catch (e) {}
+    }
+
     const total = Number((productsTotal + shippingAmount).toFixed(2));
     const commissionAmount = validCoupon ? Number(((productsTotal * commissionPct) / 100).toFixed(2)) : 0;
     const commissionStatus = validCoupon ? 'pendente' : 'sem_comissao';
