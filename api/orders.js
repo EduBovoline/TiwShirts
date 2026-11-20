@@ -72,7 +72,7 @@ function buildPixPayload({ key, merchantName, merchantCity, amount, txid }) {
   return payload + crc16ccitt(payload);
 }
 
-async function createInfinitePayCheckout({ handle, orderId, orderNsu, items, customer, siteOrigin }) {
+async function createInfinitePayCheckout({ handle, orderId, orderNsu, items, shipping, customer, siteOrigin }) {
   const cleanHandle = String(handle || process.env.INFINITEPAY_HANDLE || 'edu_bovoline').replace(/^\$/, '').trim();
   const baseUrl = siteOrigin || process.env.PUBLIC_SITE_URL || 'https://tiwshirts.space';
   const redirectUrl = `${baseUrl}/?pedido=${encodeURIComponent(orderId)}&status=pago`;
@@ -92,6 +92,17 @@ async function createInfinitePayCheckout({ handle, orderId, orderNsu, items, cus
       price: Number(it.discounted_unit_cents || Math.round(Number(it.unit_price) * 100)),
     };
   });
+
+  if (shipping && Number(shipping.price) > 0) {
+    const shipCents = Math.round(Number(shipping.price) * 100);
+    const shipDesc = `Frete ${shipping.company || ''} ${shipping.name || ''}`.replace(/\s+/g, ' ').trim();
+    infiniteItems.push({
+      name: shipDesc,
+      description: shipDesc,
+      quantity: 1,
+      price: shipCents,
+    });
+  }
 
   const cleanPhone = String((customer && customer.phone) || '').replace(/\D/g, '');
   const formattedPhone = cleanPhone
@@ -294,7 +305,7 @@ module.exports = async (req, res) => {
       });
     }
 
-    const { customer, items, payment_method, coupon_code } = body;
+    const { customer, items, payment_method, coupon_code, shipping } = body;
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ success: false, error: 'Carrinho vazio.' });
     }
@@ -341,9 +352,22 @@ module.exports = async (req, res) => {
     });
 
     const subtotal = Number((subtotalCents / 100).toFixed(2));
-    const total = Number((totalCents / 100).toFixed(2));
-    const discountAmount = Number((subtotal - total).toFixed(2));
-    const commissionAmount = validCoupon ? Number(((total * commissionPct) / 100).toFixed(2)) : 0;
+    const productsTotal = Number((totalCents / 100).toFixed(2));
+    const discountAmount = Number((subtotal - productsTotal).toFixed(2));
+    const shippingAmount = shipping && Number(shipping.price) > 0
+      ? Number(Number(shipping.price).toFixed(2))
+      : 0;
+    const shippingInfo = shipping && shippingAmount >= 0 && shipping.name
+      ? {
+          service_id: Number(shipping.service_id || shipping.id || 1),
+          name: String(shipping.name || ''),
+          company: String(shipping.company || 'Correios'),
+          price: shippingAmount,
+          delivery_days: Number(shipping.delivery_days || 5),
+        }
+      : null;
+    const total = Number((productsTotal + shippingAmount).toFixed(2));
+    const commissionAmount = validCoupon ? Number(((productsTotal * commissionPct) / 100).toFixed(2)) : 0;
     const commissionStatus = validCoupon ? 'pendente' : 'sem_comissao';
 
     const ts = Date.now().toString(36).toUpperCase().slice(-4);
@@ -362,6 +386,7 @@ module.exports = async (req, res) => {
       orderId,
       orderNsu,
       items: normalizedItems,
+      shipping: shippingInfo,
       customer,
     });
 
@@ -369,8 +394,10 @@ module.exports = async (req, res) => {
       name: (customer && customer.name) || '',
       email: (customer && customer.email) || '',
       phone: (customer && customer.phone) || '',
+      cpf: (customer && customer.cpf) || '',
       address: (customer && customer.address) || '',
       cep: (customer && customer.cep) || '',
+      shipping: shippingInfo,
     };
 
     const baseRecord = {
@@ -417,8 +444,11 @@ module.exports = async (req, res) => {
     const couponLine = validCoupon
       ? `\n*Cupom aplicado:* ${validCoupon.code} (-${discountPct}% · Desc. R$ ${discountAmount.toFixed(2).replace('.', ',')})`
       : '';
+    const shippingLine = shippingInfo
+      ? `\n*Frete (${shippingInfo.company} ${shippingInfo.name}):* R$ ${shippingAmount.toFixed(2).replace('.', ',')} (até ${shippingInfo.delivery_days} dias úteis)`
+      : '';
     const waPixText = encodeURIComponent(
-      `Olá TiwShirts! Acabei de gerar o pedido *${orderId}* no valor de *R$ ${total.toFixed(2).replace('.', ',')}* via Pix.${couponLine}\n\n` +
+      `Olá TiwShirts! Acabei de gerar o pedido *${orderId}* no valor de *R$ ${total.toFixed(2).replace('.', ',')}* via Pix.${couponLine}${shippingLine}\n\n` +
         `*Cliente:* ${customerData.name}\n` +
         `*WhatsApp:* ${customerData.phone}\n` +
         `*Endereço de Entrega:* ${customerData.address}, CEP ${customerData.cep}\n\n` +
@@ -436,6 +466,8 @@ module.exports = async (req, res) => {
       checkout_provider: 'infinitepay',
       subtotal,
       discount_amount: discountAmount,
+      shipping_amount: shippingAmount,
+      shipping: shippingInfo,
       total,
       coupon_code: validCoupon ? validCoupon.code : null,
       discount_pct: discountPct,

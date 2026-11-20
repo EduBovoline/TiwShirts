@@ -552,11 +552,17 @@
                   <label for="calc-overlight">Qtd. OverLight G1-G3 (R$ 89)</label>
                   <input id="calc-overlight" type="number" min="0" value="2" oninput="updateWholesaleCalc()" />
                 </div>
-                <div>
-                  <button class="btn btn-sand" style="width:100%;" onclick="copyWholesaleQuote()">Copiar Proposta WhatsApp</button>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="calc-cep">CEP do Lojista (Frete)</label>
+                  <input id="calc-cep" type="text" placeholder="Ex: 01310-100" style="font-family:var(--mono);" />
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <button class="btn btn-sm" style="flex:1;padding:10px;" onclick="quoteWholesaleShipping()">Cotar Frete</button>
+                  <button class="btn btn-sand btn-sm" style="flex:1;padding:10px;" onclick="copyWholesaleQuote()">Copiar Proposta</button>
                 </div>
               </div>
               <div id="calc-result" style="margin-top:14px;padding:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center;"></div>
+              <div id="calc-shipping-result" style="display:none;margin-top:10px;padding:12px 14px;background:var(--bg);border:1px dashed rgba(197,168,128,0.35);border-radius:8px;"></div>
             </div>
           </div>
 
@@ -652,6 +658,13 @@
                       <div class="action-item-sub">Endpoint novo: api.checkout.infinitepay.io/links</div>
                     </div>
                     <span class="badge b-paid">ATUALIZADO</span>
+                  </div>
+                  <div class="action-item">
+                    <div class="action-item-info">
+                      <div class="action-item-title">Melhor Envio API v2 (Logística)</div>
+                      <div class="action-item-sub">Origem 18090-602 · 1 Pote: 12×18×12cm (0,45kg) · DCe ativo</div>
+                    </div>
+                    <a href="https://melhorenvio.com.br/painel/gerenciar/tokens" target="_blank" rel="noopener" class="btn btn-sm btn-sand">Tokens ↗</a>
                   </div>
                 </div>
               </div>
@@ -1324,13 +1337,18 @@
         <div class="detail-block">
           <h4>Cliente &amp; Entrega</h4>
           <div class="kv-row"><span class="dim">Nome</span><strong>${esc(cust.name || '—')}</strong></div>
+          <div class="kv-row"><span class="dim">CPF (Etiqueta/DCe)</span><span class="mono">${esc(cust.cpf || '—')}</span></div>
           <div class="kv-row"><span class="dim">WhatsApp</span><span class="mono">${esc(cust.phone || '—')}</span></div>
           <div class="kv-row"><span class="dim">E-mail</span><span>${esc(cust.email || '—')}</span></div>
           <div class="kv-row"><span class="dim">Endereço</span><span style="text-align:right;">${esc(cust.address || '—')}</span></div>
           <div class="kv-row"><span class="dim">CEP</span><span class="mono">${esc(cust.cep || '—')}</span></div>
-          <div style="margin-top:10px;">
-            <button class="btn btn-sm btn-sand" onclick='copyText(${JSON.stringify(labelText)}, "Etiqueta de envio copiada!")'>Copiar Etiqueta p/ Envio</button>
+          ${cust.shipping ? `<div class="kv-row"><span class="dim">Frete escolhido</span><span class="mono" style="color:var(--sand);">${esc(cust.shipping.company)} ${esc(cust.shipping.name)} (${fmtMoney(cust.shipping.price)})</span></div>` : ''}
+          <div class="actions-row" style="margin-top:10px;">
+            <button class="btn btn-xs btn-sand" onclick='copyText(${JSON.stringify(labelText)}, "Etiqueta de envio copiada!")'>Copiar Endereço</button>
+            <button class="btn btn-xs" onclick="quoteOrderMelhorEnvio('${esc(o.order_id)}')">Cotar Melhor Envio</button>
+            <button class="btn btn-xs btn-primary" onclick="sendOrderToMelhorEnvioCart('${esc(o.order_id)}')">Enviar p/ Carrinho Melhor Envio ↗</button>
           </div>
+          <div id="od-me-box" style="display:none;margin-top:10px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-size:12px;"></div>
         </div>
 
         <div class="detail-block">
@@ -1373,6 +1391,82 @@
       const text = `Fala ${name}! Seu pedido *${orderId}* da TiwShirts foi despachado.\n\nCódigo de rastreio: *${code}*\nAcompanhe pelos Correios/transportadora. Valeu por fortalecer a cena!`;
       window.open((phone ? `https://wa.me/${phone}` : 'https://wa.me/') + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
       updateOrderStatus(orderId, 'enviado');
+    }
+
+    async function quoteOrderMelhorEnvio(orderId) {
+      const o = ordersCache.find((x) => x.order_id === orderId);
+      if (!o) return;
+      const box = document.getElementById('od-me-box');
+      if (!box) return;
+      const cep = (o.customer && o.customer.cep) || '';
+      box.style.display = 'block';
+      box.innerHTML = 'Cotando Melhor Envio (origem 18090-602)...';
+      try {
+        const resp = await fetch('/api/shipping', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to_cep: cep, items: o.items || [] }),
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.success) {
+          box.innerHTML = `<span style="color:var(--danger);">${esc((data && data.error) || 'Erro na cotação.')}</span>`;
+          return;
+        }
+        const destStr = data.destination && data.destination.city ? `${data.destination.city}/${data.destination.uf}` : data.to_cep;
+        box.innerHTML = `<div class="muted" style="margin-bottom:6px;">Origem 18090-602 → ${esc(destStr)} · ${data.total_jars} pote(s) (12×18×12cm · 0,45kg)</div>` +
+          (data.options || []).map((opt) => `
+            <div class="kv-row" style="align-items:center;">
+              <span><strong>${esc(opt.company)} ${esc(opt.name)}</strong> · até ${opt.delivery_days}d úteis</span>
+              <span class="actions-row">
+                <strong class="money-green">${fmtMoney(opt.price)}</strong>
+                <button class="btn btn-xs btn-sand" onclick="sendOrderToMelhorEnvioCart('${esc(o.order_id)}', ${opt.service_id})">Gerar c/ este</button>
+              </span>
+            </div>
+          `).join('');
+      } catch (e) {
+        box.innerHTML = `<span style="color:var(--danger);">${esc(e.message)}</span>`;
+      }
+    }
+
+    async function sendOrderToMelhorEnvioCart(orderId, serviceId) {
+      const o = ordersCache.find((x) => x.order_id === orderId);
+      if (!o) return;
+      const cust = o.customer || {};
+      const chosenService = serviceId || (cust.shipping && cust.shipping.service_id) || 1;
+      const box = document.getElementById('od-me-box');
+      if (box) { box.style.display = 'block'; box.innerHTML = 'Enviando pré-etiqueta para o Melhor Envio...'; }
+      try {
+        const res = await apiFetch('/api/shipping', {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'add_to_cart',
+            order_id: o.order_id,
+            service_id: chosenService,
+            recipient: cust,
+            items: o.items || [],
+          }),
+        });
+        if (res.data && res.data.token_missing) {
+          if (box) {
+            box.innerHTML = `<div style="color:var(--warn);margin-bottom:6px;"><strong>Falta colar o MELHOR_ENVIO_TOKEN na Vercel:</strong> a pré-etiqueta (12×18×12cm · 0,45kg/pote · Declaração de Conteúdo DCe) já está montada.</div>
+              <a href="https://melhorenvio.com.br/painel/gerenciar/tokens" target="_blank" rel="noopener" class="btn btn-xs btn-sand">Gerar Token no Melhor Envio ↗</a>`;
+          }
+          toast('Configure MELHOR_ENVIO_TOKEN na Vercel para envio direto.', 'warn');
+          return;
+        }
+        if (!res.ok || !res.data.success) {
+          if (box) box.innerHTML = `<span style="color:var(--danger);">${esc((res.data && res.data.error) || 'Não foi possível inserir no carrinho.')}</span>`;
+          toast((res.data && res.data.error) || 'Erro no Melhor Envio.', 'err');
+          return;
+        }
+        if (box) {
+          box.innerHTML = `<div style="color:var(--green);margin-bottom:6px;">✓ Etiqueta inserida no carrinho do Melhor Envio! Protocolo: <strong>${esc(res.data.protocol || res.data.melhorenvio_cart_id)}</strong></div>
+            <a href="${esc(res.data.panel_url)}" target="_blank" rel="noopener" class="btn btn-xs btn-primary">Abrir Carrinho Melhor Envio p/ Pagar e Imprimir ↗</a>`;
+        }
+        toast('Pré-etiqueta enviada ao Melhor Envio!');
+      } catch (e) {
+        toast(e.message, 'err');
+      }
     }
 
     async function updateOrderStatus(orderId, status) {
@@ -1765,6 +1859,45 @@
           <div class="money-green" style="font-size:20px;">${fmtMoney(totalB2B)}</div>
         </div>
       `;
+    }
+
+    async function quoteWholesaleShipping() {
+      const cep = (document.getElementById('calc-cep').value || '').replace(/\D/g, '');
+      const box = document.getElementById('calc-shipping-result');
+      if (cep.length !== 8) {
+        toast('Digite o CEP do lojista (8 números) para cotar o frete.', 'warn');
+        return;
+      }
+      const qC = Math.max(0, Number(document.getElementById('calc-classica').value || 0));
+      const qH = Math.max(0, Number(document.getElementById('calc-overheavy').value || 0));
+      const qL = Math.max(0, Number(document.getElementById('calc-overlight').value || 0));
+      const totalQty = Math.max(1, qC + qH + qL);
+      const totalB2B = qC * 69 + (qH + qL) * 89;
+      box.style.display = 'block';
+      box.innerHTML = 'Cotando frete da caixa atacado (origem 18090-602)...';
+      try {
+        const resp = await fetch('/api/shipping', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to_cep: cep,
+            qty: totalQty,
+            unit_value: Number((totalB2B / totalQty).toFixed(2)) || 69,
+          }),
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.success) {
+          box.innerHTML = `<span style="color:var(--danger);">${esc((data && data.error) || 'Erro ao cotar.')}</span>`;
+          return;
+        }
+        const destStr = data.destination && data.destination.city ? `${data.destination.city}/${data.destination.uf}` : cep;
+        box.innerHTML = `<div class="muted" style="margin-bottom:6px;">Frete Melhor Envio (18090-602 → ${esc(destStr)}) · ${totalQty} potes (${(totalQty * 0.45).toFixed(2)} kg):</div>` +
+          `<div style="display:flex;gap:14px;flex-wrap:wrap;">` +
+          (data.options || []).map((o) => `<span class="mono"><strong>${esc(o.company)} ${esc(o.name)}:</strong> <span style="color:var(--green);">${fmtMoney(o.price)}</span> (${o.delivery_days}d úteis)</span>`).join(' · ') +
+          `</div>`;
+      } catch (e) {
+        box.innerHTML = `<span style="color:var(--danger);">${esc(e.message)}</span>`;
+      }
     }
 
     function copyWholesaleQuote() {

@@ -805,6 +805,12 @@ a:hover { color:#F5F5F5; }
                 <span>− {{ cartDiscountLabel }}</span>
               </div>
             </sc-if>
+            <sc-if value="{{ hasSelectedShipping }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#C5A880;">
+                <span>FRETE ({{ selectedShipping.company }} {{ selectedShipping.name }})</span>
+                <span>+ {{ cartShippingLabel }}</span>
+              </div>
+            </sc-if>
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:4px;">
               <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8E8E93;">TOTAL DO PEDIDO</div>
               <div style="font-family:'Lemon Milk',sans-serif;font-size:24px;">{{ cartTotalLabel }}</div>
@@ -819,16 +825,36 @@ a:hover { color:#F5F5F5; }
           </sc-if>
 
           <form onSubmit="{{ submitCheckout }}" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-bottom:2px;">1. DADOS PARA ENTREGA E RASTREAMENTO</div>
-            <input id="cart-nome" type="text" required aria-label="Nome completo" placeholder="Nome completo *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-bottom:2px;">1. DADOS PARA ENTREGA, ETIQUETA E FRETE (MELHOR ENVIO)</div>
+            <div style="display:grid;grid-template-columns:1fr 150px;gap:10px;">
+              <input id="cart-nome" type="text" required aria-label="Nome completo" placeholder="Nome completo *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+              <input id="cart-cpf" type="text" required aria-label="CPF para etiqueta de envio" placeholder="CPF (etiqueta) *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;" />
+            </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
               <input id="cart-email" type="email" required aria-label="E-mail para acompanhamento" placeholder="E-mail para rastreio *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
               <input id="cart-phone" type="tel" required aria-label="WhatsApp para avisos" placeholder="WhatsApp c/ DDD *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
             </div>
-            <div style="display:grid;grid-template-columns:130px 1fr;gap:10px;">
-              <input id="cart-cep" type="text" required aria-label="CEP" placeholder="CEP *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
-              <input id="cart-address" type="text" required aria-label="Endereço de entrega" placeholder="Rua, número, bairro, cidade/UF *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
+            <div style="display:grid;grid-template-columns:1fr auto;gap:8px;">
+              <input id="cart-cep" type="text" required aria-label="CEP" placeholder="Digite seu CEP (8 dígitos) *" onInput="{{ handleCepInput }}" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;" />
+              <button type="button" onClick="{{ calculateShipping }}" style="padding:0 14px;background:rgba(197,168,128,0.16);border:1px solid rgba(197,168,128,0.4);color:#C5A880;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">{{ shippingCalcLabel }}</button>
             </div>
+
+            <sc-if value="{{ hasShippingOptions }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#0d0d0d;border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:10px;display:flex;flex-direction:column;gap:6px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;letter-spacing:0.06em;">ESCOLHA A MODALIDADE DE ENVIO ({{ shippingDestinationLabel }})</div>
+                <sc-for items="{{ shippingOptionsList }}" item="ship" index="si">
+                  <button type="button" onClick="{{ ship.select }}" style="{{ ship.style }}">
+                    <span>{{ ship.title }}</span>
+                    <span style="font-weight:700;">{{ ship.priceLabel }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasShippingError }}" hint-placeholder-val="{{ false }}">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#f87171;">{{ shippingError }}</div>
+            </sc-if>
+
+            <input id="cart-address" type="text" required aria-label="Endereço de entrega" placeholder="Rua, número, complemento, bairro, cidade/UF *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
 
             <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-top:6px;">2. FORMA DE PAGAMENTO NO CHECKOUT</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -1092,6 +1118,12 @@ class Component extends DCLogic {
     appliedCoupon: null,
     couponError: "",
     couponLoading: false,
+    shippingOptions: [],
+    selectedShippingIdx: 0,
+    shippingLoading: false,
+    shippingError: "",
+    shippingDestination: null,
+    lastQuotedCep: "",
   };
 
   catalog = null;
@@ -1535,9 +1567,74 @@ class Component extends DCLogic {
 
   closeCart = () => this.setState({ cartOpen: false });
 
+  handleCepInput = () => {
+    const el = document.getElementById("cart-cep");
+    if (!el) return;
+    const clean = String(el.value || "").replace(/\D/g, "");
+    if (clean.length === 8 && clean !== this.state.lastQuotedCep) {
+      this.calculateShipping();
+    }
+  };
+
+  calculateShipping = async () => {
+    const el = document.getElementById("cart-cep");
+    const cleanCep = String((el && el.value) || "").replace(/\D/g, "");
+    if (cleanCep.length !== 8) {
+      this.setState({ shippingError: "Digite um CEP válido com 8 números.", shippingOptions: [] });
+      return;
+    }
+    this.setState({ shippingLoading: true, shippingError: "", lastQuotedCep: cleanCep });
+    try {
+      const items = this.state.cart.map((c) => ({
+        sku: c.sku,
+        qty: c.qty,
+        price: c.price,
+      }));
+      const res = await fetch(BACKEND_URL + "/api/shipping", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to_cep: cleanCep, items }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data || !data.success || !Array.isArray(data.options) || !data.options.length) {
+        this.setState({
+          shippingLoading: false,
+          shippingError: (data && data.error) || "Não foi possível cotar o frete para este CEP.",
+          shippingOptions: [],
+        });
+        return;
+      }
+      // Auto-preenche rua/bairro/cidade/UF no campo de endereço se estiver em branco
+      if (data.destination && data.destination.city) {
+        const addrEl = document.getElementById("cart-address");
+        if (addrEl && !addrEl.value.trim()) {
+          const parts = [
+            data.destination.street ? (data.destination.street + ", Nº ") : "",
+            data.destination.neighborhood || "",
+            data.destination.city + "/" + (data.destination.uf || ""),
+          ].filter(Boolean);
+          addrEl.value = parts.join(" - ");
+        }
+      }
+      this.setState({
+        shippingLoading: false,
+        shippingError: "",
+        shippingOptions: data.options,
+        selectedShippingIdx: 0,
+        shippingDestination: data.destination || null,
+      });
+    } catch (err) {
+      this.setState({
+        shippingLoading: false,
+        shippingError: "Erro ao consultar frete. Tente novamente.",
+      });
+    }
+  };
+
   submitCheckout = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
     const name = (document.getElementById("cart-nome") && document.getElementById("cart-nome").value) || "";
+    const cpf = (document.getElementById("cart-cpf") && document.getElementById("cart-cpf").value) || "";
     const email = (document.getElementById("cart-email") && document.getElementById("cart-email").value) || "";
     const phone = (document.getElementById("cart-phone") && document.getElementById("cart-phone").value) || "";
     const cep = (document.getElementById("cart-cep") && document.getElementById("cart-cep").value) || "";
@@ -1555,6 +1652,12 @@ class Component extends DCLogic {
     }));
     if (!items.length) return;
 
+    let selectedShipping = (this.state.shippingOptions && this.state.shippingOptions[this.state.selectedShippingIdx]) || null;
+    if (!selectedShipping && String(cep).replace(/\D/g, "").length === 8) {
+      await this.calculateShipping();
+      selectedShipping = (this.state.shippingOptions && this.state.shippingOptions[this.state.selectedShippingIdx]) || null;
+    }
+
     const applied = this.state.appliedCoupon;
     const discountPct = applied ? (Number(applied.discount_pct) || 0) : 0;
     const couponCode = applied ? applied.code : null;
@@ -1567,8 +1670,9 @@ class Component extends DCLogic {
       subtotalCents += unitCents * c.qty;
       totalCents += discUnitCents * c.qty;
     });
-    const totalAmount = Number((totalCents / 100).toFixed(2));
-    const customer = { name, email, phone, cep, address };
+    const shippingCents = selectedShipping ? Math.round((Number(selectedShipping.price) || 0) * 100) : 0;
+    const totalAmount = Number(((totalCents + shippingCents) / 100).toFixed(2));
+    const customer = { name, cpf, email, phone, cep, address };
 
     try {
       const res = await fetch(BACKEND_URL + "/api/orders", {
@@ -1577,6 +1681,7 @@ class Component extends DCLogic {
         body: JSON.stringify({
           customer,
           items,
+          shipping: selectedShipping,
           payment_method: paymentMethod,
           coupon_code: couponCode,
         }),
@@ -1967,11 +2072,45 @@ class Component extends DCLogic {
       totalCents += discUnitCents * c.qty;
     });
     const cartSubtotal = subtotalCents / 100;
-    const cartTotal = totalCents / 100;
-    const cartDiscount = Math.max(0, cartSubtotal - cartTotal);
+    const cartProductsTotal = totalCents / 100;
+    const cartDiscount = Math.max(0, cartSubtotal - cartProductsTotal);
+    const shippingOptions = Array.isArray(this.state.shippingOptions) ? this.state.shippingOptions : [];
+    const selectedShipping = shippingOptions[this.state.selectedShippingIdx] || null;
+    const hasSelectedShipping = !!selectedShipping;
+    const shippingPrice = selectedShipping ? (Number(selectedShipping.price) || 0) : 0;
+    const cartTotal = cartProductsTotal + shippingPrice;
     const cartSubtotalLabel = fmtPrice(cartSubtotal);
     const cartDiscountLabel = fmtPrice(cartDiscount);
+    const cartShippingLabel = fmtPrice(shippingPrice);
     const cartTotalLabel = fmtPrice(cartTotal);
+    const hasShippingOptions = shippingOptions.length > 0;
+    const hasShippingError = !!this.state.shippingError;
+    const shippingError = this.state.shippingError || "";
+    const shippingCalcLabel = this.state.shippingLoading ? "COTANDO..." : "CALCULAR FRETE";
+    const dest = this.state.shippingDestination;
+    const shippingDestinationLabel = dest && dest.city ? (dest.city + "/" + (dest.uf || "")) : "MELHOR ENVIO";
+    const shippingOptionsList = shippingOptions.map((opt, idx) => {
+      const isSel = idx === this.state.selectedShippingIdx;
+      return {
+        title: (isSel ? "● " : "○ ") + opt.company + " " + opt.name + " · até " + opt.delivery_days + " dias úteis",
+        priceLabel: fmtPrice(opt.price),
+        style: {
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          padding: "9px 11px",
+          fontFamily: "'JetBrains Mono',monospace",
+          fontSize: "11px",
+          cursor: "pointer",
+          borderRadius: "4px",
+          border: isSel ? "1px solid #4ade80" : "1px solid rgba(255,255,255,0.12)",
+          background: isSel ? "rgba(74,222,128,0.12)" : "#080808",
+          color: isSel ? "#4ade80" : "#D1D1D6",
+        },
+        select: () => this.setState({ selectedShippingIdx: idx }),
+      };
+    });
     const hasAppliedCoupon = !!(appliedCoupon && appliedCoupon.code);
     const noAppliedCoupon = !hasAppliedCoupon;
     const appliedCouponPill = hasAppliedCoupon ? ("✓ " + appliedCoupon.code + " · " + discountPct + "% OFF") : "";
@@ -2057,7 +2196,18 @@ class Component extends DCLogic {
       cartCount,
       cartSubtotalLabel,
       cartDiscountLabel,
+      cartShippingLabel,
       cartTotalLabel,
+      selectedShipping: selectedShipping || { company: "", name: "", price: 0 },
+      hasSelectedShipping,
+      hasShippingOptions,
+      hasShippingError,
+      shippingError,
+      shippingCalcLabel,
+      shippingDestinationLabel,
+      shippingOptionsList,
+      handleCepInput: this.handleCepInput,
+      calculateShipping: this.calculateShipping,
       appliedCoupon: appliedCoupon || { code: "", partner_name: "", discount_pct: 0 },
       hasAppliedCoupon,
       noAppliedCoupon,
