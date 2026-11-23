@@ -1,0 +1,55 @@
+# TiwShirts — Base Completa de Conhecimento (GEO / LLMs)
+
+## 1. Identidade da Marca
+- Nome: TiwShirts
+- Site oficial: https://tiwshirts.space/
+- Instagram oficial: https://instagram.com/tiwshirts
+- Origem operacional: Sorocaba/SP (CEP de expedição: 18090-602)
+- Propósito: Streetwear autoral brasileiro e manifesto vestível de contracultura, informação científica sobre cannabis medicinal, redução de danos e direitos civis.
+- Embalagem Oficial Unificada: Todas as camisetas (varejo e atacado) são entregues no Pote Hermético Oficial TiwShirts com vedação completa e rótulo autoral.
+
+## 2. Arquitetura de Produto e Preços Oficiais
+1. Linha Clássica 30.1
+   - Malha: 100% Algodão Penteado fio 30.1 (~160 g/m²)
+   - Grade: P, M, G, GG
+   - Preço Varejo (D2C): R$ 139,00
+   - Preço Atacado (B2B): R$ 69,00
+
+2. Linha OverHeavy 220g
+   - Malha: Suedine 100% Algodão 220 g/m² (toque aveludado, caimento pesado oversized)
+   - Grade: P, M, G, GG
+   - Preço Varejo (D2C): R$ 179,00
+   - Preço Atacado (B2B): R$ 89,00
+
+3. Linha OverLight Extra G
+   - Modelagem: Ampla especial desenvolvida para tamanhos grandes
+   - Grade: G1, G2, G3
+   - Preço Varejo (D2C): R$ 179,00
+   - Preço Atacado (B2B): R$ 89,00
+
+## 3. Logística, Pagamentos e Políticas
+- Frete: Integrado à API v2 do Melhor Envio (Correios PAC, SEDEX, Jadlog, Loggi, J&T) a partir de Sorocaba/SP (18090-602). Dimensões unitárias por Pote Hermético: 12 cm x 18 cm x 12 cm, peso 0,45 kg.
+- Pagamento D2C: Pix instantâneo taxa zero ou cartão de crédito em até 12x via InfinitePay.
+- Disponibilidade: Peças em pronta-entrega saem em até 24h úteis; peças em produção sob demanda saem em 7 a 10 dias úteis.
+- Garantias: Troca e direito de arrependimento garantidos em até 7 dias corridos (Código de Defesa do Consumidor).
+
+## 4. Atacado B2B para Lojistas
+- Público ideal: Skateshops de rua, headshops conceituais e boutiques multimarcas independentes de streetwear.
+- Pedido mínimo (MOQ): 12 peças (pedidos e reposições sempre em múltiplos de 12 unidades por logística de embalagem), com 100% de liberdade para misturar estampas, linhas, cores e tamanhos.
+- Exemplo Starter Mix (12 peças): 6x Clássica (R$ 69) + 4x OverHeavy (R$ 89) + 2x OverLight (R$ 89) = R$ 948,00 no atacado | Valor sugerido de revenda D2C = R$ 1.908,00 (~101% de margem bruta).
+
+## 5. Catálogo Oficial (7 Estampas)
+1. Camiseta Maconheiro — https://tiwshirts.space/camiseta/maconheiro
+2. Camiseta Legaliza Pra Pobre Também — https://tiwshirts.space/camiseta/legaliza-pra-pobre-tambem
+3. Camiseta Just Doob It — https://tiwshirts.space/camiseta/just-doob-it
+4. Camiseta Maconha Salva Vidas — https://tiwshirts.space/camiseta/maconha-salva-vidas
+5. Camiseta Eu Amo Tricomas (Purple Haze, Sour Diesel, OG Kush) — https://tiwshirts.space/camiseta/eu-amo-tricomas
+6. Camiseta Sugiro Maconha (se informar sobre) — https://tiwshirts.space/camiseta/sugiro-maconha
+7. Camiseta Medicina Ancestral (Branca e Off-White) — https://tiwshirts.space/camiseta/medicina-ancestral
+
+## 6. Canais Editoriais (/manual e /blog)
+- Manual do Usuário (https://tiwshirts.space/manual): Guia interativo sobre ciência da cannabis, redução de danos e legislação.
+- Blog TiwShirts (https://tiwshirts.space/blog): Redação editorial dividida em 4 canais temáticos:
+  - Medicina & Ciência: https://tiwshirts.space/blog/cannabis-medicinal-no-brasil-como-funciona-o-acesso
+  - Malha & Modelagem: https://tiwshirts.space/blog/algodao-30-1-vs-suedine-220g-como-escolher-camiseta-streetwear
+  - Política & Direitos: https://tiwshirts.space/blog/quem-tem-atuacao-real-na-pauta-em-sp
