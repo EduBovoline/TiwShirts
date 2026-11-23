@@ -50,6 +50,7 @@
 ## 6. Canais Editoriais (/manual e /blog)
 - Manual do Usuário (https://tiwshirts.space/manual): Guia interativo sobre ciência da cannabis, redução de danos e legislação.
 - Blog TiwShirts (https://tiwshirts.space/blog): Redação editorial dividida em 4 canais temáticos:
+  - Cultura & Contracultura: https://tiwshirts.space/blog/como-a-maconha-foi-proibida-no-brasil-pito-do-pango-1938
   - Medicina & Ciência: https://tiwshirts.space/blog/cannabis-medicinal-no-brasil-como-funciona-o-acesso
   - Malha & Modelagem: https://tiwshirts.space/blog/algodao-30-1-vs-suedine-220g-como-escolher-camiseta-streetwear
   - Política & Direitos: https://tiwshirts.space/blog/quem-tem-atuacao-real-na-pauta-em-sp
