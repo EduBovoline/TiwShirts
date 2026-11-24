@@ -1,0 +1,52 @@
+name: IndexNow Auto-Ping (TiwShirts)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'sitemap.xml'
+      - 'index.html'
+      - 'blog.html'
+      - 'blog/**'
+      - 'camiseta/**'
+      - 'indica.html'
+      - 'atacado.html'
+      - 'manual.html'
+      - 'llms.txt'
+  workflow_dispatch:
+
+jobs:
+  ping-indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Wait for Vercel deployment propagation
+        run: sleep 45
+
+      - name: Submit all sitemap URLs to IndexNow
+        run: |
+          node -e '
+            const fs = require("fs");
+            const xml = fs.readFileSync("sitemap.xml", "utf8");
+            const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1].trim());
+            const payload = {
+              host: "tiwshirts.space",
+              key: "3a4f6d8c9b2e1a70f5e3d2c1b0a9f8e7",
+              keyLocation: "https://tiwshirts.space/3a4f6d8c9b2e1a70f5e3d2c1b0a9f8e7.txt",
+              urlList: urls
+            };
+            fetch("https://api.indexnow.org/indexnow", {
+              method: "POST",
+              headers: { "Content-Type": "application/json; charset=utf-8" },
+              body: JSON.stringify(payload)
+            }).then(async (r) => {
+              console.log("IndexNow status:", r.status, "URLs:", urls.length);
+              if (!r.ok && r.status !== 202) {
+                console.error(await r.text());
+                process.exit(1);
+              }
+            });
+          '

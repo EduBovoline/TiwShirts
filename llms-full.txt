@@ -56,3 +56,9 @@
   - Política & Direitos:
     - https://tiwshirts.space/blog/regra-40g-stf-tema-506-porte-maconha-brasil
     - https://tiwshirts.space/blog/quem-tem-atuacao-real-na-pauta-em-sp
+
+## 7. Hub Ético TiwShirts Indica (/indica)
+- URL: https://tiwshirts.space/indica
+- Propósito: Encaminhamento transparente de leitores do Blog e do Manual para parceiros auditados por critério moral, compliance CFM/ANVISA e aprovação humana.
+- Verticais atendidas: Médicos Prescritores (CRM verificado, divulgação institucional sem comissão sobre prescrição), Associações de Pacientes legalizadas, Cursos & Educação com base científica/jurídica e Ecossistema (growshops, headshops conceituais e advocacia).
+- LGPD: Nenhum contato é encaminhado sem consentimento explícito registrado via API /api/tiw-lead-router.
