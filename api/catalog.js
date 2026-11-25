@@ -1,5 +1,7 @@
 // Vercel Serverless Function — GET /api/catalog
-// Catálogo vivo oficial TiwShirts (7 estampas × 3 linhas × estoque real de pronta-entrega e bases lisas)
+// Catálogo vivo oficial TiwShirts (7 estampas × 3 linhas × estoque real mesclado com overrides do Gestor da Loja no Supabase)
+
+const { anonHeaders, sbFetch } = require('./_supabase');
 
 const LINES = [
   { id: 'pf',       name: 'Linha Clássica 30.1',    sizes: ['P', 'M', 'G', 'GG'], price: 139.0, wholesale: 69.0 },
@@ -25,141 +27,100 @@ const PRODUCTS = [
   { id: 'medicina',   name: 'Medicina Ancestral' },
 ];
 
-// Combos oficiais comercializados (Medicina Ancestral exclusivamente em Branca e Off-White)
 const CATALOG = [
-  {
-    product: 'maconheiro',
-    combos: [
-      { line: 'pf',       color: 'preto' },
-      { line: 'casca',    color: 'preto' },
-      { line: 'espacoso', color: 'preto' },
-    ],
-  },
-  {
-    product: 'legaliza',
-    combos: [
-      { line: 'pf',       color: 'preto' },
-      { line: 'casca',    color: 'preto' },
-      { line: 'espacoso', color: 'preto' },
-    ],
-  },
+  { product: 'maconheiro', combos: [{ line: 'pf', color: 'preto' }, { line: 'casca', color: 'preto' }, { line: 'espacoso', color: 'preto' }] },
+  { product: 'legaliza',   combos: [{ line: 'pf', color: 'preto' }, { line: 'casca', color: 'preto' }, { line: 'espacoso', color: 'preto' }] },
   {
     product: 'justdoobit',
     combos: [
-      { line: 'pf',       color: 'preto' },
-      { line: 'pf',       color: 'branco' },
-      { line: 'casca',    color: 'preto' },
-      { line: 'casca',    color: 'offwhite' },
-      { line: 'espacoso', color: 'preto' },
-      { line: 'espacoso', color: 'branco' },
-      { line: 'espacoso', color: 'offwhite' },
+      { line: 'pf', color: 'preto' }, { line: 'pf', color: 'branco' },
+      { line: 'casca', color: 'preto' }, { line: 'casca', color: 'offwhite' },
+      { line: 'espacoso', color: 'preto' }, { line: 'espacoso', color: 'branco' }, { line: 'espacoso', color: 'offwhite' },
     ],
   },
   {
     product: 'salvavidas',
     combos: [
-      { line: 'pf',       color: 'preto' },
-      { line: 'pf',       color: 'branco' },
-      { line: 'casca',    color: 'preto' },
-      { line: 'casca',    color: 'offwhite' },
-      { line: 'espacoso', color: 'preto' },
-      { line: 'espacoso', color: 'branco' },
-      { line: 'espacoso', color: 'offwhite' },
+      { line: 'pf', color: 'preto' }, { line: 'pf', color: 'branco' },
+      { line: 'casca', color: 'preto' }, { line: 'casca', color: 'offwhite' },
+      { line: 'espacoso', color: 'preto' }, { line: 'espacoso', color: 'branco' }, { line: 'espacoso', color: 'offwhite' },
     ],
   },
   {
     product: 'tricomas',
     combos: [
-      { line: 'pf',       color: 'preto',        label: 'Purple Haze' },
-      { line: 'pf',       color: 'azul-marinho', label: 'Sour Diesel' },
-      { line: 'pf',       color: 'offwhite',     label: 'OG Kush' },
-      { line: 'casca',    color: 'preto',        label: 'Purple Haze' },
-      { line: 'casca',    color: 'offwhite',     label: 'OG Kush' },
-      { line: 'espacoso', color: 'preto',        label: 'Purple Haze' },
-      { line: 'espacoso', color: 'offwhite',     label: 'OG Kush' },
+      { line: 'pf', color: 'preto', label: 'Purple Haze' },
+      { line: 'pf', color: 'azul-marinho', label: 'Sour Diesel' },
+      { line: 'pf', color: 'offwhite', label: 'OG Kush' },
+      { line: 'casca', color: 'preto', label: 'Purple Haze' },
+      { line: 'casca', color: 'offwhite', label: 'OG Kush' },
+      { line: 'espacoso', color: 'preto', label: 'Purple Haze' },
+      { line: 'espacoso', color: 'offwhite', label: 'OG Kush' },
     ],
   },
-  {
-    product: 'sugiro',
-    combos: [
-      { line: 'pf',       color: 'preto' },
-      { line: 'casca',    color: 'preto' },
-      { line: 'espacoso', color: 'preto' },
-    ],
-  },
-  {
-    product: 'medicina',
-    combos: [
-      { line: 'pf',       color: 'branco' },
-      { line: 'casca',    color: 'offwhite' },
-      { line: 'espacoso', color: 'branco' },
-      { line: 'espacoso', color: 'offwhite' },
-    ],
-  },
+  { product: 'sugiro',   combos: [{ line: 'pf', color: 'preto' }, { line: 'casca', color: 'preto' }, { line: 'espacoso', color: 'preto' }] },
+  { product: 'medicina', combos: [{ line: 'pf', color: 'branco' }, { line: 'casca', color: 'offwhite' }, { line: 'espacoso', color: 'branco' }, { line: 'espacoso', color: 'offwhite' }] },
 ];
 
-// Inventário físico real — 11 peças estampadas prontas (Envio imediato / 24h)
-const FINISHED_INVENTORY = {
-  'justdoobit_casca_preto_m':      1,
-  'justdoobit_pf_preto_g':         1,
-  'justdoobit_pf_branco_g':        1,
-  'tricomas_pf_azul-marinho_m':    1,
-  'tricomas_pf_preto_g':           1,
-  'sugiro_pf_preto_gg':            1,
-  'salvavidas_casca_preto_g':      1,
-  'medicina_casca_offwhite_g':     1,
-  'salvavidas_casca_offwhite_g':   1,
-  'medicina_pf_branco_m':          1,
-  'salvavidas_pf_preto_m':         1,
+const DEFAULT_FINISHED_INVENTORY = {
+  'justdoobit_casca_preto_m':    1,
+  'justdoobit_pf_preto_g':       1,
+  'justdoobit_pf_branco_g':      1,
+  'tricomas_pf_azul-marinho_m':  1,
+  'tricomas_pf_preto_g':         1,
+  'sugiro_pf_preto_gg':          1,
+  'salvavidas_casca_preto_g':    1,
+  'medicina_casca_offwhite_g':   1,
+  'salvavidas_casca_offwhite_g': 1,
+  'medicina_pf_branco_m':        1,
+  'salvavidas_pf_preto_m':       1,
 };
 
-// Inventário físico real — 9 bases lisas em estoque (Envio em 3 dias úteis)
-const BLANK_INVENTORY = {
-  'casca:offwhite:M':     1,
-  'casca:preto:GG':       1,
-  'espacoso:preto:G1':    1,
-  'espacoso:preto:G2':    2,
-  'espacoso:preto:G3':    1,
+const DEFAULT_BLANK_INVENTORY = {
+  'casca:offwhite:M':  1,
+  'casca:preto:GG':    1,
+  'espacoso:preto:G1': 1,
+  'espacoso:preto:G2': 2,
+  'espacoso:preto:G3': 1,
   'espacoso:offwhite:G1': 1,
   'espacoso:branco:G1':   2,
 };
 
-function resolveAvailability(sku, lineId, colorId, size) {
-  const finishedQty = FINISHED_INVENTORY[sku] || 0;
-  const blankQty = BLANK_INVENTORY[`${lineId}:${colorId}:${size}`] || 0;
-
-  if (finishedQty > 0) {
-    return {
-      finished_qty: finishedQty,
-      blank_qty: blankQty,
-      status: 'PRONTA_ENTREGA',
-      label: '● Envio imediato (24h)',
-      lead: '24h',
-    };
-  }
-  if (blankQty > 0) {
-    return {
-      finished_qty: 0,
-      blank_qty: blankQty,
-      status: 'ENVIO_3_DIAS',
-      label: '● Envio em 3 dias úteis',
-      lead: '3 dias úteis',
-    };
-  }
-  return {
-    finished_qty: 0,
-    blank_qty: 0,
-    status: 'PRE_COMPRA',
-    label: '● Envio em 7 a 10 dias úteis',
-    lead: '7 a 10 dias úteis',
-  };
-}
-
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
+
+  const finishedMap = { ...DEFAULT_FINISHED_INVENTORY };
+  const blankMap = { ...DEFAULT_BLANK_INVENTORY };
+
+  try {
+    const invRes = await sbFetch('/rest/v1/tiw_inventory?select=key,kind,qty', { headers: anonHeaders() });
+    if (invRes.ok && Array.isArray(invRes.data)) {
+      for (const row of invRes.data) {
+        if (row.kind === 'blank' || String(row.key).startsWith('blank:')) {
+          const cleanKey = String(row.key).replace(/^blank:/, '');
+          blankMap[cleanKey] = Number(row.qty || 0);
+        } else {
+          finishedMap[row.key] = Number(row.qty || 0);
+        }
+      }
+    }
+  } catch {}
+
+  function resolveAvailability(sku, lineId, colorId, size) {
+    const finishedQty = Number(finishedMap[sku] || 0);
+    const blankQty = Number(blankMap[`${lineId}:${colorId}:${size}`] || 0);
+
+    if (finishedQty > 0) {
+      return { finished_qty: finishedQty, blank_qty: blankQty, status: 'PRONTA_ENTREGA', label: '● Envio imediato (24h)', lead: '24h' };
+    }
+    if (blankQty > 0) {
+      return { finished_qty: 0, blank_qty: blankQty, status: 'ENVIO_3_DIAS', label: '● Envio em 3 dias úteis', lead: '3 dias úteis' };
+    }
+    return { finished_qty: 0, blank_qty: 0, status: 'PRE_COMPRA', label: '● Envio em 7 a 10 dias úteis', lead: '7 a 10 dias úteis' };
+  }
 
   const combosById = {};
   for (const entry of CATALOG) combosById[entry.product] = entry.combos;
@@ -171,11 +132,7 @@ module.exports = (req, res) => {
       const color = COLORS.find((c) => c.id === combo.color);
       const sizes = (line ? line.sizes : []).map((size) => {
         const sku = `${prod.id}_${combo.line}_${combo.color}_${size.toLowerCase()}`;
-        return {
-          size,
-          sku,
-          ...resolveAvailability(sku, combo.line, combo.color, size),
-        };
+        return { size, sku, ...resolveAvailability(sku, combo.line, combo.color, size) };
       });
       return {
         key: `${combo.line}:${combo.color}`,
@@ -199,6 +156,7 @@ module.exports = (req, res) => {
     lead_reprint: '7 a 10 dias úteis',
     checkout_provider: 'infinitepay',
     infinitepay_handle: (process.env.INFINITEPAY_HANDLE || 'edu_bovoline').replace(/^\$/, ''),
+    blank_inventory: blankMap,
     count: products.length,
     products,
   });

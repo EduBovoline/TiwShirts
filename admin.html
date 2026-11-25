@@ -250,35 +250,45 @@
       </div>
 
       <nav class="sidebar-nav">
-        <div class="nav-section-label">Operação</div>
-        <button class="nav-item active" data-view="overview" onclick="switchView('overview')">
+        <div class="nav-section-label">Diretoria 360°</div>
+        <button class="nav-item active" data-view="overview" data-roles="admin,gestor_loja,gestor_parceiros,gestor_marca" onclick="switchView('overview')">
           <span class="nav-item-left"><span class="nav-icon">◈</span> Visão Geral</span>
           <span class="nav-badge warn" id="nb-actions" style="display:none;">0</span>
         </button>
-        <button class="nav-item" data-view="orders" onclick="switchView('orders')">
+
+        <div class="nav-section-label">Gestor da Loja</div>
+        <button class="nav-item" data-view="orders" data-roles="admin,gestor_loja" onclick="switchView('orders')">
           <span class="nav-item-left"><span class="nav-icon">⬡</span> Pedidos D2C</span>
           <span class="nav-badge" id="nb-orders">0</span>
         </button>
-        <button class="nav-item" data-view="coupons" onclick="switchView('coupons')">
-          <span class="nav-item-left"><span class="nav-icon">★</span> Afiliados 10+10</span>
-          <span class="nav-badge green" id="nb-coupons">0</span>
-        </button>
-
-        <div class="nav-section-label">Loja</div>
-        <button class="nav-item" data-view="catalog" onclick="switchView('catalog')">
-          <span class="nav-item-left"><span class="nav-icon">◫</span> Catálogo &amp; Estoque</span>
+        <button class="nav-item" data-view="catalog" data-roles="admin,gestor_loja" onclick="switchView('catalog')">
+          <span class="nav-item-left"><span class="nav-icon">◫</span> Estoque &amp; Catálogo</span>
           <span class="nav-badge" id="nb-catalog">7</span>
         </button>
-
-        <div class="nav-section-label">Atacado</div>
-        <button class="nav-item" data-view="b2b" onclick="switchView('b2b')">
+        <button class="nav-item" data-view="b2b" data-roles="admin,gestor_loja" onclick="switchView('b2b')">
           <span class="nav-item-left"><span class="nav-icon">▣</span> Atacado B2B</span>
           <span class="nav-badge" id="nb-b2b">0</span>
         </button>
 
-        <div class="nav-section-label">Sistema</div>
-        <button class="nav-item" data-view="settings" onclick="switchView('settings')">
-          <span class="nav-item-left"><span class="nav-icon">⚙</span> Conta &amp; Atalhos</span>
+        <div class="nav-section-label">Gestor de Parceiros</div>
+        <button class="nav-item" data-view="coupons" data-roles="admin,gestor_parceiros" onclick="switchView('coupons')">
+          <span class="nav-item-left"><span class="nav-icon">★</span> Afiliados &amp; Saques</span>
+          <span class="nav-badge green" id="nb-coupons">0</span>
+        </button>
+
+        <div class="nav-section-label">Gestor da Marca</div>
+        <button class="nav-item" data-view="brand" data-roles="admin,gestor_marca" onclick="switchView('brand')">
+          <span class="nav-item-left"><span class="nav-icon">✦</span> Marca &amp; Hub /indica</span>
+          <span class="nav-badge" id="nb-indica">0</span>
+        </button>
+
+        <div class="nav-section-label">Automação &amp; Equipe</div>
+        <button class="nav-item" data-view="comms" data-roles="admin,gestor_marca,gestor_loja,gestor_parceiros" onclick="switchView('comms')">
+          <span class="nav-item-left"><span class="nav-icon">⚡</span> Comunicação Auto</span>
+          <span class="nav-badge green" id="nb-comms">ON</span>
+        </button>
+        <button class="nav-item" data-view="settings" data-roles="admin,gestor_marca,gestor_loja,gestor_parceiros" onclick="switchView('settings')">
+          <span class="nav-item-left"><span class="nav-icon">⚙</span> Equipe &amp; Perfis</span>
         </button>
       </nav>
 
@@ -287,7 +297,7 @@
           <div class="user-avatar" id="user-initials">EB</div>
           <div class="user-meta">
             <div class="u-name" id="admin-user-email">edubovoline@gmail.com</div>
-            <div class="u-role">● ADMIN ATIVO</div>
+            <div class="u-role" id="admin-user-role">● ADMIN ATIVO</div>
           </div>
         </div>
         <div style="display:flex;gap:6px;">
@@ -430,6 +440,57 @@
 
         <!-- ==================== VIEW: COUPONS ==================== -->
         <section id="view-coupons" class="view-section" style="display:none;">
+          <!-- VIP Invite Generator + Payout Queue -->
+          <div class="grid-equal">
+            <div class="card" style="margin-bottom:0;">
+              <div class="card-head">
+                <div class="card-title">🎟 Gerar Convite VIP 1-Clique (Sem Fricção)</div>
+                <span class="muted">Para quem a TiwShirts convida</span>
+              </div>
+              <div class="card-body">
+                <form onsubmit="createVipInvite(event)">
+                  <div class="form-grid-2">
+                    <div class="field">
+                      <label>Nome do Convidado</label>
+                      <input id="vi-name" placeholder="Ex: Chico Skate" />
+                    </div>
+                    <div class="field">
+                      <label>Código Sugerido</label>
+                      <input id="vi-code" placeholder="Ex: CHICO10" style="text-transform:uppercase;font-family:var(--mono);" />
+                    </div>
+                  </div>
+                  <div class="form-grid-2">
+                    <div class="field">
+                      <label>WhatsApp (opcional)</label>
+                      <input id="vi-wa" placeholder="(15) 99999-9999" />
+                    </div>
+                    <div class="field">
+                      <label>Modalidade / Tier</label>
+                      <select id="vi-tier">
+                        <option value="10_10">Parceiro Padrão (10% OFF + 10% Com)</option>
+                        <option value="10_12">Creator (10% OFF + 12% Com)</option>
+                        <option value="10_15">Embaixador (10% OFF + 15% Com)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="width:100%;" id="vi-btn">Gerar Link de Convite VIP →</button>
+                </form>
+                <div id="vi-output" class="link-output" style="display:none;"></div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-bottom:0;">
+              <div class="card-head">
+                <div class="card-title">💸 Fila de Saques Pix Solicitados</div>
+                <span class="muted">Baixa automática no extrato</span>
+              </div>
+              <div class="card-body" id="payout-requests-list">
+                <div class="empty-state" style="padding:18px;">Nenhum saque Pix pendente no momento.</div>
+              </div>
+            </div>
+          </div>
+          <div style="height:18px;"></div>
+
           <!-- Partner Portal Requests Queue -->
           <div class="card">
             <div class="card-head">
@@ -519,6 +580,33 @@
         <section id="view-catalog" class="view-section" style="display:none;">
           <div class="card">
             <div class="card-head">
+              <div class="card-title">📦 Ajuste Rápido de Estoque em Tempo Real (Gestor da Loja)</div>
+              <span class="muted">Atualiza automaticamente Pronta-Entrega (24h), Base Lisa (3d) ou Pré-Compra (7-10d) na vitrine</span>
+            </div>
+            <div class="card-body">
+              <form class="form-grid-2" style="grid-template-columns:1.2fr 0.8fr 0.6fr auto;align-items:end;" onsubmit="saveInventoryOverride(event)">
+                <div class="field" style="margin-bottom:0;">
+                  <label>SKU ou Base Lisa *</label>
+                  <select id="inv-sku-select" required></select>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label>Tipo de Estoque</label>
+                  <select id="inv-kind" onchange="populateInventorySelector()">
+                    <option value="finished">Peça Estampada Pronta (24h)</option>
+                    <option value="blank">Base Lisa p/ Estampar (3 dias)</option>
+                  </select>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label>Nova Qtd.</label>
+                  <input id="inv-qty" type="number" min="0" value="1" required />
+                </div>
+                <button type="submit" class="btn btn-primary" id="inv-save-btn">Salvar Estoque →</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
               <div class="card-title">👕 Catálogo Oficial &amp; Estoque em Tempo Real</div>
               <span class="muted" id="catalog-meta">7 estampas oficiais</span>
             </div>
@@ -595,8 +683,164 @@
           </div>
         </section>
 
+        <!-- ==================== VIEW: BRAND & HUB /INDICA (GESTOR DA MARCA) ==================== -->
+        <section id="view-brand" class="view-section" style="display:none;">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Parceiros Éticos (/indica)</div>
+              <div class="kpi-val mono-gold" id="bm-partners">0</div>
+              <div class="kpi-sub">Aprovados e ativos na vitrine</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Leads Encaminhados (LGPD)</div>
+              <div class="kpi-val money-green" id="bm-referrals">0</div>
+              <div class="kpi-sub">Com consentimento registrado</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Canais GEO Ativos</div>
+              <div class="kpi-val">4</div>
+              <div class="kpi-sub"><a href="/blog" target="_blank" style="color:var(--sand);">/blog</a> · <a href="/manual" target="_blank" style="color:var(--sand);">/manual</a> · <a href="/indica" target="_blank" style="color:var(--sand);">/indica</a></div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">✦ Cadastrar Parceiro Auditado no Hub /indica</div>
+                <span class="muted">Apenas após aprovação moral + documental</span>
+              </div>
+              <div class="card-body">
+                <form onsubmit="saveIndicaPartner(event)">
+                  <div class="form-grid-2">
+                    <div class="field"><label>Nome do Parceiro / Entidade *</label><input id="ip-name" required placeholder="Ex: Dra. Helena Silva / Assoc. Flor da Vida" /></div>
+                    <div class="field">
+                      <label>Vertical *</label>
+                      <select id="ip-vertical">
+                        <option value="medico_prescritor">Médico Prescritor (CRM verificado)</option>
+                        <option value="associacao_pacientes">Associação de Pacientes</option>
+                        <option value="curso_educacao">Cursos &amp; Educação</option>
+                        <option value="ecossistema_servicos">Ecossistema (Advogado / Grow / Headshop)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-grid-2">
+                    <div class="field"><label>Credencial (CRM / CNPJ / OAB)</label><input id="ip-cred" placeholder="Ex: CRM/SP 123456" /></div>
+                    <div class="field"><label>Cidade / Atendimento</label><input id="ip-city" value="Brasil (Teleconsulta / Online)" /></div>
+                  </div>
+                  <div class="field"><label>Chamada Curta *</label><input id="ip-head" required placeholder="Ex: Acompanhamento médico individualizado em cannabis medicinal" /></div>
+                  <div class="form-grid-2">
+                    <div class="field"><label>URL de Destino (será rastreada c/ UTM) *</label><input id="ip-url" type="url" required placeholder="https://..." /></div>
+                    <div class="field"><label>WhatsApp Direto (opcional)</label><input id="ip-wa" placeholder="5511999999999" /></div>
+                  </div>
+                  <button type="submit" class="btn btn-primary" id="ip-btn">Publicar Parceiro no /indica →</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">🌿 Últimos Encaminhamentos (/indica · LGPD)</div>
+                <a href="/indica" target="_blank" class="btn btn-xs">Ver Página /indica ↗</a>
+              </div>
+              <div class="card-body" id="indica-referrals-list">
+                <div class="empty-state" style="padding:18px;">Nenhum encaminhamento registrado ainda.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Parceiros Cadastrados no /indica</div></div>
+            <div class="card-body" id="indica-partners-list"></div>
+          </div>
+        </section>
+
+        <!-- ==================== VIEW: COMMS AUTOMATION ==================== -->
+        <section id="view-comms" class="view-section" style="display:none;">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">⚡ Canais de Automação de Comunicação</div>
+                <button class="btn btn-xs btn-sand" onclick="testCommDispatch()">Disparar Teste Agora ⚡</button>
+              </div>
+              <div class="card-body">
+                <p class="muted" style="margin-bottom:14px;">Conecte seus canais operacionais e transacionais. Cada novo pedido, mudança de status/rastreio, candidatura de afiliado, saque Pix, lead B2B ou encaminhamento <code>/indica</code> dispara automaticamente.</p>
+                <form onsubmit="saveCommSettings(event)">
+                  <div class="form-grid-2">
+                    <div class="field">
+                      <label>Telegram Bot Token <span id="st-tg" class="muted"></span></label>
+                      <input id="cs-tg-token" type="password" placeholder="123456:ABC-DEF... (deixe vazio p/ manter)" />
+                    </div>
+                    <div class="field">
+                      <label>Telegram Chat ID (Grupo/Gestor)</label>
+                      <input id="cs-tg-chat" placeholder="Ex: -1001234567890" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Discord Webhook URL (Canal de Operações) <span id="st-dc" class="muted"></span></label>
+                    <input id="cs-discord" type="password" placeholder="https://discord.com/api/webhooks/... (deixe vazio p/ manter)" />
+                  </div>
+                  <div class="form-grid-2">
+                    <div class="field">
+                      <label>WhatsApp API Webhook (Evolution / Z-API / n8n) <span id="st-wa" class="muted"></span></label>
+                      <input id="cs-wa-url" placeholder="https://sua-api/message/sendText/..." />
+                    </div>
+                    <div class="field">
+                      <label>Token da API WhatsApp</label>
+                      <input id="cs-wa-tok" type="password" placeholder="Bearer / apikey (opcional)" />
+                    </div>
+                  </div>
+                  <div class="form-grid-2">
+                    <div class="field">
+                      <label>Resend API Key (E-mail Transacional) <span id="st-em" class="muted"></span></label>
+                      <input id="cs-resend" type="password" placeholder="re_... (deixe vazio p/ manter)" />
+                    </div>
+                    <div class="field">
+                      <label>E-mail de Alertas da Gestão</label>
+                      <input id="cs-admin-email" type="email" value="edubovoline@gmail.com" />
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary" id="cs-save-btn">Salvar Canais de Automação →</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">📡 Fila &amp; Histórico de Disparos Automáticos</div>
+                <span class="muted">Últimos 60 eventos</span>
+              </div>
+              <div class="card-body" id="comm-logs-list" style="max-height:520px;overflow-y:auto;">
+                <div class="empty-state">Carregando histórico de comunicações...</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- ==================== VIEW: SETTINGS ==================== -->
         <section id="view-settings" class="view-section" style="display:none;">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">👥 Equipe &amp; Modalidades de Gestores (RBAC)</div>
+              <span class="muted">Cadastre o e-mail de cada gestor para liberar apenas os módulos da sua função</span>
+            </div>
+            <div class="card-body">
+              <form class="form-grid-2" style="grid-template-columns:1fr 1fr 1fr auto;align-items:end;margin-bottom:18px;" onsubmit="addTeamMember(event)">
+                <div class="field" style="margin-bottom:0;"><label>Nome *</label><input id="tm-name" required placeholder="Ex: Lucas Operação" /></div>
+                <div class="field" style="margin-bottom:0;"><label>E-mail (mesmo do login) *</label><input id="tm-email" type="email" required placeholder="lucas@tiwshirts.space" /></div>
+                <div class="field" style="margin-bottom:0;">
+                  <label>Modalidade de Gestor *</label>
+                  <select id="tm-role">
+                    <option value="gestor_loja">Gestor da Loja (Pedidos, Estoque &amp; B2B)</option>
+                    <option value="gestor_parceiros">Gestor de Parceiros (Afiliados &amp; Saques)</option>
+                    <option value="gestor_marca">Gestor da Marca (Blog, Criativos &amp; /indica)</option>
+                    <option value="admin">Admin Geral (Acesso Total 360°)</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary" id="tm-btn">+ Liberar Gestor</button>
+              </form>
+              <div id="team-members-list" class="action-list"></div>
+            </div>
+          </div>
           <div class="grid-equal">
             <div class="card">
               <div class="card-head">
@@ -801,6 +1045,14 @@
     let ordersCache = [];
     let couponsCache = [];
     let partnerRequestsCache = [];
+    let partnerInvitesCache = [];
+    let payoutRequestsCache = [];
+    let indicaPartnersCache = [];
+    let indicaReferralsCache = [];
+    let commConfigCache = {};
+    let commLogsCache = [];
+    let teamCache = [];
+    let staffProfile = { role: 'admin', name: 'Admin', email: '' };
     let b2bCache = [];
     let catalogCache = [];
     let orderStatusFilter = 'all';
@@ -819,12 +1071,14 @@
     };
 
     const VIEW_META = {
-      overview: ['Visão Geral', 'Resumo financeiro, pendências do dia e saúde da operação'],
-      orders: ['Pedidos D2C Varejo', 'Acompanhe pagamentos, produção, rastreio e mensagens no WhatsApp'],
-      coupons: ['Afiliados & Cupons 10+10', 'Aprove solicitações do portal /parceiros, gere links e quite comissões'],
-      catalog: ['Catálogo & Estoque', 'As 7 estampas oficiais com inventário real de pronta-entrega e bases lisas'],
-      b2b: ['Atacado B2B', 'Calculadora de pedidos (múltiplos de 12) e leads de lojistas interessados'],
-      settings: ['Conta & Atalhos', 'Segurança da conta admin e links rápidos da infraestrutura'],
+      overview: ['Visão Geral 360°', 'Resumo financeiro, pendências do dia e pulso de toda a operação'],
+      orders: ['Gestor da Loja · Pedidos D2C', 'Pagamentos, produção, Potes Herméticos, Melhor Envio e disparo automático de rastreio'],
+      coupons: ['Gestor de Parceiros · Afiliados & Saques', 'Convites VIP 1-clique, candidaturas sem fricção, tiers e pagamentos de comissão no Pix'],
+      catalog: ['Gestor da Loja · Estoque Vivo & Catálogo', 'Edição em tempo real de peças prontas (24h) e bases lisas (3 dias)'],
+      b2b: ['Gestor da Loja · Atacado B2B', 'Simulador múltiplos de 12 peças, cotação de caixa e funil comercial de lojistas'],
+      brand: ['Gestor da Marca · Editorial & Hub /indica', 'Curadoria ética de médicos/associações/cursos e encaminhamentos com consentimento LGPD'],
+      comms: ['Automação de Comunicação Omnichannel', 'Telegram Bot, Discord, WhatsApp API (Evolution/Z-API), Resend E-mail e fila auditável'],
+      settings: ['Equipe, Perfis de Acesso & Conta', 'Controle de gestores por função (Marca, Loja, Parceiros, Admin) e atalhos'],
     };
 
     const STATUS_MAP = {
@@ -1070,27 +1324,50 @@
       const btn = document.getElementById('refresh-btn');
       btn.disabled = true; btn.textContent = 'Atualizando...';
       try {
-        const [cpRes, ordRes, b2bRes, prRes, catResp] = await Promise.all([
-          apiFetch('/api/coupons'),
-          apiFetch('/api/orders'),
-          apiFetch('/api/b2b'),
-          apiFetch('/api/partner-requests?scope=admin').catch(() => ({ ok: false, data: { requests: [] } })),
+        const [meRes, cpRes, ordRes, b2bRes, prRes, catResp, indRes, cmRes, tmRes] = await Promise.all([
+          apiFetch('/api/ops?scope=me').catch(() => ({ ok: false, data: {} })),
+          apiFetch('/api/coupons').catch(() => ({ ok: false, data: { coupons: [] } })),
+          apiFetch('/api/orders').catch(() => ({ ok: false, data: { orders: [] } })),
+          apiFetch('/api/b2b').catch(() => ({ ok: false, data: { leads: [] } })),
+          apiFetch('/api/partner-requests?scope=admin').catch(() => ({ ok: false, data: { requests: [], invites: [], payouts: [] } })),
           fetch('/api/catalog').then((r) => r.json()).catch(() => ({ products: [] })),
+          apiFetch('/api/ops?scope=indica').catch(() => ({ ok: false, data: { partners: [], referrals: [] } })),
+          apiFetch('/api/ops?scope=comms').catch(() => ({ ok: false, data: { config: {}, logs: [] } })),
+          apiFetch('/api/ops?scope=team').catch(() => ({ ok: false, data: { members: [] } })),
         ]);
+
+        if (meRes.ok && meRes.data && meRes.data.staff) {
+          staffProfile = meRes.data.staff;
+          applyStaffRoleUI();
+        }
+
         couponsCache = (cpRes.data && cpRes.data.coupons) || [];
         ordersCache = (ordRes.data && ordRes.data.orders) || [];
         b2bCache = (b2bRes.data && b2bRes.data.leads) || [];
         partnerRequestsCache = (prRes.data && prRes.data.requests) || [];
+        partnerInvitesCache = (prRes.data && prRes.data.invites) || [];
+        payoutRequestsCache = (prRes.data && prRes.data.payouts) || [];
         catalogCache = (catResp && catResp.products) || [];
+        window.__blankInventoryMap = (catResp && catResp.blank_inventory) || {};
+        indicaPartnersCache = (indRes.data && indRes.data.partners) || [];
+        indicaReferralsCache = (indRes.data && indRes.data.referrals) || [];
+        commConfigCache = (cmRes.data && cmRes.data.config) || {};
+        commLogsCache = (cmRes.data && cmRes.data.logs) || [];
+        teamCache = (tmRes.data && tmRes.data.members) || [];
 
         renderOverview();
         renderOrders();
         renderPartnerRequests();
+        renderPayoutRequests();
         renderCoupons();
         populateLinkBuilder();
+        populateInventorySelector();
         renderCatalog();
         renderB2B();
         updateWholesaleCalc();
+        renderBrandHub();
+        renderCommsHub();
+        renderTeamMembers();
         if (activeOrderId) {
           const stillExists = ordersCache.find((o) => o.order_id === activeOrderId);
           if (stillExists) renderOrderDrawer(stillExists);
@@ -1388,9 +1665,9 @@
     function sendTrackingWa(orderId, name, phone) {
       const code = (document.getElementById('od-tracking').value || '').trim();
       if (!code) { toast('Digite o código de rastreio primeiro.', 'warn'); return; }
-      const text = `Fala ${name}! Seu pedido *${orderId}* da TiwShirts foi despachado.\n\nCódigo de rastreio: *${code}*\nAcompanhe pelos Correios/transportadora. Valeu por fortalecer a cena!`;
+      const text = `Fala ${name}! Seu pedido *${orderId}* da TiwShirts foi despachado.\n\nCódigo de rastreio: *${code}*\nAcompanhe em https://tiwshirts.space/minha-conta?pedido=${encodeURIComponent(orderId)} ou pela transportadora. Valeu por fortalecer a cena!`;
       window.open((phone ? `https://wa.me/${phone}` : 'https://wa.me/') + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
-      updateOrderStatus(orderId, 'enviado');
+      updateOrderFields(orderId, { status: 'enviado', tracking_code: code });
     }
 
     async function quoteOrderMelhorEnvio(orderId) {
@@ -1979,6 +2256,345 @@
         ['Protocolo', 'Data', 'Responsavel', 'Loja', 'Cidade', 'Email', 'WhatsApp'],
         b2bCache.map((l) => [l.protocol, fmtDate(l.created_at), l.nome, l.loja, l.cidade, l.email, l.zap])
       );
+    }
+
+    /* ================= MULTI-ROLE, VIP INVITES, PAYOUTS, INVENTORY, BRAND & COMMS ================= */
+    const ROLE_LABELS = {
+      admin: '● ADMIN GERAL 360°',
+      gestor_loja: '● GESTOR DA LOJA',
+      gestor_parceiros: '● GESTOR DE PARCEIROS',
+      gestor_marca: '● GESTOR DA MARCA',
+    };
+
+    function applyStaffRoleUI() {
+      const role = (staffProfile && staffProfile.role) || 'admin';
+      const roleEl = document.getElementById('admin-user-role');
+      if (roleEl) roleEl.textContent = ROLE_LABELS[role] || ('● ' + role.toUpperCase());
+      document.querySelectorAll('.sidebar-nav .nav-item').forEach((btn) => {
+        const allowed = (btn.dataset.roles || 'admin').split(',');
+        btn.style.display = (role === 'admin' || allowed.includes(role)) ? 'flex' : 'none';
+      });
+    }
+
+    async function createVipInvite(e) {
+      e.preventDefault();
+      const btn = document.getElementById('vi-btn');
+      const out = document.getElementById('vi-output');
+      btn.disabled = true; btn.textContent = 'Gerando convite...';
+      try {
+        const res = await apiFetch('/api/partner-requests', {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'create_invite',
+            partner_name: document.getElementById('vi-name').value.trim(),
+            suggested_code: document.getElementById('vi-code').value.trim().toUpperCase(),
+            partner_whatsapp: document.getElementById('vi-wa').value.trim(),
+            tier: document.getElementById('vi-tier').value,
+            auto_approve: true,
+          }),
+        });
+        if (!res.ok || !res.data.success) {
+          toast((res.data && res.data.error) || 'Não foi possível gerar convite.', 'err');
+          return;
+        }
+        const url = res.data.invite_url;
+        const phone = cleanPhoneDigits(document.getElementById('vi-wa').value);
+        const waMsg = encodeURIComponent(
+          `Salve! Aqui é da TiwShirts. Liberamos um convite oficial do nosso Programa de Parceiros pra você escolher seu cupom e receber comissão no Pix:\n\n${url}`
+        );
+        out.style.display = 'flex';
+        out.innerHTML = `
+          <code>${esc(url)}</code>
+          <div style="display:flex;gap:6px;">
+            <button type="button" class="btn btn-sand btn-xs" onclick="copyText('${esc(url)}', 'Link de Convite VIP copiado!')">Copiar Convite</button>
+            <a href="${phone ? 'https://wa.me/' + phone : 'https://wa.me/'}?text=${waMsg}" target="_blank" rel="noopener" class="btn btn-primary btn-xs">Mandar no WhatsApp ↗</a>
+          </div>
+        `;
+        toast('Convite VIP gerado!');
+      } catch (err) { toast(err.message, 'err'); }
+      finally { btn.disabled = false; btn.textContent = 'Gerar Link de Convite VIP →'; }
+    }
+
+    function renderPayoutRequests() {
+      const box = document.getElementById('payout-requests-list');
+      if (!box) return;
+      const pend = payoutRequestsCache.filter((p) => p.status === 'solicitado');
+      if (!pend.length) {
+        box.innerHTML = '<div class="empty-state" style="padding:18px;">Nenhum saque Pix pendente no momento.</div>';
+        return;
+      }
+      box.innerHTML = pend.map((p) => `
+        <div class="action-item">
+          <div class="action-item-info">
+            <div class="action-item-title"><span class="mono-gold">${esc(p.coupon_code)}</span> · <span class="money-warn">${fmtMoney(p.amount)}</span></div>
+            <div class="action-item-sub">${esc(p.partner_email)} · Pix: <code>${esc(p.pix_key)}</code></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-xs" onclick="copyText('${esc(p.pix_key)}', 'Chave Pix copiada!')">Copiar Pix</button>
+            <button class="btn btn-primary btn-xs" onclick="payPayoutRequest(${p.id}, '${esc(p.coupon_code)}', ${p.amount})">Confirmar Pix Pago</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function payPayoutRequest(id, code, amt) {
+      const ok = await askConfirm('Confirmar pagamento Pix?', `Marcar o saque de ${fmtMoney(amt)} do cupom ${code} como PAGO e avisar o parceiro automaticamente?`);
+      if (!ok) return;
+      try {
+        const res = await apiFetch('/api/partner-requests', {
+          method: 'PATCH',
+          body: JSON.stringify({ id, action: 'pay_payout' }),
+        });
+        if (!res.ok) { toast((res.data && res.data.error) || 'Erro ao dar baixa.', 'err'); return; }
+        toast('Saque Pix baixado e parceiro notificado!');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+    }
+
+    function populateInventorySelector() {
+      const sel = document.getElementById('inv-sku-select');
+      const kind = document.getElementById('inv-kind') ? document.getElementById('inv-kind').value : 'finished';
+      if (!sel) return;
+      if (kind === 'blank') {
+        const blankCombos = [
+          'pf:preto:P','pf:preto:M','pf:preto:G','pf:preto:GG',
+          'pf:branco:P','pf:branco:M','pf:branco:G','pf:branco:GG',
+          'casca:preto:P','casca:preto:M','casca:preto:G','casca:preto:GG',
+          'casca:offwhite:P','casca:offwhite:M','casca:offwhite:G','casca:offwhite:GG',
+          'espacoso:preto:G1','espacoso:preto:G2','espacoso:preto:G3',
+          'espacoso:branco:G1','espacoso:branco:G2','espacoso:branco:G3',
+          'espacoso:offwhite:G1','espacoso:offwhite:G2','espacoso:offwhite:G3',
+        ];
+        const bmap = window.__blankInventoryMap || {};
+        sel.innerHTML = blankCombos.map((k) => `<option value="blank:${k}">Base Lisa ${k} (Atual: ${Number(bmap[k] || 0)})</option>`).join('');
+      } else {
+        const opts = [];
+        catalogCache.forEach((p) => {
+          (p.options || []).forEach((o) => {
+            (o.sizes || []).forEach((s) => {
+              opts.push(`<option value="${esc(s.sku)}">${esc(p.name)} · ${esc(o.line_name.replace('Linha ',''))} ${esc(o.color_name)} ${esc(s.size)} (Atual: ${s.finished_qty})</option>`);
+            });
+          });
+        });
+        sel.innerHTML = opts.join('');
+      }
+    }
+
+    async function saveInventoryOverride(e) {
+      e.preventDefault();
+      const key = document.getElementById('inv-sku-select').value;
+      const kind = document.getElementById('inv-kind').value;
+      const qty = Math.max(0, Number(document.getElementById('inv-qty').value || 0));
+      const btn = document.getElementById('inv-save-btn');
+      btn.disabled = true;
+      try {
+        const res = await apiFetch('/api/ops?scope=inventory', {
+          method: 'PATCH',
+          body: JSON.stringify({ key, kind, qty }),
+        });
+        if (!res.ok || !res.data.success) {
+          toast((res.data && res.data.error) || 'Erro ao atualizar estoque.', 'err');
+          return;
+        }
+        toast('Estoque atualizado na loja ao vivo!');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+      finally { btn.disabled = false; }
+    }
+
+    function renderBrandHub() {
+      const bp = document.getElementById('bm-partners');
+      const br = document.getElementById('bm-referrals');
+      const nb = document.getElementById('nb-indica');
+      if (bp) bp.textContent = indicaPartnersCache.filter((p) => p.is_active).length;
+      if (br) br.textContent = indicaReferralsCache.length;
+      if (nb) nb.textContent = indicaReferralsCache.length;
+
+      const refEl = document.getElementById('indica-referrals-list');
+      if (refEl) {
+        refEl.innerHTML = indicaReferralsCache.length
+          ? indicaReferralsCache.slice(0, 15).map((r) => `
+              <div class="action-item">
+                <div class="action-item-info">
+                  <div class="action-item-title"><span class="mono-gold">${esc(r.protocol)}</span> · ${esc(r.user_name)} <span class="badge b-paid">${esc(r.vertical)}</span></div>
+                  <div class="action-item-sub">Zap: ${esc(r.user_whatsapp)} · "${esc(r.intent_summary)}"</div>
+                </div>
+                <a href="https://wa.me/${cleanPhoneDigits(r.user_whatsapp)}" target="_blank" class="btn btn-xs btn-sand">WhatsApp ↗</a>
+              </div>
+            `).join('')
+          : '<div class="empty-state" style="padding:18px;">Nenhum encaminhamento /indica registrado ainda.</div>';
+      }
+
+      const pEl = document.getElementById('indica-partners-list');
+      if (pEl) {
+        pEl.innerHTML = indicaPartnersCache.length
+          ? `<div class="action-list">` + indicaPartnersCache.map((p) => `
+              <div class="action-item">
+                <div class="action-item-info">
+                  <div class="action-item-title">${esc(p.name)} <span class="badge ${p.is_active ? 'b-paid' : 'b-muted'}">${p.is_active ? 'Ativo' : 'Pausado'}</span></div>
+                  <div class="action-item-sub">${esc(p.vertical)} · ${esc(p.credentials || '')} · ${esc(p.destination_url)}</div>
+                </div>
+                <button class="btn btn-xs" onclick="toggleIndicaPartner('${esc(p.id)}', ${!p.is_active})">${p.is_active ? 'Pausar' : 'Ativar'}</button>
+              </div>
+            `).join('') + `</div>`
+          : '<div class="empty-state" style="padding:18px;">Nenhum parceiro publicado ainda. Use o formulário acima após rodar a curadoria ética.</div>';
+      }
+    }
+
+    async function saveIndicaPartner(e) {
+      e.preventDefault();
+      const btn = document.getElementById('ip-btn');
+      btn.disabled = true;
+      try {
+        const res = await apiFetch('/api/ops?scope=indica', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: document.getElementById('ip-name').value.trim(),
+            vertical: document.getElementById('ip-vertical').value,
+            credentials: document.getElementById('ip-cred').value.trim(),
+            city_uf: document.getElementById('ip-city').value.trim(),
+            headline: document.getElementById('ip-head').value.trim(),
+            description: document.getElementById('ip-head').value.trim(),
+            destination_url: document.getElementById('ip-url').value.trim(),
+            whatsapp: document.getElementById('ip-wa').value.trim(),
+          }),
+        });
+        if (!res.ok) { toast((res.data && res.data.error) || 'Erro ao publicar parceiro.', 'err'); return; }
+        e.target.reset();
+        toast('Parceiro publicado no Hub /indica!');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+      finally { btn.disabled = false; }
+    }
+
+    async function toggleIndicaPartner(id, next) {
+      await apiFetch('/api/ops?scope=indica', { method: 'PATCH', body: JSON.stringify({ id, is_active: next }) });
+      toast(next ? 'Parceiro ativado!' : 'Parceiro pausado.');
+      await loadAllData();
+    }
+
+    function renderCommsHub() {
+      const cfg = commConfigCache || {};
+      const setSt = (id, ok) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = ok ? '<span style="color:var(--green);">● CONECTADO</span>' : '○ não configurado';
+      };
+      setSt('st-tg', cfg.telegram_configured);
+      setSt('st-dc', cfg.discord_configured);
+      setSt('st-wa', cfg.whatsapp_api_configured);
+      setSt('st-em', cfg.email_configured);
+
+      if (cfg.telegram_chat_id && !document.getElementById('cs-tg-chat').value) document.getElementById('cs-tg-chat').value = cfg.telegram_chat_id;
+      if (cfg.whatsapp_webhook_url && !document.getElementById('cs-wa-url').value) document.getElementById('cs-wa-url').value = cfg.whatsapp_webhook_url;
+      if (cfg.notify_admin_email) document.getElementById('cs-admin-email').value = cfg.notify_admin_email;
+
+      const listEl = document.getElementById('comm-logs-list');
+      if (!listEl) return;
+      if (!commLogsCache.length) {
+        listEl.innerHTML = '<div class="empty-state" style="padding:20px;">Os disparos automáticos (pedidos, afiliados, B2B e /indica) aparecerão aqui com horário, canal e link 1-clique.</div>';
+        return;
+      }
+      listEl.innerHTML = `<div class="action-list">` + commLogsCache.map((l) => {
+        const waUrl = l.metadata && l.metadata.wa_url;
+        const stCls = l.status === 'sent' ? 'b-paid' : (l.status === 'failed' ? 'b-cancel' : 'b-pending');
+        return `<div class="action-item">
+          <div class="action-item-info">
+            <div class="action-item-title">
+              <span class="mono-gold">${esc(l.event_type)}</span>
+              <span class="badge b-muted">${esc(l.channel)}</span>
+              <span class="badge ${stCls}">${esc(l.status)}</span>
+            </div>
+            <div class="action-item-sub">${esc(fmtDate(l.created_at))} · Para: ${esc(l.recipient || 'equipe')} · ${esc((l.message_preview || '').slice(0, 110))}</div>
+          </div>
+          ${waUrl ? `<a href="${esc(waUrl)}" target="_blank" rel="noopener" class="btn btn-xs btn-sand">Enviar WhatsApp ↗</a>` : ''}
+        </div>`;
+      }).join('') + `</div>`;
+    }
+
+    async function saveCommSettings(e) {
+      e.preventDefault();
+      const btn = document.getElementById('cs-save-btn');
+      btn.disabled = true;
+      const body = {
+        telegram_chat_id: document.getElementById('cs-tg-chat').value.trim(),
+        whatsapp_webhook_url: document.getElementById('cs-wa-url').value.trim(),
+        notify_admin_email: document.getElementById('cs-admin-email').value.trim(),
+      };
+      const tgTok = document.getElementById('cs-tg-token').value.trim();
+      const dcUrl = document.getElementById('cs-discord').value.trim();
+      const waTok = document.getElementById('cs-wa-tok').value.trim();
+      const rsKey = document.getElementById('cs-resend').value.trim();
+      if (tgTok) body.telegram_bot_token = tgTok;
+      if (dcUrl) body.discord_webhook_url = dcUrl;
+      if (waTok) body.whatsapp_webhook_token = waTok;
+      if (rsKey) body.resend_api_key = rsKey;
+
+      try {
+        const res = await apiFetch('/api/ops?scope=comms', { method: 'PUT', body: JSON.stringify(body) });
+        if (!res.ok) { toast((res.data && res.data.error) || 'Erro ao salvar canais.', 'err'); return; }
+        toast('Canais de automação salvos!');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+      finally { btn.disabled = false; }
+    }
+
+    async function testCommDispatch() {
+      try {
+        const res = await apiFetch('/api/ops?scope=comms', {
+          method: 'POST',
+          body: JSON.stringify({ event_type: 'system.test', subject: 'Teste Oficial · TiwShirts Automação' }),
+        });
+        if (!res.ok) { toast((res.data && res.data.error) || 'Erro no teste.', 'err'); return; }
+        toast('Disparo de teste enviado para os canais ativos!');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+    }
+
+    function renderTeamMembers() {
+      const box = document.getElementById('team-members-list');
+      if (!box) return;
+      if (!teamCache.length) {
+        box.innerHTML = '<div class="muted">Apenas o Admin principal cadastrado.</div>';
+        return;
+      }
+      box.innerHTML = teamCache.map((m) => `
+        <div class="action-item">
+          <div class="action-item-info">
+            <div class="action-item-title">${esc(m.name)} <span class="badge b-paid">${esc(m.role)}</span></div>
+            <div class="action-item-sub">${esc(m.email)}</div>
+          </div>
+          ${m.email !== 'edubovoline@gmail.com' ? `<button class="btn btn-danger btn-xs" onclick="removeTeamMember('${esc(m.email)}')">Remover</button>` : '<span class="badge b-muted">Proprietário</span>'}
+        </div>
+      `).join('');
+    }
+
+    async function addTeamMember(e) {
+      e.preventDefault();
+      const btn = document.getElementById('tm-btn');
+      btn.disabled = true;
+      try {
+        const res = await apiFetch('/api/ops?scope=team', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: document.getElementById('tm-name').value.trim(),
+            email: document.getElementById('tm-email').value.trim().toLowerCase(),
+            role: document.getElementById('tm-role').value,
+          }),
+        });
+        if (!res.ok) { toast((res.data && res.data.error) || 'Erro ao adicionar gestor.', 'err'); return; }
+        e.target.reset();
+        toast('Gestor liberado! Basta ele criar conta ou entrar em /admin.');
+        await loadAllData();
+      } catch (err) { toast(err.message, 'err'); }
+      finally { btn.disabled = false; }
+    }
+
+    async function removeTeamMember(email) {
+      const ok = await askConfirm('Remover acesso de ' + email + '?', 'Este gestor perderá acesso imediato à Central.', true);
+      if (!ok) return;
+      await apiFetch('/api/ops?scope=team&email=' + encodeURIComponent(email), { method: 'DELETE' });
+      toast('Gestor removido.');
+      await loadAllData();
     }
 
     /* ================= SHORTCUTS & INIT ================= */

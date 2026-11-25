@@ -14,6 +14,7 @@ const {
   fetchValidCoupon,
 } = require('./_supabase');
 const { quoteShippingOptions } = require('./shipping');
+const { dispatchCommEvent } = require('./_comms');
 
 const LINE_PRICES = {
   pf: 139.0,
@@ -213,11 +214,17 @@ module.exports = async (req, res) => {
     }
     try {
       const body = parseBody(req);
-      const { order_id, status, commission_status } = body;
+      const { order_id, status, commission_status, tracking_code } = body;
       if (!order_id) return res.status(400).json({ success: false, error: 'order_id obrigatório' });
 
       const patchData = {};
       if (status) patchData.status = status;
+      if (tracking_code !== undefined) {
+        patchData.tracking_code = String(tracking_code || '').trim() || null;
+        if (patchData.tracking_code && status === 'enviado') {
+          patchData.shipped_at = new Date().toISOString();
+        }
+      }
       if (status === 'cancelado') {
         patchData.commission_status = 'cancelado';
       } else if (commission_status) {
@@ -231,17 +238,51 @@ module.exports = async (req, res) => {
         return res.status(400).json({ success: false, error: 'Informe status ou commission_status.' });
       }
 
-      const updRes = await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(order_id)}`, {
+      let updRes = await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(order_id)}`, {
         method: 'PATCH',
-        headers: { ...headers, Prefer: 'return=minimal' },
+        headers: { ...headers, Prefer: 'return=representation' },
         body: patchData,
       });
+
+      if (!updRes.ok && isMissingTableError(updRes) && ('tracking_code' in patchData || 'shipped_at' in patchData)) {
+        delete patchData.tracking_code;
+        delete patchData.shipped_at;
+        updRes = await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(order_id)}`, {
+          method: 'PATCH',
+          headers: { ...headers, Prefer: 'return=representation' },
+          body: patchData,
+        });
+      }
 
       if (!updRes.ok) {
         return res.status(updRes.status).json({ success: false, error: 'Erro ao atualizar pedido.' });
       }
 
-      return res.status(200).json({ success: true, order_id, ...patchData });
+      const updatedOrder = Array.isArray(updRes.data) && updRes.data[0] ? updRes.data[0] : null;
+      let commResult = null;
+      if (updatedOrder && status && ['pago', 'producao', 'enviado'].includes(status)) {
+        const cust = updatedOrder.customer || {};
+        const evMap = { pago: 'order.paid', producao: 'order.producao', enviado: 'order.enviado' };
+        commResult = await dispatchCommEvent(
+          evMap[status],
+          {
+            subject: `Atualização do Pedido ${order_id} · TiwShirts`,
+            staffSummary: `📦 Pedido *${order_id}* movido para *${status.toUpperCase()}* (${cust.name || 'Cliente'})`,
+            recipientPhone: cust.phone,
+            recipientEmail: cust.email,
+            vars: {
+              name: cust.name || 'Cliente',
+              order_id,
+              total: 'R$ ' + Number(updatedOrder.total || 0).toFixed(2).replace('.', ','),
+              tracking_code: tracking_code || updatedOrder.tracking_code || 'em breve',
+              action_url: `https://tiwshirts.space/minha-conta?pedido=${encodeURIComponent(order_id)}`,
+            },
+          },
+          { headers }
+        );
+      }
+
+      return res.status(200).json({ success: true, order_id, ...patchData, comm: commResult });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }
@@ -474,6 +515,19 @@ module.exports = async (req, res) => {
         `Segue o comprovante de pagamento!`
     );
     const waUrl = `https://wa.me/${WHATSAPP_TIW}?text=${waPixText}`;
+
+    dispatchCommEvent('order.created', {
+      subject: `Recebemos seu pedido ${orderId} · TiwShirts`,
+      staffSummary: `🛒 *NOVO PEDIDO ${orderId}*: R$ ${total.toFixed(2).replace('.', ',')} (${String(payment_method || 'pix').toUpperCase()}) · ${customerData.name}${validCoupon ? ` · Cupom ${validCoupon.code}` : ''}`,
+      recipientPhone: customerData.phone,
+      recipientEmail: customerData.email,
+      vars: {
+        name: customerData.name || 'Cliente',
+        order_id: orderId,
+        total: 'R$ ' + total.toFixed(2).replace('.', ','),
+        action_url: checkoutUrl,
+      },
+    }).catch(() => {});
 
     return res.status(201).json({
       success: true,

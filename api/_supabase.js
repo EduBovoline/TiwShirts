@@ -1,4 +1,4 @@
-// Helper compartilhado para Supabase REST + validação de cupons (arquivo _* não vira rota na Vercel)
+// Helper compartilhado para Supabase REST, controle de papéis (RBAC) e validação de cupons
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://msschydwkaektxjlbmjc.supabase.co';
 const SUPABASE_KEY =
@@ -42,6 +42,19 @@ function adminHeaders(req, extra = {}) {
   };
 }
 
+function serviceOrAnonHeaders(extra = {}) {
+  const svc = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+  if (svc) {
+    return {
+      apikey: svc,
+      Authorization: `Bearer ${svc}`,
+      'Content-Type': 'application/json',
+      ...extra,
+    };
+  }
+  return anonHeaders(extra);
+}
+
 function parseBody(req) {
   if (!req || req.body == null) return {};
   if (typeof req.body === 'string') return JSON.parse(req.body || '{}');
@@ -68,43 +81,93 @@ async function sbFetch(path, { method = 'GET', headers, body } = {}) {
 
 function isMissingTableError(res) {
   const msg = typeof res.data === 'object' && res.data ? `${res.data.code || ''} ${res.data.message || ''}` : String(res.text || '');
-  return res.status === 404 || /PGRST205|42P01|does not exist|schema cache/i.test(msg);
+  return res.status === 404 || /PGRST205|42P01|42703|does not exist|schema cache/i.test(msg);
+}
+
+async function getStaffContext(req) {
+  const token = getBearerToken(req);
+  if (!token) return null;
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      method: 'GET',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` },
+    });
+    if (!resp.ok) return null;
+    const user = await resp.json();
+    if (!user || !user.id) return null;
+
+    const email = String(user.email || '').toLowerCase().trim();
+    const isSuperAdmin =
+      Boolean(user.app_metadata && user.app_metadata.role === 'admin') ||
+      email === 'edubovoline@gmail.com';
+
+    let role = isSuperAdmin ? 'admin' : null;
+    let memberName = (user.user_metadata && (user.user_metadata.name || user.user_metadata.partner_name)) || email;
+
+    if (!role && email) {
+      const tmRes = await sbFetch(
+        `/rest/v1/tiw_team_members?email=eq.${encodeURIComponent(email)}&active=eq.true&select=role,name&limit=1`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` } }
+      );
+      if (tmRes.ok && Array.isArray(tmRes.data) && tmRes.data[0]) {
+        role = tmRes.data[0].role;
+        memberName = tmRes.data[0].name || memberName;
+      }
+    }
+
+    return {
+      user,
+      token,
+      email,
+      name: memberName,
+      role, // 'admin' | 'gestor_marca' | 'gestor_loja' | 'gestor_parceiros' | null
+      isStaff: Boolean(role),
+      isAdmin: role === 'admin',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+  } catch {
+    return null;
+  }
 }
 
 function normalizeCouponCode(raw) {
-  return String(raw || '').trim().toUpperCase().replace(/\s+/g, '');
+  return String(raw || '').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '');
 }
 
 async function fetchValidCoupon(rawCode) {
   const code = normalizeCouponCode(rawCode);
   if (!code || !/^[A-Z0-9_-]{3,32}$/.test(code)) {
-    return { valid: false, message: 'Código de cupom inválido.' };
+    return { valid: false, message: 'Formato de cupom inválido.' };
   }
 
   const res = await sbFetch(
-    `/rest/v1/tiw_coupons?code=eq.${encodeURIComponent(code)}&select=id,code,partner_name,discount_pct,commission_pct,active,max_uses,uses_count,expires_at&limit=1`,
-    { headers: anonHeaders() }
+    `/rest/v1/tiw_coupons?code=eq.${encodeURIComponent(code)}&select=id,code,partner_name,discount_pct,commission_pct,active,max_uses,uses_count,expires_at&limit=1`
   );
 
   if (!res.ok) {
     if (isMissingTableError(res)) {
-      return { valid: false, setupRequired: true, message: 'Tabela de cupons ainda não inicializada no Supabase.' };
+      return {
+        valid: false,
+        setupRequired: true,
+        message: 'Tabela de cupons ainda não inicializada no Supabase.',
+      };
     }
-    return { valid: false, message: 'Não foi possível validar o cupom agora.' };
+    return { valid: false, message: 'Não foi possível validar o cupom no momento.' };
   }
 
   const row = Array.isArray(res.data) ? res.data[0] : null;
-  if (!row) {
-    return { valid: false, message: 'Cupom não encontrado ou inativo.' };
+  if (!row || !row.active) {
+    return { valid: false, message: 'Cupom inválido ou inativo.' };
   }
-  if (!row.active) {
-    return { valid: false, message: 'Este cupom está pausado no momento.' };
-  }
-  if (row.expires_at && new Date(row.expires_at) <= new Date()) {
-    return { valid: false, message: 'Este cupom expirou.' };
+  if (row.expires_at && new Date(row.expires_at).getTime() < Date.now()) {
+    return { valid: false, message: 'Este cupom já expirou.' };
   }
   if (row.max_uses != null && Number(row.uses_count || 0) >= Number(row.max_uses)) {
-    return { valid: false, message: 'Este cupom atingiu o limite de usos.' };
+    return { valid: false, message: 'Limite de usos deste cupom atingido.' };
   }
 
   return {
@@ -126,6 +189,9 @@ module.exports = {
   setCors,
   anonHeaders,
   adminHeaders,
+  serviceOrAnonHeaders,
+  getBearerToken,
+  getStaffContext,
   parseBody,
   sbFetch,
   isMissingTableError,

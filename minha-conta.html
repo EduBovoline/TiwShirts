@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central do Usuário · Pedidos, Lojistas, Afiliados e Gestores | TiwShirts</title>
+  <meta name="description" content="Acompanhe seu pedido TiwShirts em tempo real, consulte protocolos de atacado B2B, acesse o portal de afiliados 10+10, a curadoria /indica ou a central de gestores." />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070708;
+      --surface: #121215;
+      --surface-2: #18181c;
+      --border: rgba(255,255,255,0.09);
+      --border-strong: rgba(255,255,255,0.16);
+      --green: #4ade80;
+      --sand: #C5A880;
+      --warn: #f59e0b;
+      --blue: #60a5fa;
+      --text: #F4F4F5;
+      --dim: #A1A1AA;
+      --muted: #71717A;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.55; min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
+    .topbar {
+      position: sticky; top: 0; z-index: 30; background: rgba(7,7,8,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    }
+    .brand { font-family: var(--mono); font-weight: 800; letter-spacing: 0.1em; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+    .dot { width: 10px; height: 10px; border-radius: 3px; background: var(--green); box-shadow: 0 0 12px rgba(74,222,128,0.55); }
+    .nav { display: flex; gap: 16px; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; color: var(--dim); }
+    .nav a:hover { color: var(--green); }
+
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 42px 20px 72px; }
+    .eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sand); }
+    h1 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em; margin-top: 6px; }
+    .lead { color: var(--dim); max-width: 680px; margin-top: 10px; font-size: 0.98rem; }
+
+    .roles-grid { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+    .role-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px;
+      display: flex; flex-direction: column; gap: 8px; transition: .18s; cursor: pointer;
+    }
+    .role-card:hover, .role-card.active { border-color: var(--green); background: var(--surface-2); }
+    .role-tag { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; color: var(--sand); letter-spacing: 0.08em; }
+    .role-card h3 { font-size: 1rem; font-weight: 700; }
+    .role-card p { font-size: 0.84rem; color: var(--dim); }
+
+    .panel { margin-top: 26px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 14px; padding: 26px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; margin-top: 16px; }
+    @media (max-width: 720px) { .form-row { grid-template-columns: 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; color: var(--sand); letter-spacing: 0.06em; }
+    .field input { background: var(--bg); border: 1px solid var(--border-strong); color: var(--text); padding: 11px 13px; border-radius: 8px; font-size: 0.92rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 18px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+    .btn-green { background: var(--green); border-color: var(--green); color: #05150a; }
+    .btn-sand { background: rgba(197,168,128,0.14); border-color: rgba(197,168,128,0.4); color: var(--sand); }
+
+    .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 18px 0; }
+    @media (max-width: 640px) { .timeline { grid-template-columns: 1fr 1fr; } }
+    .tl-step { padding: 10px 12px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+    .tl-step.done { border-color: rgba(74,222,128,0.45); color: var(--green); background: rgba(74,222,128,0.08); }
+    .result-card { margin-top: 18px; padding: 18px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); display: none; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand"><span class="dot"></span> TIWSHIRTS · CENTRAL DE ACESSO</a>
+    <nav class="nav">
+      <a href="/">Loja</a>
+      <a href="/atacado">Atacado</a>
+      <a href="/blog">Blog</a>
+      <a href="/indica">Indica</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <span class="eyebrow">Ecossistema Multi-Usuário TiwShirts</span>
+    <h1>Selecione sua modalidade de acesso</h1>
+    <p class="lead">Cada perfil na TiwShirts tem um ambiente dedicado — do rastreio imediato de pedido à gestão de afiliados, atacado B2B, rede ética e comando da operação.</p>
+
+    <section class="roles-grid">
+      <div class="role-card active" id="rc-customer" onclick="selectRole('customer')">
+        <span class="role-tag">01 · Consumidor D2C</span>
+        <h3>Rastrear Meu Pedido</h3>
+        <p>Acompanhe pagamento, produção, Pote Hermético e código de rastreio em tempo real.</p>
+      </div>
+
+      <div class="role-card" id="rc-b2b" onclick="selectRole('b2b')">
+        <span class="role-tag">02 · Lojista Multimarcas</span>
+        <h3>Portal Atacado B2B</h3>
+        <p>Consulte seu protocolo B2B, cotação de caixa com 12 potes e reposição com 101% de margem.</p>
+      </div>
+
+      <a class="role-card" href="/parceiros">
+        <span class="role-tag">03 · Creator &amp; Parceiro</span>
+        <h3>Afiliados 10+10 →</h3>
+        <p>Solicite seu cupom sem fricção, baixe seu QR Code, veja o extrato e peça saque no Pix.</p>
+      </a>
+
+      <a class="role-card" href="/indica">
+        <span class="role-tag">04 · Saúde &amp; Educação</span>
+        <h3>Rede Ética /indica →</h3>
+        <p>Encaminhamento com consentimento LGPD ou submissão de médicos, associações e cursos.</p>
+      </a>
+
+      <a class="role-card" href="/admin">
+        <span class="role-tag">05 · Equipe Interna</span>
+        <h3>Central de Gestores →</h3>
+        <p>Ambientes dedicados para Gestor da Marca, Gestor da Loja, Gestor de Parceiros e Admin.</p>
+      </a>
+    </section>
+
+    <!-- PAINEL 1: RASTREIO DE PEDIDO D2C -->
+    <section id="panel-customer" class="panel">
+      <h2 style="font-size:1.25rem;">Consultar Pedido da Loja (D2C)</h2>
+      <p style="color:var(--dim);font-size:0.9rem;margin-top:4px;">Informe o código recebido na compra (ex: <code>TIW-XXXX-XXXX</code>) e os 4 últimos dígitos do seu WhatsApp ou CPF.</p>
+      <form class="form-row" onsubmit="lookupOrder(event)">
+        <div class="field">
+          <label for="lo-code">Código do Pedido *</label>
+          <input id="lo-code" required placeholder="Ex: TIW-ABCD-1234" style="font-family:var(--mono);text-transform:uppercase;" />
+        </div>
+        <div class="field">
+          <label for="lo-contact">Últimos 4 dígitos do WhatsApp ou CPF *</label>
+          <input id="lo-contact" required placeholder="Ex: 2083 ou seu e-mail" />
+        </div>
+        <button class="btn btn-green" type="submit" id="lo-btn">Consultar Agora →</button>
+      </form>
+      <div id="lo-result" class="result-card"></div>
+    </section>
+
+    <!-- PAINEL 2: CONSULTA DE PROTOCOLO B2B -->
+    <section id="panel-b2b" class="panel" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h2 style="font-size:1.25rem;">Área do Lojista B2B (Múltiplos de 12 Peças)</h2>
+          <p style="color:var(--dim);font-size:0.9rem;margin-top:4px;">Consulte o andamento do seu protocolo de credenciamento ou monte um novo lote.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="/atacado" class="btn btn-sand">Simulador de Margem (12/24/36 pç) →</a>
+          <a href="/assets/Lamina_Comercial_Atacado_TiwShirts.pdf" target="_blank" class="btn">Baixar Catálogo PDF ↗</a>
+        </div>
+      </div>
+      <form class="form-row" style="grid-template-columns:1fr auto;" onsubmit="lookupB2B(event)">
+        <div class="field">
+          <label for="lb2b-code">Protocolo B2B *</label>
+          <input id="lb2b-code" required placeholder="Ex: TIW-B2B-XXXXX" style="font-family:var(--mono);text-transform:uppercase;" />
+        </div>
+        <button class="btn btn-green" type="submit">Consultar Protocolo →</button>
+      </form>
+      <div id="lb2b-result" class="result-card"></div>
+    </section>
+  </main>
+
+  <script>
+    function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmtMoney(v) { return 'R$ ' + Number(v || 0).toFixed(2).replace('.', ','); }
+
+    function selectRole(r) {
+      document.getElementById('rc-customer').classList.toggle('active', r === 'customer');
+      document.getElementById('rc-b2b').classList.toggle('active', r === 'b2b');
+      document.getElementById('panel-customer').style.display = r === 'customer' ? 'block' : 'none';
+      document.getElementById('panel-b2b').style.display = r === 'b2b' ? 'block' : 'none';
+    }
+
+    async function lookupOrder(e) {
+      e.preventDefault();
+      const code = document.getElementById('lo-code').value.trim().toUpperCase();
+      const contact = document.getElementById('lo-contact').value.trim();
+      const box = document.getElementById('lo-result');
+      box.style.display = 'block';
+      box.innerHTML = 'Consultando pedido...';
+      try {
+        const r = await fetch(`/api/ops?scope=lookup&kind=order&code=${encodeURIComponent(code)}&contact=${encodeURIComponent(contact)}`);
+        const d = await r.json();
+        if (!r.ok || !d.success) {
+          box.innerHTML = `<span style="color:#f87171;">${esc(d.error || 'Pedido não localizado.')}</span>`;
+          return;
+        }
+        const o = d.order;
+        const stages = ['aguardando_pagamento', 'pago', 'producao', 'enviado'];
+        const idx = stages.indexOf(o.status);
+        const itemsHtml = (o.items || []).map((i) => `• ${i.qty}x ${esc(i.name)} (${esc(i.fit)}, ${esc(i.size)})`).join('<br>');
+
+        box.innerHTML = `
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <div><strong style="font-family:var(--mono);color:var(--sand);font-size:1.05rem;">${esc(o.order_id)}</strong> · Olá, ${esc(o.customer_first_name)}!</div>
+            <strong style="font-family:var(--mono);color:var(--green);">${fmtMoney(o.total)}</strong>
+          </div>
+          <div class="timeline">
+            <div class="tl-step ${idx >= 0 ? 'done' : ''}">1. Pedido Recebido</div>
+            <div class="tl-step ${idx >= 1 ? 'done' : ''}">2. Pago · Separando Pote</div>
+            <div class="tl-step ${idx >= 2 ? 'done' : ''}">3. Produção / Embalagem</div>
+            <div class="tl-step ${idx >= 3 ? 'done' : ''}">4. Despachado</div>
+          </div>
+          <div style="font-size:0.88rem;color:var(--dim);margin-bottom:10px;">${itemsHtml}</div>
+          ${o.tracking_code ? `<div style="padding:10px 12px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.35);border-radius:8px;margin-top:8px;">📦 <strong>Código de Rastreio:</strong> <code style="font-family:var(--mono);color:var(--green);">${esc(o.tracking_code)}</code></div>` : ''}
+          ${o.checkout_url ? `<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;"><a href="${esc(o.checkout_url)}" target="_blank" class="btn btn-green">Pagar c/ Cartão ou Pix (InfinitePay) ↗</a></div>` : ''}
+        `;
+      } catch (err) {
+        box.innerHTML = `<span style="color:#f87171;">Erro de conexão: ${esc(err.message)}</span>`;
+      }
+    }
+
+    async function lookupB2B(e) {
+      e.preventDefault();
+      const code = document.getElementById('lb2b-code').value.trim().toUpperCase();
+      const box = document.getElementById('lb2b-result');
+      box.style.display = 'block';
+      box.innerHTML = 'Consultando protocolo B2B...';
+      try {
+        const r = await fetch(`/api/ops?scope=lookup&kind=b2b&code=${encodeURIComponent(code)}`);
+        const d = await r.json();
+        if (!r.ok || !d.success) {
+          box.innerHTML = `<span style="color:#f87171;">${esc(d.error || 'Protocolo não encontrado.')}</span>`;
+          return;
+        }
+        const b = d.b2b;
+        box.innerHTML = `
+          <div><strong style="font-family:var(--mono);color:var(--sand);">${esc(b.protocol)}</strong> · ${esc(b.loja)} (${esc(b.cidade)})</div>
+          <div style="margin-top:6px;color:var(--green);font-family:var(--mono);font-size:0.85rem;">Status Comercial: ${esc((b.stage || 'em_analise').toUpperCase())}</div>
+        `;
+      } catch (err) {
+        box.innerHTML = `<span style="color:#f87171;">${esc(err.message)}</span>`;
+      }
+    }
+
+    const qp = new URLSearchParams(window.location.search);
+    if (qp.get('pedido')) {
+      document.getElementById('lo-code').value = qp.get('pedido').toUpperCase();
+    }
+  </script>
+</body>
+</html>

@@ -13,6 +13,7 @@ const {
   sbFetch,
   isMissingTableError,
 } = require('./_supabase');
+const { dispatchCommEvent } = require('./_comms');
 
 const JEV_URL = 'https://api.typesafe.ai/v1/systemone';
 
@@ -273,6 +274,15 @@ module.exports = async (req, res) => {
     );
 
     const waTarget = (matchedPartner && matchedPartner.whatsapp) ? matchedPartner.whatsapp.replace(/\D/g, '') : WHATSAPP_TIW;
+
+    dispatchCommEvent('indica.routed', {
+      subject: `Novo encaminhamento /indica · ${protocol}`,
+      staffSummary: `🌿 *LEAD HUB /INDICA* (${VERTICAL_LABELS[finalVertical] || finalVertical}): ${userName} (${userWhatsapp}) · "${intentSummary.slice(0, 120)}"`,
+      recipientPhone: userWhatsapp,
+      recipientEmail: userEmail,
+      defaultMessage: `Olá ${userName}! Registramos sua solicitação no TiwShirts Indica (Protocolo *${protocol}*) com consentimento LGPD.`,
+      vars: { name: userName, protocol },
+    }).catch(() => {});
 
     return res.status(201).json({
       success: true,

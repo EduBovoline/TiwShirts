@@ -3,7 +3,9 @@
   "rewrites": [
     { "source": "/manual", "destination": "/manual.html" },
     { "source": "/manualdousuario-cannabis", "destination": "/manual.html" },
-    { "source": "/manualdousuario-cannabis.html", "destination": "/manual.html" }
+    { "source": "/manualdousuario-cannabis.html", "destination": "/manual.html" },
+    { "source": "/rastreio", "destination": "/minha-conta.html" },
+    { "source": "/minha-conta", "destination": "/minha-conta.html" }
   ],
   "headers": [
     {

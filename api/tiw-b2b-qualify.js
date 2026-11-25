@@ -13,6 +13,7 @@ const {
   sbFetch,
 } = require('./_supabase');
 const { quoteShippingOptions } = require('./shipping');
+const { dispatchCommEvent } = require('./_comms');
 
 const JEV_URL = 'https://api.typesafe.ai/v1/systemone';
 
@@ -245,6 +246,21 @@ module.exports = async (req, res) => {
         `*Total Atacado:* R$ ${totalB2B.toFixed(2).replace('.', ',')} (revenda sugerida R$ ${totalD2C.toFixed(2).replace('.', ',')})${shipLine}\n\n` +
         `Quero escolher as estampas e tamanhos da grade livre!`
     );
+
+    dispatchCommEvent('b2b.qualified', {
+      subject: `Novo Lead Atacado B2B · ${loja} (${protocol})`,
+      staffSummary: `▣ *LEAD ATACADO B2B* (${jevResult.tier}): *${loja}* (${cidade}) · ${totalQty} peças = R$ ${totalB2B.toFixed(2).replace('.', ',')} · Resp: ${nome} (${zap})`,
+      recipientPhone: zap,
+      recipientEmail: email,
+      vars: {
+        name: nome,
+        loja,
+        protocol,
+        qty: totalQty,
+        total: 'R$ ' + totalB2B.toFixed(2).replace('.', ','),
+        action_url: 'https://tiwshirts.space/assets/Lamina_Comercial_Atacado_TiwShirts.pdf',
+      },
+    }).catch(() => {});
 
     return res.status(201).json({
       success: true,
