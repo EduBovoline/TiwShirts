@@ -117,6 +117,66 @@ module.exports = async (req, res) => {
     }
 
     // =========================================================================
+    // 1B. RESOLVE HOME (Roteamento automático pós-login para a área do usuário)
+    // =========================================================================
+    if (scope === 'resolve_home' && req.method === 'GET') {
+      const ctx = await getStaffContext(req);
+      if (!ctx || !ctx.user) {
+        return res.status(401).json({ success: false, error: 'Sessão inválida ou expirada.' });
+      }
+
+      // 1. Se for membro da equipe/gestor -> vai direto para /admin na visão do seu papel
+      if (ctx.isStaff) {
+        const defaultViewMap = {
+          admin: 'overview',
+          gestor_loja: 'orders',
+          gestor_parceiros: 'coupons',
+          gestor_marca: 'brand',
+        };
+        return res.status(200).json({
+          success: true,
+          modality: ctx.role,
+          destination: `/admin?view=${defaultViewMap[ctx.role] || 'overview'}`,
+          label: ctx.role === 'admin' ? 'Admin Geral 360°' : `Gestor (${ctx.role.replace('gestor_', '')})`,
+          staff: { email: ctx.email, name: ctx.name, role: ctx.role, isAdmin: ctx.isAdmin },
+        });
+      }
+
+      // 2. Verifica modalidade salva no onboarding (user_metadata.account_modality)
+      const meta = (ctx.user && ctx.user.user_metadata) || {};
+      let modality = String(meta.account_modality || '').trim().toLowerCase();
+
+      // 3. Se conta antiga sem account_modality explícito, infere pelo vínculo real no banco
+      if (!modality) {
+        const [cpRes, reqRes] = await Promise.all([
+          sbFetch('/rest/v1/rpc/get_my_partner_dashboard', { method: 'POST', headers: ctx.headers, body: {} }),
+          sbFetch(`/rest/v1/tiw_partner_requests?select=id&limit=1`, { headers: ctx.headers }),
+        ]);
+        const hasAffiliate =
+          (cpRes.ok && Array.isArray(cpRes.data) && cpRes.data.length > 0) ||
+          (reqRes.ok && Array.isArray(reqRes.data) && reqRes.data.length > 0) ||
+          Boolean(meta.requested_code);
+        modality = hasAffiliate ? 'afiliado' : 'cliente_d2c';
+      }
+
+      const destMap = {
+        afiliado: { destination: '/parceiros', label: 'Afiliado / Creator 10+10' },
+        lojista_b2b: { destination: '/atacado', label: 'Lojista Atacado B2B' },
+        parceiro_indica: { destination: '/indica', label: 'Parceiro Ético /indica' },
+        cliente_d2c: { destination: '/minha-conta?area=cliente', label: 'Cliente da Loja (D2C)' },
+      };
+
+      const target = destMap[modality] || destMap.cliente_d2c;
+      return res.status(200).json({
+        success: true,
+        modality,
+        destination: target.destination,
+        label: target.label,
+        user: { email: ctx.email, name: ctx.name },
+      });
+    }
+
+    // =========================================================================
     // DEMAIS ROTAS EXIGEM AUTENTICAÇÃO DE EQUIPE (RBAC)
     // =========================================================================
     const staff = await getStaffContext(req);

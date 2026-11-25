@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Central do Usuário · Pedidos, Lojistas, Afiliados e Gestores | TiwShirts</title>
-  <meta name="description" content="Acompanhe seu pedido TiwShirts em tempo real, consulte protocolos de atacado B2B, acesse o portal de afiliados 10+10, a curadoria /indica ou a central de gestores." />
+  <title>Entrar ou Criar Conta · TiwShirts</title>
+  <meta name="description" content="Acesse sua conta TiwShirts para ir direto ao seu painel (Afiliado 10+10, Lojista B2B, Parceiro /indica, Gestor ou Cliente) ou rastreie seu pedido." />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,10 +16,10 @@
       --surface-2: #18181c;
       --border: rgba(255,255,255,0.09);
       --border-strong: rgba(255,255,255,0.16);
+      --accent: #2D5A27;
       --green: #4ade80;
       --sand: #C5A880;
-      --warn: #f59e0b;
-      --blue: #60a5fa;
+      --danger: #f87171;
       --text: #F4F4F5;
       --dim: #A1A1AA;
       --muted: #71717A;
@@ -27,8 +27,10 @@
       --sans: 'Inter', -apple-system, sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.55; min-height: 100vh; }
+    body { background: radial-gradient(circle at top, rgba(45,90,39,0.18), transparent 52%), var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.55; min-height: 100vh; }
     a { color: inherit; text-decoration: none; }
+    button, input, select { font-family: inherit; }
+
     .topbar {
       position: sticky; top: 0; z-index: 30; background: rgba(7,7,8,0.92); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border); padding: 14px 24px;
@@ -39,41 +41,56 @@
     .nav { display: flex; gap: 16px; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; color: var(--dim); }
     .nav a:hover { color: var(--green); }
 
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 42px 20px 72px; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 34px 20px 72px; }
+    .split { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 24px; align-items: start; }
+    @media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+
+    .card { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 14px; padding: 26px; box-shadow: 0 22px 54px rgba(0,0,0,0.45); }
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 4px; background: var(--bg); border: 1px solid var(--border); border-radius: 9px; margin-bottom: 20px; }
+    .tab-btn { padding: 9px; border: none; border-radius: 6px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
+    .tab-btn.active { background: var(--surface-2); color: #fff; border: 1px solid var(--border-strong); }
+
     .eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sand); }
-    h1 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em; margin-top: 6px; }
-    .lead { color: var(--dim); max-width: 680px; margin-top: 10px; font-size: 0.98rem; }
+    h1 { font-size: 1.55rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 4px; }
+    .sub { color: var(--dim); font-size: 0.88rem; margin-top: 6px; margin-bottom: 18px; }
 
-    .roles-grid { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
-    .role-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px;
-      display: flex; flex-direction: column; gap: 8px; transition: .18s; cursor: pointer;
+    .mod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    @media (max-width: 520px) { .mod-grid { grid-template-columns: 1fr; } }
+    .mod-opt {
+      padding: 12px 13px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border-strong);
+      cursor: pointer; text-align: left; transition: .15s;
     }
-    .role-card:hover, .role-card.active { border-color: var(--green); background: var(--surface-2); }
-    .role-tag { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; color: var(--sand); letter-spacing: 0.08em; }
-    .role-card h3 { font-size: 1rem; font-weight: 700; }
-    .role-card p { font-size: 0.84rem; color: var(--dim); }
+    .mod-opt:hover { border-color: var(--sand); }
+    .mod-opt.active { border-color: var(--green); background: rgba(74,222,128,0.08); }
+    .mod-opt strong { display: block; font-size: 13px; color: var(--text); }
+    .mod-opt span { display: block; font-size: 11.5px; color: var(--dim); margin-top: 2px; }
 
-    .panel { margin-top: 26px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 14px; padding: 26px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; margin-top: 16px; }
-    @media (max-width: 720px) { .form-row { grid-template-columns: 1fr; } }
-    .field { display: flex; flex-direction: column; gap: 6px; }
-    .field label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; color: var(--sand); letter-spacing: 0.06em; }
-    .field input { background: var(--bg); border: 1px solid var(--border-strong); color: var(--text); padding: 11px 13px; border-radius: 8px; font-size: 0.92rem; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 18px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
+    .field label { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; color: var(--sand); letter-spacing: 0.06em; display: flex; justify-content: space-between; }
+    .field input, .field select { background: var(--bg); border: 1px solid var(--border-strong); color: var(--text); padding: 10px 12px; border-radius: 8px; font-size: 13px; outline: none; }
+    .field input:focus, .field select:focus { border-color: var(--green); }
+    .form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 520px) { .form-2 { grid-template-columns: 1fr; } }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 16px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-weight: 700; font-size: 13px; cursor: pointer; width: 100%; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
     .btn-green { background: var(--green); border-color: var(--green); color: #05150a; }
-    .btn-sand { background: rgba(197,168,128,0.14); border-color: rgba(197,168,128,0.4); color: var(--sand); }
+    .btn-sand { background: rgba(197,168,128,0.12); border-color: rgba(197,168,128,0.38); color: var(--sand); }
+    .link-inline { background: none; border: none; color: var(--sand); font-size: 11.5px; cursor: pointer; text-decoration: underline; }
 
-    .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 18px 0; }
-    @media (max-width: 640px) { .timeline { grid-template-columns: 1fr 1fr; } }
-    .tl-step { padding: 10px 12px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+    .err-box { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.35); color: var(--danger); padding: 10px 12px; border-radius: 8px; font-size: 12.5px; margin-bottom: 14px; display: none; }
+    .ok-box { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.35); color: var(--green); padding: 12px 14px; border-radius: 8px; font-size: 12.5px; margin-bottom: 14px; display: none; }
+
+    .timeline { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0; }
+    .tl-step { padding: 8px 10px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); font-size: 11.5px; color: var(--muted); font-family: var(--mono); }
     .tl-step.done { border-color: rgba(74,222,128,0.45); color: var(--green); background: rgba(74,222,128,0.08); }
-    .result-card { margin-top: 18px; padding: 18px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); display: none; }
+    .result-card { margin-top: 14px; padding: 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); display: none; font-size: 13px; }
+    .redirect-overlay { text-align: center; padding: 48px 24px; display: none; }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a href="/" class="brand"><span class="dot"></span> TIWSHIRTS · CENTRAL DE ACESSO</a>
+    <a href="/" class="brand"><span class="dot"></span> TIWSHIRTS · CONTA &amp; RASTREIO</a>
     <nav class="nav">
       <a href="/">Loja</a>
       <a href="/atacado">Atacado</a>
@@ -83,92 +100,409 @@
   </header>
 
   <main class="wrap">
-    <span class="eyebrow">Ecossistema Multi-Usuário TiwShirts</span>
-    <h1>Selecione sua modalidade de acesso</h1>
-    <p class="lead">Cada perfil na TiwShirts tem um ambiente dedicado — do rastreio imediato de pedido à gestão de afiliados, atacado B2B, rede ética e comando da operação.</p>
-
-    <section class="roles-grid">
-      <div class="role-card active" id="rc-customer" onclick="selectRole('customer')">
-        <span class="role-tag">01 · Consumidor D2C</span>
-        <h3>Rastrear Meu Pedido</h3>
-        <p>Acompanhe pagamento, produção, Pote Hermético e código de rastreio em tempo real.</p>
+    <!-- Tela de redirecionamento automático quando já está autenticado -->
+    <div id="redirect-box" class="card redirect-overlay">
+      <div class="eyebrow">Acesso Reconhecido</div>
+      <h1 id="rd-title" style="margin-top:8px;">Entrando na sua área...</h1>
+      <p id="rd-sub" class="sub" style="margin-bottom:20px;">Identificamos seu perfil e estamos te levando direto para o seu painel.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <a id="rd-link" href="/" class="btn btn-green" style="width:auto;">Abrir Minha Área Agora →</a>
+        <button type="button" class="btn" style="width:auto;" onclick="logoutAll()">Trocar de Conta</button>
       </div>
+    </div>
 
-      <div class="role-card" id="rc-b2b" onclick="selectRole('b2b')">
-        <span class="role-tag">02 · Lojista Multimarcas</span>
-        <h3>Portal Atacado B2B</h3>
-        <p>Consulte seu protocolo B2B, cotação de caixa com 12 potes e reposição com 101% de margem.</p>
-      </div>
-
-      <a class="role-card" href="/parceiros">
-        <span class="role-tag">03 · Creator &amp; Parceiro</span>
-        <h3>Afiliados 10+10 →</h3>
-        <p>Solicite seu cupom sem fricção, baixe seu QR Code, veja o extrato e peça saque no Pix.</p>
-      </a>
-
-      <a class="role-card" href="/indica">
-        <span class="role-tag">04 · Saúde &amp; Educação</span>
-        <h3>Rede Ética /indica →</h3>
-        <p>Encaminhamento com consentimento LGPD ou submissão de médicos, associações e cursos.</p>
-      </a>
-
-      <a class="role-card" href="/admin">
-        <span class="role-tag">05 · Equipe Interna</span>
-        <h3>Central de Gestores →</h3>
-        <p>Ambientes dedicados para Gestor da Marca, Gestor da Loja, Gestor de Parceiros e Admin.</p>
-      </a>
-    </section>
-
-    <!-- PAINEL 1: RASTREIO DE PEDIDO D2C -->
-    <section id="panel-customer" class="panel">
-      <h2 style="font-size:1.25rem;">Consultar Pedido da Loja (D2C)</h2>
-      <p style="color:var(--dim);font-size:0.9rem;margin-top:4px;">Informe o código recebido na compra (ex: <code>TIW-XXXX-XXXX</code>) e os 4 últimos dígitos do seu WhatsApp ou CPF.</p>
-      <form class="form-row" onsubmit="lookupOrder(event)">
-        <div class="field">
-          <label for="lo-code">Código do Pedido *</label>
-          <input id="lo-code" required placeholder="Ex: TIW-ABCD-1234" style="font-family:var(--mono);text-transform:uppercase;" />
+    <div id="main-split" class="split">
+      <!-- COLUNA 1: LOGIN ÚNICO + ONBOARDING COM MODALIDADE -->
+      <section class="card">
+        <div class="tabs">
+          <button type="button" class="tab-btn active" id="t-login" onclick="setTab('login')">Entrar</button>
+          <button type="button" class="tab-btn" id="t-onboard" onclick="setTab('onboard')">Primeiro Acesso (Onboarding)</button>
         </div>
-        <div class="field">
-          <label for="lo-contact">Últimos 4 dígitos do WhatsApp ou CPF *</label>
-          <input id="lo-contact" required placeholder="Ex: 2083 ou seu e-mail" />
-        </div>
-        <button class="btn btn-green" type="submit" id="lo-btn">Consultar Agora →</button>
-      </form>
-      <div id="lo-result" class="result-card"></div>
-    </section>
 
-    <!-- PAINEL 2: CONSULTA DE PROTOCOLO B2B -->
-    <section id="panel-b2b" class="panel" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-        <div>
-          <h2 style="font-size:1.25rem;">Área do Lojista B2B (Múltiplos de 12 Peças)</h2>
-          <p style="color:var(--dim);font-size:0.9rem;margin-top:4px;">Consulte o andamento do seu protocolo de credenciamento ou monte um novo lote.</p>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <a href="/atacado" class="btn btn-sand">Simulador de Margem (12/24/36 pç) →</a>
-          <a href="/assets/Lamina_Comercial_Atacado_TiwShirts.pdf" target="_blank" class="btn">Baixar Catálogo PDF ↗</a>
-        </div>
-      </div>
-      <form class="form-row" style="grid-template-columns:1fr auto;" onsubmit="lookupB2B(event)">
-        <div class="field">
-          <label for="lb2b-code">Protocolo B2B *</label>
-          <input id="lb2b-code" required placeholder="Ex: TIW-B2B-XXXXX" style="font-family:var(--mono);text-transform:uppercase;" />
-        </div>
-        <button class="btn btn-green" type="submit">Consultar Protocolo →</button>
-      </form>
-      <div id="lb2b-result" class="result-card"></div>
-    </section>
+        <div id="auth-err" class="err-box"></div>
+        <div id="auth-ok" class="ok-box"></div>
+
+        <!-- TAB 1: LOGIN DIRETO (VAI AUTOMATICAMENTE PARA A ÁREA DO PERFIL!) -->
+        <form id="f-login" onsubmit="handleUnifiedLogin(event)">
+          <span class="eyebrow">Login Único TiwShirts</span>
+          <h1>Acesse sua área</h1>
+          <p class="sub">Entre com seu e-mail e você será levado automaticamente ao seu painel (Afiliado 10+10, Lojista B2B, Parceiro /indica, Cliente ou Gestor).</p>
+
+          <div class="field">
+            <label for="li-email">E-mail *</label>
+            <input id="li-email" type="email" required placeholder="voce@exemplo.com" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="li-pass">
+              <span>Senha *</span>
+              <button type="button" class="link-inline" onclick="sendReset()">Esqueci minha senha</button>
+            </label>
+            <input id="li-pass" type="password" minlength="6" placeholder="Digite sua senha" autocomplete="current-password" />
+          </div>
+
+          <button type="submit" class="btn btn-green" id="li-btn">Entrar na Minha Área →</button>
+          <button type="button" class="btn btn-sand" style="margin-top:10px;" id="li-magic" onclick="sendMagic()">✉ Entrar sem senha (Link Mágico no e-mail)</button>
+        </form>
+
+        <!-- TAB 2: ONBOARDING (ESCOLHA DA MODALIDADE APENAS NO CADASTRO) -->
+        <form id="f-onboard" style="display:none;" onsubmit="handleOnboarding(event)">
+          <span class="eyebrow">Passo Único · Onboarding</span>
+          <h1>Escolha sua modalidade</h1>
+          <p class="sub">Selecione como você se conecta à TiwShirts. Depois disso, todo login vai direto para a sua área.</p>
+
+          <div class="mod-grid" role="radiogroup" aria-label="Modalidade de conta">
+            <button type="button" class="mod-opt active" data-mod="afiliado" onclick="pickModality('afiliado')">
+              <strong>★ Afiliado / Creator (10+10)</strong>
+              <span>Ganhe 10% no Pix com seu cupom e link próprio.</span>
+            </button>
+            <button type="button" class="mod-opt" data-mod="lojista_b2b" onclick="pickModality('lojista_b2b')">
+              <strong>▣ Lojista Multimarcas (B2B)</strong>
+              <span>Atacado em múltiplos de 12 peças com 101% margem.</span>
+            </button>
+            <button type="button" class="mod-opt" data-mod="parceiro_indica" onclick="pickModality('parceiro_indica')">
+              <strong>🌿 Parceiro Ético (/indica)</strong>
+              <span>Médico prescritor, associação, curso ou serviço.</span>
+            </button>
+            <button type="button" class="mod-opt" data-mod="cliente_d2c" onclick="pickModality('cliente_d2c')">
+              <strong>👕 Cliente da Loja (D2C)</strong>
+              <span>Acompanhar pedidos, entregas e lançamentos.</span>
+            </button>
+          </div>
+
+          <div class="form-2">
+            <div class="field"><label>Seu Nome / Marca *</label><input id="ob-name" required placeholder="Como prefere ser chamado" /></div>
+            <div class="field"><label>WhatsApp *</label><input id="ob-wa" type="tel" required placeholder="(15) 99999-9999" /></div>
+          </div>
+
+          <!-- Campos dinâmicos exclusivos da modalidade Afiliado -->
+          <div id="ob-extra-afiliado">
+            <div class="form-2">
+              <div class="field">
+                <label>Código do Cupom *</label>
+                <input id="ob-code" minlength="3" maxlength="20" placeholder="Ex: CHICO10" style="text-transform:uppercase;font-family:var(--mono);font-weight:700;" oninput="checkObCode(this.value)" />
+                <div id="ob-code-st" style="font-family:var(--mono);font-size:11px;color:var(--muted);"></div>
+              </div>
+              <div class="field"><label>Chave Pix (p/ Comissões) *</label><input id="ob-pix" placeholder="CPF, celular, e-mail ou aleatória" /></div>
+            </div>
+          </div>
+
+          <!-- Campos dinâmicos exclusivos de Lojista B2B -->
+          <div id="ob-extra-b2b" style="display:none;">
+            <div class="form-2">
+              <div class="field"><label>Nome da Loja *</label><input id="ob-store" placeholder="Ex: Skate Shop Centro" /></div>
+              <div class="field"><label>Cidade / UF *</label><input id="ob-city" placeholder="Ex: Sorocaba / SP" /></div>
+            </div>
+          </div>
+
+          <!-- Campos dinâmicos exclusivos de Parceiro /indica -->
+          <div id="ob-extra-indica" style="display:none;">
+            <div class="form-2">
+              <div class="field">
+                <label>Vertical</label>
+                <select id="ob-vertical">
+                  <option value="medico_prescritor">Médico Prescritor (CRM)</option>
+                  <option value="associacao_pacientes">Associação de Pacientes</option>
+                  <option value="curso_educacao">Curso &amp; Educação</option>
+                  <option value="ecossistema_servicos">Advocacia / Grow / Headshop</option>
+                </select>
+              </div>
+              <div class="field"><label>Registro (CRM / CNPJ / Site)</label><input id="ob-cred" placeholder="Ex: CRM/SP 123456" /></div>
+            </div>
+          </div>
+
+          <div class="form-2">
+            <div class="field"><label>E-mail de Acesso *</label><input id="ob-email" type="email" required placeholder="voce@exemplo.com" autocomplete="email" /></div>
+            <div class="field"><label>Crie uma Senha *</label><input id="ob-pass" type="password" required minlength="6" placeholder="Mínimo 6 caracteres" autocomplete="new-password" /></div>
+          </div>
+
+          <button type="submit" class="btn btn-green" id="ob-btn">Concluir Onboarding e Entrar →</button>
+        </form>
+      </section>
+
+      <!-- COLUNA 2: RASTREIO RÁPIDO D2C SEM PRECISAR DE LOGIN -->
+      <section class="card" id="customer-tracker-card">
+        <span class="eyebrow">Consulta Rápida · Sem Login</span>
+        <h2 style="font-size:1.25rem;margin-top:4px;">Rastrear Pedido da Loja</h2>
+        <p class="sub">Comprou na TiwShirts? Digite o código do pedido e os últimos 4 dígitos do seu WhatsApp ou CPF para ver status e rastreio na hora.</p>
+        <form onsubmit="lookupOrder(event)">
+          <div class="field">
+            <label for="lo-code">Código do Pedido *</label>
+            <input id="lo-code" required placeholder="Ex: TIW-ABCD-1234" style="font-family:var(--mono);text-transform:uppercase;" />
+          </div>
+          <div class="field">
+            <label for="lo-contact">Últimos 4 dígitos do WhatsApp ou CPF *</label>
+            <input id="lo-contact" required placeholder="Ex: 2083 ou seu e-mail" />
+          </div>
+          <button class="btn btn-sand" type="submit">Consultar Status do Pedido →</button>
+        </form>
+        <div id="lo-result" class="result-card"></div>
+      </section>
+    </div>
   </main>
 
   <script>
+    const SUPABASE_URL = 'https://msschydwkaektxjlbmjc.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_oes4HCZimIPiK91wp3grLw_xT5gJJdz';
+    const UNIFIED_SESSION_KEY = 'tiw_auth_session';
+
+    let selectedModality = 'afiliado';
+    let codeDebounce = null;
+
     function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function fmtMoney(v) { return 'R$ ' + Number(v || 0).toFixed(2).replace('.', ','); }
 
-    function selectRole(r) {
-      document.getElementById('rc-customer').classList.toggle('active', r === 'customer');
-      document.getElementById('rc-b2b').classList.toggle('active', r === 'b2b');
-      document.getElementById('panel-customer').style.display = r === 'customer' ? 'block' : 'none';
-      document.getElementById('panel-b2b').style.display = r === 'b2b' ? 'block' : 'none';
+    function setTab(t) {
+      document.getElementById('t-login').classList.toggle('active', t === 'login');
+      document.getElementById('t-onboard').classList.toggle('active', t === 'onboard');
+      document.getElementById('f-login').style.display = t === 'login' ? 'block' : 'none';
+      document.getElementById('f-onboard').style.display = t === 'onboard' ? 'block' : 'none';
+      document.getElementById('auth-err').style.display = 'none';
+      document.getElementById('auth-ok').style.display = 'none';
+    }
+
+    function pickModality(mod) {
+      selectedModality = mod;
+      document.querySelectorAll('.mod-opt').forEach((b) => b.classList.toggle('active', b.dataset.mod === mod));
+      document.getElementById('ob-extra-afiliado').style.display = mod === 'afiliado' ? 'block' : 'none';
+      document.getElementById('ob-extra-b2b').style.display = mod === 'lojista_b2b' ? 'block' : 'none';
+      document.getElementById('ob-extra-indica').style.display = mod === 'parceiro_indica' ? 'block' : 'none';
+      document.getElementById('ob-code').required = (mod === 'afiliado');
+      document.getElementById('ob-pix').required = (mod === 'afiliado');
+      document.getElementById('ob-store').required = (mod === 'lojista_b2b');
+      document.getElementById('ob-city').required = (mod === 'lojista_b2b');
+    }
+
+    function checkObCode(raw) {
+      const code = String(raw || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+      const el = document.getElementById('ob-code-st');
+      if (code.length < 3) { el.textContent = ''; return; }
+      clearTimeout(codeDebounce);
+      codeDebounce = setTimeout(async () => {
+        try {
+          const r = await fetch('/api/partner-requests?check_code=' + encodeURIComponent(code));
+          const d = await r.json();
+          el.style.color = d.available ? '#4ade80' : '#f87171';
+          el.textContent = d.available ? `✓ ${code} livre!` : `✕ ${code} já usado`;
+        } catch {}
+      }, 280);
+    }
+
+    function saveUnifiedSession(sess) {
+      localStorage.setItem(UNIFIED_SESSION_KEY, JSON.stringify(sess));
+      localStorage.setItem('tiw_partner_session', JSON.stringify(sess));
+      sessionStorage.setItem('tiw_admin_session', JSON.stringify(sess));
+    }
+
+    function logoutAll() {
+      localStorage.removeItem(UNIFIED_SESSION_KEY);
+      localStorage.removeItem('tiw_partner_session');
+      sessionStorage.removeItem('tiw_admin_session');
+      location.replace('/minha-conta');
+    }
+
+    async function routeLoggedInUser(sess) {
+      try {
+        const resp = await fetch('/api/ops?scope=resolve_home', {
+          headers: { Authorization: 'Bearer ' + sess.access_token },
+        });
+        if (!resp.ok) return false;
+        const data = await resp.json();
+        if (!data || !data.success || !data.destination) return false;
+
+        // Se o destino for a própria tela D2C (/minha-conta?area=cliente), fica aqui focado no rastreio!
+        if (data.modality === 'cliente_d2c') {
+          document.getElementById('redirect-box').style.display = 'none';
+          document.getElementById('main-split').style.display = 'grid';
+          document.getElementById('auth-ok').innerHTML = `<strong>Olá, ${esc(sess.email)}!</strong> Conta de Cliente D2C conectada. Use o rastreio ao lado ou <a href="/" style="text-decoration:underline;">volte para a loja</a>. <button type="button" class="link-inline" style="margin-left:8px;" onclick="logoutAll()">Sair</button>`;
+          document.getElementById('auth-ok').style.display = 'block';
+          return true;
+        }
+
+        document.getElementById('main-split').style.display = 'none';
+        document.getElementById('redirect-box').style.display = 'block';
+        document.getElementById('rd-title').textContent = `Redirecionando para: ${data.label}`;
+        document.getElementById('rd-link').href = data.destination;
+        setTimeout(() => { window.location.replace(data.destination); }, 350);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    async function handleUnifiedLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('li-email').value.trim().toLowerCase();
+      const password = document.getElementById('li-pass').value;
+      const errEl = document.getElementById('auth-err');
+      errEl.style.display = 'none';
+      if (!password) {
+        errEl.textContent = 'Digite sua senha ou clique em "Entrar sem senha (Link Mágico)".';
+        errEl.style.display = 'block';
+        return;
+      }
+      const btn = document.getElementById('li-btn');
+      btn.disabled = true; btn.textContent = 'Identificando seu perfil...';
+      try {
+        const resp = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+          method: 'POST',
+          headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.access_token) {
+          errEl.textContent = /not confirmed/i.test(data.error_description || data.msg || '')
+            ? 'Confirme seu e-mail pelo link enviado ou clique em "Entrar sem senha" abaixo.'
+            : 'E-mail ou senha inválidos.';
+          errEl.style.display = 'block';
+          return;
+        }
+        const sess = {
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+          expires_at: Date.now() + (data.expires_in || 3600) * 1000,
+          email: (data.user && data.user.email) || email,
+        };
+        saveUnifiedSession(sess);
+        await routeLoggedInUser(sess);
+      } catch (err) {
+        errEl.textContent = err.message; errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Entrar na Minha Área →';
+      }
+    }
+
+    async function handleOnboarding(e) {
+      e.preventDefault();
+      const errEl = document.getElementById('auth-err');
+      const okEl = document.getElementById('auth-ok');
+      errEl.style.display = 'none'; okEl.style.display = 'none';
+
+      const name = document.getElementById('ob-name').value.trim();
+      const whatsapp = document.getElementById('ob-wa').value.trim();
+      const email = document.getElementById('ob-email').value.trim().toLowerCase();
+      const password = document.getElementById('ob-pass').value;
+      const code = document.getElementById('ob-code').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+      const pixKey = document.getElementById('ob-pix').value.trim();
+      const store = document.getElementById('ob-store').value.trim();
+      const city = document.getElementById('ob-city').value.trim();
+      const vertical = document.getElementById('ob-vertical').value;
+      const cred = document.getElementById('ob-cred').value.trim();
+
+      const btn = document.getElementById('ob-btn');
+      btn.disabled = true; btn.textContent = 'Configurando sua conta...';
+
+      try {
+        const redirectTo = encodeURIComponent(window.location.origin + '/minha-conta');
+        const signupResp = await fetch(`${SUPABASE_URL}/auth/v1/signup?redirect_to=${redirectTo}`, {
+          method: 'POST',
+          headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            password,
+            data: {
+              name,
+              whatsapp,
+              account_modality: selectedModality,
+              requested_code: selectedModality === 'afiliado' ? code : undefined,
+              partner_name: name,
+              pix_key: selectedModality === 'afiliado' ? pixKey : undefined,
+              store_name: store || undefined,
+              city_uf: city || undefined,
+              indica_vertical: selectedModality === 'parceiro_indica' ? vertical : undefined,
+              credentials: cred || undefined,
+            },
+          }),
+        });
+        const signupData = await signupResp.json().catch(() => ({}));
+
+        let sess = null;
+        if (signupData && signupData.access_token) {
+          sess = {
+            access_token: signupData.access_token,
+            refresh_token: signupData.refresh_token || '',
+            expires_at: Date.now() + (signupData.expires_in || 3600) * 1000,
+            email,
+          };
+          saveUnifiedSession(sess);
+        }
+
+        // Persiste imediatamente a intenção específica da modalidade no banco!
+        if (selectedModality === 'afiliado') {
+          const apResp = await fetch('/api/partner-requests', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(sess ? { Authorization: 'Bearer ' + sess.access_token } : {}),
+            },
+            body: JSON.stringify({
+              action: 'public_apply',
+              email,
+              partner_name: name,
+              requested_code: code,
+              whatsapp,
+              pix_key: pixKey,
+            }),
+          });
+          const apData = await apResp.json();
+          if (!apResp.ok || !apData.success) {
+            errEl.textContent = (apData && apData.error) || 'Não foi possível reservar o cupom.';
+            errEl.style.display = 'block';
+            return;
+          }
+        } else if (selectedModality === 'lojista_b2b') {
+          await fetch('/api/b2b', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome: name, loja: store, cidade: city, email, zap: whatsapp }),
+          }).catch(() => {});
+        }
+
+        if (sess) {
+          await routeLoggedInUser(sess);
+          return;
+        }
+
+        document.getElementById('li-email').value = email;
+        setTab('login');
+        okEl.innerHTML = `<strong>✓ Onboarding concluído (${esc(selectedModality)})!</strong><br>Enviamos o link de confirmação para <strong>${esc(email)}</strong>. Assim que clicar no link ou entrar aqui, você será levado direto para a sua área!`;
+        okEl.style.display = 'block';
+      } catch (err) {
+        errEl.textContent = err.message; errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Concluir Onboarding e Entrar →';
+      }
+    }
+
+    async function sendMagic() {
+      const email = document.getElementById('li-email').value.trim().toLowerCase();
+      const errEl = document.getElementById('auth-err');
+      const okEl = document.getElementById('auth-ok');
+      errEl.style.display = 'none'; okEl.style.display = 'none';
+      if (!email) { errEl.textContent = 'Digite seu e-mail primeiro.'; errEl.style.display = 'block'; return; }
+      const r = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, create_user: false, email_redirect_to: window.location.origin + '/minha-conta' }),
+      });
+      if (r.ok) {
+        okEl.textContent = `Link Mágico enviado para ${email}! Ao clicar, você entra direto na sua área.`;
+        okEl.style.display = 'block';
+      } else {
+        errEl.textContent = 'Aguarde 60s ou verifique se o e-mail já fez o Primeiro Acesso.';
+        errEl.style.display = 'block';
+      }
+    }
+
+    async function sendReset() {
+      const email = document.getElementById('li-email').value.trim().toLowerCase();
+      if (!email) { document.getElementById('auth-err').textContent = 'Digite seu e-mail acima.'; document.getElementById('auth-err').style.display = 'block'; return; }
+      await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, redirect_to: window.location.origin + '/parceiros' }),
+      });
+      document.getElementById('auth-ok').textContent = `Link de redefinição enviado para ${email}.`;
+      document.getElementById('auth-ok').style.display = 'block';
     }
 
     async function lookupOrder(e) {
@@ -181,62 +515,66 @@
       try {
         const r = await fetch(`/api/ops?scope=lookup&kind=order&code=${encodeURIComponent(code)}&contact=${encodeURIComponent(contact)}`);
         const d = await r.json();
-        if (!r.ok || !d.success) {
-          box.innerHTML = `<span style="color:#f87171;">${esc(d.error || 'Pedido não localizado.')}</span>`;
-          return;
-        }
+        if (!r.ok || !d.success) { box.innerHTML = `<span style="color:#f87171;">${esc(d.error || 'Pedido não encontrado.')}</span>`; return; }
         const o = d.order;
         const stages = ['aguardando_pagamento', 'pago', 'producao', 'enviado'];
         const idx = stages.indexOf(o.status);
         const itemsHtml = (o.items || []).map((i) => `• ${i.qty}x ${esc(i.name)} (${esc(i.fit)}, ${esc(i.size)})`).join('<br>');
-
         box.innerHTML = `
-          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-            <div><strong style="font-family:var(--mono);color:var(--sand);font-size:1.05rem;">${esc(o.order_id)}</strong> · Olá, ${esc(o.customer_first_name)}!</div>
-            <strong style="font-family:var(--mono);color:var(--green);">${fmtMoney(o.total)}</strong>
+          <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+            <strong>${esc(o.order_id)}</strong>
+            <strong style="color:var(--green);font-family:var(--mono);">${fmtMoney(o.total)}</strong>
           </div>
           <div class="timeline">
-            <div class="tl-step ${idx >= 0 ? 'done' : ''}">1. Pedido Recebido</div>
-            <div class="tl-step ${idx >= 1 ? 'done' : ''}">2. Pago · Separando Pote</div>
-            <div class="tl-step ${idx >= 2 ? 'done' : ''}">3. Produção / Embalagem</div>
-            <div class="tl-step ${idx >= 3 ? 'done' : ''}">4. Despachado</div>
+            <div class="tl-step ${idx >= 0 ? 'done' : ''}">1. Recebido</div>
+            <div class="tl-step ${idx >= 1 ? 'done' : ''}">2. Pago · Pote</div>
+            <div class="tl-step ${idx >= 2 ? 'done' : ''}">3. Produção</div>
+            <div class="tl-step ${idx >= 3 ? 'done' : ''}">4. Enviado</div>
           </div>
-          <div style="font-size:0.88rem;color:var(--dim);margin-bottom:10px;">${itemsHtml}</div>
-          ${o.tracking_code ? `<div style="padding:10px 12px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.35);border-radius:8px;margin-top:8px;">📦 <strong>Código de Rastreio:</strong> <code style="font-family:var(--mono);color:var(--green);">${esc(o.tracking_code)}</code></div>` : ''}
-          ${o.checkout_url ? `<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;"><a href="${esc(o.checkout_url)}" target="_blank" class="btn btn-green">Pagar c/ Cartão ou Pix (InfinitePay) ↗</a></div>` : ''}
-        `;
-      } catch (err) {
-        box.innerHTML = `<span style="color:#f87171;">Erro de conexão: ${esc(err.message)}</span>`;
-      }
-    }
-
-    async function lookupB2B(e) {
-      e.preventDefault();
-      const code = document.getElementById('lb2b-code').value.trim().toUpperCase();
-      const box = document.getElementById('lb2b-result');
-      box.style.display = 'block';
-      box.innerHTML = 'Consultando protocolo B2B...';
-      try {
-        const r = await fetch(`/api/ops?scope=lookup&kind=b2b&code=${encodeURIComponent(code)}`);
-        const d = await r.json();
-        if (!r.ok || !d.success) {
-          box.innerHTML = `<span style="color:#f87171;">${esc(d.error || 'Protocolo não encontrado.')}</span>`;
-          return;
-        }
-        const b = d.b2b;
-        box.innerHTML = `
-          <div><strong style="font-family:var(--mono);color:var(--sand);">${esc(b.protocol)}</strong> · ${esc(b.loja)} (${esc(b.cidade)})</div>
-          <div style="margin-top:6px;color:var(--green);font-family:var(--mono);font-size:0.85rem;">Status Comercial: ${esc((b.stage || 'em_analise').toUpperCase())}</div>
+          <div style="color:var(--dim);font-size:12.5px;">${itemsHtml}</div>
+          ${o.tracking_code ? `<div style="margin-top:10px;color:var(--green);font-family:var(--mono);">📦 Rastreio: ${esc(o.tracking_code)}</div>` : ''}
+          ${o.checkout_url ? `<div style="margin-top:10px;"><a href="${esc(o.checkout_url)}" target="_blank" class="btn btn-green">Pagar Pedido Agora ↗</a></div>` : ''}
         `;
       } catch (err) {
         box.innerHTML = `<span style="color:#f87171;">${esc(err.message)}</span>`;
       }
     }
 
-    const qp = new URLSearchParams(window.location.search);
-    if (qp.get('pedido')) {
-      document.getElementById('lo-code').value = qp.get('pedido').toUpperCase();
-    }
+    (async function init() {
+      const qp = new URLSearchParams(window.location.search);
+      if (qp.get('pedido')) document.getElementById('lo-code').value = qp.get('pedido').toUpperCase();
+      if (qp.get('onboarding') === '1') setTab('onboard');
+
+      // Captura retorno de Magic Link / Confirmação de e-mail (#access_token=...)
+      if (window.location.hash && window.location.hash.includes('access_token=')) {
+        const hp = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+        const accessToken = hp.get('access_token');
+        const refreshToken = hp.get('refresh_token') || '';
+        const expiresIn = Number(hp.get('expires_in') || 3600);
+        if (accessToken) {
+          const uResp = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + accessToken } });
+          const uData = uResp.ok ? await uResp.json() : {};
+          const sess = { access_token: accessToken, refresh_token: refreshToken, expires_at: Date.now() + expiresIn * 1000, email: uData.email || '' };
+          saveUnifiedSession(sess);
+          history.replaceState(null, '', window.location.pathname);
+          await routeLoggedInUser(sess);
+          return;
+        }
+      }
+
+      // Se já tem sessão ativa e não veio especificamente consultar pedido, já vai direto para a área do perfil!
+      if (!qp.get('pedido') && qp.get('area') !== 'cliente') {
+        const raw = localStorage.getItem(UNIFIED_SESSION_KEY);
+        if (raw) {
+          try {
+            const p = JSON.parse(raw);
+            if (p && p.access_token && (!p.expires_at || Date.now() < p.expires_at - 30000)) {
+              await routeLoggedInUser(p);
+            }
+          } catch {}
+        }
+      }
+    })();
   </script>
 </body>
 </html>

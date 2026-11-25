@@ -538,7 +538,7 @@
           body: JSON.stringify({
             email,
             password,
-            data: { requested_code: code, partner_name: partnerName, instagram, whatsapp, pix_key: pixKey },
+            data: { account_modality: 'afiliado', requested_code: code, partner_name: partnerName, instagram, whatsapp, pix_key: pixKey },
           }),
         });
         const signupData = await signupResp.json().catch(() => ({}));
@@ -754,7 +754,7 @@
             return true;
           }
         }
-        const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+        const raw = localStorage.getItem(SESSION_KEY) || localStorage.getItem('tiw_auth_session') || sessionStorage.getItem(SESSION_KEY);
         if (!raw) return false;
         const p = JSON.parse(raw);
         if (!p || !p.access_token) return false;
@@ -785,6 +785,7 @@
 
     function handleLogout() {
       localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem('tiw_auth_session');
       sessionStorage.removeItem(SESSION_KEY);
       session = null;
       location.reload();

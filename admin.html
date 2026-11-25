@@ -1198,7 +1198,7 @@
 
     async function ensureSession() {
       try {
-        const raw = sessionStorage.getItem(SESSION_KEY);
+        const raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem('tiw_auth_session');
         if (!raw) return false;
         const parsed = JSON.parse(raw);
         if (!parsed || !parsed.access_token) return false;
@@ -1262,6 +1262,8 @@
 
     function handleLogout() {
       sessionStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem('tiw_auth_session');
+      localStorage.removeItem('tiw_partner_session');
       currentSession = null;
       showLogin();
     }
@@ -2274,6 +2276,12 @@
         const allowed = (btn.dataset.roles || 'admin').split(',');
         btn.style.display = (role === 'admin' || allowed.includes(role)) ? 'flex' : 'none';
       });
+      const qpView = new URLSearchParams(window.location.search).get('view');
+      const defaultByRole = { admin: 'overview', gestor_loja: 'orders', gestor_parceiros: 'coupons', gestor_marca: 'brand' };
+      const targetView = qpView || (currentView === 'overview' && role !== 'admin' ? defaultByRole[role] : null);
+      if (targetView && targetView !== currentView) {
+        switchView(targetView);
+      }
     }
 
     async function createVipInvite(e) {
