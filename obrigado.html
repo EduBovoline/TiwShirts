@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QTQRLBB51"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7QTQRLBB51');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedido Recebido · Obrigado! | TiwShirts</title>
+  <meta name="description" content="Confirmação e acompanhamento do seu pedido na TiwShirts. Entrega no Pote Hermético Oficial e suporte transparente." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070708;
+      --surface: #121215;
+      --surface-2: #18181c;
+      --border: rgba(255,255,255,0.09);
+      --border-strong: rgba(255,255,255,0.16);
+      --accent: #2D5A27;
+      --green: #4ade80;
+      --sand: #C5A880;
+      --text: #F4F4F5;
+      --dim: #A1A1AA;
+      --muted: #71717A;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at top, rgba(45,90,39,0.2), transparent 55%), var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      background: rgba(7,7,8,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+    }
+    .brand { font-family: var(--mono); font-weight: 800; letter-spacing: 0.1em; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+    .dot { width: 10px; height: 10px; border-radius: 3px; background: var(--green); box-shadow: 0 0 12px rgba(74,222,128,0.55); }
+    .nav { display: flex; gap: 16px; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; color: var(--dim); }
+    .nav a:hover { color: var(--green); }
+
+    .wrap { max-width: 780px; width: 100%; margin: 0 auto; padding: 40px 20px 64px; flex: 1; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border-strong);
+      border-radius: 14px; padding: 30px; box-shadow: 0 22px 54px rgba(0,0,0,0.48);
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px;
+      border-radius: 999px; font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      background: rgba(74,222,128,0.14); border: 1px solid rgba(74,222,128,0.35); color: var(--green);
+    }
+    h1 { font-size: clamp(1.65rem, 3.5vw, 2.3rem); font-weight: 800; letter-spacing: -0.02em; margin-top: 14px; line-height: 1.15; }
+    .lead { color: var(--dim); margin-top: 10px; font-size: 0.96rem; }
+
+    .order-meta {
+      margin-top: 22px; padding: 16px 18px; border-radius: 10px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .order-id { font-family: var(--mono); font-size: 1.15rem; font-weight: 800; color: var(--sand); }
+    .order-total { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--green); }
+
+    .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 22px; }
+    @media (max-width: 680px) { .timeline { grid-template-columns: 1fr 1fr; } }
+    .tl-step {
+      padding: 13px 12px; border-radius: 10px; background: var(--bg);
+      border: 1px solid var(--border); font-size: 0.78rem; color: var(--muted);
+    }
+    .tl-step strong { display: block; font-family: var(--mono); font-size: 0.72rem; margin-bottom: 4px; text-transform: uppercase; }
+    .tl-step.done { border-color: rgba(74,222,128,0.45); background: rgba(74,222,128,0.08); color: var(--text); }
+    .tl-step.done strong { color: var(--green); }
+
+    .actions { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 18px; border-radius: 8px; border: 1px solid var(--border-strong);
+      background: var(--surface-2); color: var(--text); font-weight: 700; font-size: 0.86rem; cursor: pointer;
+    }
+    .btn:hover { border-color: var(--sand); }
+    .btn-green { background: var(--green); border-color: var(--green); color: #05150a; }
+    .btn-sand { background: rgba(197,168,128,0.12); border-color: rgba(197,168,128,0.4); color: var(--sand); }
+
+    .cdc-box {
+      margin-top: 24px; padding: 16px 18px; border-radius: 10px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      font-size: 0.85rem; color: var(--dim); line-height: 1.6;
+    }
+    .cdc-box strong { color: var(--text); }
+    .cdc-box a { color: var(--sand); text-decoration: underline; }
+
+    footer {
+      border-top: 1px solid var(--border); padding: 24px 20px; text-align: center;
+      font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+    }
+    footer a { color: var(--sand); margin: 0 6px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand"><span class="dot"></span> TIWSHIRTS</a>
+    <nav class="nav">
+      <a href="/">Loja</a>
+      <a href="/rastreio">Rastrear Pedido</a>
+      <a href="/politicas">Políticas &amp; Trocas</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="badge" id="status-badge">✓ Pedido Registrado</div>
+      <h1 id="thank-title">Obrigado por fortalecer a TiwShirts!</h1>
+      <p class="lead" id="thank-sub">
+        Recebemos seu pedido e já estamos cuidando de cada detalhe. Todas as peças saem de Sorocaba/SP vedadas no nosso Pote Hermético Oficial.
+      </p>
+
+      <div class="order-meta">
+        <div>
+          <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);text-transform:uppercase;">Número do Pedido</div>
+          <div class="order-id" id="ord-id">TIW-SHIRTS</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);text-transform:uppercase;">Resumo</div>
+          <div class="order-total" id="ord-total">Acompanhamento ativo</div>
+        </div>
+      </div>
+
+      <div class="timeline" aria-label="Etapas do pedido">
+        <div class="tl-step done" id="st-1">
+          <strong>1. Registrado</strong>
+          Pedido gravado no sistema.
+        </div>
+        <div class="tl-step" id="st-2">
+          <strong>2. Pagamento</strong>
+          Confirmação Pix ou InfinitePay.
+        </div>
+        <div class="tl-step" id="st-3">
+          <strong>3. Pote Hermético</strong>
+          Separação, conferência e vedação.
+        </div>
+        <div class="tl-step" id="st-4">
+          <strong>4. Envio &amp; Rastreio</strong>
+          Postagem e envio do código.
+        </div>
+      </div>
+
+      <div class="actions">
+        <a id="track-btn" href="/rastreio" class="btn btn-green">Acompanhar Pedido / Rastreio →</a>
+        <a id="wa-btn" href="https://wa.me/5515981512083" target="_blank" rel="noopener" class="btn btn-sand">Falar no WhatsApp (15 98151-2083) ↗</a>
+        <a href="/" class="btn">Voltar para a Loja</a>
+      </div>
+
+      <div class="cdc-box">
+        <strong>Seus direitos garantidos por lei (CDC &amp; LGPD):</strong><br />
+        • <strong>Arrependimento em 7 dias corridos (Art. 49 CDC):</strong> após receber o pedido, você tem 7 dias para desistir sem custo, com logística reversa gratuita e estorno total (incluindo o frete).<br />
+        • <strong>Trocas e garantia:</strong> 30 dias para troca simples de tamanho/estampa e 90 dias de garantia legal contra defeitos de fabricação.<br />
+        • <strong>Privacidade e Documentação Fiscal:</strong> seus dados seguem protegidos pela LGPD e o envio acompanha Declaração de Conteúdo (DCe) ou NF-e quando aplicável. Consulte todas as regras em <a href="/politicas">Políticas, Trocas (CDC) &amp; Privacidade</a>.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>49.040.721 EDUARDO JOSE BOVOLINE · CNPJ 49.040.721/0001-14 · Sorocaba/SP</div>
+    <div style="margin-top:8px;">
+      <a href="/">Loja</a>·
+      <a href="/rastreio">Rastrear Pedido</a>·
+      <a href="/politicas">Políticas, Trocas (CDC) &amp; LGPD</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const qp = new URLSearchParams(window.location.search);
+      const paramOrder = (qp.get('pedido') || qp.get('order_id') || '').trim().toUpperCase();
+      const paramStatus = (qp.get('status') || '').trim().toLowerCase();
+
+      let saved = null;
+      try {
+        saved = JSON.parse(localStorage.getItem('tiw_last_order') || 'null');
+      } catch {}
+
+      const orderId = paramOrder || (saved && saved.orderId) || '';
+      const isPaid = paramStatus === 'pago' || paramStatus === 'approved' || paramStatus === 'paid';
+
+      if (orderId) {
+        document.getElementById('ord-id').textContent = orderId;
+        document.getElementById('track-btn').href = '/rastreio?pedido=' + encodeURIComponent(orderId);
+        document.getElementById('wa-btn').href =
+          'https://wa.me/5515981512083?text=' +
+          encodeURIComponent('Olá TiwShirts! Estou acompanhando meu pedido *' + orderId + '*.');
+      }
+
+      if (saved && saved.orderId === orderId && saved.total != null) {
+        document.getElementById('ord-total').textContent = 'R$ ' + Number(saved.total).toFixed(2).replace('.', ',');
+      }
+
+      if (isPaid) {
+        document.getElementById('status-badge').textContent = '✓ Pagamento Confirmado';
+        document.getElementById('thank-title').textContent = 'Pagamento confirmado! Obrigado pela compra.';
+        document.getElementById('thank-sub').textContent =
+          'Recebemos a confirmação do seu pagamento e seu pedido já entrou na fila de separação no Pote Hermético Oficial. Enviaremos o código de rastreio por e-mail e WhatsApp assim que for despachado.';
+        document.getElementById('st-2').classList.add('done');
+
+        if (typeof gtag === 'function') {
+          gtag('event', 'purchase_thank_you', {
+            transaction_id: orderId || undefined,
+            value: saved && saved.total ? Number(saved.total) : undefined,
+            currency: 'BRL',
+          });
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

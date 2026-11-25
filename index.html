@@ -643,8 +643,8 @@ a:hover { color:#F5F5F5; }
       </div>
     </div>
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:11px;color:#8E8E93;letter-spacing:0.03em;">
-      <div>TiwShirts · Feito para quem pensa. Todos os direitos reservados.</div>
-      <div>Desenvolvido e assinado por <a href="https://instagram.com/vocacaomkt" target="_blank" rel="noopener" style="color:#C5A880;">@vocacaomkt</a> · <a href="/minha-conta" style="color:#C5A880;text-decoration:none;">Rastrear Pedido</a> · Troca e arrependimento em até 7 dias (CDC) · Dados protegidos (LGPD) · <a href="/parceiros" style="color:#71717A;text-decoration:none;">Parceiros</a></div>
+      <div>49.040.721 EDUARDO JOSE BOVOLINE · CNPJ 49.040.721/0001-14 · Sorocaba/SP · Operação Online</div>
+      <div>Desenvolvido e assinado por <a href="https://instagram.com/vocacaomkt" target="_blank" rel="noopener" style="color:#C5A880;">@vocacaomkt</a> · <a href="/rastreio" style="color:#C5A880;text-decoration:none;">Rastrear Pedido</a> · <a href="/politicas" style="color:#C5A880;text-decoration:none;">Troca em 7 dias (CDC) &amp; Privacidade (LGPD)</a> · <a href="/parceiros" style="color:#71717A;text-decoration:none;">Parceiros</a></div>
     </div>
   </footer>
 
@@ -900,7 +900,12 @@ a:hover { color:#F5F5F5; }
               <button type="button" onClick="{{ selectPayCard }}" style="{{ payCardBtnStyle }}">💳 CARTÃO / INFINITEPAY</button>
             </div>
 
-            <button type="submit" style="margin-top:8px;padding:16px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:700;cursor:pointer;">PAGAR E FINALIZAR PEDIDO →</button>
+            <label style="display:flex;align-items:flex-start;gap:9px;margin-top:6px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:4px;font-family:'Inter',sans-serif;font-size:11.5px;color:#D1D1D6;line-height:1.45;cursor:pointer;">
+              <input id="cart-lgpd" type="checkbox" required style="margin-top:2px;width:15px;height:15px;accent-color:#4ade80;flex-shrink:0;" />
+              <span>Li e concordo com a <a href="/politicas" target="_blank" rel="noopener" style="color:#C5A880;text-decoration:underline;">Política de Privacidade (LGPD), Termos e Direito de Arrependimento em 7 dias (CDC)</a>.</span>
+            </label>
+
+            <button type="submit" style="margin-top:4px;padding:16px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.1em;font-weight:700;cursor:pointer;">PAGAR E FINALIZAR PEDIDO →</button>
             <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;text-align:center;">Checkout seguro via InfinitePay & Pix Direto · Código de rastreio enviado por e-mail e WhatsApp.</div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#C5A880;text-align:center;line-height:1.5;">Peça pronta esgotou no meio do caminho? A gente te chama no WhatsApp e você decide: aguardar a produção (3 a 10 dias úteis) ou reembolso imediato.</div>
           </form>
@@ -929,6 +934,7 @@ a:hover { color:#F5F5F5; }
                   <button type="button" onClick="{{ confirmPixPaid }}" style="flex:1;padding:12px;background:#2D5A27;color:#F5F5F5;border:none;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">JÁ REALIZEI O PIX →</button>
                 </div>
                 <a href="{{ checkoutResult.waUrl }}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:rgba(45,90,39,0.35);color:#4ade80;border:1px solid rgba(74,222,128,0.4);border-radius:4px;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;margin-top:8px;">ENVIAR COMPROVANTE NO WHATSAPP (15 98151-2083) →</a>
+                <a href="/obrigado?pedido={{ checkoutResult.orderId }}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:rgba(255,255,255,0.04);color:#D1D1D6;border:1px solid rgba(255,255,255,0.14);border-radius:4px;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:8px;">ABRIR PÁGINA DE ACOMPANHAMENTO / RECIBO →</a>
                 <button type="button" onClick="{{ payWithInfinitePay }}" style="width:100%;margin-top:8px;padding:11px;background:rgba(255,255,255,0.06);color:#C5A880;border:1px solid rgba(197,168,128,0.3);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;">PREFERE CARTÃO EM ATÉ 12X? ABRIR CHECKOUT INFINITEPAY →</button>
               </div>
             </sc-if>
@@ -1104,7 +1110,7 @@ function buildLocalPixPayload(amount, txid) {
 function buildLocalInfinitePayUrl(handle, orderId, items, customer, discountPct, orderNsu) {
   const cleanHandle = String(handle || DEFAULT_INFINITEPAY_HANDLE).replace(/^\$/, "").trim();
   const origin = (typeof window !== "undefined" && window.location && window.location.origin) || "https://tiwshirts.space";
-  const redirectUrl = origin + "/?pedido=" + encodeURIComponent(orderId) + "&status=pago";
+  const redirectUrl = origin + "/obrigado?pedido=" + encodeURIComponent(orderId) + "&status=pago";
   const pct = Number(discountPct) || 0;
 
   const infiniteItems = items.map((it) => {
@@ -1710,7 +1716,13 @@ class Component extends DCLogic {
     const phone = (document.getElementById("cart-phone") && document.getElementById("cart-phone").value) || "";
     const cep = (document.getElementById("cart-cep") && document.getElementById("cart-cep").value) || "";
     const address = (document.getElementById("cart-address") && document.getElementById("cart-address").value) || "";
+    const lgpdAccepted = Boolean(document.getElementById("cart-lgpd") && document.getElementById("cart-lgpd").checked);
     const paymentMethod = this.state.paymentMethod || "pix";
+
+    if (!lgpdAccepted) {
+      this.setState({ checkoutResult: { type: "error", message: "Confirme o aceite da Política de Privacidade (LGPD) e Trocas (CDC) para finalizar o pedido." } });
+      return;
+    }
 
     const items = this.state.cart.map((c) => ({
       sku: c.sku,
@@ -1755,6 +1767,7 @@ class Component extends DCLogic {
           shipping: selectedShipping,
           payment_method: paymentMethod,
           coupon_code: couponCode,
+          lgpd_accepted: lgpdAccepted,
         }),
       });
       const data = await res.json();

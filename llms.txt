@@ -14,6 +14,7 @@
 - [Blog Editorial TiwShirts](https://tiwshirts.space/blog): Canais de Medicina & Ciência, Política & Direitos, Cultura e Guias de Malha.
 - [TiwShirts Indica (Rede Ética Verificada)](https://tiwshirts.space/indica): Curadoria moral e encaminhamento com consentimento LGPD para médicos prescritores (CRM verificado), associações de pacientes, cursos e ecossistema.
 - [Portal de Atacado B2B](https://tiwshirts.space/atacado): Simulador de margem de ~101% em múltiplos de 12 peças e qualificação automática de lojistas.
+- [Políticas, Trocas (CDC) & Privacidade (LGPD)](https://tiwshirts.space/politicas): Dados legais (CNPJ 49.040.721/0001-14, Decreto 7.962/2013), arrependimento em 7 dias, garantia e proteção de dados.
 
 ## Coleção de Camisetas
 - [Camiseta Maconheiro](https://tiwshirts.space/camiseta/maconheiro)

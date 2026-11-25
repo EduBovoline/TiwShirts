@@ -77,7 +77,7 @@ function buildPixPayload({ key, merchantName, merchantCity, amount, txid }) {
 async function createInfinitePayCheckout({ handle, orderId, orderNsu, items, shipping, customer, siteOrigin }) {
   const cleanHandle = String(handle || process.env.INFINITEPAY_HANDLE || 'edu_bovoline').replace(/^\$/, '').trim();
   const baseUrl = siteOrigin || process.env.PUBLIC_SITE_URL || 'https://tiwshirts.space';
-  const redirectUrl = `${baseUrl}/?pedido=${encodeURIComponent(orderId)}&status=pago`;
+  const redirectUrl = `${baseUrl}/obrigado?pedido=${encodeURIComponent(orderId)}&status=pago`;
   const nsu = String(orderNsu || orderId).slice(0, 50);
 
   // Descrições neutras de vestuário para evitar bloqueios por palavras-chave nas adquirentes
@@ -328,16 +328,37 @@ module.exports = async (req, res) => {
       const secretOk = !process.env.INFINITEPAY_WEBHOOK_SECRET || req.query.secret === process.env.INFINITEPAY_WEBHOOK_SECRET;
       if (orderNsu && secretOk && process.env.SUPABASE_SERVICE_ROLE_KEY) {
         try {
-          await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(orderNsu)}`, {
+          const svcHeaders = {
+            apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+            'Content-Type': 'application/json',
+            Prefer: 'return=representation',
+          };
+          const upd = await sbFetch(`/rest/v1/tiw_orders?order_id=eq.${encodeURIComponent(orderNsu)}`, {
             method: 'PATCH',
-            headers: {
-              apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
-              Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-              'Content-Type': 'application/json',
-              Prefer: 'return=minimal',
-            },
+            headers: svcHeaders,
             body: { status: 'pago' },
           });
+          const paidOrder = upd.ok && Array.isArray(upd.data) ? upd.data[0] : null;
+          if (paidOrder) {
+            const cust = paidOrder.customer || {};
+            await dispatchCommEvent(
+              'order.paid',
+              {
+                subject: `Pagamento confirmado! Obrigado pelo pedido ${orderNsu} · TiwShirts`,
+                staffSummary: `✅ *PAGAMENTO CONFIRMADO (Webhook InfinitePay)* · Pedido *${orderNsu}* (${cust.name || 'Cliente'}) · R$ ${Number(paidOrder.total || 0).toFixed(2).replace('.', ',')}`,
+                recipientPhone: cust.phone,
+                recipientEmail: cust.email,
+                vars: {
+                  name: cust.name || 'Cliente',
+                  order_id: orderNsu,
+                  total: 'R$ ' + Number(paidOrder.total || 0).toFixed(2).replace('.', ','),
+                  action_url: `https://tiwshirts.space/obrigado?pedido=${encodeURIComponent(orderNsu)}&status=pago`,
+                },
+              },
+              { headers: svcHeaders }
+            ).catch(() => {});
+          }
         } catch (e) {}
       }
       return res.status(200).json({
@@ -347,7 +368,13 @@ module.exports = async (req, res) => {
       });
     }
 
-    const { customer, items, payment_method, coupon_code, shipping } = body;
+    const { customer, items, payment_method, coupon_code, shipping, lgpd_accepted } = body;
+    if (lgpd_accepted === false) {
+      return res.status(400).json({
+        success: false,
+        error: 'É obrigatório aceitar a Política de Privacidade (LGPD) e os Termos de Troca (CDC) para finalizar o pedido.',
+      });
+    }
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ success: false, error: 'Carrinho vazio.' });
     }
@@ -457,6 +484,9 @@ module.exports = async (req, res) => {
       address: (customer && customer.address) || '',
       cep: (customer && customer.cep) || '',
       shipping: shippingInfo,
+      lgpd_accepted: true,
+      lgpd_accepted_at: new Date().toISOString(),
+      lgpd_version: 'politicas-v1-2026',
     };
 
     const baseRecord = {
@@ -549,6 +579,7 @@ module.exports = async (req, res) => {
       pix_qr_url: pixQrUrl,
       checkout_url: checkoutUrl,
       init_point: checkoutUrl,
+      thank_you_url: `${(process.env.PUBLIC_SITE_URL || 'https://tiwshirts.space').replace(/\/$/, '')}/obrigado?pedido=${encodeURIComponent(orderId)}`,
       wa_url: waUrl,
       customer: customerData,
       items: normalizedItems,

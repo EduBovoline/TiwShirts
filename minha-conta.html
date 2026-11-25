@@ -54,8 +54,7 @@
     h1 { font-size: 1.55rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 4px; }
     .sub { color: var(--dim); font-size: 0.88rem; margin-top: 6px; margin-bottom: 18px; }
 
-    .mod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    @media (max-width: 520px) { .mod-grid { grid-template-columns: 1fr; } }
+    .mod-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
     .mod-opt {
       padding: 12px 13px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border-strong);
       cursor: pointer; text-align: left; transition: .15s;
@@ -124,9 +123,9 @@
 
         <!-- TAB 1: LOGIN DIRETO (VAI AUTOMATICAMENTE PARA A ÁREA DO PERFIL!) -->
         <form id="f-login" onsubmit="handleUnifiedLogin(event)">
-          <span class="eyebrow">Login Único TiwShirts</span>
+          <span class="eyebrow">Login Único · Parceiros &amp; Gestores</span>
           <h1>Acesse sua área</h1>
-          <p class="sub">Entre com seu e-mail e você será levado automaticamente ao seu painel (Afiliado 10+10, Lojista B2B, Parceiro /indica, Cliente ou Gestor).</p>
+          <p class="sub">Entre com seu e-mail para ir direto ao seu painel (Afiliado 10+10, Lojista B2B, Parceiro /indica ou Gestor).</p>
 
           <div class="field">
             <label for="li-email">E-mail *</label>
@@ -144,13 +143,13 @@
           <button type="button" class="btn btn-sand" style="margin-top:10px;" id="li-magic" onclick="sendMagic()">✉ Entrar sem senha (Link Mágico no e-mail)</button>
         </form>
 
-        <!-- TAB 2: ONBOARDING (ESCOLHA DA MODALIDADE APENAS NO CADASTRO) -->
+        <!-- TAB 2: ONBOARDING (EXCLUSIVO PARA PARCERIAS COMERCIAIS) -->
         <form id="f-onboard" style="display:none;" onsubmit="handleOnboarding(event)">
-          <span class="eyebrow">Passo Único · Onboarding</span>
-          <h1>Escolha sua modalidade</h1>
-          <p class="sub">Selecione como você se conecta à TiwShirts. Depois disso, todo login vai direto para a sua área.</p>
+          <span class="eyebrow">Passo Único · Onboarding de Parceiros</span>
+          <h1>Escolha sua modalidade de parceria</h1>
+          <p class="sub">Cadastro exclusivo para <strong>Afiliados 10+10, Lojistas B2B e Rede /indica</strong>. Comprou camiseta na loja? Não precisa criar conta — acompanhe seu pedido direto ao lado.</p>
 
-          <div class="mod-grid" role="radiogroup" aria-label="Modalidade de conta">
+          <div class="mod-grid" role="radiogroup" aria-label="Modalidade de parceria">
             <button type="button" class="mod-opt active" data-mod="afiliado" onclick="pickModality('afiliado')">
               <strong>★ Afiliado / Creator (10+10)</strong>
               <span>Ganhe 10% no Pix com seu cupom e link próprio.</span>
@@ -161,11 +160,7 @@
             </button>
             <button type="button" class="mod-opt" data-mod="parceiro_indica" onclick="pickModality('parceiro_indica')">
               <strong>🌿 Parceiro Ético (/indica)</strong>
-              <span>Médico prescritor, associação, curso ou serviço.</span>
-            </button>
-            <button type="button" class="mod-opt" data-mod="cliente_d2c" onclick="pickModality('cliente_d2c')">
-              <strong>👕 Cliente da Loja (D2C)</strong>
-              <span>Acompanhar pedidos, entregas e lançamentos.</span>
+              <span>Médico prescritor, associação, curso ou serviço verificado.</span>
             </button>
           </div>
 
@@ -239,6 +234,14 @@
       </section>
     </div>
   </main>
+
+  <footer style="border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);">
+    <div>49.040.721 EDUARDO JOSE BOVOLINE · CNPJ 49.040.721/0001-14 · Sorocaba/SP</div>
+    <div style="margin-top:8px;">
+      <a href="/" style="color:var(--sand);margin:0 6px;">Loja</a>·
+      <a href="/politicas" style="color:var(--sand);margin:0 6px;">Políticas, Trocas (CDC) &amp; LGPD</a>
+    </div>
+  </footer>
 
   <script>
     const SUPABASE_URL = 'https://msschydwkaektxjlbmjc.supabase.co';
