@@ -86,6 +86,14 @@
     .result-card { margin-top: 14px; padding: 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); display: none; font-size: 13px; }
     .redirect-overlay { text-align: center; padding: 48px 24px; display: none; }
   </style>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zjfflw7tm9");
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -122,7 +130,7 @@
         <div id="auth-ok" class="ok-box"></div>
 
         <!-- TAB 1: LOGIN DIRETO (VAI AUTOMATICAMENTE PARA A ÁREA DO PERFIL!) -->
-        <form id="f-login" onsubmit="handleUnifiedLogin(event)">
+        <form id="f-login" onsubmit="handleUnifiedLogin(event)" data-clarity-mask="true">
           <span class="eyebrow">Login Único · Parceiros &amp; Gestores</span>
           <h1>Acesse sua área</h1>
           <p class="sub">Entre com seu e-mail para ir direto ao seu painel (Afiliado 10+10, Lojista B2B, Parceiro /indica ou Gestor).</p>
@@ -144,7 +152,7 @@
         </form>
 
         <!-- TAB 2: ONBOARDING (EXCLUSIVO PARA PARCERIAS COMERCIAIS) -->
-        <form id="f-onboard" style="display:none;" onsubmit="handleOnboarding(event)">
+        <form id="f-onboard" style="display:none;" onsubmit="handleOnboarding(event)" data-clarity-mask="true">
           <span class="eyebrow">Passo Único · Onboarding de Parceiros</span>
           <h1>Escolha sua modalidade de parceria</h1>
           <p class="sub">Cadastro exclusivo para <strong>Afiliados 10+10, Lojistas B2B e Rede /indica</strong>. Comprou camiseta na loja? Não precisa criar conta — acompanhe seu pedido direto ao lado.</p>
@@ -215,7 +223,7 @@
       </section>
 
       <!-- COLUNA 2: RASTREIO RÁPIDO D2C SEM PRECISAR DE LOGIN -->
-      <section class="card" id="customer-tracker-card">
+      <section class="card" id="customer-tracker-card" data-clarity-mask="true">
         <span class="eyebrow">Consulta Rápida · Sem Login</span>
         <h2 style="font-size:1.25rem;margin-top:4px;">Rastrear Pedido da Loja</h2>
         <p class="sub">Comprou na TiwShirts? Digite o código do pedido e os últimos 4 dígitos do seu WhatsApp ou CPF para ver status e rastreio na hora.</p>

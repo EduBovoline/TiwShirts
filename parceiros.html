@@ -123,6 +123,14 @@
     .toast-stack { position: fixed; bottom: 20px; right: 20px; z-index: 100; display: flex; flex-direction: column; gap: 8px; }
     .toast { background: var(--surface-2); border: 1px solid var(--border-strong); border-left: 3px solid var(--green); padding: 10px 14px; border-radius: 8px; font-size: 12.5px; box-shadow: 0 12px 28px rgba(0,0,0,0.55); }
   </style>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zjfflw7tm9");
+  </script>
 </head>
 <body>
 
@@ -184,7 +192,7 @@
         <div id="auth-ok" class="ok-box" style="display:none;"></div>
 
         <!-- FORM 1: CANDIDATURA LÓGICA EM 1 PASSO (Salva no banco na hora + cria acesso) -->
-        <form id="form-apply" onsubmit="handleOneStepApply(event)">
+        <form id="form-apply" onsubmit="handleOneStepApply(event)" data-clarity-mask="true">
           <input type="text" id="ap-hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" />
           <div class="field">
             <label for="ap-code">Código do Cupom Desejado * <span class="muted" style="text-transform:none;">Ex: SEUAPELIDO10</span></label>
@@ -229,7 +237,7 @@
         </form>
 
         <!-- FORM 2: LOGIN + MAGIC LINK (SEM SENHA) + RECUPERAR SENHA -->
-        <form id="form-signin" style="display:none;" onsubmit="handleSignIn(event)">
+        <form id="form-signin" style="display:none;" onsubmit="handleSignIn(event)" data-clarity-mask="true">
           <div class="field">
             <label for="si-email">Seu E-mail *</label>
             <input id="si-email" type="email" required placeholder="voce@exemplo.com" autocomplete="email" />
@@ -250,7 +258,7 @@
         </form>
 
         <!-- FORM 3: DEFINIR NOVA SENHA (quando vem do link de recuperação) -->
-        <form id="form-reset" style="display:none;" onsubmit="handlePasswordResetSave(event)">
+        <form id="form-reset" style="display:none;" onsubmit="handlePasswordResetSave(event)" data-clarity-mask="true">
           <div class="field">
             <label for="rs-pass">Nova Senha *</label>
             <input id="rs-pass" type="password" required minlength="6" placeholder="Digite sua nova senha (mín. 6 caracteres)" />
@@ -328,7 +336,7 @@
             </div>
             <div class="card-body">
               <p class="muted" style="margin-bottom:14px;">Assim que você tiver comissões liberadas (de pedidos já pagos), peça a transferência para sua chave Pix com 1 clique.</p>
-              <form onsubmit="handleRequestPayout(event)">
+              <form onsubmit="handleRequestPayout(event)" data-clarity-mask="true">
                 <div class="field">
                   <label for="po-coupon">Cupom com Saldo</label>
                   <select id="po-coupon" required></select>

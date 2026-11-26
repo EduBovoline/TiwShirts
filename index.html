@@ -215,6 +215,14 @@ src="https://www.facebook.com/tr?id=2509347146216109&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 <script src="./support.js"></script>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zjfflw7tm9");
+  </script>
 </head>
 <body>
 <x-dc>
@@ -882,7 +890,7 @@ a:hover { color:#F5F5F5; }
             </div>
           </sc-if>
 
-          <form onSubmit="{{ submitCheckout }}" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
+          <form onSubmit="{{ submitCheckout }}" data-clarity-mask="true" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
             <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#C5A880;letter-spacing:0.06em;margin-bottom:2px;">1. DADOS PARA ENTREGA E ETIQUETA</div>
             <div style="display:grid;grid-template-columns:1fr 150px;gap:10px;">
               <input id="cart-nome" type="text" required aria-label="Nome completo" placeholder="Nome completo *" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#F5F5F5;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;outline:none;" />
@@ -925,7 +933,7 @@ a:hover { color:#F5F5F5; }
                 <div style="background:#fff;padding:10px;border-radius:6px;display:inline-block;margin-bottom:12px;">
                   <img src="{{ checkoutResult.pixQrUrl }}" alt="QR Code Pix TiwShirts" style="width:190px;height:190px;display:block;" />
                 </div>
-                <div style="text-align:left;margin-bottom:10px;">
+                <div data-clarity-mask="true" style="text-align:left;margin-bottom:10px;">
                   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#8E8E93;margin-bottom:4px;">PIX COPIA E COLA:</div>
                   <input type="text" readonly value="{{ checkoutResult.pixCode }}" aria-label="Código Pix Copia e Cola" style="width:100%;background:#080808;border:1px solid rgba(255,255,255,0.15);color:#D1D1D6;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;" />
                 </div>
@@ -963,7 +971,7 @@ a:hover { color:#F5F5F5; }
                 <div style="color:#8E8E93;">○ 3. Separação, conferência e vedação no Pote Hermético</div>
                 <div style="color:#8E8E93;">○ 4. Despacho na transportadora e envio do código de rastreio</div>
               </div>
-              <div style="margin-top:14px;background:rgba(45,90,39,0.18);border:1px solid rgba(74,222,128,0.25);padding:12px;border-radius:4px;font-size:12px;color:#D1D1D6;line-height:1.6;">
+              <div data-clarity-mask="true" style="margin-top:14px;background:rgba(45,90,39,0.18);border:1px solid rgba(74,222,128,0.25);padding:12px;border-radius:4px;font-size:12px;color:#D1D1D6;line-height:1.6;">
                 As atualizações de cada etapa e o código de rastreio são enviados automaticamente para:<br>
                 • <strong>E-mail:</strong> {{ checkoutResult.email }}<br>
                 • <strong>WhatsApp (avisos automáticos):</strong> {{ checkoutResult.phone }}
