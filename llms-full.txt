@@ -51,10 +51,12 @@
 - Manual do Usuário (https://tiwshirts.space/manual): Guia interativo sobre ciência da cannabis, redução de danos e legislação.
 - Blog TiwShirts (https://tiwshirts.space/blog): Redação editorial dividida em 4 canais temáticos:
   - Cultura & Contracultura:
+    - https://tiwshirts.space/blog/historia-medicina-ancestral-cannabis-farmacopeia-brasileira-1926
     - https://tiwshirts.space/blog/purple-haze-sour-diesel-og-kush-historia-geneticas-classicas
     - https://tiwshirts.space/blog/marcha-da-maconha-adpf-187-liberdade-de-expressao-cultura-de-rua
     - https://tiwshirts.space/blog/como-a-maconha-foi-proibida-no-brasil-pito-do-pango-1938
   - Medicina & Ciência:
+    - https://tiwshirts.space/blog/comestiveis-cannabis-11-hidroxi-thc-metabolismo-hepatico-tempo-efeito
     - https://tiwshirts.space/blog/vaporizacao-ervas-secas-vs-combustao-temperatura-reducao-de-danos
     - https://tiwshirts.space/blog/cbd-vs-thc-epilepsia-refrataria-dor-cronica-ansiedade-evidencias
     - https://tiwshirts.space/blog/sistema-endocanabinoide-cb1-cb2-efeito-comitiva-tricomas
@@ -65,6 +67,7 @@
     - https://tiwshirts.space/blog/modelagem-oversized-vs-plus-size-g1-g2-g3-como-escolher-caimento
     - https://tiwshirts.space/blog/algodao-30-1-vs-suedine-220g-como-escolher-camiseta-streetwear
   - Política & Direitos:
+    - https://tiwshirts.space/blog/canhamo-industrial-hemp-brasil-stj-iac-16-thc-03
     - https://tiwshirts.space/blog/salvo-conduto-cultivo-cannabis-medicinal-stj-requisitos
     - https://tiwshirts.space/blog/regra-40g-stf-tema-506-porte-maconha-brasil
     - https://tiwshirts.space/blog/quem-tem-atuacao-real-na-pauta-em-sp
