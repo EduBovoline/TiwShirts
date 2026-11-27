@@ -287,8 +287,13 @@ a { color:#C5A880; }
 a:hover { color:#F5F5F5; }
 
 
-/* ===== RESPONSIVE FIXES ===== */
+/* ===== RESPONSIVE FIXES & INP OPTIMIZATION ===== */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+a, button, [role="button"], summary { touch-action: manipulation; }
+#lookbook, #suedine, #manual, #atacado, footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
 @media (max-width: 992px) {
   #suedine > div:nth-child(2) { grid-template-columns: 1fr !important; }
   .showcase-pote-grid { grid-template-columns: 1fr !important; }
@@ -432,7 +437,7 @@ a:hover { color:#F5F5F5; }
   <!-- HERO -->
   <section style="position:relative;height:100vh;min-height:640px;display:flex;align-items:center;justify-content:center;overflow:hidden;" data-screen-label="Hero">
     <div style="position:absolute;inset:0;">
-      <video ref="{{ heroVideoRef }}" src="assets/hero-bg.mp4" poster="assets/capa-hero.webp" autoplay loop muted playsinline webkit-playsinline preload="metadata" autoPlay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;"></video>
+      <video ref="{{ heroVideoRef }}" src="assets/hero-bg.mp4" poster="assets/capa-hero.webp" loop muted playsinline webkit-playsinline preload="none" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;"></video>
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(8,8,8,0.35) 0%, rgba(8,8,8,0.85) 100%);"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 30%, transparent 60%, rgba(8,8,8,0.95) 100%);"></div>
     </div>
@@ -1070,6 +1075,20 @@ const BLANK_INVENTORY = {
   "espacoso:branco:G1":   2,
 };
 
+const LINE_INFO = {
+  "pf": { name: "Clássica 30.1", price: "R$ 139" },
+  "casca": { name: "OverHeavy 220g", price: "R$ 179" },
+  "espacoso": { name: "OverLight G1-G3", price: "R$ 179" },
+};
+
+function trackClarity(eventName) {
+  try {
+    if (typeof window !== "undefined" && typeof window.clarity === "function") {
+      window.clarity("event", eventName);
+    }
+  } catch (e) {}
+}
+
 function fmtPrice(n) {
   const v = Number(n) || 0;
   return "R$ " + v.toFixed(2).replace(".", ",");
@@ -1377,6 +1396,8 @@ class Component extends DCLogic {
     }
 
     const vObj = (look && look.variants && look.variants[bestVariantIdx]) || {};
+    this.syncHeroVideo(true);
+    trackClarity("view_product");
     this.setState({
       modalOpen: true,
       activeLookId: id,
@@ -1386,7 +1407,10 @@ class Component extends DCLogic {
     });
   }
 
-  closeModal = () => this.setState({ modalOpen: false, shareCopied: false });
+  closeModal = () => {
+    this.setState({ modalOpen: false, shareCopied: false });
+    this.syncHeroVideo(false);
+  };
 
   prevImage = () => {
     const active = this.looksData.find((l) => l.id === this.state.activeLookId) || this.looksData[0];
@@ -1472,8 +1496,15 @@ class Component extends DCLogic {
     try { localStorage.removeItem("tiw_active_coupon"); } catch (e) {}
     this.setState({ appliedCoupon: null, couponError: "" });
   };
-  openB2bModal = () => this.setState({ b2bModalOpen: true, b2bSuccess: false });
-  closeB2bModal = () => this.setState({ b2bModalOpen: false });
+  openB2bModal = () => {
+    this.syncHeroVideo(true);
+    trackClarity("b2b_modal_open");
+    this.setState({ b2bModalOpen: true, b2bSuccess: false });
+  };
+  closeB2bModal = () => {
+    this.setState({ b2bModalOpen: false });
+    this.syncHeroVideo(false);
+  };
   stopProp = (e) => e.stopPropagation();
 
   selectPayPix = () => this.setState({ paymentMethod: "pix" });
@@ -1495,6 +1526,7 @@ class Component extends DCLogic {
 
   confirmPixPaid = () => {
     this.setState({ pixConfirmed: true });
+    trackClarity("pix_confirmed");
     const order = this.state.checkoutResult;
     if (order) {
       try {
@@ -1563,6 +1595,7 @@ class Component extends DCLogic {
       window.open(waUrl, "_blank");
     } catch (errOpen) {}
 
+    trackClarity("b2b_lead_submitted");
     this.setState({ b2bSuccess: true, b2bProtocol: protocol, b2bWaUrl: waUrl });
   };
 
@@ -1592,6 +1625,8 @@ class Component extends DCLogic {
         lead: size.lead,
       }];
     }
+    this.syncHeroVideo(true);
+    trackClarity("add_to_cart");
     this.setState({ modalOpen: false, cart, cartOpen: true, checkoutResult: null, pixConfirmed: false });
     if (this.state.lastQuotedCep) {
       setTimeout(() => {
@@ -1624,10 +1659,15 @@ class Component extends DCLogic {
         savedOrder = JSON.parse(localStorage.getItem("tiw_last_order") || "null");
       } catch (e) {}
     }
+    this.syncHeroVideo(true);
+    if (this.state.cart.length > 0) trackClarity("begin_checkout");
     this.setState({ cartOpen: true, checkoutResult: savedOrder });
   };
 
-  closeCart = () => this.setState({ cartOpen: false });
+  closeCart = () => {
+    this.setState({ cartOpen: false });
+    this.syncHeroVideo(false);
+  };
 
   handleCepInput = () => {
     const el = document.getElementById("cart-cep");
@@ -1802,6 +1842,8 @@ class Component extends DCLogic {
           address,
         };
         try { localStorage.setItem("tiw_last_order", JSON.stringify(resultObj)); } catch (e) {}
+        trackClarity("order_created");
+        if (paymentMethod === "pix") trackClarity("pix_generated");
         this.setState({ cart: [], checkoutResult: resultObj, pixConfirmed: false });
         if (paymentMethod === "card" && checkoutUrl) {
           window.location.href = checkoutUrl;
@@ -1837,6 +1879,8 @@ class Component extends DCLogic {
       address,
     };
     try { localStorage.setItem("tiw_last_order", JSON.stringify(resultObj)); } catch (e) {}
+    trackClarity("order_created");
+    if (paymentMethod === "pix") trackClarity("pix_generated");
     this.setState({ cart: [], checkoutResult: resultObj, pixConfirmed: false });
     if (paymentMethod === "card" && checkoutUrl) {
       window.location.href = checkoutUrl;
@@ -1858,23 +1902,55 @@ class Component extends DCLogic {
       .then((data) => {
         if (data && data.success) {
           this.catalog = data.products || [];
+          const map = {};
+          for (const p of this.catalog) map[p.id] = p;
+          this._catalogById = map;
           if (data.infinitepay_handle) this.infinitepayHandle = data.infinitepay_handle;
-          this.forceUpdate();
+          const scheduleRefresh = () => {
+            if (!this.state.modalOpen && !this.state.cartOpen && !this.state.b2bModalOpen) {
+              this.forceUpdate();
+            }
+          };
+          if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+            window.requestIdleCallback(scheduleRefresh, { timeout: 600 });
+          } else {
+            setTimeout(scheduleRefresh, 0);
+          }
         }
       })
       .catch(() => {
         this.catalog = null;
+        this._catalogById = {};
       });
   }
 
   get catalogById() {
-    if (!this.catalog) return {};
-    const map = {};
-    for (const p of this.catalog) map[p.id] = p;
-    return map;
+    return this._catalogById || {};
   }
 
   heroVideoRef = React.createRef();
+  _heroInView = true;
+  _heroPlayTimer = null;
+
+  syncHeroVideo(overlayOpen) {
+    const v = this.heroVideoRef && this.heroVideoRef.current;
+    if (!v) return;
+    if (this._heroPlayTimer) {
+      clearTimeout(this._heroPlayTimer);
+      this._heroPlayTimer = null;
+    }
+    if (overlayOpen) {
+      if (!v.paused) v.pause();
+      return;
+    }
+    this._heroPlayTimer = setTimeout(() => {
+      if (this._heroInView && !this.state.modalOpen && !this.state.cartOpen && !this.state.b2bModalOpen) {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      }
+    }, 150);
+  }
+
   componentDidMount() {
     this.loadCatalog();
 
@@ -1909,23 +1985,45 @@ class Component extends DCLogic {
 
     const v = this.heroVideoRef.current;
     if (v) {
-      v.playbackRate = 0.5;
-      v.muted = true;
-      v.defaultMuted = true;
-      v.loop = true;
-      v.volume = 0;
-      const playVideo = () => {
-        const p = v.play();
-        if (p && p.catch) p.catch(() => {});
-      };
-      playVideo();
-      v.addEventListener('ended', () => {
-        v.currentTime = 0;
-        playVideo();
-      });
-      document.addEventListener('touchstart', playVideo, { once: true, passive: true });
-      document.addEventListener('click', playVideo, { once: true, passive: true });
+      const reduceMotion = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const saveData = typeof navigator !== "undefined" && navigator.connection && navigator.connection.saveData;
+      if (!reduceMotion && !saveData) {
+        v.muted = true;
+        v.defaultMuted = true;
+        v.loop = true;
+        v.volume = 0;
+        const startVideo = () => {
+          if (this._heroInView && !this.state.modalOpen && !this.state.cartOpen && !this.state.b2bModalOpen) {
+            const p = v.play();
+            if (p && p.catch) p.catch(() => {});
+          }
+        };
+        if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+          window.requestIdleCallback(() => {
+            this._heroPlayTimer = setTimeout(startVideo, 150);
+          }, { timeout: 600 });
+        } else {
+          this._heroPlayTimer = setTimeout(startVideo, 350);
+        }
+        if (typeof IntersectionObserver === "function") {
+          this._heroObserver = new IntersectionObserver((entries) => {
+            const visible = Boolean(entries[0] && entries[0].isIntersecting);
+            this._heroInView = visible;
+            if (!visible) {
+              if (!v.paused) v.pause();
+            } else if (!this.state.modalOpen && !this.state.cartOpen && !this.state.b2bModalOpen) {
+              this._heroPlayTimer = setTimeout(startVideo, 120);
+            }
+          }, { threshold: 0.05 });
+          this._heroObserver.observe(v);
+        }
+      }
     }
+  }
+
+  componentWillUnmount() {
+    if (this._heroPlayTimer) clearTimeout(this._heroPlayTimer);
+    if (this._heroObserver) this._heroObserver.disconnect();
   }
 
   renderVals() {
@@ -1975,18 +2073,21 @@ class Component extends DCLogic {
       ? "ADICIONAR AO CARRINHO (ENVIO 3 DIAS) →"
       : "ADICIONAR AO CARRINHO (7 A 10 DIAS) →";
 
-    const looks = this.looksData.map((look, i) => ({
-      id: look.id,
-      name: look.name,
-      thumb: look.thumb,
-      thumb2: look.thumb2 || look.thumb,
-      hasSecond: !!look.thumb2,
-      secondThumb: look.thumb2 ? "50%" : "100%",
-      tagRight: look.tagRight,
-      priceLabel: look.id === "tricomas" ? "3 Colorways · A partir de R$ 139" : "A partir de R$ 139",
-      cardStyle: this.cardStyle(look, i),
-      open: () => this.openLook(look.id),
-    }));
+    if (!this._cachedLooks) {
+      this._cachedLooks = this.looksData.map((look, i) => ({
+        id: look.id,
+        name: look.name,
+        thumb: look.thumb,
+        thumb2: look.thumb2 || look.thumb,
+        hasSecond: !!look.thumb2,
+        secondThumb: look.thumb2 ? "50%" : "100%",
+        tagRight: look.tagRight,
+        priceLabel: look.id === "tricomas" ? "3 Colorways · A partir de R$ 139" : "A partir de R$ 139",
+        cardStyle: this.cardStyle(look, i),
+        open: () => this.openLook(look.id),
+      }));
+    }
+    const looks = this._cachedLooks;
 
     const currColorId = variant.colorId || "preto";
     const currLineId = variant.lineId || "pf";
@@ -2016,12 +2117,6 @@ class Component extends DCLogic {
         border: "rgba(255,255,255,0.25)",
         checkColor: "#F5F5F5",
       },
-    };
-
-    const LINE_INFO = {
-      "pf": { name: "Clássica 30.1", price: "R$ 139" },
-      "casca": { name: "OverHeavy 220g", price: "R$ 179" },
-      "espacoso": { name: "OverLight G1-G3", price: "R$ 179" },
     };
 
     const uniqueColorIds = [];
